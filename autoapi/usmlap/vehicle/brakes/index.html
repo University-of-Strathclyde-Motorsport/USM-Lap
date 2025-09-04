@@ -1,0 +1,2473 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/brakes/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../common/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>brakes - USM Lap</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#usmlap.vehicle.brakes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="USM Lap" class="md-header__button md-logo" aria-label="USM Lap" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            USM Lap
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              brakes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="USM Lap" class="md-nav__button md-logo" aria-label="USM Lap" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    USM Lap
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    USM Lap
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../tutorials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorials
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../how-to-guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    How-To Guides
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../explanation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Explanation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    usmlap
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            usmlap
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../__main__/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    __main__
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datatypes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    datatypes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_3" id="__nav_5_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    utils
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            utils
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/geometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    geometry
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/proportion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    proportion
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_4" id="__nav_5_1_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    vehicle
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            vehicle
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    brakes
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    brakes
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      brakes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeCaliper" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeCaliper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakeCaliper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_area
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeDisc" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeDisc
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeLine
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakeLine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.force_to_torque" class="md-nav__link">
+    <span class="md-ellipsis">
+      force_to_torque
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.get_brake_pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_brake_pressure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.torque_to_force" class="md-nav__link">
+    <span class="md-ellipsis">
+      torque_to_force
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakePad
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakePad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="md-nav__link">
+    <span class="md-ellipsis">
+      coefficient_of_friction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad.height" class="md-nav__link">
+    <span class="md-ellipsis">
+      height
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Brakes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Brakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes.brake_bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      brake_bias
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes.brake_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      brake_lines
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      MasterCylinder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MasterCylinder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.colour" class="md-nav__link">
+    <span class="md-ellipsis">
+      colour
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_area" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_area
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_diameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_diameter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    common
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      brakes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeCaliper" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeCaliper
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakeCaliper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_area
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeDisc" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeDisc
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakeLine
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakeLine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.force_to_torque" class="md-nav__link">
+    <span class="md-ellipsis">
+      force_to_torque
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.get_brake_pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_brake_pressure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakeLine.torque_to_force" class="md-nav__link">
+    <span class="md-ellipsis">
+      torque_to_force
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad" class="md-nav__link">
+    <span class="md-ellipsis">
+      BrakePad
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BrakePad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="md-nav__link">
+    <span class="md-ellipsis">
+      coefficient_of_friction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.BrakePad.height" class="md-nav__link">
+    <span class="md-ellipsis">
+      height
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Brakes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Brakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes.brake_bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      brake_bias
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.Brakes.brake_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      brake_lines
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      MasterCylinder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MasterCylinder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.colour" class="md-nav__link">
+    <span class="md-ellipsis">
+      colour
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_area" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_area
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_diameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      piston_diameter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>brakes</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="usmlap.vehicle.brakes"></a>
+    <div class="doc doc-contents first">
+
+        <p>This module models the brake system of a vehicle.</p>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.BrakeCaliper" class="doc doc-heading">
+            <code>BrakeCaliper</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+
+
+        <p>The brake caliper, transmitting force from the brake line to the wheel.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeCaliper.piston_count">piston_count</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of pistons in the caliper</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeCaliper.piston_diameter">piston_diameter</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The diameter of each piston, in metres</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakeCaliper</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The brake caliper, transmitting force from the brake line to the wheel.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        piston_count (int): The number of pistons in the caliper</span>
+<span class="sd">        piston_diameter (float): The diameter of each piston, in metres</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">piston_count</span><span class="p">:</span> <span class="n">PositiveInt</span>
+    <span class="n">piston_diameter</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">piston_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The total piston area, in square metres.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">piston_count</span> <span class="o">*</span> <span class="n">geometry</span><span class="o">.</span><span class="n">area_of_circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">piston_diameter</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">piston_area</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The total piston area, in square metres.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.BrakeDisc" class="doc doc-heading">
+            <code>BrakeDisc</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+
+
+        <p>The brake disc attached to the wheel.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeDisc.outer_diameter">outer_diameter</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The outer diameter of the brake disc, in metres</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakeDisc</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The brake disc attached to the wheel.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        outer_diameter (float): The outer diameter of the brake disc, in metres</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">outer_diameter</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.BrakeLine" class="doc doc-heading">
+            <code>BrakeLine</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+
+
+        <p>An individual brake line.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeLine.cylinder">cylinder</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="MasterCylinder (usmlap.vehicle.brakes.MasterCylinder)" href="#usmlap.vehicle.brakes.MasterCylinder">MasterCylinder</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The master cylinder attached to the pedal</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeLine.caliper">caliper</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="BrakeCaliper (usmlap.vehicle.brakes.BrakeCaliper)" href="#usmlap.vehicle.brakes.BrakeCaliper">BrakeCaliper</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The brake caliper attached to the wheel</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeLine.disc">disc</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="BrakeDisc (usmlap.vehicle.brakes.BrakeDisc)" href="#usmlap.vehicle.brakes.BrakeDisc">BrakeDisc</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The brake disc attached to the wheel</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeLine.pad">pad</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="BrakePad (usmlap.vehicle.brakes.BrakePad)" href="#usmlap.vehicle.brakes.BrakePad">BrakePad</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The brake pad attached to the caliper</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakeLine</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An individual brake line.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        cylinder (MasterCylinder): The master cylinder attached to the pedal</span>
+<span class="sd">        caliper (BrakeCaliper): The brake caliper attached to the wheel</span>
+<span class="sd">        disc (BrakeDisc): The brake disc attached to the wheel</span>
+<span class="sd">        pad (BrakePad): The brake pad attached to the caliper</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cylinder</span><span class="p">:</span> <span class="n">MasterCylinder</span>
+    <span class="n">caliper</span><span class="p">:</span> <span class="n">BrakeCaliper</span>
+    <span class="n">disc</span><span class="p">:</span> <span class="n">BrakeDisc</span>
+    <span class="n">pad</span><span class="p">:</span> <span class="n">BrakePad</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_area_scaling_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The force scaling factor between the cylinder and caliper.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">caliper</span><span class="o">.</span><span class="n">piston_area</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder</span><span class="o">.</span><span class="n">piston_area</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_effective_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The radius at which the braking force is applied to the wheel.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disc</span><span class="o">.</span><span class="n">outer_diameter</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pad</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_force_to_torque_scaling_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ratio between braking torque and master cylinder force.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_area_scaling_factor</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pad</span><span class="o">.</span><span class="n">coefficient_of_friction</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effective_radius</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_brake_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the pressure of the brake fluid.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cylinder_force (float): Force applied to the master cylinder [N]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Gauge pressure of the brake fluid [Pa]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder</span><span class="o">.</span><span class="n">piston_area</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">force_to_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the braking torque applied to the wheel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cylinder_force (float): Force applied to the master cylinder [N]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Braking torque applied to the wheel [Nm]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wheel_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the force required to apply a torque to the wheel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            wheel_torque (float): Braking torque applied to the wheel [Nm]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Force required on the master cylinder [N]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wheel_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="usmlap.vehicle.brakes.BrakeLine.force_to_torque" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">force_to_torque</span><span class="p">(</span><span class="n">cylinder_force</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate the braking torque applied to the wheel.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cylinder_force</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Force applied to the master cylinder [N]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>float</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Braking torque applied to the wheel [Nm]</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">force_to_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the braking torque applied to the wheel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cylinder_force (float): Force applied to the master cylinder [N]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Braking torque applied to the wheel [Nm]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="usmlap.vehicle.brakes.BrakeLine.get_brake_pressure" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_brake_pressure</span><span class="p">(</span><span class="n">cylinder_force</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate the pressure of the brake fluid.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cylinder_force</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Force applied to the master cylinder [N]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>float</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Gauge pressure of the brake fluid [Pa]</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_brake_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the pressure of the brake fluid.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cylinder_force (float): Force applied to the master cylinder [N]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Gauge pressure of the brake fluid [Pa]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder</span><span class="o">.</span><span class="n">piston_area</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="usmlap.vehicle.brakes.BrakeLine.torque_to_force" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">torque_to_force</span><span class="p">(</span><span class="n">wheel_torque</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate the force required to apply a torque to the wheel.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>wheel_torque</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Braking torque applied to the wheel [Nm]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>float</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Force required on the master cylinder [N]</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wheel_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the force required to apply a torque to the wheel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wheel_torque (float): Braking torque applied to the wheel [Nm]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Force required on the master cylinder [N]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">wheel_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.BrakePad" class="doc doc-heading">
+            <code>BrakePad</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+
+
+        <p>The brake pad attached to the caliper.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakePad</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The brake pad attached to the caliper.&quot;&quot;&quot;</span>
+
+    <span class="n">height</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The height of the brake pad, in metres.&quot;&quot;&quot;</span>
+    <span class="n">coefficient_of_friction</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The coefficient of friction between the brake pad and brake disc.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">coefficient_of_friction</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The coefficient of friction between the brake pad and brake disc.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.BrakePad.height" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">height</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The height of the brake pad, in metres.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.Brakes" class="doc doc-heading">
+            <code>Brakes</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+
+
+        <p>The brake system of the vehicle.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.Brakes.front">front</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="BrakeLine (usmlap.vehicle.brakes.BrakeLine)" href="#usmlap.vehicle.brakes.BrakeLine">BrakeLine</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Brake line for the front wheels</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.Brakes.rear">rear</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="BrakeLine (usmlap.vehicle.brakes.BrakeLine)" href="#usmlap.vehicle.brakes.BrakeLine">BrakeLine</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Brake line for the rear wheels</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.Brakes.pedal_ratio">pedal_ratio</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Ratio of master cylinder force to pedal force</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.Brakes.front_brake_bias">front_brake_bias</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Proportion of force applied to the front master cylinder (value between 0 and 1)</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.Brakes.regen_torque">regen_torque</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Maximum regenerative braking torque [Nm]</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Brakes</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The brake system of the vehicle.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        front (BrakeLine): Brake line for the front wheels</span>
+<span class="sd">        rear (BrakeLine): Brake line for the rear wheels</span>
+<span class="sd">        pedal_ratio (float): Ratio of master cylinder force to pedal force</span>
+<span class="sd">        front_brake_bias (float): Proportion of force applied to the front master cylinder (value between 0 and 1)</span>
+<span class="sd">        regen_torque (float): Maximum regenerative braking torque [Nm]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">front</span><span class="p">:</span> <span class="n">BrakeLine</span>
+    <span class="n">rear</span><span class="p">:</span> <span class="n">BrakeLine</span>
+    <span class="n">pedal_ratio</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+    <span class="n">front_brake_bias</span><span class="p">:</span> <span class="n">Percentage</span>
+    <span class="n">regen_torque</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">brake_bias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tuple of brake biases for the front and rear wheels.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">(</span><span class="n">proportion</span><span class="o">.</span><span class="n">with_complement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">front_brake_bias</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">brake_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="n">BrakeLine</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tuple of front and rear brake lines.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">front</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rear</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_front_brake_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">front_multiplier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">front</span><span class="o">.</span><span class="n">force_to_torque</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rear_multiplier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rear</span><span class="o">.</span><span class="n">force_to_torque</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">front_multiplier</span> <span class="o">/</span> <span class="p">(</span><span class="n">front_multiplier</span> <span class="o">+</span> <span class="n">rear_multiplier</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_cylinder_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pedal_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the force applied to the front and rear master cylinders.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pedal_force (float): Force applied to the pedal, in Newtons.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            cylinder_forces (FrontRear[float]): Force applied to the front and rear master cylinders, in Newtons.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_force</span> <span class="o">=</span> <span class="n">pedal_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pedal_ratio</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">([</span><span class="n">total_force</span> <span class="o">*</span> <span class="n">bias</span> <span class="k">for</span> <span class="n">bias</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">brake_bias</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pedal_force_to_wheel_torque</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pedal_force</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="n">cylinder_forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cylinder_forces</span><span class="p">(</span><span class="n">pedal_force</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">(</span>
+            <span class="n">brake_line</span><span class="o">.</span><span class="n">force_to_torque</span><span class="p">(</span><span class="n">force</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">brake_line</span><span class="p">,</span> <span class="n">force</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brake_lines</span><span class="p">,</span> <span class="n">cylinder_forces</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_overall_brake_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pedal_force_to_wheel_torque</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.Brakes.brake_bias" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">brake_bias</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Tuple of brake biases for the front and rear wheels.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.Brakes.brake_lines" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">brake_lines</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Tuple of front and rear brake lines.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.brakes.MasterCylinder" class="doc doc-heading">
+            <code>MasterCylinder</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="usmlap.vehicle.common.Component">Component</span></code></p>
+
+
+        <p>The master cylinder, transmitting force from the pedal to the brake line.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MasterCylinder</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The master cylinder, transmitting force from the pedal to the brake line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">piston_diameter</span><span class="p">:</span> <span class="n">PositiveFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The diameter of the piston, in metres.&quot;&quot;&quot;</span>
+    <span class="n">colour</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The colour of the master cylinder.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">piston_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The area of the piston, in square metres.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">area_of_circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">piston_diameter</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">library_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;master_cylinders.json&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.MasterCylinder.colour" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">colour</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The colour of the master cylinder.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.MasterCylinder.piston_area" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">piston_area</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The area of the piston, in square metres.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="usmlap.vehicle.brakes.MasterCylinder.piston_diameter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">piston_diameter</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The diameter of the piston, in metres.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
