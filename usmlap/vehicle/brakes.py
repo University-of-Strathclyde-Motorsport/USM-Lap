@@ -1,92 +1,193 @@
 from .common import Component, Subsystem
-from utils import geometry
-from datatypes import FrontRear
+from utils import geometry, proportion
+from pydantic import PositiveFloat, PositiveInt
+from datatypes import FrontRear, Percentage
 
 
 class MasterCylinder(Component):
+    """
+    The master cylinder, transmitting force from the pedal to the brake line.
+    """
+
+    piston_diameter: PositiveFloat
+    """The diameter of the piston, in metres."""
+    colour: str
+    """The colour of the master cylinder."""
+
+    @property
+    def piston_area(self) -> float:
+        """The area of the piston, in square metres."""
+        return geometry.area_of_circle(self.piston_diameter)
+
     @classmethod
     def library_name(cls) -> str:
         return "master_cylinders.json"
 
-    def __init__(self, piston_diameter: float, colour: str):
-        self.piston_diameter = piston_diameter
-        self.colour = colour
-
-    def get_piston_area(self) -> float:
-        return geometry.area_of_circle(self.piston_diameter)
-
 
 class BrakeCaliper(Subsystem):
-    def __init__(self, piston_count: int, piston_diameter: float):
-        self.piston_count = piston_count
-        self.piston_diameter = piston_diameter
+    """
+    The brake caliper, transmitting force from the brake line to the wheel.
 
-    def get_piston_area(self) -> float:
+    Attributes:
+        piston_count (int): The number of pistons in the caliper
+        piston_diameter (float): The diameter of each piston, in metres
+    """
+
+    piston_count: PositiveInt
+    piston_diameter: PositiveFloat
+
+    @property
+    def piston_area(self) -> float:
+        """The total piston area, in square metres."""
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
 
 class BrakeDisc(Subsystem):
-    def __init__(self, outer_diameter: float):
-        self.outer_diameter = outer_diameter
+    """
+    The brake disc attached to the wheel.
+
+    Attributes:
+        outer_diameter (float): The outer diameter of the brake disc, in metres
+    """
+
+    outer_diameter: PositiveFloat
 
 
 class BrakePad(Subsystem):
-    def __init__(self, height: float, coefficient_of_friction: float):
-        self.height = height
-        self.coefficient_of_friction = coefficient_of_friction
+    """The brake pad attached to the caliper."""
+
+    height: PositiveFloat
+    """The height of the brake pad, in metres."""
+    coefficient_of_friction: PositiveFloat
+    """The coefficient of friction between the brake pad and brake disc."""
 
 
 class BrakeLine(Subsystem):
-    def __init__(
-        self,
-        cylinder: str,
-        caliper: BrakeCaliper,
-        disc: BrakeDisc,
-        pad: BrakePad,
-    ):
-        self.cylinder = MasterCylinder.from_library(cylinder)
-        self.caliper = caliper
-        self.disc = disc
-        self.pad = pad
+    """
+    An individual brake line.
 
+    Attributes:
+        cylinder (MasterCylinder): The master cylinder attached to the pedal
+        caliper (BrakeCaliper): The brake caliper attached to the wheel
+        disc (BrakeDisc): The brake disc attached to the wheel
+        pad (BrakePad): The brake pad attached to the caliper
+    """
+
+    cylinder: MasterCylinder
+    caliper: BrakeCaliper
+    disc: BrakeDisc
+    pad: BrakePad
+
+    @property
     def _area_scaling_factor(self) -> float:
-        cylinder_area = self.cylinder.get_piston_area()
-        caliper_area = self.caliper.get_piston_area()
-        return caliper_area / cylinder_area
+        """The force scaling factor between the cylinder and caliper."""
+        return self.caliper.piston_area / self.cylinder.piston_area
 
+    @property
     def _effective_radius(self) -> float:
-        return self.disc.outer_diameter - (self.pad.height / 2)
+        """The radius at which the braking force is applied to the wheel."""
+        return 0.5 * (self.disc.outer_diameter - self.pad.height)
 
-    def get_brake_pressure(self, cylinder_force: float) -> float:
-        return cylinder_force / self.cylinder.get_piston_area()
-
-    def force_to_torque(self, cylinder_force: float) -> float:
+    @property
+    def _force_to_torque_scaling_factor(self) -> float:
+        """The ratio between braking torque and master cylinder force."""
         return (
-            0.5
-            * cylinder_force
-            * self._area_scaling_factor()
+            self._area_scaling_factor
             * self.pad.coefficient_of_friction
-            * self._effective_radius()
+            * self._effective_radius
         )
 
+    def get_brake_pressure(self, cylinder_force: float) -> float:
+        """
+        Calculate the pressure of the brake fluid.
+
+        Args:
+            cylinder_force (float): Force applied to the master cylinder [N]
+
+        Returns:
+            float: Gauge pressure of the brake fluid [Pa]
+        """
+        return cylinder_force / self.cylinder.piston_area
+
+    def force_to_torque(self, cylinder_force: float) -> float:
+        """
+        Calculate the braking torque applied to the wheel.
+
+        Args:
+            cylinder_force (float): Force applied to the master cylinder [N]
+
+        Returns:
+            float: Braking torque applied to the wheel [Nm]
+        """
+        return cylinder_force * self._force_to_torque_scaling_factor
+
     def torque_to_force(self, wheel_torque: float) -> float:
-        return wheel_torque / self.force_to_torque(1)
+        """
+        Calculate the force required to apply a torque to the wheel.
+
+        Args:
+            wheel_torque (float): Braking torque applied to the wheel [Nm]
+
+        Returns:
+            float: Force required on the master cylinder [N]
+        """
+        return wheel_torque / self._force_to_torque_scaling_factor
 
 
 class Brakes(Subsystem):
-    def __init__(
-        self,
-        brake_lines: FrontRear[BrakeLine],
-        pedal_ratio: float,
-        front_brake_bias: float,
-        regen_torque: float,
-    ):
-        self.brake_lines = brake_lines
-        self.pedal_ratio = pedal_ratio
-        self.front_brake_bias = front_brake_bias
-        self.regen_torque = regen_torque
+    """
+    The brake system of the vehicle.
+
+    Attributes:
+        front (BrakeLine): Brake line for the front wheels
+        rear (BrakeLine): Brake line for the rear wheels
+        pedal_ratio (float): Ratio of master cylinder force to pedal force
+        front_brake_bias (float): Proportion of force applied to the front master cylinder (value between 0 and 1)
+        regen_torque (float): Maximum regenerative braking torque [Nm]
+    """
+
+    front: BrakeLine
+    rear: BrakeLine
+    pedal_ratio: PositiveFloat
+    front_brake_bias: Percentage
+    regen_torque: PositiveFloat
+
+    @property
+    def brake_bias(self) -> FrontRear[float]:
+        """Tuple of brake biases for the front and rear wheels."""
+        return FrontRear(proportion.with_complement(self.front_brake_bias))
+
+    @property
+    def brake_lines(self) -> FrontRear[BrakeLine]:
+        """Tuple of front and rear brake lines."""
+        return FrontRear((self.front, self.rear))
 
     def _get_front_brake_balance(self) -> float:
-        front_multiplier = self.brake_lines.front.force_to_torque(1)
-        rear_multiplier = self.brake_lines.rear.force_to_torque(1)
+        front_multiplier = self.front.force_to_torque(1)
+        rear_multiplier = self.rear.force_to_torque(1)
         return front_multiplier / (front_multiplier + rear_multiplier)
+
+    def _get_cylinder_forces(self, pedal_force: float) -> FrontRear[float]:
+        """
+        Get the force applied to the front and rear master cylinders.
+
+        Args:
+            pedal_force (float): Force applied to the pedal, in Newtons.
+
+        Returns:
+            cylinder_forces (FrontRear[float]): Force applied to the front and rear master cylinders, in Newtons.
+        """
+        total_force = pedal_force * self.pedal_ratio
+        return FrontRear([total_force * bias for bias in self.brake_bias])
+
+    def pedal_force_to_wheel_torque(
+        self, pedal_force: float
+    ) -> FrontRear[float]:
+        cylinder_forces = self._get_cylinder_forces(pedal_force)
+        return FrontRear(
+            brake_line.force_to_torque(force)
+            for brake_line, force in zip(self.brake_lines, cylinder_forces)
+        )
+
+    def get_overall_brake_balance(self) -> FrontRear[float]:
+        return FrontRear(self.pedal_force_to_wheel_torque(1))

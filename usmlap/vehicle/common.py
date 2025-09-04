@@ -1,21 +1,17 @@
 from abc import ABC, abstractmethod
+from pydantic import BaseModel
 import json
-from typing import Self, Any
+from typing import Self
 
 
-class Subsystem:
+class Subsystem(BaseModel):
     @classmethod
     def from_json(cls, filepath: str) -> Self:
         with open(filepath, "r") as file:
-            return cls(**json.load(file))
+            return cls.model_validate_json(file.read())
 
     def to_json(self) -> str:
-        return json.dumps(
-            self,
-            default=lambda object: object.__dict__,
-            sort_keys=True,
-            indent=4,
-        )
+        return self.model_dump_json(indent=4)
 
     def __str__(self) -> str:
         return self.to_json()
@@ -29,7 +25,7 @@ class Component(ABC, Subsystem):
 
     @classmethod
     def _get_library_path(cls) -> str:
-        return "library/components/" + cls.library_name()
+        return "appdata/library/components/" + cls.library_name()
 
     @classmethod
     def load_library(cls) -> dict[str, Self]:

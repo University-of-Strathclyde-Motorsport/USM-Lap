@@ -1,9 +1,12 @@
 {
     "front": {
-        "cylinder": "CP7855-91",
+        "cylinder":  {
+            "piston_diameter": 0.0222,
+            "colour": "white"
+        },
         "caliper": {
-            "piston_count": 2,
-            "piston_diameter": 0.005
+            "piston_count": 4,
+            "piston_diameter": 0.025
         },
         "disc": {
             "outer_diameter": 0.184
@@ -14,10 +17,13 @@
         }
     },
     "rear": {
-        "cylinder": "CP7855-91",
+        "cylinder":  {
+            "piston_diameter": 0.0222,
+            "colour": "white"
+        },
         "caliper": {
             "piston_count": 2,
-            "piston_diameter": 0.005
+            "piston_diameter": 0.025
         },
         "disc": {
             "outer_diameter": 0.184
@@ -27,7 +33,7 @@
             "coefficient_of_friction": 0.5
         }
     },
-    "pedal_ratio": 1,
-    "front_brake_bias": 0.5,
+    "pedal_ratio": 3.6,
+    "front_brake_bias": 0.681,
     "regen_torque": 40
 }
