@@ -1,0 +1,15 @@
+[project]
+name = "USM-Lap"
+version = "0.1.0"
+description = "USM laptime simulator, built in Python"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mkdocs>=1.6.1",
+    "mkdocs-autoapi>=0.4.1",
+    "mkdocs-gen-files>=0.5.0",
+    "mkdocs-material>=9.6.18",
+    "mkdocstrings-python>=1.18.2",
+    "mkdocstrings[python]>=0.30.0",
+    "pydantic>=2.11.7",
+]

@@ -1,3 +1,7 @@
+"""
+This module models the brake system of a vehicle.
+"""
+
 from .common import Component, Subsystem
 from utils import geometry, proportion
 from pydantic import PositiveFloat, PositiveInt
@@ -7,12 +11,14 @@ from datatypes import FrontRear, Percentage
 class MasterCylinder(Component):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
+
+    Attributes:
+        piston_diameter (float): The diameter of the piston, in metres
+        colour (str): The colour of the master cylinder
     """
 
     piston_diameter: PositiveFloat
-    """The diameter of the piston, in metres."""
     colour: str
-    """The colour of the master cylinder."""
 
     @property
     def piston_area(self) -> float:

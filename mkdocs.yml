@@ -1,0 +1,53 @@
+site_name: USM Lap
+site_url: https://university-of-strathclyde-motorsport.github.io/USM-Lap/
+remote_branch: gh-pages
+
+repo_url: https://github.com/university-of-strathclyde-motorsport/USM-Lap
+repo_name: USM-Lap
+
+nav:
+  - About: index.md
+  - Tutorials: tutorials.md
+  - How-To Guides: how-to-guides.md
+  - Explanation: explanation.md
+
+plugins:
+- search
+- mkdocs-autoapi:
+    autoapi_dir: src/usmlap
+    autoapi_file_patterns:
+      - "*.py"
+    autoapi_add_nav_entry: Reference
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        paths: [src]
+        options:
+          show_source: true
+          docstring_style: google
+
+theme:
+  name: material
+  language: en
+  logo: assets/usm-logo.png
+  favicon: assets/usm-logo.png
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+  palette: 
+    scheme: slate
+  
+extra_css:
+  - stylesheets/extra.css
