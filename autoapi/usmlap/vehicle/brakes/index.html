@@ -776,21 +776,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="BrakeCaliper">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="md-nav__link">
-    <span class="md-ellipsis">
-      piston_area
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -851,30 +836,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="BrakePad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="md-nav__link">
-    <span class="md-ellipsis">
-      coefficient_of_friction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakePad.height" class="md-nav__link">
-    <span class="md-ellipsis">
-      height
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -916,21 +877,6 @@
       MasterCylinder
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="MasterCylinder">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_area" class="md-nav__link">
-    <span class="md-ellipsis">
-      piston_area
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1029,21 +975,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="BrakeCaliper">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="md-nav__link">
-    <span class="md-ellipsis">
-      piston_area
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1104,30 +1035,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="BrakePad">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="md-nav__link">
-    <span class="md-ellipsis">
-      coefficient_of_friction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.BrakePad.height" class="md-nav__link">
-    <span class="md-ellipsis">
-      height
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1169,21 +1076,6 @@
       MasterCylinder
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="MasterCylinder">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.brakes.MasterCylinder.piston_area" class="md-nav__link">
-    <span class="md-ellipsis">
-      piston_area
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1287,6 +1179,17 @@
               </div>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakeCaliper.piston_area">piston_area</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total area of the pistons, in square metres</p>
+              </div>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1321,6 +1224,7 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        piston_count (int): The number of pistons in the caliper</span>
 <span class="sd">        piston_diameter (float): The diameter of each piston, in metres</span>
+<span class="sd">        piston_area (float): The total area of the pistons, in square metres</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">piston_count</span><span class="p">:</span> <span class="n">PositiveInt</span>
@@ -1328,7 +1232,6 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">piston_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The total piston area, in square metres.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">piston_count</span> <span class="o">*</span> <span class="n">geometry</span><span class="o">.</span><span class="n">area_of_circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">piston_diameter</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
@@ -1342,28 +1245,6 @@
 
 
 
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="usmlap.vehicle.brakes.BrakeCaliper.piston_area" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">piston_area</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The total piston area, in square metres.</p>
-
-    </div>
-
-</div>
 
 
 
@@ -1554,12 +1435,7 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
 <span class="normal"> 77</span>
 <span class="normal"> 78</span>
 <span class="normal"> 79</span>
@@ -1623,7 +1499,18 @@
 <span class="normal">137</span>
 <span class="normal">138</span>
 <span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakeLine</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakeLine</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An individual brake line.</span>
 
@@ -1663,10 +1550,12 @@
 <span class="sd">        Calculate the pressure of the brake fluid.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            cylinder_force (float): Force applied to the master cylinder [N]</span>
+<span class="sd">            cylinder_force (float):</span>
+<span class="sd">                Force applied to the master cylinder, in Newtons</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Gauge pressure of the brake fluid [Pa]</span>
+<span class="sd">            brake_pressure (float):</span>
+<span class="sd">                Gauge pressure of the brake fluid, in Pascals</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder</span><span class="o">.</span><span class="n">piston_area</span>
 
@@ -1675,24 +1564,28 @@
 <span class="sd">        Calculate the braking torque applied to the wheel.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            cylinder_force (float): Force applied to the master cylinder [N]</span>
+<span class="sd">            cylinder_force (float):</span>
+<span class="sd">                Force applied to the master cylinder, in Newtons</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Braking torque applied to the wheel [Nm]</span>
+<span class="sd">            braking_torque (float):</span>
+<span class="sd">                Torque applied to the wheel, in Newton-metres</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wheel_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">braking_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the force required to apply a torque to the wheel.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            wheel_torque (float): Braking torque applied to the wheel [Nm]</span>
+<span class="sd">            braking_torque (float):</span>
+<span class="sd">                Braking torque required on the wheel, in Newton-metres</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Force required on the master cylinder [N]</span>
+<span class="sd">            cylinder_force (float):</span>
+<span class="sd">                Force required on the master cylinder, in Newtons</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">wheel_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+        <span class="k">return</span> <span class="n">braking_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1743,7 +1636,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Force applied to the master cylinder [N]</p>
+                <p>Force applied to the master cylinder, in Newtons</p>
               </div>
             </td>
             <td>
@@ -1764,12 +1657,12 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>float</code></td>            <td>
+<td><code>braking_torque</code></td>            <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Braking torque applied to the wheel [Nm]</p>
+                <p>Torque applied to the wheel, in Newton-metres</p>
               </div>
             </td>
           </tr>
@@ -1779,25 +1672,29 @@
 
             <details class="quote">
               <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
-<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">force_to_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">force_to_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the braking torque applied to the wheel.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cylinder_force (float): Force applied to the master cylinder [N]</span>
+<span class="sd">        cylinder_force (float):</span>
+<span class="sd">            Force applied to the master cylinder, in Newtons</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Braking torque applied to the wheel [Nm]</span>
+<span class="sd">        braking_torque (float):</span>
+<span class="sd">            Torque applied to the wheel, in Newton-metres</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
 </code></pre></div></td></tr></table></div>
@@ -1840,7 +1737,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Force applied to the master cylinder [N]</p>
+                <p>Force applied to the master cylinder, in Newtons</p>
               </div>
             </td>
             <td>
@@ -1861,12 +1758,12 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>float</code></td>            <td>
+<td><code>brake_pressure</code></td>            <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Gauge pressure of the brake fluid [Pa]</p>
+                <p>Gauge pressure of the brake fluid, in Pascals</p>
               </div>
             </td>
           </tr>
@@ -1876,25 +1773,29 @@
 
             <details class="quote">
               <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
-<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_brake_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_brake_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cylinder_force</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the pressure of the brake fluid.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cylinder_force (float): Force applied to the master cylinder [N]</span>
+<span class="sd">        cylinder_force (float):</span>
+<span class="sd">            Force applied to the master cylinder, in Newtons</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Gauge pressure of the brake fluid [Pa]</span>
+<span class="sd">        brake_pressure (float):</span>
+<span class="sd">            Gauge pressure of the brake fluid, in Pascals</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cylinder_force</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder</span><span class="o">.</span><span class="n">piston_area</span>
 </code></pre></div></td></tr></table></div>
@@ -1907,7 +1808,7 @@
 
 
 <h3 id="usmlap.vehicle.brakes.BrakeLine.torque_to_force" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">torque_to_force</span><span class="p">(</span><span class="n">wheel_torque</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">torque_to_force</span><span class="p">(</span><span class="n">braking_torque</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1930,14 +1831,14 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>wheel_torque</code>
+                <code>braking_torque</code>
             </td>
             <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Braking torque applied to the wheel [Nm]</p>
+                <p>Braking torque required on the wheel, in Newton-metres</p>
               </div>
             </td>
             <td>
@@ -1958,12 +1859,12 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>float</code></td>            <td>
+<td><code>cylinder_force</code></td>            <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Force required on the master cylinder [N]</p>
+                <p>Force required on the master cylinder, in Newtons</p>
               </div>
             </td>
           </tr>
@@ -1973,27 +1874,31 @@
 
             <details class="quote">
               <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wheel_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">torque_to_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">braking_torque</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the force required to apply a torque to the wheel.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        wheel_torque (float): Braking torque applied to the wheel [Nm]</span>
+<span class="sd">        braking_torque (float):</span>
+<span class="sd">            Braking torque required on the wheel, in Newton-metres</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Force required on the master cylinder [N]</span>
+<span class="sd">        cylinder_force (float):</span>
+<span class="sd">            Force required on the master cylinder, in Newtons</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">wheel_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
+    <span class="k">return</span> <span class="n">braking_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_force_to_torque_scaling_factor</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2027,6 +1932,42 @@
         <p>The brake pad attached to the caliper.</p>
 
 
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakePad.height">height</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The height of the brake pad, in metres</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.BrakePad.coefficient_of_friction">coefficient_of_friction</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The coefficient of friction between the brake pad and brake disc</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
 
 
 
@@ -2041,13 +1982,23 @@
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakePad</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The brake pad attached to the caliper.&quot;&quot;&quot;</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BrakePad</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The brake pad attached to the caliper.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        height (float): The height of the brake pad, in metres</span>
+<span class="sd">        coefficient_of_friction (float):</span>
+<span class="sd">            The coefficient of friction between the brake pad and brake disc</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">height</span><span class="p">:</span> <span class="n">PositiveFloat</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The height of the brake pad, in metres.&quot;&quot;&quot;</span>
     <span class="n">coefficient_of_friction</span><span class="p">:</span> <span class="n">PositiveFloat</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The coefficient of friction between the brake pad and brake disc.&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2060,50 +2011,6 @@
 
 
 
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="usmlap.vehicle.brakes.BrakePad.coefficient_of_friction" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">coefficient_of_friction</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The coefficient of friction between the brake pad and brake disc.</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="usmlap.vehicle.brakes.BrakePad.height" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">height</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The height of the brake pad, in metres.</p>
-
-    </div>
-
-</div>
 
 
 
@@ -2212,18 +2119,7 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\usmlap\vehicle\brakes.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
@@ -2268,7 +2164,20 @@
 <span class="normal">196</span>
 <span class="normal">197</span>
 <span class="normal">198</span>
-<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Brakes</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Brakes</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The brake system of the vehicle.</span>
 
@@ -2309,7 +2218,8 @@
 <span class="sd">            pedal_force (float): Force applied to the pedal, in Newtons.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            cylinder_forces (FrontRear[float]): Force applied to the front and rear master cylinders, in Newtons.</span>
+<span class="sd">            cylinder_forces (FrontRear[float]):</span>
+<span class="sd">                Force applied to the master cylinders, in Newtons.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">total_force</span> <span class="o">=</span> <span class="n">pedal_force</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pedal_ratio</span>
         <span class="k">return</span> <span class="n">FrontRear</span><span class="p">([</span><span class="n">total_force</span> <span class="o">*</span> <span class="n">bias</span> <span class="k">for</span> <span class="n">bias</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">brake_bias</span><span class="p">])</span>
@@ -2324,7 +2234,8 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_overall_brake_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrontRear</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pedal_force_to_wheel_torque</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">torques</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pedal_force_to_wheel_torque</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FrontRear</span><span class="p">(</span><span class="n">proportion</span><span class="o">.</span><span class="n">normalise</span><span class="p">(</span><span class="n">torques</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2444,6 +2355,17 @@
               </div>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.brakes.MasterCylinder.piston_area">piston_area</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The area of the piston, in square metres</p>
+              </div>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -2482,6 +2404,7 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        piston_diameter (float): The diameter of the piston, in metres</span>
 <span class="sd">        colour (str): The colour of the master cylinder</span>
+<span class="sd">        piston_area (float): The area of the piston, in square metres</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">piston_diameter</span><span class="p">:</span> <span class="n">PositiveFloat</span>
@@ -2489,7 +2412,6 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">piston_area</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The area of the piston, in square metres.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">geometry</span><span class="o">.</span><span class="n">area_of_circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">piston_diameter</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
@@ -2507,28 +2429,6 @@
 
 
 
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h3 id="usmlap.vehicle.brakes.MasterCylinder.piston_area" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">piston_area</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-property"><code>property</code></small>
-  </span>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The area of the piston, in square metres.</p>
-
-    </div>
-
-</div>
 
 
 
