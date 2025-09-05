@@ -6,6 +6,8 @@ from .common import Component, Subsystem
 from utils import geometry, proportion
 from pydantic import PositiveFloat, PositiveInt
 from datatypes import FrontRear, Percentage
+from typing import Annotated
+from annotated_types import Unit
 
 
 class MasterCylinder(Component):
@@ -13,12 +15,12 @@ class MasterCylinder(Component):
     The master cylinder, transmitting force from the pedal to the brake line.
 
     Attributes:
-        piston_diameter (float): The diameter of the piston, in metres
+        piston_diameter (float): The diameter of the piston
         colour (str): The colour of the master cylinder
-        piston_area (float): The area of the piston, in square metres
+        piston_area (float): The area of the piston
     """
 
-    piston_diameter: PositiveFloat
+    piston_diameter: Annotated[PositiveFloat, Unit("m")]
     colour: str
 
     @property
@@ -36,12 +38,12 @@ class BrakeCaliper(Subsystem):
 
     Attributes:
         piston_count (int): The number of pistons in the caliper
-        piston_diameter (float): The diameter of each piston, in metres
-        piston_area (float): The total area of the pistons, in square metres
+        piston_diameter (float): The diameter of the piston
+        piston_area (float): The total area of the pistons
     """
 
     piston_count: PositiveInt
-    piston_diameter: PositiveFloat
+    piston_diameter: Annotated[PositiveFloat, Unit("m")]
 
     @property
     def piston_area(self) -> float:
@@ -53,10 +55,10 @@ class BrakeDisc(Subsystem):
     The brake disc attached to the wheel.
 
     Attributes:
-        outer_diameter (float): The outer diameter of the brake disc, in metres
+        outer_diameter (float): The outer diameter of the brake disc
     """
 
-    outer_diameter: PositiveFloat
+    outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
 class BrakePad(Subsystem):
@@ -64,12 +66,12 @@ class BrakePad(Subsystem):
     The brake pad attached to the caliper.
 
     Attributes:
-        height (float): The height of the brake pad, in metres
+        height (float): The height of the brake pad
         coefficient_of_friction (float):
             The coefficient of friction between the brake pad and brake disc
     """
 
-    height: PositiveFloat
+    height: Annotated[PositiveFloat, Unit("m")]
     coefficient_of_friction: PositiveFloat
 
 
@@ -113,12 +115,10 @@ class BrakeLine(Subsystem):
         Calculate the pressure of the brake fluid.
 
         Args:
-            cylinder_force (float):
-                Force applied to the master cylinder, in Newtons
+            cylinder_force (float): Force applied to the master cylinder
 
         Returns:
-            brake_pressure (float):
-                Gauge pressure of the brake fluid, in Pascals
+            brake_pressure (float): Gauge pressure of the brake fluid
         """
         return cylinder_force / self.cylinder.piston_area
 
@@ -127,12 +127,10 @@ class BrakeLine(Subsystem):
         Calculate the braking torque applied to the wheel.
 
         Args:
-            cylinder_force (float):
-                Force applied to the master cylinder, in Newtons
+            cylinder_force (float): Force applied to the master cylinder
 
         Returns:
-            braking_torque (float):
-                Torque applied to the wheel, in Newton-metres
+            braking_torque (float): Torque applied to the wheel
         """
         return cylinder_force * self._force_to_torque_scaling_factor
 
@@ -141,12 +139,10 @@ class BrakeLine(Subsystem):
         Calculate the force required to apply a torque to the wheel.
 
         Args:
-            braking_torque (float):
-                Braking torque required on the wheel, in Newton-metres
+            braking_torque (float): Braking torque required on the wheel
 
         Returns:
-            cylinder_force (float):
-                Force required on the master cylinder, in Newtons
+            cylinder_force (float): Force required on the master cylinder
         """
         return braking_torque / self._force_to_torque_scaling_factor
 
@@ -160,14 +156,14 @@ class Brakes(Subsystem):
         rear (BrakeLine): Brake line for the rear wheels
         pedal_ratio (float): Ratio of master cylinder force to pedal force
         front_brake_bias (float): Proportion of force applied to the front master cylinder (value between 0 and 1)
-        regen_torque (float): Maximum regenerative braking torque [Nm]
+        regen_torque (float): Maximum regenerative braking torque
     """
 
     front: BrakeLine
     rear: BrakeLine
     pedal_ratio: PositiveFloat
     front_brake_bias: Percentage
-    regen_torque: PositiveFloat
+    regen_torque: Annotated[PositiveFloat, Unit("Nm")]
 
     @property
     def brake_bias(self) -> FrontRear[float]:
@@ -189,11 +185,11 @@ class Brakes(Subsystem):
         Get the force applied to the front and rear master cylinders.
 
         Args:
-            pedal_force (float): Force applied to the pedal, in Newtons.
+            pedal_force (float): Force applied to the pedal
 
         Returns:
             cylinder_forces (FrontRear[float]):
-                Force applied to the master cylinders, in Newtons.
+                Force applied to the master cylinders
         """
         total_force = pedal_force * self.pedal_ratio
         return FrontRear([total_force * bias for bias in self.brake_bias])
