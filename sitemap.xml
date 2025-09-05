@@ -56,4 +56,24 @@
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/common/</loc>
          <lastmod>2025-09-05</lastmod>
     </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/steering/</loc>
+         <lastmod>2025-09-05</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/suspension/</loc>
+         <lastmod>2025-09-05</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/transmission/</loc>
+         <lastmod>2025-09-05</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/</loc>
+         <lastmod>2025-09-05</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/tir/</loc>
+         <lastmod>2025-09-05</lastmod>
+    </url>
 </urlset>
