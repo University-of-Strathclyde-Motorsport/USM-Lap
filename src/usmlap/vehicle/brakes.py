@@ -15,9 +15,9 @@ class MasterCylinder(Component):
     The master cylinder, transmitting force from the pedal to the brake line.
 
     Attributes:
-        piston_diameter (float): The diameter of the piston
-        colour (str): The colour of the master cylinder
-        piston_area (float): The area of the piston
+        piston_diameter (float): The diameter of the piston.
+        colour (str): The colour of the master cylinder.
+        piston_area (float): The area of the piston.
     """
 
     piston_diameter: Annotated[PositiveFloat, Unit("m")]
@@ -37,9 +37,9 @@ class BrakeCaliper(Subsystem):
     The brake caliper, transmitting force from the brake line to the wheel.
 
     Attributes:
-        piston_count (int): The number of pistons in the caliper
-        piston_diameter (float): The diameter of the piston
-        piston_area (float): The total area of the pistons
+        piston_count (int): The number of pistons in the caliper.
+        piston_diameter (float): The diameter of the piston.
+        piston_area (float): The total area of the pistons.
     """
 
     piston_count: PositiveInt
@@ -55,7 +55,7 @@ class BrakeDisc(Subsystem):
     The brake disc attached to the wheel.
 
     Attributes:
-        outer_diameter (float): The outer diameter of the brake disc
+        outer_diameter (float): The outer diameter of the brake disc.
     """
 
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
@@ -66,9 +66,9 @@ class BrakePad(Subsystem):
     The brake pad attached to the caliper.
 
     Attributes:
-        height (float): The height of the brake pad
+        height (float): The height of the brake pad.
         coefficient_of_friction (float):
-            The coefficient of friction between the brake pad and brake disc
+            The coefficient of friction between the brake pad and brake disc.
     """
 
     height: Annotated[PositiveFloat, Unit("m")]
@@ -80,10 +80,10 @@ class BrakeLine(Subsystem):
     An individual brake line.
 
     Attributes:
-        cylinder (MasterCylinder): The master cylinder attached to the pedal
-        caliper (BrakeCaliper): The brake caliper attached to the wheel
-        disc (BrakeDisc): The brake disc attached to the wheel
-        pad (BrakePad): The brake pad attached to the caliper
+        cylinder (MasterCylinder): The master cylinder attached to the pedal.
+        caliper (BrakeCaliper): The brake caliper attached to the wheel.
+        disc (BrakeDisc): The brake disc attached to the wheel.
+        pad (BrakePad): The brake pad attached to the caliper.
     """
 
     cylinder: MasterCylinder
@@ -115,10 +115,10 @@ class BrakeLine(Subsystem):
         Calculate the pressure of the brake fluid.
 
         Args:
-            cylinder_force (float): Force applied to the master cylinder
+            cylinder_force (float): Force applied to the master cylinder.
 
         Returns:
-            brake_pressure (float): Gauge pressure of the brake fluid
+            brake_pressure (float): Gauge pressure of the brake fluid.
         """
         return cylinder_force / self.cylinder.piston_area
 
@@ -127,10 +127,10 @@ class BrakeLine(Subsystem):
         Calculate the braking torque applied to the wheel.
 
         Args:
-            cylinder_force (float): Force applied to the master cylinder
+            cylinder_force (float): Force applied to the master cylinder.
 
         Returns:
-            braking_torque (float): Torque applied to the wheel
+            braking_torque (float): Torque applied to the wheel.
         """
         return cylinder_force * self._force_to_torque_scaling_factor
 
@@ -139,10 +139,10 @@ class BrakeLine(Subsystem):
         Calculate the force required to apply a torque to the wheel.
 
         Args:
-            braking_torque (float): Braking torque required on the wheel
+            braking_torque (float): Braking torque required on the wheel.
 
         Returns:
-            cylinder_force (float): Force required on the master cylinder
+            cylinder_force (float): Force required on the master cylinder.
         """
         return braking_torque / self._force_to_torque_scaling_factor
 
@@ -152,11 +152,13 @@ class Brakes(Subsystem):
     The brake system of the vehicle.
 
     Attributes:
-        front (BrakeLine): Brake line for the front wheels
-        rear (BrakeLine): Brake line for the rear wheels
-        pedal_ratio (float): Ratio of master cylinder force to pedal force
-        front_brake_bias (float): Proportion of force applied to the front master cylinder (value between 0 and 1)
-        regen_torque (float): Maximum regenerative braking torque
+        front (BrakeLine): Brake line for the front wheels.
+        rear (BrakeLine): Brake line for the rear wheels.
+        pedal_ratio (float): Ratio of master cylinder force to pedal force.
+        front_brake_bias (float):
+            Proportion of force applied to the front master cylinder
+            (value between 0 and 1).
+        regen_torque (float): Maximum regenerative braking torque.
     """
 
     front: BrakeLine
@@ -185,11 +187,11 @@ class Brakes(Subsystem):
         Get the force applied to the front and rear master cylinders.
 
         Args:
-            pedal_force (float): Force applied to the pedal
+            pedal_force (float): Force applied to the pedal.
 
         Returns:
             cylinder_forces (FrontRear[float]):
-                Force applied to the master cylinders
+                Force applied to the master cylinders.
         """
         total_force = pedal_force * self.pedal_ratio
         return FrontRear([total_force * bias for bias in self.brake_bias])

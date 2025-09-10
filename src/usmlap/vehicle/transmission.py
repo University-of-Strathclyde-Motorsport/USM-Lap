@@ -15,9 +15,9 @@ class Transmission(Subsystem):
     Transmits power from the motor to the wheels.
 
     Attributes:
-        primary_gear_reduction (float): The reduction of the primary gear
-        final_gear_reduction (float): The reduction of the final gear
-        gear_ratio (list[float]): The ratios of the gears
+        primary_gear_reduction (float): The reduction of the primary gear.
+        final_gear_reduction (float): The reduction of the final gear.
+        gear_ratio (list[float]): The ratios of the gears.
     """
 
     primary_gear_reduction: PositiveFloat

@@ -9,6 +9,10 @@ from pydantic import PositiveFloat
 
 
 class SuspensionAxle(Subsystem):
+    """
+    The suspension for a single axle of a vehicle.
+    """
+
     pass
 
 
@@ -17,12 +21,21 @@ class Suspension(Subsystem):
     The suspension system of a vehicle.
 
     Attributes:
-        front (SuspensionAxle): Front axle suspension
-        rear (SuspensionAxle): Rear axle suspension
-        wheelbase (float): The distance between the front and rear wheels, measured between contact patches
-        front_track_width (float): The width of the front track, measured between contact patches
-        rear_track_width (float): The width of the rear track, measured between contact patches
-        centre_of_gravity_height (float): The height of the centre of gravity above the ground plane
+        front (SuspensionAxle):
+            Front axle suspension.
+        rear (SuspensionAxle):
+            Rear axle suspension.
+        wheelbase (float):
+            The distance between the front and rear wheels,
+            measured between contact patches.
+        front_track_width (float):
+            The width of the front track,
+            measured between contact patches.
+        rear_track_width (float):
+            The width of the rear track,
+            measured between contact patches.
+        centre_of_gravity_height (float):
+            The height of the centre of gravity above the ground plane.
     """
 
     front: SuspensionAxle
