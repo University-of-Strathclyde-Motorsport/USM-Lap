@@ -602,6 +602,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.datatypes.Coordinate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coordinate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.datatypes.FrontRear" class="md-nav__link">
+    <span class="md-ellipsis">
+      FrontRear
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -922,6 +940,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../vehicle/tyre/magic_formula/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    magic_formula
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vehicle/tyre/tir/" class="md-nav__link">
         
   
@@ -1002,6 +1043,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.datatypes.Coordinate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coordinate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.datatypes.FrontRear" class="md-nav__link">
+    <span class="md-ellipsis">
+      FrontRear
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1030,6 +1089,8 @@
 <a id="usmlap.datatypes"></a>
     <div class="doc doc-contents first">
 
+        <p>This module defines custom datatypes used throughout the project.</p>
+
 
 
 
@@ -1048,6 +1109,264 @@
 
 
 
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.datatypes.Coordinate" class="doc doc-heading">
+            <code>Coordinate</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Represents a coordinate with x, y, and z components.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.datatypes.Coordinate.x">x</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>x component.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.datatypes.Coordinate.y">y</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>y component.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.datatypes.Coordinate.z">z</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>z component (default: 0).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\datatypes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Coordinate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a coordinate with x, y, and z components.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        x (float): x component.</span>
+<span class="sd">        y (float): y component.</span>
+<span class="sd">        z (float): z component (default: 0).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.datatypes.FrontRear" class="doc doc-heading">
+            <code>FrontRear</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="tuple">tuple</span>[<span title="usmlap.datatypes.T">T</span>, <span title="usmlap.datatypes.T">T</span>]</code></p>
+
+
+        <p>Represents a property with a front and rear value.</p>
+<p>Used for properties which differ on each axle of the vehicle.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.datatypes.FrontRear.front">front</span></code></td>
+            <td>
+                  <code><span title="usmlap.datatypes.T">T</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Value for the front axle.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.datatypes.FrontRear.rear">rear</span></code></td>
+            <td>
+                  <code><span title="usmlap.datatypes.T">T</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Value for the rear axle.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\datatypes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FrontRear</span><span class="p">(</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a property with a front and rear value.</span>
+
+<span class="sd">    Used for properties which differ on each axle of the vehicle.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        front (T): Value for the front axle.</span>
+<span class="sd">        rear (T): Value for the rear axle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">front</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;front: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">front</span><span class="si">}</span><span class="s2">, rear: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rear</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 
 

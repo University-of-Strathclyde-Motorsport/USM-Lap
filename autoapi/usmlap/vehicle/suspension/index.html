@@ -847,6 +847,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.suspension.SuspensionAxle" class="md-nav__link">
+    <span class="md-ellipsis">
+      SuspensionAxle
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -923,6 +932,29 @@
             tyre
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tyre/magic_formula/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    magic_formula
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1020,6 +1052,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.suspension.SuspensionAxle" class="md-nav__link">
+    <span class="md-ellipsis">
+      SuspensionAxle
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1082,7 +1123,7 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="usmlap.vehicle.common.Subsystem">Subsystem</span></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="Subsystem (usmlap.vehicle.common.Subsystem)" href="../common/#usmlap.vehicle.common.Subsystem">Subsystem</a></code></p>
 
 
         <p>The suspension system of a vehicle.</p>
@@ -1101,22 +1142,22 @@
           <tr class="doc-section-item">
             <td><code><span title="usmlap.vehicle.suspension.Suspension.front">front</span></code></td>
             <td>
-                  <code><span title="usmlap.vehicle.suspension.SuspensionAxle">SuspensionAxle</span></code>
+                  <code><a class="autorefs autorefs-internal" title="SuspensionAxle (usmlap.vehicle.suspension.SuspensionAxle)" href="#usmlap.vehicle.suspension.SuspensionAxle">SuspensionAxle</a></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Front axle suspension</p>
+                <p>Front axle suspension.</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
             <td><code><span title="usmlap.vehicle.suspension.Suspension.rear">rear</span></code></td>
             <td>
-                  <code><span title="usmlap.vehicle.suspension.SuspensionAxle">SuspensionAxle</span></code>
+                  <code><a class="autorefs autorefs-internal" title="SuspensionAxle (usmlap.vehicle.suspension.SuspensionAxle)" href="#usmlap.vehicle.suspension.SuspensionAxle">SuspensionAxle</a></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rear axle suspension</p>
+                <p>Rear axle suspension.</p>
               </div>
             </td>
           </tr>
@@ -1127,7 +1168,8 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The distance between the front and rear wheels, measured between contact patches</p>
+                <p>The distance between the front and rear wheels,
+measured between contact patches.</p>
               </div>
             </td>
           </tr>
@@ -1138,7 +1180,8 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The width of the front track, measured between contact patches</p>
+                <p>The width of the front track,
+measured between contact patches.</p>
               </div>
             </td>
           </tr>
@@ -1149,7 +1192,8 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The width of the rear track, measured between contact patches</p>
+                <p>The width of the rear track,
+measured between contact patches.</p>
               </div>
             </td>
           </tr>
@@ -1160,7 +1204,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The height of the centre of gravity above the ground plane</p>
+                <p>The height of the centre of gravity above the ground plane.</p>
               </div>
             </td>
           </tr>
@@ -1176,11 +1220,7 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\usmlap\vehicle\suspension.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
 <span class="normal">22</span>
@@ -1194,17 +1234,39 @@
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Suspension</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Suspension</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The suspension system of a vehicle.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        front (SuspensionAxle): Front axle suspension</span>
-<span class="sd">        rear (SuspensionAxle): Rear axle suspension</span>
-<span class="sd">        wheelbase (float): The distance between the front and rear wheels, measured between contact patches</span>
-<span class="sd">        front_track_width (float): The width of the front track, measured between contact patches</span>
-<span class="sd">        rear_track_width (float): The width of the rear track, measured between contact patches</span>
-<span class="sd">        centre_of_gravity_height (float): The height of the centre of gravity above the ground plane</span>
+<span class="sd">        front (SuspensionAxle):</span>
+<span class="sd">            Front axle suspension.</span>
+<span class="sd">        rear (SuspensionAxle):</span>
+<span class="sd">            Rear axle suspension.</span>
+<span class="sd">        wheelbase (float):</span>
+<span class="sd">            The distance between the front and rear wheels,</span>
+<span class="sd">            measured between contact patches.</span>
+<span class="sd">        front_track_width (float):</span>
+<span class="sd">            The width of the front track,</span>
+<span class="sd">            measured between contact patches.</span>
+<span class="sd">        rear_track_width (float):</span>
+<span class="sd">            The width of the rear track,</span>
+<span class="sd">            measured between contact patches.</span>
+<span class="sd">        centre_of_gravity_height (float):</span>
+<span class="sd">            The height of the centre of gravity above the ground plane.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">front</span><span class="p">:</span> <span class="n">SuspensionAxle</span>
@@ -1213,6 +1275,68 @@
     <span class="n">front_track_width</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">Unit</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)]</span>
     <span class="n">rear_track_width</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">Unit</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)]</span>
     <span class="n">centre_of_gravity_height</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">Unit</span><span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="usmlap.vehicle.suspension.SuspensionAxle" class="doc doc-heading">
+            <code>SuspensionAxle</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Subsystem (usmlap.vehicle.common.Subsystem)" href="../common/#usmlap.vehicle.common.Subsystem">Subsystem</a></code></p>
+
+
+        <p>The suspension for a single axle of a vehicle.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src\usmlap\vehicle\suspension.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SuspensionAxle</span><span class="p">(</span><span class="n">Subsystem</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The suspension for a single axle of a vehicle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
 </code></pre></div></td></tr></table></div>
               </details>
 

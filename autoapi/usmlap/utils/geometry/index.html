@@ -670,6 +670,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.utils.geometry.area_of_circle" class="md-nav__link">
+    <span class="md-ellipsis">
+      area_of_circle
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -922,6 +931,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../vehicle/tyre/magic_formula/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    magic_formula
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../vehicle/tyre/tir/" class="md-nav__link">
         
   
@@ -1002,6 +1034,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#usmlap.utils.geometry.area_of_circle" class="md-nav__link">
+    <span class="md-ellipsis">
+      area_of_circle
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1030,6 +1071,9 @@
 <a id="usmlap.utils.geometry"></a>
     <div class="doc doc-contents first">
 
+        <p>This module contains utility functions for working with geometry,
+such as calculating areas and volumes.</p>
+
 
 
 
@@ -1049,6 +1093,103 @@
 
 
 
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="usmlap.utils.geometry.area_of_circle" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">area_of_circle</span><span class="p">(</span><span class="n">diameter</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate the area of a circle from its diameter.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>diameter</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Diameter of the circle.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>area</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Area of the circle.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\utils\geometry.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">area_of_circle</span><span class="p">(</span><span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the area of a circle from its diameter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        diameter (float): Diameter of the circle.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        area (float): Area of the circle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">pow</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
 
 
 
