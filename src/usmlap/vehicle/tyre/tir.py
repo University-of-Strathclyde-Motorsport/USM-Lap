@@ -649,7 +649,7 @@ class AligningCoefficients(_ParameterGroup):
         QBZ3 (float): Variation of slope Bpt with load squared.
         QBZ4 (float): Variation of slope Bpt with camber.
         QBZ5 (float): Variation of slope Bpt with absolute camber.
-        QBZ6 (float): Variation of slope Bpt with camber squared.
+        QBZ6 (Optional[float]): Variation of slope Bpt with camber squared.
         QBZ9 (float): Slope factor Br of residual torque Mzr.
         QBZ10 (float): Slope factor Br of residual torque Mzr.
         QCZ1 (float): Shape factor Cpt for pneumatic trail.
@@ -685,7 +685,7 @@ class AligningCoefficients(_ParameterGroup):
     QBZ3: float
     QBZ4: float
     QBZ5: float
-    QBZ6: float
+    QBZ6: Optional[float] = None
     QBZ9: float
     QBZ10: float
     QCZ1: float

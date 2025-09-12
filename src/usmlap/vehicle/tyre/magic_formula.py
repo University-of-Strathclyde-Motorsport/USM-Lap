@@ -365,14 +365,17 @@ class MagicFormula(object):
 
     @property  # (4.E40)
     def Bt(self) -> float:  # noqa: S100
+        # Note: QBZ6 is used in place of QBZ4 in Pacejka's book.
+        # However, the 6.1.2 manual uses QBZ4.
+        # The available tyre data also uses QBZ4, not QBZ6.
         QBZ1 = self.parameters.ALIGNING_COEFFICIENTS.QBZ1
         QBZ2 = self.parameters.ALIGNING_COEFFICIENTS.QBZ2
         QBZ3 = self.parameters.ALIGNING_COEFFICIENTS.QBZ3
+        QBZ4 = self.parameters.ALIGNING_COEFFICIENTS.QBZ4
         QBZ5 = self.parameters.ALIGNING_COEFFICIENTS.QBZ5
-        QBZ6 = self.parameters.ALIGNING_COEFFICIENTS.QBZ6
         LKY = self.parameters.SCALING_COEFFICIENTS.LKY
         load_factor = QBZ1 + QBZ2 * self.dfz + QBZ3 * self.dfz**2
-        camber_factor = 1 + QBZ5 * abs(self.gamma) * QBZ6 * self.gamma**2
+        camber_factor = 1 + QBZ4 * self.gamma + QBZ5 * abs(self.gamma)
         return load_factor * camber_factor * LKY / self.lmuy_prime
 
     @property  # (4.E41)
