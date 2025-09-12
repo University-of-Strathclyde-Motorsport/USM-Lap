@@ -3,6 +3,7 @@ This module contains functions for working with arrays.
 """
 
 import math
+from itertools import accumulate
 from typing import TypeVar
 
 T = TypeVar("T")
@@ -51,3 +52,16 @@ def diff(x: list[float]) -> list[float]:
     """
     assert len(x) > 1, "x must have at least two elements"
     return [x[i + 1] - x[i] for i in range(len(x) - 1)]
+
+
+def cumsum(values: list[float]) -> list[float]:
+    """
+    Returns the cumulative sum of a list.
+
+    Args:
+        values (list[float]): The input list.
+
+    Returns:
+        list[float]: The cumulative sum of values.
+    """
+    return list(accumulate(values))

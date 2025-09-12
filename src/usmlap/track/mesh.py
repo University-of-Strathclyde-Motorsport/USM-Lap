@@ -8,7 +8,7 @@ from itertools import accumulate
 import numpy as np
 
 from .track_data import Configuration, TrackData
-from utils.array import interp_previous, diff
+from utils.array import diff, cumsum
 
 
 class Node(BaseModel):
@@ -89,10 +89,10 @@ class MeshGenerator(object):
         curvature = self._interpolate_curvature(position)
         # TODO: Implement code for closing the track
 
-        elevation = self._interpolate_elevation(position)
-        banking = self._interpolate_banking(position)
-        grip_factor = self._interpolate_grip_factor(position)
-        sector = self._interpolate_sector(position)
+        elevation = track_data.elevation.interpolate(position)
+        banking = track_data.banking.interpolate(position)
+        grip_factor = track_data.grip_factor.interpolate(position)
+        sector = track_data.sector.interpolate(position)
 
         inclination = self._calculate_inclination(position, elevation)
 
@@ -120,32 +120,6 @@ class MeshGenerator(object):
             curvature_value.append(curvature_value[0])
         return np.interp(position, curvature_position, curvature_value).tolist()
 
-    def _interpolate_elevation(self, position: list[float]) -> list[float]:
-        data = self.track_data.elevation
-        elevation_position = cumsum([point.location for point in data])
-        elevation_value = [point.elevation for point in data]
-        return np.interp(position, elevation_position, elevation_value).tolist()
-
-    def _interpolate_banking(self, position: list[float]) -> list[float]:
-        data = self.track_data.banking
-        banking_position = cumsum([point.location for point in data])
-        banking_value = [point.banking for point in data]
-        return np.interp(position, banking_position, banking_value).tolist()
-
-    def _interpolate_grip_factor(self, position: list[float]) -> list[float]:
-        data = self.track_data.grip_factor
-        grip_factor_position = cumsum([point.startpoint for point in data])
-        grip_factor_value = [point.grip_factor for point in data]
-        return interp_previous(
-            position, grip_factor_position, grip_factor_value
-        )
-
-    def _interpolate_sector(self, position: list[float]) -> list[int]:
-        data = self.track_data.sector
-        sector_position = cumsum([point.startpoint for point in data])
-        sector_value = [point.sector_number for point in data]
-        return interp_previous(position, sector_position, sector_value)
-
     @staticmethod
     def _calculate_inclination(
         position: list[float], elevation: list[float]
@@ -163,8 +137,3 @@ class MeshGenerator(object):
         return np.interp(
             position, inclination_position, inclination_value
         ).tolist()
-
-
-def cumsum(values: list[float]) -> list[float]:
-    """Returns the cumulative sum of a list."""
-    return list(accumulate(values))

@@ -2,15 +2,19 @@
 This module contains code for reading track data from an Excel file.
 """
 
-from enum import Enum
-from typing import Annotated, Self
-from annotated_types import Unit
-from pydantic import BaseModel, Field, ConfigDict
-from abc import ABC
-from math import pi, inf
-import pandas
+from __future__ import annotations
 
-from utils.conversion import degrees_to_radians, radians_to_degrees
+from abc import ABC, abstractmethod
+from collections.abc import Sequence
+from enum import Enum
+from typing import Annotated, Self, overload, TypeVar
+from pydantic import BaseModel, Field, ConfigDict
+from pydantic.dataclasses import dataclass
+from annotated_types import Unit
+import math
+import pandas
+import numpy as np
+from utils.array import interp_previous
 
 
 class Metadata(BaseModel):
@@ -90,7 +94,7 @@ class ShapeData(BaseModel):
         self, section_type: SectionType, length: float, corner_radius: float
     ) -> None:
         if section_type == SectionType.STRAIGHT:
-            corner_radius = inf
+            corner_radius = math.inf
         else:
             corner_radius = corner_radius * section_type.value
         super().__init__(
@@ -104,75 +108,96 @@ class ShapeData(BaseModel):
         return 1 / self.corner_radius
 
 
-class LocationData(ABC, BaseModel):
+T = TypeVar("T")
+
+
+@dataclass
+class PositionData[T](Sequence[T], ABC):
     """
-    Abstract base class for data recorded over a number of locations.
+    Abstract base class for data recorded against a series of positions.
+
+    Subclasses must implement the `interpolate` method.
+
+    Attributes:
+        position (list[float]): The positions of the data.
+        value (list[T]): The values of the data at each position.
     """
 
-    location: Annotated[float, Field(ge=0), Unit("m")]
+    position: list[Annotated[float, Field(ge=0), Unit("m")]]
+    value: list[T]
+
+    def __post_init__(self) -> None:
+        if len(self.position) != len(self.value):
+            raise ValueError("position and value must have the same length")
+
+    def __len__(self) -> int:
+        return len(self.value)
+
+    @overload
+    def __getitem__(self, key: int) -> T: ...
+
+    @overload
+    def __getitem__(self, key: slice) -> Sequence[T]: ...
+
+    def __getitem__(self, key: int | slice) -> Sequence[T] | T:
+        if isinstance(key, int):
+            return self.value[key]
+        else:
+            return self.__class__(self.position[key], self.value[key])
+
+    @abstractmethod
+    def interpolate(self, position: list[float]) -> list[T]: ...
 
 
-# class LocationData2(ABC, BaseModel):
-#     """
-#     Abstract base class for data recorded over a number of locations.
-#     """
+class LocationData(PositionData[float]):
+    """
+    Base class for data recorded at a number of locations.
+    """
 
-#     location: list[Annotated[float, Field(ge=0), Unit("m")]]
-#     value: list[float]
-
-#     def __init__(self, location: list[float], value: list[float]) -> None:
-#         assert len(location) == len(value), (
-#             "location and value must have the same length"
-#         )
-#         super().__init__(location=location, value=value)
-
-#     def length(self) -> float:
-#         return len(self.location)
-
-#     def __iter__(self):
-#         yield from zip(self.location, self.value)
-
-#     def max(self) -> float:
-#         return max(self.value)
-
-#     def min(self) -> float:
-#         return min(self.value)
+    def interpolate(self, position: list[float]) -> list[float]:
+        return np.interp(position, self.position, self.value).tolist()
 
 
+class StartpointData[T](PositionData[T]):
+    """
+    Base class for data recorded with a series of startpoints.
+    """
+
+    def interpolate(self, position: list[float]) -> list[T]:
+        return interp_previous(position, self.position, self.value)
+
+
+@dataclass
 class ElevationData(LocationData):
     """
     Data describing the elevation of the track.
     """
 
-    elevation: Annotated[float, Unit("m")]
+    value: list[Annotated[float, Unit("m")]]
 
 
-# class ElevationData2(LocationData2):
-#     """
-#     Data describing the elevation of the track.
-#     """
-
-#     value: list[Annotated[float, Unit("m")]]
-
-
+@dataclass
 class BankingData(LocationData):
     """
     Data describing the banking angle of the track.
     """
 
-    banking: Annotated[float, Field(ge=-pi / 2, le=pi / 2), Unit("rad")]
+    value: list[
+        Annotated[float, Field(ge=-math.pi / 2, le=math.pi / 2), Unit("rad")]
+    ]
 
 
-class GripFactorData(BaseModel):
+@dataclass
+class GripFactorData(StartpointData[float]):
     """
     Data describing the grip factor of the track.
     """
 
-    startpoint: Annotated[float, Field(ge=0), Unit("m")]
-    grip_factor: Annotated[float, Field(gt=0)]
+    value: list[Annotated[float, Field(gt=0)]]
 
 
-class SectorData(BaseModel):
+@dataclass
+class SectorData(StartpointData[int]):
     """
     Data specifying sectors of the track.
 
@@ -180,8 +205,10 @@ class SectorData(BaseModel):
     and is used purely for visualisation.
     """
 
-    startpoint: Annotated[float, Field(ge=0), Unit("m")]
-    sector_number: Annotated[int, Field(gt=0)]
+    value: list[Annotated[int, Field(gt=0)]]
+
+    def list_sectors(self) -> str:
+        return ", ".join(str(value) for value in self.value)
 
 
 class Event(Enum):
@@ -231,8 +258,8 @@ class TrackData(BaseModel):
     Attributes:
         metadata (Metadata): Metadata for the track, such as name and location.
         shape (list[ShapeData]): Data describing the shape of the track.
-        elevation (list[ElevationData]): Data describing the track elevation.
-        banking (list[BankingData]): Data describing the track banking.
+        elevation (ElevationData): Data describing the track elevation.
+        banking (BankingData): Data describing the track banking.
         grip_factor (list[GripFactorData]): Grip factor data for the track.
         sector (list[SectorData]): Data specifying sectors of the track.
         event (Event): The type of event the track is suitable for.
@@ -245,10 +272,10 @@ class TrackData(BaseModel):
 
     metadata: Metadata
     shape: list[ShapeData]
-    elevation: list[ElevationData]
-    banking: list[BankingData]
-    grip_factor: list[GripFactorData]
-    sector: list[SectorData]
+    elevation: ElevationData
+    banking: BankingData
+    grip_factor: GripFactorData
+    sector: SectorData
     event: Event
     configuration: Configuration
     direction: Direction = Direction.FORWARD
@@ -257,29 +284,6 @@ class TrackData(BaseModel):
     @property
     def total_length(self) -> float:
         return sum(segment.length for segment in self.shape)
-
-    @property
-    def max_elevation(self) -> float:
-        return max(point.elevation for point in self.elevation)
-
-    @property
-    def min_elevation(self) -> float:
-        return min(point.elevation for point in self.elevation)
-
-    @property
-    def max_banking(self) -> float:
-        return max(abs(point.banking) for point in self.banking)
-
-    @property
-    def max_grip_factor(self) -> float:
-        return max(point.grip_factor for point in self.grip_factor)
-
-    @property
-    def min_grip_factor(self) -> float:
-        return min(point.grip_factor for point in self.grip_factor)
-
-    def list_sectors(self) -> str:
-        return ", ".join(str(sector.sector_number) for sector in self.sector)
 
     def __str__(self) -> str:
         return (
@@ -290,12 +294,13 @@ class TrackData(BaseModel):
             f"Mirrored: {self.mirror}\n\n"
             f"Shape data: {len(self.shape)} segments\n"
             f"Elevation data: {len(self.elevation)} points "
-            f"(high: {self.max_elevation} m, low: {self.min_elevation} m)\n"
+            f"(high: {max(self.elevation)} m, low: {min(self.elevation)} m)\n"
             f"Banking data: {len(self.banking)} points "
-            f"(max: {radians_to_degrees(self.max_banking)}°)\n"
+            f"(max: {math.degrees(max(self.banking, key=abs))}°)\n"
             f"Grip factor data: {len(self.grip_factor)} points "
-            f"(max: {self.max_grip_factor}, min: {self.min_grip_factor})\n"
-            f"Sector data: {len(self.sector)} sectors ({self.list_sectors()})\n"
+            f"(max: {max(self.grip_factor)}, min: {min(self.grip_factor)})\n"
+            f"Sector data: {len(self.sector)} sectors "
+            f"({self.sector.list_sectors()})\n"
         )
 
     @classmethod
@@ -363,52 +368,37 @@ class TrackReader(object):
             for _, row in dataframe.iterrows()
         ]
 
-    def get_elevation_data(self) -> list[ElevationData]:
+    def get_elevation_data(self) -> ElevationData:
         """Returns the elevation data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Elevation")
-        # return ElevationData2(
-        #     location=dataframe["Point [m]"].tolist(),
-        #     value=dataframe["Elevation [m]"].tolist(),
-        # )
-        return [
-            ElevationData(
-                location=row["Point [m]"], elevation=row["Elevation [m]"]
-            )
-            for _, row in dataframe.iterrows()
-        ]
+        return ElevationData(
+            position=dataframe["Point [m]"].tolist(),
+            value=dataframe["Elevation [m]"].tolist(),
+        )
 
-    def get_banking_data(self) -> list[BankingData]:
+    def get_banking_data(self) -> BankingData:
         """Returns the banking data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Banking")
-        return [
-            BankingData(
-                location=row["Point [m]"],
-                banking=degrees_to_radians(row["Banking [deg]"]),
-            )
-            for _, row in dataframe.iterrows()
-        ]
+        return BankingData(
+            position=dataframe["Point [m]"].tolist(),
+            value=dataframe["Banking [deg]"].apply(math.radians).tolist(),
+        )
 
-    def get_grip_factor_data(self) -> list[GripFactorData]:
+    def get_grip_factor_data(self) -> GripFactorData:
         """Returns the grip factor data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Grip Factors")
-        return [
-            GripFactorData(
-                startpoint=row["Start Point [m]"],
-                grip_factor=row["Grip Factor [-]"],
-            )
-            for _, row in dataframe.iterrows()
-        ]
+        return GripFactorData(
+            position=dataframe["Start Point [m]"].tolist(),
+            value=dataframe["Grip Factor [-]"].tolist(),
+        )
 
-    def get_sector_data(self) -> list[SectorData]:
+    def get_sector_data(self) -> SectorData:
         """Returns the sector data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Sectors")
-        return [
-            SectorData(
-                startpoint=row["Start Point [m]"],
-                sector_number=row["Sector"],
-            )
-            for _, row in dataframe.iterrows()
-        ]
+        return SectorData(
+            position=dataframe["Start Point [m]"].tolist(),
+            value=dataframe["Sector"].tolist(),
+        )
 
     def get_configuration(self) -> Configuration:
         """Returns the configuration of the track."""
