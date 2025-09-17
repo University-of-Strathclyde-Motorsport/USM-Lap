@@ -14,7 +14,7 @@ from annotated_types import Unit
 import math
 import pandas
 import numpy as np
-from utils.array import interp_previous
+from utils.array import interp_previous, cumsum
 
 
 class Metadata(BaseModel):
@@ -73,7 +73,53 @@ class SectionType(Enum):
     RIGHT = -1
 
 
-class ShapeData(BaseModel):
+@dataclass
+class ShapeData(object):
+    """
+    Data describing the shape of the track.
+
+    Attributes:
+        segments (list[Segment]): The segments making up the track.
+        total_length (float): The total length of the track.
+        corner_radius (float): The radius of the section of the track.
+    """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    # total_length: Annotated[float, Unit("m")]
+    segments: list[Segment]
+
+    def __init__(self, segments: list[Segment]) -> None:
+        print("here!")
+        self.segment_count = len(self.segments)
+        self.total_length = sum(segment.length for segment in self.segments)
+
+    @property
+    def total_length(self) -> float:
+        return sum(segment.length for segment in self.segments)
+
+    @property
+    def segment_count(self) -> float:
+        return len(self.segments)
+
+    def interpolate_curvature(
+        self, position: list[float], closed_track: bool = False
+    ) -> list[float]:
+        lengths = [s.length for s in self.segments]
+        end_positions = cumsum(lengths)
+        curvature_position = [
+            position - (0.5 * length)
+            for position, length in zip(end_positions, lengths)
+        ]
+        curvature_value = [s.curvature for s in self.segments]
+        if closed_track:
+            curvature_position.append(end_positions[-1] + (0.5 * lengths[0]))
+            curvature_value.append(curvature_value[0])
+        return np.interp(position, curvature_position, curvature_value).tolist()
+
+
+@dataclass
+class Segment(object):
     """
     Data describing the shape of a section of track.
 
@@ -84,27 +130,24 @@ class ShapeData(BaseModel):
         corner_radius (float): The radius of the section of the track.
     """
 
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = ConfigDict(
+        use_enum_values=True, arbitrary_types_allowed=True
+    )
 
     section_type: SectionType
     length: Annotated[float, Field(gt=0), Unit("m")]
     corner_radius: Annotated[float, Unit("m")]
 
-    def __init__(
-        self, section_type: SectionType, length: float, corner_radius: float
-    ) -> None:
-        if section_type == SectionType.STRAIGHT:
-            corner_radius = math.inf
+    def __post_init__(self) -> None:
+        if self.section_type == SectionType.STRAIGHT:
+            self.corner_radius = math.inf
         else:
-            corner_radius = corner_radius * section_type.value
-        super().__init__(
-            section_type=section_type,
-            length=length,
-            corner_radius=corner_radius,
-        )
+            self.corner_radius = self.corner_radius * self.section_type.value
 
     @property
     def curvature(self) -> float:
+        if self.corner_radius == 0:
+            print(self.section_type)
         return 1 / self.corner_radius
 
 
@@ -257,11 +300,11 @@ class TrackData(BaseModel):
 
     Attributes:
         metadata (Metadata): Metadata for the track, such as name and location.
-        shape (list[ShapeData]): Data describing the shape of the track.
+        shape (ShapeData): Data describing the shape of the track.
         elevation (ElevationData): Data describing the track elevation.
         banking (BankingData): Data describing the track banking.
-        grip_factor (list[GripFactorData]): Grip factor data for the track.
-        sector (list[SectorData]): Data specifying sectors of the track.
+        grip_factor (GripFactorData): Grip factor data for the track.
+        sector (SectorData): Data specifying sectors of the track.
         event (Event): The type of event the track is suitable for.
         configuration (Configuration): The configuration of the track.
         direction (Direction): The direction of driving (default = FORWARD).
@@ -271,7 +314,7 @@ class TrackData(BaseModel):
     model_config = ConfigDict()
 
     metadata: Metadata
-    shape: list[ShapeData]
+    shape: ShapeData
     elevation: ElevationData
     banking: BankingData
     grip_factor: GripFactorData
@@ -281,18 +324,14 @@ class TrackData(BaseModel):
     direction: Direction = Direction.FORWARD
     mirror: bool = False
 
-    @property
-    def total_length(self) -> float:
-        return sum(segment.length for segment in self.shape)
-
     def __str__(self) -> str:
         return (
             f"{self.metadata}\n\n"
-            f"Length: {self.total_length} m\n"
+            f"Length: {self.shape.total_length} m\n"
             f"Configuration: {str(self.configuration)}\n"
             f"Direction: {str(self.direction)}\n"
             f"Mirrored: {self.mirror}\n\n"
-            f"Shape data: {len(self.shape)} segments\n"
+            f"Shape data: {self.shape.segment_count} segments\n"
             f"Elevation data: {len(self.elevation)} points "
             f"(high: {max(self.elevation)} m, low: {min(self.elevation)} m)\n"
             f"Banking data: {len(self.banking)} points "
@@ -356,17 +395,18 @@ class TrackReader(object):
             city=str(info.at["City", 1]),
         )
 
-    def get_shape_data(self) -> list[ShapeData]:
+    def get_shape_data(self) -> ShapeData:
         """Returns the shape data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Shape")
-        return [
-            ShapeData(
+        segments = [
+            Segment(
                 section_type=SectionType[row["Type"].upper()],
                 length=row["Section Length"],
                 corner_radius=row["Corner Radius"],
             )
             for _, row in dataframe.iterrows()
         ]
+        return ShapeData(segments=segments)
 
     def get_elevation_data(self) -> ElevationData:
         """Returns the elevation data for the track."""

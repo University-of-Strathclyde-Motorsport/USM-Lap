@@ -3,12 +3,14 @@ This module contains code for generating a track mesh.
 """
 
 from pydantic import BaseModel, Field
+from pydantic.dataclasses import dataclass
+from typing import Annotated
+from annotated_types import Unit
 from math import pi, atan
-from itertools import accumulate
 import numpy as np
 
 from .track_data import Configuration, TrackData
-from utils.array import diff, cumsum
+from utils.array import diff
 
 
 class Node(BaseModel):
@@ -62,10 +64,13 @@ class Mesh(BaseModel):
         return self.track_length / self.node_count
 
 
+@dataclass
 class MeshGenerator(object):
     """
     Generates a mesh from a track data object.
     """
+
+    resolution: Annotated[float, Field(gt=0, default=1), Unit("m")]
 
     def generate_mesh(self, track_data: TrackData) -> Mesh:
         """
@@ -78,27 +83,25 @@ class MeshGenerator(object):
             mesh (Mesh): A mesh of the track.
         """
         self.track_data = track_data
-        self.track_length = track_data.total_length
+        self.track_length = track_data.shape.total_length
+        self.node_count = round(self.track_length / self.resolution)
+        self.spacing = self.track_length / (self.node_count - 1)
+        self.position = np.arange(0, self.track_length, self.spacing).tolist()
 
-        length = [shape.length for shape in track_data.shape]
-        position = list(accumulate(length))
-        position.insert(0, 0)
-        position.pop()
+        length = diff(self.position + [self.track_length])
+        curvature = track_data.shape.interpolate_curvature(self.position)
+        # TODO: Implement code for closing the track
         # fractional_position = [p / self.track_length for p in position]
 
-        curvature = self._interpolate_curvature(position)
-        # TODO: Implement code for closing the track
-
-        elevation = track_data.elevation.interpolate(position)
-        banking = track_data.banking.interpolate(position)
-        grip_factor = track_data.grip_factor.interpolate(position)
-        sector = track_data.sector.interpolate(position)
-
-        inclination = self._calculate_inclination(position, elevation)
+        elevation = track_data.elevation.interpolate(self.position)
+        banking = track_data.banking.interpolate(self.position)
+        grip_factor = track_data.grip_factor.interpolate(self.position)
+        sector = track_data.sector.interpolate(self.position)
+        inclination = self._calculate_inclination(self.position, elevation)
 
         nodes = [
             Node(
-                position=position[i],
+                position=self.position[i],
                 length=length[i],
                 curvature=curvature[i],
                 elevation=elevation[i],
@@ -107,18 +110,10 @@ class MeshGenerator(object):
                 grip_factor=grip_factor[i],
                 sector=sector[i],
             )
-            for i in range(len(position))
+            for i in range(len(self.position))
         ]
 
         return Mesh(nodes=nodes, configuration=track_data.configuration)
-
-    def _interpolate_curvature(self, position: list[float]) -> list[float]:
-        curvature_position = cumsum([s.length for s in self.track_data.shape])
-        curvature_value = [s.curvature for s in self.track_data.shape]
-        if self.track_data.configuration == Configuration.CLOSED:
-            curvature_position.append(curvature_position[0] + self.track_length)
-            curvature_value.append(curvature_value[0])
-        return np.interp(position, curvature_position, curvature_value).tolist()
 
     @staticmethod
     def _calculate_inclination(

@@ -15,7 +15,7 @@ class TyreAttitude(object):
     """
     Parameters describing the attitude of a tyre.
 
-    Args:
+    Attributes:
         normal_load (float): The normal load acting on the tyre.
     """
 
