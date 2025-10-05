@@ -3,5 +3,6 @@
     "python-envs.pythonProjects": [],
     "python.analysis.extraPaths": [
         "./src/usmlap"
-    ]
+    ],
+    "mermaidExportPro.autoExport": false
 }
