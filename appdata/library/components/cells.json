@@ -1,0 +1,11 @@
+{
+    "Molicel P30B": {
+        "capacity": 38800,
+        "nominal_voltage": 3.6,
+        "charge_voltage": 4.2,
+        "discharge_voltage": 2.5,
+        "discharge_current": 30,
+        "resistance": 0.017,
+        "datasheet_url": "https://www.molicel.com/wp-content/uploads/Product-Data-Sheet-of-INR-18650-P30B-80111-2.pdf"
+    }
+}
