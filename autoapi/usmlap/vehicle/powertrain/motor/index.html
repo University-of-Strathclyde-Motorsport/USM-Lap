@@ -1092,9 +1092,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.Motor.get_power" class="md-nav__link">
+  <a href="#usmlap.vehicle.powertrain.motor.Motor.get_speed" class="md-nav__link">
     <span class="md-ellipsis">
-      get_power
+      get_speed
     </span>
   </a>
   
@@ -1115,26 +1115,20 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.TorqueMap" class="md-nav__link">
+  <a href="#usmlap.vehicle.powertrain.motor.rads_to_rpm" class="md-nav__link">
     <span class="md-ellipsis">
-      TorqueMap
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="TorqueMap">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.TorqueMap.lookup_torque" class="md-nav__link">
-    <span class="md-ellipsis">
-      lookup_torque
+      rads_to_rpm
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.powertrain.motor.rpm_to_rads" class="md-nav__link">
+    <span class="md-ellipsis">
+      rpm_to_rads
+    </span>
+  </a>
   
 </li>
       
@@ -1459,9 +1453,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.Motor.get_power" class="md-nav__link">
+  <a href="#usmlap.vehicle.powertrain.motor.Motor.get_speed" class="md-nav__link">
     <span class="md-ellipsis">
-      get_power
+      get_speed
     </span>
   </a>
   
@@ -1482,26 +1476,20 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.TorqueMap" class="md-nav__link">
+  <a href="#usmlap.vehicle.powertrain.motor.rads_to_rpm" class="md-nav__link">
     <span class="md-ellipsis">
-      TorqueMap
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="TorqueMap">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usmlap.vehicle.powertrain.motor.TorqueMap.lookup_torque" class="md-nav__link">
-    <span class="md-ellipsis">
-      lookup_torque
+      rads_to_rpm
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#usmlap.vehicle.powertrain.motor.rpm_to_rads" class="md-nav__link">
+    <span class="md-ellipsis">
+      rpm_to_rads
+    </span>
+  </a>
   
 </li>
       
@@ -1584,18 +1572,62 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.torque_map">torque_map</span></code></td>
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.electrical_resistance">electrical_resistance</span></code></td>
             <td>
-                  <code><a class="autorefs autorefs-internal" title="TorqueMap (usmlap.vehicle.powertrain.motor.TorqueMap)" href="#usmlap.vehicle.powertrain.motor.TorqueMap">TorqueMap</a></code>
+                  <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Torque map of the motor.</p>
+                <p>Electrical resistance of the motor.</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.max_rpm">max_rpm</span></code></td>
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.peak_torque">peak_torque</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Peak torque which the motor can deliver for a short period.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.continuous_torque">continuous_torque</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Maximum torque which the motor can deliver continuously.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.peak_current">peak_current</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current required to deliver the peak torque.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.continuous_current">continuous_current</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current required to deliver the continuous torque.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.maximum_rpm">maximum_rpm</span></code></td>
             <td>
                   <code><span title="float">float</span></code>
             </td>
@@ -1605,411 +1637,25 @@
               </div>
             </td>
           </tr>
-      </tbody>
-    </table>
-
-
-
-
-
-
-
-
-              <details class="quote">
-                <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    An electric motor.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        torque_map (TorqueMap): Torque map of the motor.</span>
-<span class="sd">        max_rpm (float): Maximum rotational speed of the motor.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">torque_map</span><span class="p">:</span> <span class="n">TorqueMap</span>
-    <span class="n">max_rpm</span><span class="p">:</span> <span class="nb">float</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">library_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;motors.json&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the torque output of the motor at a given speed.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            speed (float): Rotational speed of the motor.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            torque (float): Torque at the motor shaft.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">rpm</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">*</span> <span class="p">(</span><span class="mi">30</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">rpm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_rpm</span><span class="p">:</span>
-            <span class="n">torque</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">torque</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque_map</span><span class="o">.</span><span class="n">lookup_torque</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">torque</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the power output of the motor at a given speed.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            speed (float): Rotational speed of the motor.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            power (float): Power output of the motor.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_torque</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot_torque_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">torque_map</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot_power_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-        <span class="n">rpm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_rpm</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="n">rpm</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span>
-        <span class="n">power</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_power</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">speed</span><span class="p">]</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rpm</span><span class="p">,</span> <span class="n">power</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Power Map&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Speed (RPM)&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Power (kW)&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div></td></tr></table></div>
-              </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="usmlap.vehicle.powertrain.motor.Motor.get_power" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_power</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Get the power output of the motor at a given speed.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
           <tr class="doc-section-item">
-            <td>
-                <code>speed</code>
-            </td>
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.rated_voltage">rated_voltage</span></code></td>
             <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Rotational speed of the motor.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>power</code></td>            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Power output of the motor.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-            <details class="quote">
-              <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the power output of the motor at a given speed.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        speed (float): Rotational speed of the motor.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        power (float): Power output of the motor.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_torque</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="usmlap.vehicle.powertrain.motor.Motor.get_torque" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_torque</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span></code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Get the torque output of the motor at a given speed.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>speed</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Rotational speed of the motor.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>torque</code></td>            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Torque at the motor shaft.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-            <details class="quote">
-              <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the torque output of the motor at a given speed.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        speed (float): Rotational speed of the motor.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        torque (float): Torque at the motor shaft.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rpm</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">*</span> <span class="p">(</span><span class="mi">30</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rpm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_rpm</span><span class="p">:</span>
-        <span class="n">torque</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">torque</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque_map</span><span class="o">.</span><span class="n">lookup_torque</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">torque</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="usmlap.vehicle.powertrain.motor.TorqueMap" class="doc doc-heading">
-            <code>TorqueMap</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
-
-
-        <p>A torque map for a motor.</p>
-
-
-<p><span class="doc-section-title">Attributes:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td><code><span title="usmlap.vehicle.powertrain.motor.TorqueMap.rpm">rpm</span></code></td>
-            <td>
-                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Rotational speeds of the motor</p>
+                <p>Rated voltage of the motor.</p>
               </div>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="usmlap.vehicle.powertrain.motor.TorqueMap.torque">torque</span></code></td>
+            <td><code><span title="usmlap.vehicle.powertrain.motor.Motor.datasheet_url">datasheet_url</span></code></td>
             <td>
-                  <code><span title="list">list</span>[<span title="float">float</span>]</code>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Corresponding torques at the motor shaft</p>
+                <p>URL for the datasheet of the motor.</p>
               </div>
             </td>
           </tr>
@@ -2025,7 +1671,10 @@
 
               <details class="quote">
                 <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
@@ -2056,38 +1705,103 @@
 <span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
-<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TorqueMap</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Motor</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A torque map for a motor.</span>
+<span class="sd">    An electric motor.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        rpm (list[float]): Rotational speeds of the motor</span>
-<span class="sd">        torque (list[float]): Corresponding torques at the motor shaft</span>
+<span class="sd">        electrical_resistance (float): Electrical resistance of the motor.</span>
+<span class="sd">        peak_torque (float):</span>
+<span class="sd">            Peak torque which the motor can deliver for a short period.</span>
+<span class="sd">        continuous_torque (float):</span>
+<span class="sd">            Maximum torque which the motor can deliver continuously.</span>
+<span class="sd">        peak_current (float): Current required to deliver the peak torque.</span>
+<span class="sd">        continuous_current (float):</span>
+<span class="sd">            Current required to deliver the continuous torque.</span>
+<span class="sd">        maximum_rpm (float): Maximum rotational speed of the motor.</span>
+<span class="sd">        rated_voltage (float): Rated voltage of the motor.</span>
+<span class="sd">        datasheet_url (str): URL for the datasheet of the motor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">rpm</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
-    <span class="n">torque</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">electrical_resistance</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">peak_torque</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">continuous_torque</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">peak_current</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">continuous_current</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">maximum_rpm</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rated_voltage</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">datasheet_url</span><span class="p">:</span> <span class="nb">str</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">lookup_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">library_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;motors.json&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maximum_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rpm_to_rads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maximum_rpm</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed_per_volt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">maximum_speed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rated_voltage</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">torque_per_amp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak_torque</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak_current</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voltage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Lookup the motor torque at a given speed.</span>
+<span class="sd">        Calculate the motor speed for an input voltage.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            rpm (float): Rotational speed of the motor.</span>
+<span class="sd">            voltage (float): Voltage applied to the motor.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            torque (float): Torque at the motor shaft.</span>
+<span class="sd">            speed (float): Rotational speed of the motor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">rpm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">voltage</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_per_volt</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Torque Map&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Speed (RPM)&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Torque (Nm)&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the motor torque for an input current.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            current (float): Current applied to the motor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            torque (float): Torque output of the motor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">current</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque_per_amp</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2107,15 +1821,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="usmlap.vehicle.powertrain.motor.TorqueMap.lookup_torque" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">lookup_torque</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span></code>
+<h3 id="usmlap.vehicle.powertrain.motor.Motor.get_speed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_speed</span><span class="p">(</span><span class="n">voltage</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Lookup the motor torque at a given speed.</p>
+        <p>Calculate the motor speed for an input voltage.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2131,14 +1845,111 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                <code>rpm</code>
+                <code>voltage</code>
             </td>
             <td>
                   <code><span title="float">float</span></code>
             </td>
             <td>
               <div class="doc-md-description">
+                <p>Voltage applied to the motor.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>speed</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
                 <p>Rotational speed of the motor.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voltage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the motor speed for an input voltage.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        voltage (float): Voltage applied to the motor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        speed (float): Rotational speed of the motor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">voltage</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_per_volt</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="usmlap.vehicle.powertrain.motor.Motor.get_torque" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_torque</span><span class="p">(</span><span class="n">current</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculate the motor torque for an input current.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>current</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current applied to the motor.</p>
               </div>
             </td>
             <td>
@@ -2164,7 +1975,7 @@
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Torque at the motor shaft.</p>
+                <p>Torque output of the motor.</p>
               </div>
             </td>
           </tr>
@@ -2174,27 +1985,27 @@
 
             <details class="quote">
               <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">lookup_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lookup the motor torque at a given speed.</span>
+<span class="sd">    Calculate the motor torque for an input current.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        rpm (float): Rotational speed of the motor.</span>
+<span class="sd">        current (float): Current applied to the motor.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        torque (float): Torque at the motor shaft.</span>
+<span class="sd">        torque (float): Torque output of the motor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">rpm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">current</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">torque_per_amp</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2209,6 +2020,200 @@
 
 </div>
 
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="usmlap.vehicle.powertrain.motor.rads_to_rpm" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rads_to_rpm</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert from radians per second to RPM</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>speed</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Speed in radians per second</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>rpm</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Speed in revolutions per minute</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rads_to_rpm</span><span class="p">(</span><span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert from radians per second to RPM</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        speed (float): Speed in radians per second</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        rpm (float): Speed in revolutions per minute</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">speed</span> <span class="o">*</span> <span class="p">(</span><span class="mi">30</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="usmlap.vehicle.powertrain.motor.rpm_to_rads" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rpm_to_rads</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert from RPM to radians per second</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>rpm</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Speed in revolutions per minute</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>speed</code></td>            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Speed in radians per second</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\usmlap\vehicle\powertrain\motor.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rpm_to_rads</span><span class="p">(</span><span class="n">rpm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert from RPM to radians per second</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rpm (float): Speed in revolutions per minute</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        speed (float): Speed in radians per second</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rpm</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
 
 
 
