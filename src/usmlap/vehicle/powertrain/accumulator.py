@@ -33,6 +33,24 @@ class Cell(Component):
     def library_name(cls) -> str:
         return "cells.json"
 
+    def get_voltage(self, state_of_charge: float) -> float:
+        """
+        Get approximate cell voltage from state of charge.
+
+        This function interpolates linearly
+        between the charge and discharge voltage.
+
+        Args:
+            state_of_charge (float): State of charge, between 0 and 1.
+
+        Returns:
+            voltage (float): Voltage of the cell.
+        """
+        return (
+            self.charge_voltage * state_of_charge
+            + self.discharge_voltage * (1 - state_of_charge)
+        )
+
 
 class Accumulator(BaseModel):
     """
@@ -58,11 +76,11 @@ class Accumulator(BaseModel):
 
     @property
     def maximum_voltage(self) -> float:
-        return self.cell.charge_voltage * self.cells_in_series
+        return self.get_voltage(state_of_charge=1)
 
     @property
     def minimum_voltage(self) -> float:
-        return self.cell.discharge_voltage * self.cells_in_series
+        return self.get_voltage(state_of_charge=0)
 
     @property
     def maximum_discharge_current(self) -> float:
@@ -74,3 +92,14 @@ class Accumulator(BaseModel):
             self.cell.resistance * self.cells_in_series / self.cells_in_parallel
         )
 
+    def get_voltage(self, state_of_charge: float) -> float:
+        """
+        Get the voltage of the accumulator at a given state of charge.
+
+        Args:
+            state_of_charge (float): State of charge, between 0 and 1.
+
+        Returns:
+            voltage (float): Voltage of the accumulator.
+        """
+        return self.cell.get_voltage(state_of_charge) * self.cells_in_series

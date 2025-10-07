@@ -3,44 +3,7 @@ This module models the motor of a vehicle.
 """
 
 import math
-import numpy as np
-import matplotlib.pyplot as plt
-from pydantic import BaseModel
 from ..common import Component
-
-
-class TorqueMap(BaseModel):
-    """
-    A torque map for a motor.
-
-    Attributes:
-        rpm (list[float]): Rotational speeds of the motor
-        torque (list[float]): Corresponding torques at the motor shaft
-    """
-
-    rpm: list[float]
-    torque: list[float]
-
-    def lookup_torque(self, rpm: float) -> float:
-        """
-        Lookup the motor torque at a given speed.
-
-        Args:
-            rpm (float): Rotational speed of the motor.
-
-        Returns:
-            torque (float): Torque at the motor shaft.
-        """
-        return np.interp(rpm, self.rpm, self.torque)
-
-    def plot(self) -> None:
-        _, ax = plt.subplots()
-        ax.plot(self.rpm, self.torque)
-        ax.set_title("Torque Map")
-        ax.set_xlabel("Speed (RPM)")
-        ax.set_ylabel("Torque (Nm)")
-        ax.grid()
-        plt.show()
 
 
 class Motor(Component):
@@ -48,57 +11,90 @@ class Motor(Component):
     An electric motor.
 
     Attributes:
-        torque_map (TorqueMap): Torque map of the motor.
-        max_rpm (float): Maximum rotational speed of the motor.
+        electrical_resistance (float): Electrical resistance of the motor.
+        peak_torque (float):
+            Peak torque which the motor can deliver for a short period.
+        continuous_torque (float):
+            Maximum torque which the motor can deliver continuously.
+        peak_current (float): Current required to deliver the peak torque.
+        continuous_current (float):
+            Current required to deliver the continuous torque.
+        maximum_rpm (float): Maximum rotational speed of the motor.
+        rated_voltage (float): Rated voltage of the motor.
+        datasheet_url (str): URL for the datasheet of the motor.
     """
 
-    torque_map: TorqueMap
-    max_rpm: float
+    electrical_resistance: float
+    peak_torque: float
+    continuous_torque: float
+    peak_current: float
+    continuous_current: float
+    maximum_rpm: float
+    rated_voltage: float
+    datasheet_url: str
 
     @classmethod
     def library_name(cls) -> str:
         return "motors.json"
 
-    def get_torque(self, speed: float) -> float:
+    @property
+    def maximum_speed(self) -> float:
+        return rpm_to_rads(self.maximum_rpm)
+
+    @property
+    def speed_per_volt(self) -> float:
+        return self.maximum_speed / self.rated_voltage
+
+    @property
+    def torque_per_amp(self) -> float:
+        return self.peak_torque / self.peak_current
+
+    def get_speed(self, voltage: float) -> float:
         """
-        Get the torque output of the motor at a given speed.
+        Calculate the motor speed for an input voltage.
 
         Args:
-            speed (float): Rotational speed of the motor.
+            voltage (float): Voltage applied to the motor.
 
         Returns:
-            torque (float): Torque at the motor shaft.
+            speed (float): Rotational speed of the motor.
         """
-        rpm = speed * (30 / math.pi)
-        if rpm > self.max_rpm:
-            torque = 0
-        else:
-            torque = self.torque_map.lookup_torque(rpm)
-        return torque
+        return voltage * self.speed_per_volt
 
-    def get_power(self, speed: float) -> float:
+    def get_torque(self, current: float) -> float:
         """
-        Get the power output of the motor at a given speed.
+        Calculate the motor torque for an input current.
 
         Args:
-            speed (float): Rotational speed of the motor.
+            current (float): Current applied to the motor.
 
         Returns:
-            power (float): Power output of the motor.
+            torque (float): Torque output of the motor.
         """
-        return speed * self.get_torque(speed)
+        return current * self.torque_per_amp
 
-    def plot_torque_curve(self) -> None:
-        self.torque_map.plot()
 
-    def plot_power_curve(self) -> None:
-        _, ax = plt.subplots()
-        rpm = np.linspace(0, self.max_rpm, 100)
-        speed = rpm * (math.pi / 30)
-        power = [self.get_power(s) / 1000 for s in speed]
-        ax.plot(rpm, power)
-        ax.set_title("Power Map")
-        ax.set_xlabel("Speed (RPM)")
-        ax.set_ylabel("Power (kW)")
-        ax.grid()
-        plt.show()
+def rpm_to_rads(rpm: float) -> float:
+    """
+    Convert from RPM to radians per second
+
+    Args:
+        rpm (float): Speed in revolutions per minute
+
+    Returns:
+        speed (float): Speed in radians per second
+    """
+    return rpm * (math.pi / 30)
+
+
+def rads_to_rpm(speed: float) -> float:
+    """
+    Convert from radians per second to RPM
+
+    Args:
+        speed (float): Speed in radians per second
+
+    Returns:
+        rpm (float): Speed in revolutions per minute
+    """
+    return speed * (30 / math.pi)
