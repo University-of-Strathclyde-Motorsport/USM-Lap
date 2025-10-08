@@ -2,8 +2,7 @@
 This module models the electric accumulator of a vehicle.
 """
 
-from pydantic import BaseModel
-from ..common import Component
+from ..common import Component, Subsystem
 
 
 class Cell(Component):
@@ -52,7 +51,7 @@ class Cell(Component):
         )
 
 
-class Accumulator(BaseModel):
+class Accumulator(Subsystem):
     """
     An electric accumulator.
 

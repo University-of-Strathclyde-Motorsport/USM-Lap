@@ -1,0 +1,9 @@
+{
+    "accumulator": {
+        "cell": "Molicel P30b",
+        "cells_in_parallel": 6,
+        "cells_in_series": 112
+    },
+    "motor": "EMRAX 228",
+    "motor_controller": "BAMOCAR"
+}

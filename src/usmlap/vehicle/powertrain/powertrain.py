@@ -8,12 +8,13 @@ from pydantic.dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
 
+from ..common import Subsystem
 from .accumulator import Accumulator
 from .motor import Motor
 from .motor_controller import MotorController
 
 
-class Powertrain(ABC):
+class Powertrain(ABC, Subsystem):
     """
     Abstract base class for powertrain models.
     """
@@ -21,7 +22,6 @@ class Powertrain(ABC):
     ...
 
 
-@dataclass
 class RWDPowertrain(Powertrain):
     """
     Implements a single motor, rear wheel drive electric powertrain.
