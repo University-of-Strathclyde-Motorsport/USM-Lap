@@ -18,8 +18,6 @@ class SuspensionAxle(Subsystem, ABC):
             The width of the track, measured between contact patches.
     """
 
-    # suspension_type: str
-
     track_width: Annotated[PositiveFloat, Unit("m")]
 
 
@@ -29,10 +27,6 @@ class DecoupledSuspension(SuspensionAxle):
     """
 
     suspension_type: Literal["decoupled"]
-
-    @classmethod
-    def implementation_name(cls) -> str:
-        return "decoupled"
 
     roll_centre_height: Annotated[PositiveFloat, Unit("m")]
     heave_motion_ratio: PositiveFloat
@@ -47,10 +41,6 @@ class AlternativeSuspension(SuspensionAxle):
     """
 
     suspension_type: Literal["alternative"]
-
-    @classmethod
-    def implementation_name(cls) -> str:
-        return "alternative"
 
 
 SuspensionImplementation = Annotated[
