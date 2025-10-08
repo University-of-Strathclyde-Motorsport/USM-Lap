@@ -13,11 +13,14 @@ class Steering(Subsystem):
     The steering system of the vehicle.
 
     Attributes:
-        steering_ratio (float): The ratio of steering angle to wheel angle.
+        steering_ratio (float):
+            The ratio of steering angle to wheel angle.
             A steering ratio of 5 means that
             for every 5 degrees the steering wheel is rotated,
             the wheels rotate 1 degree.
-        steering_wheel_radius (float): The radius of the steering wheel.
+        steering_wheel_radius (float):
+            The radius of the steering wheel.
+            Used for calculating steering torque.
     """
 
     steering_ratio: PositiveFloat

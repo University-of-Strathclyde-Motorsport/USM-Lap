@@ -3,17 +3,34 @@ This module models the suspension of a vehicle.
 """
 
 from .common import Subsystem
+from abc import ABC
 from typing import Annotated
 from annotated_types import Unit
 from pydantic import PositiveFloat
 
 
-class SuspensionAxle(Subsystem):
+class SuspensionAxle(ABC, Subsystem):
     """
-    The suspension for a single axle of a vehicle.
+    Abstract base class for suspension on a single axle of a vehicle.
+
+    Attributes:
+        track_width (float):
+            The width of the track, measured between contact patches.
     """
 
-    pass
+    track_width: Annotated[PositiveFloat, Unit("m")]
+
+
+class DecoupledSuspension(SuspensionAxle):
+    """
+    Decoupled suspension system.
+    """
+
+    roll_centre_height: Annotated[PositiveFloat, Unit("m")]
+    heave_motion_ratio: PositiveFloat
+    heave_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
+    roll_motion_ratio: PositiveFloat
+    roll_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
 
 
 class Suspension(Subsystem):
@@ -21,9 +38,9 @@ class Suspension(Subsystem):
     The suspension system of a vehicle.
 
     Attributes:
-        front (SuspensionAxle):
+        front (DecoupledSuspension):
             Front axle suspension.
-        rear (SuspensionAxle):
+        rear (DecoupledSuspension):
             Rear axle suspension.
         wheelbase (float):
             The distance between the front and rear wheels,
@@ -38,9 +55,7 @@ class Suspension(Subsystem):
             The height of the centre of gravity above the ground plane.
     """
 
-    front: SuspensionAxle
-    rear: SuspensionAxle
+    front: DecoupledSuspension
+    rear: DecoupledSuspension
     wheelbase: Annotated[PositiveFloat, Unit("m")]
-    front_track_width: Annotated[PositiveFloat, Unit("m")]
-    rear_track_width: Annotated[PositiveFloat, Unit("m")]
     centre_of_gravity_height: Annotated[PositiveFloat, Unit("m")]

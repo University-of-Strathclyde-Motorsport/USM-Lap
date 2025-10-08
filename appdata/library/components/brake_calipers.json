@@ -1,0 +1,10 @@
+{
+    "front caliper": {
+        "piston_count": 4,
+        "piston_diameter": 0.025
+    },
+    "rear caliper": {
+        "piston_count": 2,
+        "piston_diameter": 0.025
+    }
+}

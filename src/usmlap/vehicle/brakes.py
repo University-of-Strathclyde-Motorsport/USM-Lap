@@ -32,7 +32,7 @@ class MasterCylinder(Component):
         return "master_cylinders.json"
 
 
-class BrakeCaliper(Subsystem):
+class BrakeCaliper(Component):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
 
@@ -49,8 +49,12 @@ class BrakeCaliper(Subsystem):
     def piston_area(self) -> float:
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
+    @classmethod
+    def library_name(cls) -> str:
+        return "brake_calipers.json"
 
-class BrakeDisc(Subsystem):
+
+class BrakeDisc(Component):
     """
     The brake disc attached to the wheel.
 
@@ -60,8 +64,12 @@ class BrakeDisc(Subsystem):
 
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
+    @classmethod
+    def library_name(cls) -> str:
+        return "brake_discs.json"
 
-class BrakePad(Subsystem):
+
+class BrakePad(Component):
     """
     The brake pad attached to the caliper.
 
@@ -73,6 +81,10 @@ class BrakePad(Subsystem):
 
     height: Annotated[PositiveFloat, Unit("m")]
     coefficient_of_friction: PositiveFloat
+
+    @classmethod
+    def library_name(cls) -> str:
+        return "brake_pads.json"
 
 
 class BrakeLine(Subsystem):

@@ -1,0 +1,57 @@
+{
+    "brakes": {
+        "front": {
+            "cylinder": "CP7855-94",
+            "caliper": "front caliper",
+            "disc": "default",
+            "pad": "default"
+        },
+        "rear": {
+            "cylinder": "CP7855-96",
+            "caliper": "rear caliper",
+            "disc": "default",
+            "pad": "default"
+        },
+        "pedal_ratio": 3.6,
+        "front_brake_bias": 0.681,
+        "regen_torque": 40
+    },
+    "powertrain": {
+        "accumulator": {
+            "cell": "Molicel P30b",
+            "cells_in_parallel": 6,
+            "cells_in_series": 112
+        },
+        "motor": "EMRAX 228",
+        "motor_controller": "BAMOCAR"
+    },
+    "steering": {
+        "steering_ratio": 5,
+        "steering_wheel_radius": 0.2
+    },
+    "suspension": {
+        "wheelbase": 1.535,
+        "centre_of_gravity_height": 0.3,
+        "front": {
+            "track_width": 1.2,
+            "roll_centre_height": 0.04,
+            "heave_motion_ratio": 0.95,
+            "heave_spring_rate": 87560,
+            "roll_motion_ratio": 1.5,
+            "roll_spring_rate": 87560
+        },
+        "rear": {
+            "track_width": 1.2,
+            "roll_centre_height": 0.06,
+            "heave_motion_ratio": 0.95,
+            "heave_spring_rate": 96320,
+            "roll_motion_ratio": 1.2,
+            "roll_spring_rate": 39400
+        }
+    },
+    "transmission": {
+        "primary_gear_reduction": 1,
+        "final_gear_reduction": 3,
+        "gear_ratios": [1]
+    }
+}
