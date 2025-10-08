@@ -3,13 +3,13 @@ This module models the suspension of a vehicle.
 """
 
 from .common import Subsystem
-from abc import ABC
-from typing import Annotated
+from typing import Literal, Annotated, Union
 from annotated_types import Unit
-from pydantic import PositiveFloat
+from pydantic import Field, PositiveFloat
+from abc import ABC
 
 
-class SuspensionAxle(ABC, Subsystem):
+class SuspensionAxle(Subsystem, ABC):
     """
     Abstract base class for suspension on a single axle of a vehicle.
 
@@ -17,6 +17,8 @@ class SuspensionAxle(ABC, Subsystem):
         track_width (float):
             The width of the track, measured between contact patches.
     """
+
+    # suspension_type: str
 
     track_width: Annotated[PositiveFloat, Unit("m")]
 
@@ -26,11 +28,35 @@ class DecoupledSuspension(SuspensionAxle):
     Decoupled suspension system.
     """
 
+    suspension_type: Literal["decoupled"]
+
+    @classmethod
+    def implementation_name(cls) -> str:
+        return "decoupled"
+
     roll_centre_height: Annotated[PositiveFloat, Unit("m")]
     heave_motion_ratio: PositiveFloat
     heave_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
     roll_motion_ratio: PositiveFloat
     roll_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
+
+
+class AlternativeSuspension(SuspensionAxle):
+    """
+    Alternative suspension system.
+    """
+
+    suspension_type: Literal["alternative"]
+
+    @classmethod
+    def implementation_name(cls) -> str:
+        return "alternative"
+
+
+SuspensionImplementation = Annotated[
+    Union[DecoupledSuspension, AlternativeSuspension],
+    Field(discriminator="suspension_type"),
+]
 
 
 class Suspension(Subsystem):
@@ -55,7 +81,7 @@ class Suspension(Subsystem):
             The height of the centre of gravity above the ground plane.
     """
 
-    front: DecoupledSuspension
-    rear: DecoupledSuspension
+    front: SuspensionImplementation
+    rear: SuspensionImplementation
     wheelbase: Annotated[PositiveFloat, Unit("m")]
     centre_of_gravity_height: Annotated[PositiveFloat, Unit("m")]
