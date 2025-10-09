@@ -1,6 +1,6 @@
 {
     "Hoozier 16 x 7.5 - 10 R20": {
-        "radius": 0.20574, 
+        "unloaded_radius": 0.20574, 
         "tyre_model": {
             "model_type": "linear",
             "mu_x_peak": 1.8,

@@ -166,7 +166,15 @@ TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
 
 
 class Tyre(Component):
-    radius: float
+    """
+    A racing tyre.
+
+    Attributes:
+        unloaded_radius (float): The unloaded radius of the tyre.
+        tyre_model (TyreModel): The tyre model.
+    """
+
+    unloaded_radius: float
     tyre_model: TyreModel
 
     @classmethod
