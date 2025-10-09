@@ -2,12 +2,13 @@
 This module contains various tyre model implementations.
 """
 
-from abc import ABC, abstractmethod
-from typing import Annotated
-from annotated_types import Field, Unit
-from pydantic import PositiveFloat
+from abc import abstractmethod
+from typing import Annotated, Literal
+from annotated_types import Unit
+from pydantic import Field, PositiveFloat
 from pydantic.dataclasses import dataclass
 from math import sqrt
+from ..common import Subsystem, AbstractSubsystem
 
 
 @dataclass
@@ -22,10 +23,14 @@ class TyreAttitude(object):
     normal_load: Annotated[float, Field(ge=0), Unit("N")]
 
 
-class TyreModelInterface(ABC):
+class TyreModelInterface(AbstractSubsystem):
     """
     Abstract base class for tyre models.
     """
+
+    @classmethod
+    def library_name(cls) -> str:
+        return "tyres.json"
 
     @abstractmethod
     def calculate_lateral_force(
@@ -94,8 +99,7 @@ class TyreModelInterface(ABC):
         pass
 
 
-@dataclass
-class LinearTyreModel(TyreModelInterface):
+class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
     """
     Implements a load-sensitive linear tyre model.
 
@@ -113,6 +117,8 @@ class LinearTyreModel(TyreModelInterface):
         cornering_stiffness (float):
             The lateral force generated per unit of slip angle.
     """
+
+    tyre_model: Literal["linear"]
 
     mu_x_peak: PositiveFloat
     mu_x_load_sensitivity: Annotated[float, Unit("1/N")]
@@ -153,8 +159,24 @@ class LinearTyreModel(TyreModelInterface):
         fy_max = self._get_fy_max(tyre_attitude.normal_load)
         return fx_max * self._get_scale_factor(required_fy, fy_max)
 
-    def get_slip_ratio(self, _, fx: float) -> float:
+    def get_slip_ratio(self, tyre_attitude: TyreAttitude, fx: float) -> float:
         return fx / self.slip_stiffness
 
-    def get_slip_angle(self, _, fy: float) -> float:
+    def get_slip_angle(self, tyre_attitude: TyreAttitude, fy: float) -> float:
         return fy / self.cornering_stiffness
+
+
+TyreModel = Annotated[LinearTyreModel, Field(discriminator="tyre_model")]
+
+
+class Tyres(Subsystem):
+    """
+    The tyres of a vehicle.
+
+    Attributes:
+        front (TyreModel): The front tyres of the vehicle.
+        rear (TyreModel): The rear tyres of the vehicle.
+    """
+
+    front: TyreModel
+    rear: TyreModel

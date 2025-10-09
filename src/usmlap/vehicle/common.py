@@ -95,6 +95,9 @@ class Component(ABC, Subsystem):
         Returns:
             library_path (str): Path to the component library.
         """
+        if not cls.library_name():
+            error_message = f"No library specified for class {cls.__name__}"
+            raise ValueError(error_message)
         return "appdata/library/components/" + cls.library_name()
 
     @classmethod

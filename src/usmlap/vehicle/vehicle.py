@@ -8,6 +8,7 @@ from .powertrain.powertrain import RWDPowertrain
 from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
+from .tyre.tyre_model import Tyres
 
 
 class Vehicle(Subsystem):
@@ -27,3 +28,4 @@ class Vehicle(Subsystem):
     steering: Steering
     suspension: Suspension
     transmission: Transmission
+    tyres: Tyres
