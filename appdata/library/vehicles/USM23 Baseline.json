@@ -1,4 +1,9 @@
 {
+    "metadata": {
+        "name": "USM23 Baseline",
+        "year": 2023
+    },
+    "driver": "small",
     "brakes": {
         "front": {
             "cylinder": "CP7855-94",
@@ -15,6 +20,20 @@
         "pedal_ratio": 3.6,
         "front_brake_bias": 0.681,
         "regen_torque": 40
+    },
+    "inertia": {
+        "curb_mass": 225,
+        "front_mass_distribution": 0.5,
+        "centre_of_gravity_height": 0.3,
+        "yaw_inertia": 75,
+        "front_unsprung_mass": {
+            "mass": 9,
+            "centre_of_gravity_height": 0.2
+        },
+        "rear_unsprung_mass": {
+            "mass": 9,
+            "centre_of_gravity_height": 0.2
+        }
     },
     "powertrain": {
         "accumulator": {

@@ -1,0 +1,10 @@
+{
+    "small": {
+        "mass":  65,
+        "height": 1.6
+    },
+    "medium": {
+        "mass": 75,
+        "height": 1.8
+    }
+}
