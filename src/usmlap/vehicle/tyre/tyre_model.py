@@ -8,7 +8,7 @@ from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 from pydantic.dataclasses import dataclass
 from math import sqrt
-from ..common import Subsystem, AbstractSubsystem
+from ..common import Component, Subsystem, AbstractSubsystem
 
 
 @dataclass
@@ -27,10 +27,6 @@ class TyreModelInterface(AbstractSubsystem):
     """
     Abstract base class for tyre models.
     """
-
-    @classmethod
-    def library_name(cls) -> str:
-        return "tyres.json"
 
     @abstractmethod
     def calculate_lateral_force(
@@ -118,7 +114,7 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
             The lateral force generated per unit of slip angle.
     """
 
-    tyre_model: Literal["linear"]
+    model_type: Literal["linear"]
 
     mu_x_peak: PositiveFloat
     mu_x_load_sensitivity: Annotated[float, Unit("1/N")]
@@ -166,7 +162,16 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
         return fy / self.cornering_stiffness
 
 
-TyreModel = Annotated[LinearTyreModel, Field(discriminator="tyre_model")]
+TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
+
+
+class Tyre(Component):
+    radius: float
+    tyre_model: TyreModel
+
+    @classmethod
+    def library_name(cls) -> str:
+        return "tyres.json"
 
 
 class Tyres(Subsystem):
@@ -178,5 +183,5 @@ class Tyres(Subsystem):
         rear (TyreModel): The rear tyres of the vehicle.
     """
 
-    front: TyreModel
-    rear: TyreModel
+    front: Tyre
+    rear: Tyre
