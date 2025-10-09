@@ -4,6 +4,7 @@ This module models the full vehicle.
 
 from .common import Subsystem
 from .driver import Driver
+from .aero import AeroPackage
 from .brakes import Brakes
 from .inertia import Inertia
 from .powertrain.powertrain import RWDPowertrain
@@ -35,6 +36,7 @@ class Vehicle(Subsystem):
     Attributes:
         metadata (Metadata): The metadata of the vehicle.
         driver (Driver): The driver of the vehicle.
+        aero (AeroPackage): The aerodynamic package of the vehicle.
         brakes (Brakes): The brakes of the vehicle.
         powertrain (RWDPowertrain): The powertrain of the vehicle.
         inertia (Inertia): The inertia properties of the vehicle.
@@ -46,6 +48,7 @@ class Vehicle(Subsystem):
 
     metadata: Metadata
     driver: Driver
+    aero: AeroPackage
     brakes: Brakes
     inertia: Inertia
     powertrain: RWDPowertrain

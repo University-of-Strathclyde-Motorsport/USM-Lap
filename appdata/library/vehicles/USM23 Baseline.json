@@ -4,6 +4,14 @@
         "year": 2023
     },
     "driver": "small",
+    "aero": {
+        "frontal_area": 1.002,
+        "aero_model": {
+            "model_type": "constant",
+            "lift_coefficient": -5,
+            "drag_coefficient": -1.5
+        }
+    },
     "brakes": {
         "front": {
             "cylinder": "CP7855-94",
