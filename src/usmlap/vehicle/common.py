@@ -4,10 +4,9 @@ This module contains code shared by all vehicle components.
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from pydantic import BaseModel, model_validator, ModelWrapValidatorHandler
+from pydantic import BaseModel, model_validator
 import json
-from typing import Self, Any
-import inspect
+from typing import Self, Any, Optional, ClassVar
 
 
 class Subsystem(BaseModel):
@@ -45,47 +44,34 @@ class Subsystem(BaseModel):
         return self.model_dump_json(indent=4)
 
 
-class AbstractSubsystem(ABC, Subsystem):
+class AbstractSubsystem(Subsystem):
     """
     Abstract base class for subsystems with different implementations.
+
+    https://typethepipe.com/post/pydantic-discriminated-union/
     """
 
-    @classmethod
-    @abstractmethod
-    def implementation_name(cls) -> str: ...
+    _subtypes: ClassVar[dict[str, type]] = {}
+
+    def __init_subclass__(
+        cls: Any, type: Optional[str] = None, **kwargs: Any
+    ) -> None:
+        super().__init_subclass__(**kwargs)
+        if type:
+            cls.type = type
+            if type in cls._subtypes:
+                error_message = (
+                    f"Class {cls.__name__} cannot be registered "
+                    f"with polymorphic type '{type}' "
+                    f"because it's already registered "
+                    f"to {cls._subtypes[type].__name__}"
+                )
+                raise AttributeError(error_message)
+            cls._subtypes[type] = cls
 
     @classmethod
-    def list_implementations(cls) -> dict[str, type]:
-        subclasses = cls.__subclasses__()
-        implementations: dict[str, type] = {}
-        for subclass in subclasses:
-            implementations[subclass.implementation_name()] = subclass
-        return implementations
-
-    @classmethod
-    def get_implementation(cls, implementation: str) -> type:
-        implementations = cls.list_implementations()
-        if implementation not in implementations:
-            raise ValueError(f"Invalid implementation: {implementation}")
-        return implementations[implementation]
-
-    @model_validator(mode="wrap")
-    @classmethod
-    def select_implementation(
-        cls, data: Any, handler: ModelWrapValidatorHandler[Self]
-    ) -> Self:
-        if inspect.isabstract(cls):
-            abstract_flag = inspect.isabstract(cls)
-            print(f"Class: {cls.__name__}, abstract: {abstract_flag}")
-            print(f"Data: {data}")
-            implementation = data["implementation"]
-            print(f"Implementation: {implementation}")
-            implementation_type = cls.get_implementation(implementation)
-            print(f"Implementation type: {implementation_type}")
-            constructor = implementation_type
-        else:
-            constructor = cls
-        return constructor.model_validate(**data)
+    def get_subtype_dictionary(cls) -> dict[str, type]:
+        return cls._subtypes
 
 
 class Component(ABC, Subsystem):

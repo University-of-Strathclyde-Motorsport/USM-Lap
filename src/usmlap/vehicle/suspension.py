@@ -2,14 +2,14 @@
 This module models the suspension of a vehicle.
 """
 
-from .common import Subsystem
-from typing import Literal, Annotated, Union
+from .common import Subsystem, AbstractSubsystem
+from typing import Annotated, Union, Literal
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 from abc import ABC
 
 
-class SuspensionAxle(Subsystem, ABC):
+class SuspensionAxle(ABC, AbstractSubsystem):
     """
     Abstract base class for suspension on a single axle of a vehicle.
 
@@ -21,9 +21,9 @@ class SuspensionAxle(Subsystem, ABC):
     track_width: Annotated[PositiveFloat, Unit("m")]
 
 
-class DecoupledSuspension(SuspensionAxle):
+class DecoupledSuspension(SuspensionAxle, type="decoupled"):
     """
-    Decoupled suspension system.
+    Decoupled suspension, with separate heave and roll springs.
     """
 
     suspension_type: Literal["decoupled"]
@@ -35,16 +35,16 @@ class DecoupledSuspension(SuspensionAxle):
     roll_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
 
 
-class AlternativeSuspension(SuspensionAxle):
+class DirectActuationSuspension(SuspensionAxle, type="direct_actuation"):
     """
-    Alternative suspension system.
+    Direct actuation suspension, with one spring per corner.
     """
 
-    suspension_type: Literal["alternative"]
+    suspension_type: Literal["direct_actuation"]
 
 
 SuspensionImplementation = Annotated[
-    Union[DecoupledSuspension, AlternativeSuspension],
+    Union[DecoupledSuspension, DirectActuationSuspension],
     Field(discriminator="suspension_type"),
 ]
 
@@ -54,9 +54,9 @@ class Suspension(Subsystem):
     The suspension system of a vehicle.
 
     Attributes:
-        front (DecoupledSuspension):
+        front (SuspensionImplementation):
             Front axle suspension.
-        rear (DecoupledSuspension):
+        rear (SuspensionImplementation):
             Rear axle suspension.
         wheelbase (float):
             The distance between the front and rear wheels,
