@@ -1,5 +1,5 @@
 [project]
-name = "USM-Lap"
+name = "usmlap"
 version = "0.1.0"
 description = "USM laptime simulator, built in Python"
 readme = "README.md"
@@ -7,12 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "annotated-types>=0.7.0",
     "matplotlib>=3.10.6",
-    "mkdocs>=1.6.1",
-    "mkdocs-autoapi>=0.4.1",
-    "mkdocs-gen-files>=0.5.0",
-    "mkdocs-material>=9.6.18",
-    "mkdocstrings-python>=1.18.2",
-    "mkdocstrings[python]>=0.30.0",
     "numpy>=2.3.2",
     "openpyxl>=3.1.5",
     "pandas>=2.3.2",
@@ -23,3 +17,19 @@ dependencies = [
 
 [tool.uv]
 package = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths  = "tests"
+
+[tool.coverage.run]
+source_pkgs = ["usmlap"]
+omit = ["__main__.py"]
+
+[tool.coverage.report]
+skip_empty = true

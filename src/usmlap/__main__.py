@@ -1,16 +1,27 @@
 from vehicle.vehicle import Vehicle
+from track.mesh import MeshGenerator
+from track.track_data import TrackData
+from simulation.simulation import Simulation
+from simulation.environment import Environment
+from simulation.model.point_mass import PointMassVehicleModel
+from simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 
-root = "D:/Repositories/USM-Lap/appdata/library/vehicles/"
-filename = "USM23 Baseline.json"
+root = "D:/Repositories/USM-Lap/appdata/library/"
 
-vehicle = Vehicle.from_json(root + filename)
-print(vehicle.to_json())
-print(f"Front suspension: {type(vehicle.suspension.front).__name__}")
-print(vehicle.suspension.front.to_json())
-print(f"Rear suspension: {type(vehicle.suspension.rear).__name__}")
-print(vehicle.suspension.rear.to_json())
-print(
-    f"Tyres: {type(vehicle.tyres.front).__name__}, {type(vehicle.tyres.rear).__name__}"
+vehicle_file = root + "vehicles/USM23 Baseline.json"
+vehicle = Vehicle.from_json(vehicle_file)
+
+track_file = root + "tracks/FS AutoX Germany 2012.xlsx"
+track_data = TrackData.load_track_from_spreadsheet(track_file)
+mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+
+simulation = Simulation(
+    vehicle=vehicle,
+    track=mesh,
+    environment=Environment(),
+    vehicle_model=PointMassVehicleModel(),
+    solver=QuasiSteadyStateSolver(),
 )
-print(vehicle.tyres.front.to_json())
-print(vehicle.tyres.rear.to_json())
+print(simulation)
+
+mesh.plot_traces()
