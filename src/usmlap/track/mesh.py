@@ -8,6 +8,7 @@ from typing import Annotated
 from annotated_types import Unit
 from math import pi, atan
 import numpy as np
+import matplotlib.pyplot as plt
 
 from .track_data import Configuration, TrackData
 from utils.array import diff
@@ -63,11 +64,41 @@ class Mesh(BaseModel):
     def resolution(self) -> float:
         return self.track_length / self.node_count
 
+    def plot_traces(self) -> None:
+        position = [node.position for node in self.nodes]
+        curvature = [node.curvature for node in self.nodes]
+        elevation = [node.elevation for node in self.nodes]
+        inclination = [node.inclination for node in self.nodes]
+        banking = [node.banking for node in self.nodes]
+
+        data: dict[str, list[float]] = {
+            "Curvature": curvature,
+            "Elevation": elevation,
+            "Inclination": inclination,
+            "Banking": banking,
+        }
+
+        fig, axs = plt.subplots(len(data), sharex=True)
+        fig.suptitle("Track Mesh Parameters")
+        axs[-1].set_xlabel("Position")
+
+        i = 0
+        for label, ydata in data.items():
+            axs[i].plot(position, ydata)
+            axs[i].set_title(label)
+            axs[i].set_ylabel(label)
+            axs[i].grid()
+            i += 1
+        plt.show()
+
 
 @dataclass
 class MeshGenerator(object):
     """
     Generates a mesh from a track data object.
+
+    Attributes:
+        resolution (float): The target length of a node in meters.
     """
 
     resolution: Annotated[float, Field(gt=0, default=1), Unit("m")]

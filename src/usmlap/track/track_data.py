@@ -89,11 +89,6 @@ class ShapeData(object):
     # total_length: Annotated[float, Unit("m")]
     segments: list[Segment]
 
-    def __init__(self, segments: list[Segment]) -> None:
-        print("here!")
-        self.segment_count = len(self.segments)
-        self.total_length = sum(segment.length for segment in self.segments)
-
     @property
     def total_length(self) -> float:
         return sum(segment.length for segment in self.segments)

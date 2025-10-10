@@ -3,9 +3,9 @@ This module models the brake system of a vehicle.
 """
 
 from .common import Component, Subsystem
-from utils import geometry, proportion
+from usmlap.utils import geometry, proportion
 from pydantic import PositiveFloat, PositiveInt
-from datatypes import FrontRear, Percentage
+from usmlap.datatypes import FrontRear, Percentage
 from typing import Annotated
 from annotated_types import Unit
 
@@ -104,22 +104,22 @@ class BrakeLine(Subsystem):
     pad: BrakePad
 
     @property
-    def _area_scaling_factor(self) -> float:
+    def area_scaling_factor(self) -> float:
         """The force scaling factor between the cylinder and caliper."""
         return self.caliper.piston_area / self.cylinder.piston_area
 
     @property
-    def _effective_radius(self) -> float:
+    def effective_radius(self) -> float:
         """The radius at which the braking force is applied to the wheel."""
         return 0.5 * (self.disc.outer_diameter - self.pad.height)
 
     @property
-    def _force_to_torque_scaling_factor(self) -> float:
+    def force_to_torque_scaling_factor(self) -> float:
         """The ratio between braking torque and master cylinder force."""
         return (
-            self._area_scaling_factor
+            self.area_scaling_factor
             * self.pad.coefficient_of_friction
-            * self._effective_radius
+            * self.effective_radius
         )
 
     def get_brake_pressure(self, cylinder_force: float) -> float:
@@ -144,7 +144,7 @@ class BrakeLine(Subsystem):
         Returns:
             braking_torque (float): Torque applied to the wheel.
         """
-        return cylinder_force * self._force_to_torque_scaling_factor
+        return cylinder_force * self.force_to_torque_scaling_factor
 
     def torque_to_force(self, braking_torque: float) -> float:
         """
@@ -156,7 +156,7 @@ class BrakeLine(Subsystem):
         Returns:
             cylinder_force (float): Force required on the master cylinder.
         """
-        return braking_torque / self._force_to_torque_scaling_factor
+        return braking_torque / self.force_to_torque_scaling_factor
 
 
 class Brakes(Subsystem):
