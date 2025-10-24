@@ -124,10 +124,10 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
     cornering_stiffness: float
 
     def _get_mu_x(self, normal_load: float) -> float:
-        return self.mu_x_peak + (self.mu_x_load_sensitivity * normal_load)
+        return self.mu_x_peak - (self.mu_x_load_sensitivity * normal_load)
 
     def _get_mu_y(self, normal_load: float) -> float:
-        return self.mu_y_peak + (self.mu_y_load_sensitivity * normal_load)
+        return self.mu_y_peak - (self.mu_y_load_sensitivity * normal_load)
 
     def _get_fx_max(self, normal_load: float) -> float:
         return self._get_mu_x(normal_load) * normal_load

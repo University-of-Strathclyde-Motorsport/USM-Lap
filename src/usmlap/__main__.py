@@ -6,7 +6,7 @@ from simulation.environment import Environment
 from simulation.model.point_mass import PointMassVehicleModel
 from simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 
-root = "D:/Repositories/USM-Lap/appdata/library/"
+root = "C:/Repositories/USM-Lap/appdata/library/"
 
 vehicle_file = root + "vehicles/USM23 Baseline.json"
 vehicle = Vehicle.from_json(vehicle_file)
@@ -24,4 +24,5 @@ simulation = Simulation(
 )
 print(simulation)
 
-mesh.plot_traces()
+velocities = simulation.solve()
+print(velocities)

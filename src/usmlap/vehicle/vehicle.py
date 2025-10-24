@@ -56,3 +56,18 @@ class Vehicle(Subsystem):
     suspension: Suspension
     transmission: Transmission
     tyres: Tyres
+
+    @property
+    def total_mass(self) -> float:
+        return self.inertia.curb_mass + self.driver.mass
+
+    @property
+    def equivalent_mass(self) -> float:
+        return self.total_mass  # TODO
+
+    @property
+    def maximum_velocity(self) -> float:
+        motor_speed = self.powertrain.get_maximum_motor_speed(1)
+        tyre_radius = self.tyres.rear.unloaded_radius
+        final_drive_ratio = min(self.transmission.overall_gear_ratio)
+        return motor_speed * tyre_radius / final_drive_ratio

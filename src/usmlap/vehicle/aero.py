@@ -25,11 +25,11 @@ class AeroAttitude(BaseModel):
     """
 
     velocity: float = Field(ge=0)
-    front_ride_height: float = Field(ge=0)
-    rear_ride_height: float = Field(ge=0)
-    roll_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2)
-    pitch_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2)
-    yaw_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2)
+    front_ride_height: float = Field(ge=0, default=0)
+    rear_ride_height: float = Field(ge=0, default=0)
+    roll_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
+    pitch_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
+    yaw_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
 
 
 class AeroModelInterface(ABC, AbstractSubsystem):
@@ -53,8 +53,8 @@ class ConstantAero(AeroModelInterface, type="constant"):
 
     model_type: Literal["constant"]
 
-    lift_coefficient: float = Field(le=0)
-    drag_coefficient: float = Field(le=0)
+    lift_coefficient: float = Field(gt=0)
+    drag_coefficient: float = Field(gt=0)
 
     def get_lift_coefficient(self, attitude: AeroAttitude) -> float:
         return self.lift_coefficient
@@ -81,7 +81,7 @@ class AeroPackage(Subsystem):
         lift_coefficient = self.aero_model.get_lift_coefficient(attitude)
         return self.calculate_aero_force(lift_coefficient, attitude)
 
-    def get_lift(self, attitude: AeroAttitude) -> float:
+    def get_drag(self, attitude: AeroAttitude) -> float:
         drag_coefficient = self.aero_model.get_drag_coefficient(attitude)
         return self.calculate_aero_force(drag_coefficient, attitude)
 
