@@ -16,6 +16,7 @@ class AeroAttitude(BaseModel):
     Aerodynamic attitude of a vehicle.
 
     Attributes:
+        air_density (float): The density of air.
         velocity (float): The velocity of the vehicle.
         front_ride_height (float): The front ride height of the vehicle.
         rear_ride_height (float): The rear ride height of the vehicle.
@@ -24,6 +25,7 @@ class AeroAttitude(BaseModel):
         yaw_angle (float): The yaw angle of the vehicle.
     """
 
+    air_density: float = Field(gt=0)
     velocity: float = Field(ge=0)
     front_ride_height: float = Field(ge=0, default=0)
     rear_ride_height: float = Field(ge=0, default=0)
@@ -88,4 +90,10 @@ class AeroPackage(Subsystem):
     def calculate_aero_force(
         self, coefficient: float, attitude: AeroAttitude
     ) -> float:
-        return 0.5 * coefficient * self.frontal_area * attitude.velocity**2
+        return (
+            0.5
+            * coefficient
+            * self.frontal_area
+            * attitude.air_density
+            * attitude.velocity**2
+        )

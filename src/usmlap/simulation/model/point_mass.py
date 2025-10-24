@@ -31,7 +31,9 @@ class PointMassVehicleModel(VehicleModelInterface):
             i += 1
 
             # Aero forces
-            aero_attitude = AeroAttitude(velocity=v)
+            aero_attitude = AeroAttitude(
+                velocity=v, air_density=environment.air_density
+            )
             downforce = vehicle.aero.get_downforce(aero_attitude)
             drag = vehicle.aero.get_drag(aero_attitude)
             normal_load = (weight_z + downforce) / 4
@@ -42,11 +44,17 @@ class PointMassVehicleModel(VehicleModelInterface):
 
             tyre_attitude = TyreAttitude(normal_load=normal_load)
             try:
-                available_fy = (
+                fy_front = (
                     vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude, required_fx / 4
+                        tyre_attitude, required_fx=0
                     )
-                ) * 4
+                )
+                fy_rear = (
+                    vehicle.tyres.front.tyre_model.calculate_lateral_force(
+                        tyre_attitude, required_fx / 2
+                    )
+                )
+                available_fy = 2 * (fy_front + fy_rear)
             except ValueError:
                 available_fy = 0
 
@@ -73,7 +81,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         centripetal_force = vehicle.total_mass * velocity**2 * node.curvature
         required_fy = abs(weight_y + centripetal_force)
 
-        aero_attitude = AeroAttitude(velocity=velocity)
+        aero_attitude = AeroAttitude(
+            velocity=velocity, air_density=environment.air_density
+        )
         downforce = vehicle.aero.get_downforce(aero_attitude)
         drag = vehicle.aero.get_drag(aero_attitude)
         normal_load = (weight_z + downforce) / 4
@@ -83,7 +93,7 @@ class PointMassVehicleModel(VehicleModelInterface):
             vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
                 tyre_attitude, required_fy / 4
             )
-            * 4
+            * 2
         )
         resistive_fx = drag + weight_x
         net_fx = traction_fx - resistive_fx
@@ -104,7 +114,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         centripetal_force = vehicle.total_mass * velocity**2 * node.curvature
         required_fy = abs(weight_y + centripetal_force)
 
-        aero_attitude = AeroAttitude(velocity=velocity)
+        aero_attitude = AeroAttitude(
+            velocity=velocity, air_density=environment.air_density
+        )
         downforce = vehicle.aero.get_downforce(aero_attitude)
         drag = vehicle.aero.get_drag(aero_attitude)
         normal_load = (weight_z + downforce) / 4
