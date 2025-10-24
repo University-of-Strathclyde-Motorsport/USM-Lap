@@ -5,7 +5,7 @@
         "continuous_torque": 102,
         "peak_current": 240,
         "continuous_current": 115,
-        "maximum_rpm": 5500,
+        "maximum_rpm": 6500,
         "rated_voltage": 670,
         "datasheet_url": "https://emrax.com/wp-content/uploads/2017/01/emrax_228_technical_data_4.5.pdf"
     }

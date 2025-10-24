@@ -5,8 +5,9 @@ from simulation.simulation import Simulation
 from simulation.environment import Environment
 from simulation.model.point_mass import PointMassVehicleModel
 from simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
+import matplotlib.pyplot as plt
 
-root = "C:/Repositories/USM-Lap/appdata/library/"
+root = "D:/Repositories/USM-Lap/appdata/library/"
 
 vehicle_file = root + "vehicles/USM23 Baseline.json"
 vehicle = Vehicle.from_json(vehicle_file)
@@ -22,7 +23,19 @@ simulation = Simulation(
     vehicle_model=PointMassVehicleModel(),
     solver=QuasiSteadyStateSolver(),
 )
-print(simulation)
 
-velocities = simulation.solve()
-print(velocities)
+solution = simulation.solve()
+solution.plot_apexes()
+
+velocity = [solution.data[i].velocity for i in range(len(solution.data) - 1)]
+acceleration: list[float] = []
+for i in range(len(solution.data) - 1):
+    u = solution.data[i].velocity
+    v = solution.data[i + 1].velocity
+    s = solution.data[i].node.length
+    a = (v**2 - u**2) / (2 * s)
+    acceleration.append(a)
+
+_, ax = plt.subplots()
+ax.scatter(velocity, acceleration)
+plt.show()

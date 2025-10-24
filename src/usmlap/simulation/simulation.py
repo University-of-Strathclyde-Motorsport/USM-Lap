@@ -2,15 +2,76 @@
 This module contains code for running a simulation.
 """
 
+from __future__ import annotations
 import math
 from pydantic import BaseModel, ConfigDict
 from vehicle.vehicle import Vehicle
-from vehicle.aero import AeroAttitude
-from vehicle.tyre.tyre_model import TyreAttitude
 from track.mesh import Mesh, Node
 from .environment import Environment
 from .model.point_mass import PointMassVehicleModel
 from .solver.quasi_steady_state import QuasiSteadyStateSolver
+from scipy.signal import find_peaks
+import matplotlib.pyplot as plt
+from collections import UserList
+
+
+class NodeSolution(BaseModel):
+    """
+    The solution at a single node.
+    """
+
+    node: Node
+    maximum_velocity: float
+    forward_velocity: float = 0
+    backward_velocity: float = 0
+    acceleration: float = 0
+
+    @property
+    def velocity(self) -> float:
+        return min(self.forward_velocity, self.backward_velocity)
+
+
+class Solution(UserList[NodeSolution]):
+    """
+    The solution to a simulation.
+    """
+
+    def find_apexes(self) -> list[int]:
+        apex_indices, _ = find_peaks(
+            [-solution.maximum_velocity for solution in self.data]
+        )
+        apex_indices = set(apex_indices.tolist())
+        apex_indices.update([0, len(self.data) - 1])
+        apex_velocities = [self.data[i].maximum_velocity for i in apex_indices]
+        _, sorted_apexes = zip(*sorted(zip(apex_velocities, apex_indices)))
+        return list(sorted_apexes)
+
+    def plot_apexes(self) -> None:
+        position = [solution.node.position for solution in self.data]
+        maximum_velocity = [solution.maximum_velocity for solution in self.data]
+        forward_velocity = [solution.forward_velocity for solution in self.data]
+        backward_velocity = [
+            solution.backward_velocity for solution in self.data
+        ]
+        velocity = [solution.velocity for solution in self.data]
+        apexes = self.find_apexes()
+        apex_velocity = [self.data[apex].maximum_velocity for apex in apexes]
+        apex_position = [self.data[apex].node.position for apex in apexes]
+
+        fig, ax = plt.subplots()
+        fig.suptitle("Solution")
+        ax.plot(position, maximum_velocity, color="blue")
+        ax.plot(position, forward_velocity, color="green", linestyle="--")
+        ax.plot(position, backward_velocity, color="red", linestyle="--")
+        ax.plot(position, velocity, color="orange")
+        ax.scatter(apex_position, apex_velocity, marker="o", color="red")
+        for i in range(len(apexes)):
+            plt.text(apex_position[i] + 2, apex_velocity[i], str(i + 1))
+        ax.set_xlabel("Position (m)")
+        ax.set_ylabel("Velocity (m/s)")
+        ax.set_title("Maximum Velocity")
+        ax.grid()
+        plt.show()
 
 
 class Simulation(BaseModel):
@@ -25,67 +86,123 @@ class Simulation(BaseModel):
     environment: Environment = Environment()
     vehicle_model: PointMassVehicleModel = PointMassVehicleModel()
     solver: QuasiSteadyStateSolver = QuasiSteadyStateSolver()
+    solution: Solution = Solution()
 
-    def solve(self) -> list[float]:
-        maximum_speed: list[float] = []
+    def solve(self) -> Solution:
         for node in self.track.nodes:
-            maximum_speed.append(self.lateral_vehicle_model(node))
-        return maximum_speed
-
-    def lateral_vehicle_model(self, node: Node) -> float:
-        print(f"Node: {node}")
-        if node.curvature == 0:
-            return 100  # Vehicle maximum speed
-
-        # Weight
-        weight = self.vehicle.total_mass * self.environment.gravity
-        weight_z = weight * math.cos(node.banking) * math.cos(node.inclination)
-        weight_y = -weight * math.sin(node.banking)
-        weight_x = weight * math.sin(node.inclination)
-
-        print(f"Weight: {weight}, X: {weight_x}, Y: {weight_y}, Z: {weight_z}")
-
-        # Initial speed solution
-        v = self.vehicle.maximum_velocity  # Improve initial guess
-        i = 0
-
-        # Calculate forces
-        while i < 10000:
-            i += 1
-            print(f"Iteration {i}, velocity = {v}")
-            aero_attitude = AeroAttitude(velocity=v)
-            downforce = self.vehicle.aero.get_downforce(aero_attitude)
-            drag = self.vehicle.aero.get_drag(aero_attitude)
-            # Rolling resistance
-            normal_load = (weight_z + downforce) / 4
-
-            print(
-                f"Downforce: {downforce}, Drag: {drag}, Normal load: {normal_load}"
+            self.solution.append(
+                NodeSolution(
+                    node=node,
+                    maximum_velocity=self.solve_maximum_velocity(node),
+                )
             )
+        self.solution[0].maximum_velocity = 0
+        apexes = self.solution.find_apexes()
+        print(f"Apexes: {apexes}")
 
-            tyre_attitude = TyreAttitude(normal_load=normal_load)
-            required_fx = drag + weight_x
-            required_fy = self.vehicle.total_mass * abs(
-                v**2 * node.curvature
-                + (self.environment.gravity * math.sin(node.banking))
-            )
-            try:
-                available_fy = (
-                    self.vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude, required_fx / 4
+        # Forward propagation
+        for apex in apexes:
+            print(f"Forwards propagating from apex at node {apex}")
+            self.solution[apex].forward_velocity = self.solution[
+                apex
+            ].maximum_velocity
+
+            i = apex
+            while i < len(self.solution) - 1:
+                if (
+                    self.solution[i + 1].maximum_velocity
+                    <= self.solution[i].forward_velocity
+                ):
+                    next_velocity = self.solution[i + 1].maximum_velocity
+                else:
+                    potential_acceleration = (
+                        self.vehicle_model.calculate_acceleration(
+                            vehicle=self.vehicle,
+                            environment=self.environment,
+                            node=self.solution[i].node,
+                            velocity=self.solution[i].forward_velocity,
+                        )
                     )
-                ) * 4
-            except ValueError:
-                available_fy = 0
+                    u = self.solution[i].forward_velocity
+                    s = self.solution[i].node.length
+                    potential_velocity = math.sqrt(
+                        u**2 + 2 * potential_acceleration * s
+                    )
+                    next_velocity = min(
+                        potential_velocity,
+                        self.solution[i + 1].maximum_velocity,
+                    )
 
-            print(f"Required fx: {required_fx}, fy: {required_fy}")
-            print(f"Available fy: {available_fy}")
+                self.solution[i + 1].forward_velocity = next_velocity
+                i += 1
+                if i in apexes:
+                    if (
+                        self.solution[i].forward_velocity
+                        < self.solution[i].maximum_velocity
+                    ):
+                        apexes.remove(i)
+                    else:
+                        break
+                print(
+                    f"Node: {i}, maximum velocity: {self.solution[i].maximum_velocity}, velocity: {next_velocity}"
+                )
 
-            if available_fy < required_fy:
-                ay = (available_fy + weight_y) / self.vehicle.total_mass
-                v = math.sqrt(ay / abs(node.curvature)) - 0.001
-            else:
-                break
+        # Backward propagation
+        for apex in apexes:
+            print(f"Backwards propagating from apex at node {apex}")
+            self.solution[apex].backward_velocity = self.solution[
+                apex
+            ].maximum_velocity
 
-        print(f"Converged after {i} iterations")
-        return v
+            i = apex
+            while i > 0:
+                if (
+                    self.solution[i - 1].maximum_velocity
+                    <= self.solution[i].forward_velocity
+                ):
+                    next_velocity = self.solution[i - 1].maximum_velocity
+                else:
+                    potential_acceleration = (
+                        self.vehicle_model.calculate_braking(
+                            vehicle=self.vehicle,
+                            environment=self.environment,
+                            node=self.solution[i].node,
+                            velocity=self.solution[i].backward_velocity,
+                        )
+                    )
+                    v = self.solution[i].backward_velocity
+                    s = self.solution[i].node.length
+                    term = v**2 + 2 * potential_acceleration * s
+                    if term <= 0:
+                        potential_velocity = 0
+                    else:
+                        potential_velocity = math.sqrt(term)
+
+                    next_velocity = min(
+                        potential_velocity,
+                        self.solution[i - 1].maximum_velocity,
+                    )
+
+                self.solution[i - 1].backward_velocity = next_velocity
+                i -= 1
+                if i in apexes:
+                    if (
+                        self.solution[i].backward_velocity
+                        < self.solution[i].maximum_velocity
+                    ):
+                        apexes.remove(i)
+                    else:
+                        break
+                print(
+                    f"Node: {i}, maximum velocity: {self.solution[i].maximum_velocity}, velocity: {next_velocity}"
+                )
+
+        print(f"There are {len(apexes)} apexes")
+        return self.solution
+
+    def solve_maximum_velocity(self, node: Node) -> float:
+        if node.curvature == 0:
+            return self.vehicle.maximum_velocity
+        return self.vehicle_model.lateral_vehicle_model(
+            self.vehicle, self.environment, node
+        ).velocity
