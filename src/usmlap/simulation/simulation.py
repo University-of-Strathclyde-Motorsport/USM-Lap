@@ -10,7 +10,8 @@ from track.mesh import Mesh, Node
 from .environment import Environment
 from .model.point_mass import PointMassVehicleModel
 from .solver.quasi_steady_state import QuasiSteadyStateSolver
-from .solution import Solution, NodeSolution
+from .solution import Solution
+from .solution import Node as SolutionNode
 
 
 class Simulation(BaseModel):
@@ -30,75 +31,70 @@ class Simulation(BaseModel):
     def solve(self) -> Solution:
         for node in self.track.nodes:
             self.solution.append(
-                NodeSolution(
+                SolutionNode(
                     node=node,
                     maximum_velocity=self.solve_maximum_velocity(node),
                 )
             )
-        self.solution[0].maximum_velocity = 0
+
         apexes = self.solution.find_apexes()
+        apexes.insert(0, 0)
+        self.solution[0].initial_velocity = 0
 
         # Forward propagation
         for apex in apexes:
-            print(f"Forwards propagating from apex at node {apex}")
-            self.solution[apex].forward_velocity = self.solution[
-                apex
-            ].maximum_velocity
+            if apex != 0:
+                self.solution[apex].initial_velocity = self.solution[
+                    apex
+                ].maximum_velocity
 
             i = apex
-            while i < len(self.solution) - 1:
-                maximum_velocity = self.solution[i + 1].maximum_velocity
-                if maximum_velocity <= self.solution[i].forward_velocity:
-                    velocity = self.solution[i + 1].maximum_velocity
-                else:
-                    traction_limited_velocity = (
-                        self.calculate_traction_limited_velocity(
-                            node_solution=self.solution[i]
-                        )
-                    )
-                    velocity = min(traction_limited_velocity, maximum_velocity)
+            while i < len(self.solution):
+                current_node = self.solution[i]
+                final_velocity = self.calculate_final_velocity(current_node)
+                current_node.final_velocity = final_velocity
 
-                self.solution[i + 1].forward_velocity = velocity
-                i += 1
-                if i in apexes:
-                    if (
-                        self.solution[i].forward_velocity
-                        < self.solution[i].maximum_velocity
-                    ):
-                        apexes.remove(i)
+                if i >= len(self.solution) - 1:
+                    break
+
+                next_node = self.solution[i + 1]
+                next_node.initial_velocity = final_velocity
+
+                if i + 1 in apexes:
+                    if final_velocity < next_node.maximum_velocity:
+                        apexes.remove(i + 1)
                     else:
                         break
+
+                i += 1
+
+        print(f"There are {len(apexes)} apexes before back propagation")
 
         # Backward propagation
         for apex in apexes:
-            print(f"Backwards propagating from apex at node {apex}")
-            self.solution[apex].backward_velocity = self.solution[
-                apex
-            ].maximum_velocity
-
             i = apex
             while i > 0:
-                maximum_velocity = self.solution[i - 1].maximum_velocity
-                if maximum_velocity <= self.solution[i].backward_velocity:
-                    velocity = self.solution[i - 1].maximum_velocity
-                else:
-                    traction_limited_velocity = (
-                        self.calculate_traction_limited_velocity_braking(
-                            node_solution=self.solution[i]
-                        )
-                    )
-                    velocity = min(traction_limited_velocity, maximum_velocity)
+                current_node = self.solution[i]
+                previous_node = self.solution[i - 1]
 
-                self.solution[i - 1].backward_velocity = velocity
-                i -= 1
-                if i in apexes:
-                    if (
-                        self.solution[i].backward_velocity
-                        < self.solution[i].maximum_velocity
-                    ):
-                        apexes.remove(i)
+                maximum_velocity = previous_node.final_velocity
+                if maximum_velocity <= current_node.final_velocity:
+                    break
+
+                initial_velocity = self.calculate_initial_velocity(
+                    current_node, maximum_velocity
+                )
+
+                current_node.initial_velocity = initial_velocity
+                previous_node.final_velocity = initial_velocity
+
+                if i - 1 in apexes:
+                    if initial_velocity < previous_node.final_velocity:
+                        apexes.remove(i - 1)
                     else:
                         break
+
+                i -= 1
 
         print(f"There are {len(apexes)} apexes")
         return self.solution
@@ -110,39 +106,56 @@ class Simulation(BaseModel):
             self.vehicle, self.environment, node
         ).velocity
 
-    def calculate_traction_limited_velocity(
-        self, node_solution: NodeSolution
+    def calculate_final_velocity(self, node_solution: SolutionNode) -> float:
+        maximum_velocity = node_solution.maximum_velocity
+        traction_limit_velocity = self.traction_limit_velocity(node_solution)
+        return min(traction_limit_velocity, maximum_velocity)
+
+    def calculate_initial_velocity(
+        self, node_solution: SolutionNode, maximum_velocity: float
     ) -> float:
-        traction_limited_acceleration = (
-            self.vehicle_model.calculate_acceleration(
+        traction_limit_velocity = self.traction_limit_velocity_braking(
+            node_solution
+        )
+        return min(traction_limit_velocity, maximum_velocity)
+
+    def traction_limit_velocity(self, node_solution: SolutionNode) -> float:
+        try:
+            traction_limited_acceleration = (
+                self.vehicle_model.calculate_acceleration(
+                    vehicle=self.vehicle,
+                    environment=self.environment,
+                    node=node_solution.node,
+                    velocity=node_solution.initial_velocity,
+                )
+            )
+            traction_limited_velocity = calculate_next_velocity(
+                initial_velocity=node_solution.initial_velocity,
+                acceleration=traction_limited_acceleration,
+                displacement=node_solution.node.length,
+            )
+            return traction_limited_velocity
+        except ValueError:
+            return node_solution.maximum_velocity
+
+    def traction_limit_velocity_braking(
+        self, node_solution: SolutionNode
+    ) -> float:
+        try:
+            traction_limited_braking = self.vehicle_model.calculate_braking(
                 vehicle=self.vehicle,
                 environment=self.environment,
                 node=node_solution.node,
-                velocity=node_solution.forward_velocity,
+                velocity=node_solution.final_velocity,
             )
-        )
-        traction_limited_velocity = calculate_next_velocity(
-            initial_velocity=node_solution.forward_velocity,
-            acceleration=traction_limited_acceleration,
-            displacement=node_solution.node.length,
-        )
-        return traction_limited_velocity
-
-    def calculate_traction_limited_velocity_braking(
-        self, node_solution: NodeSolution
-    ) -> float:
-        traction_limited_braking = self.vehicle_model.calculate_braking(
-            vehicle=self.vehicle,
-            environment=self.environment,
-            node=node_solution.node,
-            velocity=node_solution.backward_velocity,
-        )
-        traction_limited_velocity = calculate_previous_velocity(
-            initial_velocity=node_solution.backward_velocity,
-            acceleration=traction_limited_braking,
-            displacement=node_solution.node.length,
-        )
-        return traction_limited_velocity
+            traction_limited_velocity = calculate_previous_velocity(
+                initial_velocity=node_solution.final_velocity,
+                acceleration=traction_limited_braking,
+                displacement=node_solution.node.length,
+            )
+            return traction_limited_velocity
+        except ValueError:
+            return node_solution.maximum_velocity
 
 
 def calculate_next_velocity(

@@ -24,4 +24,7 @@ simulation = Simulation(
 )
 
 solution = simulation.solve()
-solution.plot_velocity_acceleration()
+solution.plot_apexes()
+
+print(f"Time: {solution.total_time} s")
+print(f"Average velocity: {solution.average_velocity} m/s")
