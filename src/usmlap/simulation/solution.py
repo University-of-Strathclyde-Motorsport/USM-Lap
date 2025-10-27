@@ -26,6 +26,7 @@ class Node(BaseModel):
     acceleration: float = 0
     initial_velocity: float = 0
     final_velocity: float = 0
+    anchor: bool = False
 
     @property
     def length(self) -> float:

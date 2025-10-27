@@ -17,6 +17,14 @@ from .solution import Node as SolutionNode
 class Simulation(BaseModel):
     """
     A simulation object.
+
+    Attributes:
+        vehicle (Vehicle): The vehicle to simulate.
+        track (Mesh): The track to simulate.
+        environment (Environment): Environmental variables for the simulation.
+        vehicle_model (VehicleModelInterface): The vehicle model to use.
+        solver (SolverInterface): The solver to use.
+        solution (Solution): The results of the simulation.
     """
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
