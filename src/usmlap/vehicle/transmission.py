@@ -3,8 +3,6 @@ This module models the transmission of a vehicle.
 """
 
 from .common import Subsystem
-from typing import Annotated
-from annotated_types import MinLen
 from pydantic import PositiveFloat
 
 
@@ -15,16 +13,11 @@ class Transmission(Subsystem):
     Transmits power from the motor to the wheels.
 
     Attributes:
-        primary_gear_reduction (float): The reduction of the primary gear.
-        final_gear_reduction (float): The reduction of the final gear.
-        gear_ratios (list[float]): The ratios of the gears.
+        final_drive_ratio (float):
+            The overall gear reduction of the transmission.
+            A final drive ratio of 3
+            means that the drive axle rotates once
+            for every 3 revolutions of the motor.
     """
 
-    primary_gear_reduction: PositiveFloat
-    final_gear_reduction: PositiveFloat
-    gear_ratios: Annotated[list[PositiveFloat], MinLen(1)]
-
-    @property
-    def overall_gear_ratio(self) -> list[float]:
-        gear_reduction = self.primary_gear_reduction * self.final_gear_reduction
-        return [gear_reduction * ratio for ratio in self.gear_ratios]
+    final_drive_ratio: PositiveFloat
