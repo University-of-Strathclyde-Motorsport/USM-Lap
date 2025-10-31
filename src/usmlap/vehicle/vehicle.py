@@ -67,7 +67,23 @@ class Vehicle(Subsystem):
 
     @property
     def maximum_velocity(self) -> float:
-        motor_speed = self.powertrain.get_maximum_motor_speed(1)
+        maximum_motor_speed = self.powertrain.get_maximum_motor_speed(1)
+        return self.motor_speed_to_velocity(maximum_motor_speed)
+
+    @property
+    def _overall_motor_scaling(self) -> float:
+        final_drive_ratio = self.transmission.final_drive_ratio
         tyre_radius = self.tyres.rear.unloaded_radius
-        final_drive_ratio = min(self.transmission.overall_gear_ratio)
-        return motor_speed * tyre_radius / final_drive_ratio
+        return final_drive_ratio / tyre_radius
+
+    def motor_torque_to_traction_force(self, motor_torque: float) -> float:
+        return motor_torque * self._overall_motor_scaling
+
+    def traction_force_to_motor_torque(self, traction_force: float) -> float:
+        return traction_force / self._overall_motor_scaling
+
+    def motor_speed_to_velocity(self, motor_speed: float) -> float:
+        return motor_speed / self._overall_motor_scaling
+
+    def velocity_to_motor_speed(self, velocity: float) -> float:
+        return velocity * self._overall_motor_scaling
