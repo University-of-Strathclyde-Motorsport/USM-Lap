@@ -89,14 +89,16 @@ class PointMassVehicleModel(VehicleModelInterface):
         normal_load = (weight_z + downforce) / 4
 
         tyre_attitude = TyreAttitude(normal_load=normal_load)
-        traction_fx = (
+        traction_limit_fx = (
             vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
                 tyre_attitude, required_fy / 4
             )
             * 2
         )
+        motor_limit_fx = self.get_drive_force(vehicle, velocity)
+        drive_fx = min(motor_limit_fx, traction_limit_fx)
         resistive_fx = drag + weight_x
-        net_fx = traction_fx - resistive_fx
+        net_fx = drive_fx - resistive_fx
         return net_fx / vehicle.equivalent_mass
 
     def calculate_braking(
@@ -131,3 +133,23 @@ class PointMassVehicleModel(VehicleModelInterface):
         resistive_fx = drag + weight_x
         net_fx = traction_fx + resistive_fx
         return net_fx / vehicle.equivalent_mass
+
+    def get_motor_power(self, vehicle: Vehicle, velocity: float) -> float:
+        motor_speed = vehicle.velocity_to_motor_speed(velocity)
+        power = vehicle.powertrain.get_motor_power(
+            state_of_charge=1, current=0, motor_speed=motor_speed
+        )
+        return power
+
+    def get_drive_force(self, vehicle: Vehicle, velocity: float) -> float:
+        motor_speed = vehicle.velocity_to_motor_speed(velocity)
+        motor_torque = vehicle.powertrain.get_motor_torque(
+            state_of_charge=1,
+            current=vehicle.powertrain.accumulator.maximum_discharge_current,
+            motor_speed=motor_speed,
+        )
+        drive_force = vehicle.motor_torque_to_drive_force(motor_torque)
+        print(
+            f"Velocity: {velocity}, speed: {motor_speed}, torque: {motor_torque}, force: {drive_force}"
+        )
+        return drive_force

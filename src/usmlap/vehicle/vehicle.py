@@ -76,7 +76,7 @@ class Vehicle(Subsystem):
         tyre_radius = self.tyres.rear.unloaded_radius
         return final_drive_ratio / tyre_radius
 
-    def motor_torque_to_traction_force(self, motor_torque: float) -> float:
+    def motor_torque_to_drive_force(self, motor_torque: float) -> float:
         return motor_torque * self._overall_motor_scaling
 
     def traction_force_to_motor_torque(self, traction_force: float) -> float:

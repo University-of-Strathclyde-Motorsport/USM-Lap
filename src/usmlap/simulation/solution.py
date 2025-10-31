@@ -103,8 +103,8 @@ class Solution(UserList[Node]):
 
         fig, ax = plt.subplots()
         fig.suptitle("Solution")
-        ax.plot(position, maximum_velocity, color="blue")
-        ax.plot(position, self.velocity, color="orange")
+        ax.plot(position, maximum_velocity, color="lightblue")
+        ax.plot(position, self.velocity, color="blue")
         ax.scatter(apex_position, apex_velocity, color="red")
         for i in range(len(apexes)):
             plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))
