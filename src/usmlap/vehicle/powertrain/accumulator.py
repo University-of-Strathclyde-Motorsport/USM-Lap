@@ -45,6 +45,9 @@ class Cell(Component):
         Returns:
             voltage (float): Voltage of the cell.
         """
+        if state_of_charge < 0 or state_of_charge > 1:
+            raise ValueError("State of charge must be between 0 and 1.")
+
         return (
             self.charge_voltage * state_of_charge
             + self.discharge_voltage * (1 - state_of_charge)

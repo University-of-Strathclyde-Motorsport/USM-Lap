@@ -99,17 +99,26 @@ class RWDPowertrain(Powertrain):
         self, state_of_charge: float, current: float, motor_speed: float
     ) -> float:
         knee_speed = self.get_knee_speed(state_of_charge, current)
+        maximum_speed = self.get_maximum_motor_speed(state_of_charge)
         maximum_torque = self.motor.get_torque(current)
+
         if motor_speed < knee_speed:
-            torque = maximum_torque
+            return maximum_torque
+        elif current == 0:
+            return 0
         else:
-            maximum_speed = self.get_maximum_motor_speed(state_of_charge)
-            torque = (
+            return (
                 maximum_torque
                 * (maximum_speed - motor_speed)
                 / (maximum_speed - knee_speed)
             )
-        return torque
+
+    def get_motor_power(
+        self, state_of_charge: float, current: float, motor_speed: float
+    ) -> float:
+        torque = self.get_motor_torque(state_of_charge, current, motor_speed)
+        power = motor_speed * torque
+        return power
 
     def plot_motor_curve(self, state_of_charge: float = 1) -> None:
         motor_curve = MotorCurveGenerator().generate(
