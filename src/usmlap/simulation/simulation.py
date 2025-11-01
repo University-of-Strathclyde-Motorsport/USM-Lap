@@ -2,14 +2,15 @@
 This module contains code for running a simulation.
 """
 
-from pydantic import BaseModel, ConfigDict
+from vehicle.vehicle import Vehicle
+from simulation.environment import Environment
 from track.mesh import Mesh
-from .model.point_mass import PointMassVehicleModel
-from .solver.quasi_steady_state import QuasiSteadyStateSolver
+from .model.vehicle_model import VehicleModelInterface
+from .solver.solver_interface import SolverInterface
 from .solution import Solution
 
 
-class Simulation(BaseModel):
+class Simulation(object):
     """
     A simulation object.
 
@@ -22,12 +23,22 @@ class Simulation(BaseModel):
         solution (Solution): The results of the simulation.
     """
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    solver: SolverInterface
 
-    vehicle_model: PointMassVehicleModel
-    track: Mesh
-    solver: QuasiSteadyStateSolver
-    solution: Solution = Solution()
+    def __init__(
+        self,
+        vehicle: Vehicle,
+        environment: Environment,
+        vehicle_model: type[VehicleModelInterface],
+        track: Mesh,
+        solver: type[SolverInterface],
+    ) -> None:
+        self.solver = solver(
+            vehicle_model=vehicle_model(
+                vehicle=vehicle, environment=environment
+            ),
+            track_mesh=track,
+        )
 
-    def solve(self) -> Solution:
+    def simulate(self) -> Solution:
         return self.solver.solve()

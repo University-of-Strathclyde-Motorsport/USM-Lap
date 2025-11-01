@@ -4,8 +4,6 @@ This module implements a quasi-steady-state solver.
 
 import math
 from .solver_interface import SolverInterface
-from simulation.model.point_mass import PointMassVehicleModel
-from track.mesh import Mesh
 from track.mesh import Node as TrackNode
 from simulation.solution import Solution
 from simulation.solution import Node as SolutionNode
@@ -15,16 +13,6 @@ class QuasiSteadyStateSolver(SolverInterface):
     """
     Quasi-steady-state solver.
     """
-
-    vehicle_model: PointMassVehicleModel
-    track_mesh: Mesh
-    solution: Solution = Solution()
-
-    def __init__(
-        self, vehicle_model: PointMassVehicleModel, track_mesh: Mesh
-    ) -> None:
-        self.vehicle_model = vehicle_model
-        self.track_mesh = track_mesh
 
     def solve(self) -> Solution:
         for node in self.track_mesh.nodes:

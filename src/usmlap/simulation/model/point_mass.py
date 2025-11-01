@@ -3,8 +3,6 @@ This module defines the point mass vehicle model.
 """
 
 import math
-from vehicle.vehicle import Vehicle
-from simulation.environment import Environment
 from track.mesh import Node
 from .vehicle_model import VehicleModelInterface, VehicleState
 from vehicle.aero import AeroAttitude
@@ -15,13 +13,6 @@ class PointMassVehicleModel(VehicleModelInterface):
     """
     Point mass vehicle model.
     """
-
-    vehicle: Vehicle
-    environment: Environment
-
-    def __init__(self, vehicle: Vehicle, environment: Environment) -> None:
-        self.vehicle = vehicle
-        self.environment = environment
 
     def lateral_vehicle_model(self, node: Node) -> VehicleState:
         if node.curvature == 0:

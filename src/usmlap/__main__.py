@@ -10,17 +10,20 @@ root = "D:/Repositories/USM-Lap/appdata/library/"
 
 vehicle_file = root + "vehicles/USM23 Baseline.json"
 vehicle = Vehicle.from_json(vehicle_file)
-environment = Environment()
-vehicle_model = PointMassVehicleModel(vehicle=vehicle, environment=environment)
 
 track_file = root + "tracks/FS AutoX Germany 2012.xlsx"
 track_data = TrackData.load_track_from_spreadsheet(track_file)
 mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-solver = QuasiSteadyStateSolver(vehicle_model=vehicle_model, track_mesh=mesh)
 
-simulation = Simulation(vehicle_model=vehicle_model, track=mesh, solver=solver)
+simulation = Simulation(
+    vehicle=vehicle,
+    environment=Environment(),
+    vehicle_model=PointMassVehicleModel,
+    track=mesh,
+    solver=QuasiSteadyStateSolver,
+)
 
-solution = simulation.solve()
+solution = simulation.simulate()
 solution.plot_apexes()
 
 print(f"Time: {solution.total_time} s")

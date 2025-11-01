@@ -4,6 +4,7 @@ This module defines the interface for vehicle models.
 
 from abc import ABC, abstractmethod
 from vehicle.vehicle import Vehicle
+from simulation.environment import Environment
 from track.mesh import Node
 from pydantic import BaseModel
 
@@ -23,6 +24,11 @@ class VehicleModelInterface(ABC):
     """
 
     vehicle: Vehicle
+    environment: Environment
+
+    def __init__(self, vehicle: Vehicle, environment: Environment) -> None:
+        self.vehicle = vehicle
+        self.environment = environment
 
     @abstractmethod
     def lateral_vehicle_model(self, node: Node) -> VehicleState:
