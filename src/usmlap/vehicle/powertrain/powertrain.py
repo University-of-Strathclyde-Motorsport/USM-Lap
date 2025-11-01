@@ -99,7 +99,6 @@ class RWDPowertrain(Powertrain):
         self, state_of_charge: float, current: float, motor_speed: float
     ) -> float:
         knee_speed = self.get_knee_speed(state_of_charge, current)
-        print(knee_speed)
         maximum_speed = self.get_maximum_motor_speed(state_of_charge)
         maximum_torque = self.motor.get_torque(current)
 

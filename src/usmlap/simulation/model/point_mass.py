@@ -140,7 +140,4 @@ class PointMassVehicleModel(VehicleModelInterface):
             motor_speed=motor_speed,
         )
         drive_force = self.vehicle.motor_torque_to_drive_force(motor_torque)
-        print(
-            f"Velocity: {velocity}, speed: {motor_speed}, torque: {motor_torque}, force: {drive_force}"
-        )
         return drive_force

@@ -2,12 +2,15 @@
 This module contains code for running a simulation.
 """
 
+from __future__ import annotations
 from vehicle.vehicle import Vehicle
 from simulation.environment import Environment
-from track.mesh import Mesh
 from .model.vehicle_model import VehicleModelInterface
+from .model.point_mass import PointMassVehicleModel
 from .solver.solver_interface import SolverInterface
+from .solver.quasi_steady_state import QuasiSteadyStateSolver
 from .solution import Solution
+from track.mesh import Mesh
 
 
 class Simulation(object):
@@ -28,10 +31,10 @@ class Simulation(object):
     def __init__(
         self,
         vehicle: Vehicle,
-        environment: Environment,
-        vehicle_model: type[VehicleModelInterface],
         track: Mesh,
-        solver: type[SolverInterface],
+        environment: Environment = Environment(),
+        vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel,
+        solver: type[SolverInterface] = QuasiSteadyStateSolver,
     ) -> None:
         self.solver = solver(
             vehicle_model=vehicle_model(

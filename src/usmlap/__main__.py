@@ -1,10 +1,5 @@
 from vehicle.vehicle import Vehicle
-from track.mesh import MeshGenerator
-from track.track_data import TrackData
-from simulation.simulation import Simulation
-from simulation.environment import Environment
-from simulation.model.point_mass import PointMassVehicleModel
-from simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
+from simulation.competition import Competition
 
 root = "D:/Repositories/USM-Lap/appdata/library/"
 
@@ -12,19 +7,13 @@ vehicle_file = root + "vehicles/USM23 Baseline.json"
 vehicle = Vehicle.from_json(vehicle_file)
 
 track_file = root + "tracks/FS AutoX Germany 2012.xlsx"
-track_data = TrackData.load_track_from_spreadsheet(track_file)
-mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
 
-simulation = Simulation(
-    vehicle=vehicle,
-    environment=Environment(),
-    vehicle_model=PointMassVehicleModel,
-    track=mesh,
-    solver=QuasiSteadyStateSolver,
-)
+competition = Competition(vehicle=vehicle, autocross_track=track_file)
 
-solution = simulation.simulate()
-solution.plot_apexes()
+solution = competition.simulate()
 
-print(f"Time: {solution.total_time} s")
-print(f"Average velocity: {solution.average_velocity} m/s")
+print("Results:")
+print(f"Acceleration: {solution.acceleration.total_time} s")
+print(f"Skidpad: {solution.skidpad.total_time} s")
+print(f"Autocross: {solution.autocross.total_time} s")
+print(f"Endurance: {solution.endurance.total_time} s")

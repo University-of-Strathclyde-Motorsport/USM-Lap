@@ -15,6 +15,7 @@ class QuasiSteadyStateSolver(SolverInterface):
     """
 
     def solve(self) -> Solution:
+        self.solution = Solution()
         for node in self.track_mesh.nodes:
             self.solution.append(
                 SolutionNode(

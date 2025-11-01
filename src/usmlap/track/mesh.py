@@ -2,16 +2,21 @@
 This module contains code for generating a track mesh.
 """
 
+from __future__ import annotations
 from pydantic import BaseModel, Field
 from pydantic.dataclasses import dataclass
 from typing import Annotated
 from annotated_types import Unit
-from math import pi, atan
+from math import pi, atan, ceil
+import copy
 import numpy as np
 import matplotlib.pyplot as plt
 
 from .track_data import Configuration, TrackData
 from utils.array import diff
+
+
+ENDURANCE_TRACK_LENGTH = 22000
 
 
 class Node(BaseModel):
@@ -63,6 +68,21 @@ class Mesh(BaseModel):
     @property
     def resolution(self) -> float:
         return self.track_length / self.node_count
+
+    def generate_endurance_mesh(self) -> Mesh:
+        number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / self.track_length)
+
+        endurance_nodes: list[Node] = []
+        for _ in range(number_of_laps):
+            for node in self.nodes:
+                endurance_nodes.append(copy.copy(node))
+
+        position = 0
+        for node in endurance_nodes:
+            node.position = position
+            position += node.length
+
+        return Mesh(nodes=endurance_nodes, configuration=self.configuration)
 
     def plot_traces(self) -> None:
         position = [node.position for node in self.nodes]
