@@ -4,7 +4,6 @@ This module defines the interface for vehicle models.
 
 from abc import ABC, abstractmethod
 from vehicle.vehicle import Vehicle
-from simulation.environment import Environment
 from track.mesh import Node
 from pydantic import BaseModel
 
@@ -23,28 +22,16 @@ class VehicleModelInterface(ABC):
     Abstract base class for vehicle models.
     """
 
+    vehicle: Vehicle
+
     @abstractmethod
-    def lateral_vehicle_model(
-        self, vehicle: Vehicle, environment: Environment, node: Node
-    ) -> VehicleState:
+    def lateral_vehicle_model(self, node: Node) -> VehicleState:
         pass
 
     @abstractmethod
-    def calculate_acceleration(
-        self,
-        vehicle: Vehicle,
-        environment: Environment,
-        node: Node,
-        velocity: float,
-    ) -> float:
+    def calculate_acceleration(self, node: Node, velocity: float) -> float:
         pass
 
     @abstractmethod
-    def calculate_braking(
-        self,
-        vehicle: Vehicle,
-        environment: Environment,
-        node: Node,
-        velocity: float,
-    ) -> float:
+    def calculate_braking(self, node: Node, velocity: float) -> float:
         pass

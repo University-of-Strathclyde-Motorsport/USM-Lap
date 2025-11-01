@@ -5,9 +5,7 @@ This module contains code for running a simulation.
 from __future__ import annotations
 import math
 from pydantic import BaseModel, ConfigDict
-from vehicle.vehicle import Vehicle
 from track.mesh import Mesh, Node
-from .environment import Environment
 from .model.point_mass import PointMassVehicleModel
 from .solver.quasi_steady_state import QuasiSteadyStateSolver
 from .solution import Solution
@@ -29,10 +27,8 @@ class Simulation(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    vehicle: Vehicle
+    vehicle_model: PointMassVehicleModel
     track: Mesh
-    environment: Environment = Environment()
-    vehicle_model: PointMassVehicleModel = PointMassVehicleModel()
     solver: QuasiSteadyStateSolver = QuasiSteadyStateSolver()
     solution: Solution = Solution()
 
@@ -108,11 +104,7 @@ class Simulation(BaseModel):
         return self.solution
 
     def solve_maximum_velocity(self, node: Node) -> float:
-        if node.curvature == 0:
-            return self.vehicle.maximum_velocity
-        return self.vehicle_model.lateral_vehicle_model(
-            self.vehicle, self.environment, node
-        ).velocity
+        return self.vehicle_model.lateral_vehicle_model(node).velocity
 
     def calculate_final_velocity(self, node_solution: SolutionNode) -> float:
         maximum_velocity = node_solution.maximum_velocity
@@ -131,8 +123,6 @@ class Simulation(BaseModel):
         try:
             traction_limited_acceleration = (
                 self.vehicle_model.calculate_acceleration(
-                    vehicle=self.vehicle,
-                    environment=self.environment,
                     node=node_solution.node,
                     velocity=node_solution.initial_velocity,
                 )
@@ -151,8 +141,6 @@ class Simulation(BaseModel):
     ) -> float:
         try:
             traction_limited_braking = self.vehicle_model.calculate_braking(
-                vehicle=self.vehicle,
-                environment=self.environment,
                 node=node_solution.node,
                 velocity=node_solution.final_velocity,
             )
