@@ -16,13 +16,9 @@ vehicle_model = PointMassVehicleModel(vehicle=vehicle, environment=environment)
 track_file = root + "tracks/FS AutoX Germany 2012.xlsx"
 track_data = TrackData.load_track_from_spreadsheet(track_file)
 mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+solver = QuasiSteadyStateSolver(vehicle_model=vehicle_model, track_mesh=mesh)
 
-simulation = Simulation(
-    vehicle_model=vehicle_model,
-    track=mesh,
-    environment=Environment(),
-    solver=QuasiSteadyStateSolver(),
-)
+simulation = Simulation(vehicle_model=vehicle_model, track=mesh, solver=solver)
 
 solution = simulation.solve()
 solution.plot_apexes()

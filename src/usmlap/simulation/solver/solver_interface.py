@@ -2,7 +2,8 @@
 This module defines the interface for simulation solvers.
 """
 
-from abc import ABC
+from abc import ABC, abstractmethod
+from simulation.solution import Solution
 
 
 class SolverInterface(ABC):
@@ -10,4 +11,5 @@ class SolverInterface(ABC):
     Abstract base class for simulation solvers.
     """
 
-    pass
+    @abstractmethod
+    def solve(self) -> Solution: ...
