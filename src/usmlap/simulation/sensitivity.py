@@ -2,22 +2,25 @@
 This module contains code for points sensitivity analysis.
 """
 
+from dataclasses import dataclass
 from vehicle.vehicle import Vehicle
 from vehicle.parameters import Parameter
-from simulation.competition import Competition
+from simulation.simulation import SimulationSettings
+from simulation.competition import simulate_competition
 from simulation.points.points import calculate_points
 
 PARAMETER_DELTA_SCALAR = 0.0001
 
 
+@dataclass
 class SensitivityAnalysis(object):
     """
     Class for carrying out sensitivity analysis.
     """
 
-    def __init__(self, baseline_vehicle: Vehicle, parameter: Parameter) -> None:
-        self.baseline_vehicle = baseline_vehicle
-        self.parameter = parameter
+    baseline_vehicle: Vehicle
+    parameter: Parameter
+    simulation_settings: SimulationSettings
 
     @property
     def baseline_value(self) -> float:
@@ -46,14 +49,12 @@ class SensitivityAnalysis(object):
             "increased": self.increased_value_vehicle,
             "decreased": self.decreased_value_vehicle,
         }
-        track_file = "D:/Repositories/USM-Lap/appdata/library/tracks/FS AutoX Germany 2012.xlsx"
         total_points: dict[str, float] = {}
 
         for direction, vehicle in vehicles.items():
-            competition = Competition(
-                vehicle=vehicle, autocross_track=track_file
+            results = simulate_competition(
+                vehicle=vehicle, settings=self.simulation_settings
             )
-            results = competition.simulate()
             points = calculate_points(results=results)
             total_points[direction] = points.total
 

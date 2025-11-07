@@ -4,73 +4,117 @@ This module contains code for simulating a complete Formula Student competition.
 
 from __future__ import annotations
 from dataclasses import dataclass
+from copy import deepcopy
 from vehicle.vehicle import Vehicle
 from track.mesh import MeshGenerator
 from track.track_data import TrackData
 from .solution import Solution
-from .simulation import Simulation
-
+from .simulation import SimulationSettings, simulate
 
 LIBRARY_ROOT = "D:/Repositories/USM-Lap/appdata/library/"
 ACCELERATION_TRACK = LIBRARY_ROOT + "tracks/Acceleration.xlsx"
 SKIDPAD_TRACK = LIBRARY_ROOT + "tracks/Skidpad.xlsx"
 
 
-@dataclass
-class Competition(object):
+def simulate_competition(
+    vehicle: Vehicle, settings: SimulationSettings
+) -> CompetitionResults:
     """
-    A simulation of a complete Formula Student competition.
-
-    Simulates all four events:
+    Simulates all four Formula Student events:
     acceleration, skidpad, autocross, and endurance.
 
-
-    Attributes:
+    Args:
         vehicle (Vehicle): The vehicle to simulate.
-        track (Mesh): The track to use for autocross and endurance.
-        environment (Environment): Environmental variables for the simulation.
-        vehicle_model_type (VehicleModelInterface): The vehicle model to use.
-        solver_type (SolverInterface): The solver to use.
+        settings (SimulationSettings): Settings for the simulation.
+
+    Returns:
+        results (CompetitionResults): The results of all four simulations.
     """
+    return CompetitionResults(
+        acceleration=simulate_acceleration(vehicle, settings),
+        skidpad=simulate_skidpad(vehicle, settings),
+        autocross=simulate_autocross(vehicle, settings),
+        endurance=simulate_endurance(vehicle, settings),
+    )
 
-    vehicle: Vehicle
-    autocross_track: str
 
-    def simulate(self) -> CompetitionResults:
-        return CompetitionResults(
-            acceleration=self.simulate_acceleration(),
-            skidpad=self.simulate_skidpad(),
-            autocross=self.simulate_autocross(),
-            endurance=self.simulate_endurance(),
-        )
+def simulate_acceleration(
+    vehicle: Vehicle, settings: SimulationSettings
+) -> Solution:
+    """
+    Simulate the acceleration event.
 
-    def simulate_acceleration(self) -> Solution:
-        track_data = TrackData.load_track_from_spreadsheet(ACCELERATION_TRACK)
-        mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-        simulation = Simulation(vehicle=self.vehicle, track=mesh)
-        return simulation.simulate()
+    Args:
+        vehicle (Vehicle): The vehicle to simulate.
+        settings (SimulationSettings): Settings for the simulation.
 
-    def simulate_skidpad(self) -> Solution:
-        track_data = TrackData.load_track_from_spreadsheet(SKIDPAD_TRACK)
-        mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-        simulation = Simulation(vehicle=self.vehicle, track=mesh)
-        return simulation.simulate()
+    Returns:
+        solution (Solution): The results of the simulation.
+    """
+    track_data = TrackData.load_track_from_spreadsheet(ACCELERATION_TRACK)
+    mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+    acceleration_settings = deepcopy(settings)
+    acceleration_settings.track = mesh
+    solution = simulate(vehicle=vehicle, settings=acceleration_settings)
+    return solution
 
-    def simulate_autocross(self) -> Solution:
-        track_data = TrackData.load_track_from_spreadsheet(self.autocross_track)
-        mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-        simulation = Simulation(vehicle=self.vehicle, track=mesh)
-        return simulation.simulate()
 
-    def simulate_endurance(self) -> Solution:
-        track_data = TrackData.load_track_from_spreadsheet(self.autocross_track)
-        mesh = (
-            MeshGenerator(resolution=1)
-            .generate_mesh(track_data)
-            .generate_endurance_mesh()
-        )
-        simulation = Simulation(vehicle=self.vehicle, track=mesh)
-        return simulation.simulate()
+def simulate_skidpad(
+    vehicle: Vehicle, settings: SimulationSettings
+) -> Solution:
+    """
+    Simulate the skidpad event.
+
+    Args:
+        vehicle (Vehicle): The vehicle to simulate.
+        settings (SimulationSettings): Settings for the simulation.
+
+    Returns:
+        solution (Solution): The results of the simulation.
+    """
+    track_data = TrackData.load_track_from_spreadsheet(SKIDPAD_TRACK)
+    mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+    skidpad_settings = deepcopy(settings)
+    skidpad_settings.track = mesh
+    solution = simulate(vehicle=vehicle, settings=skidpad_settings)
+    return solution
+
+
+def simulate_autocross(
+    vehicle: Vehicle, settings: SimulationSettings
+) -> Solution:
+    """
+    Simulate the autocross event.
+
+    Args:
+        vehicle (Vehicle): The vehicle to simulate.
+        settings (SimulationSettings): Settings for the simulation.
+
+    Returns:
+        solution (Solution): The results of the simulation.
+    """
+    solution = simulate(vehicle=vehicle, settings=settings)
+    return solution
+
+
+def simulate_endurance(
+    vehicle: Vehicle, settings: SimulationSettings
+) -> Solution:
+    """
+    Simulate the endurance event.
+
+    Args:
+        vehicle (Vehicle): The vehicle to simulate.
+        settings (SimulationSettings): Settings for the simulation.
+
+    Returns:
+        solution (Solution): The results of the simulation.
+    """
+    mesh = settings.track.generate_endurance_mesh()
+    endurance_settings = deepcopy(settings)
+    endurance_settings.track = mesh
+    solution = simulate(vehicle=vehicle, settings=endurance_settings)
+    return solution
 
 
 @dataclass
