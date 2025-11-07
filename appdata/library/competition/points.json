@@ -1,0 +1,8 @@
+{
+    "FSUK 2025": {
+        "acceleration_t_min": 4.324,
+        "skidpad_t_min": 5.826,
+        "autocross_t_min": 55.423,
+        "endurance_t_min": 1934.4
+    }
+}

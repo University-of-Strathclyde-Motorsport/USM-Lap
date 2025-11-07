@@ -141,8 +141,6 @@ class Segment(object):
 
     @property
     def curvature(self) -> float:
-        if self.corner_radius == 0:
-            print(self.section_type)
         return 1 / self.corner_radius
 
 

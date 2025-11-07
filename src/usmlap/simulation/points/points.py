@@ -48,7 +48,7 @@ class CompetitionPoints(object):
 
 def calculate_points(
     results: CompetitionResults,
-    data: CompetitionData = CompetitionData(),
+    data: CompetitionData = CompetitionData.get_dataset("FSUK 2025"),
     formulae: PointsFunctions = FSUKPointsFunctions(),
 ) -> CompetitionPoints:
     """

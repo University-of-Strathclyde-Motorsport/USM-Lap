@@ -120,10 +120,10 @@ class Component(ABC, Subsystem):
     @classmethod
     def list_components(cls) -> list[str]:
         """
-        Get a list
+        Get a list of available components.
 
         Returns:
-            list[str]: _description_
+            components (list[str]): Available component names.
         """
         return list(cls.load_library().keys())
 
