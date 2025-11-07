@@ -8,7 +8,7 @@
         "frontal_area": 1.002,
         "aero_model": {
             "model_type": "constant",
-            "lift_coefficient": 5,
+            "lift_coefficient": 4.2,
             "drag_coefficient": 1.5
         }
     },
