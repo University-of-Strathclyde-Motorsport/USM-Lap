@@ -37,19 +37,11 @@ class Competition(object):
     autocross_track: str
 
     def simulate(self) -> CompetitionResults:
-        acceleration_solution = self.simulate_acceleration()
-        skidpad_solution = self.simulate_skidpad()
-        autocross_solution = self.simulate_autocross()
-        endurance_solution = self.simulate_endurance()
-        # acceleration_solution = Solution()
-        # skidpad_solution = Solution()
-        # autocross_solution = Solution()
-        # # endurance_solution = Solution()
         return CompetitionResults(
-            acceleration=acceleration_solution,
-            skidpad=skidpad_solution,
-            autocross=autocross_solution,
-            endurance=endurance_solution,
+            acceleration=self.simulate_acceleration(),
+            skidpad=self.simulate_skidpad(),
+            autocross=self.simulate_autocross(),
+            endurance=self.simulate_endurance(),
         )
 
     def simulate_acceleration(self) -> Solution:
