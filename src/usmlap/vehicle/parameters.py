@@ -14,13 +14,19 @@ class Parameter(ABC):
     """
 
     _REGISTRY: dict[str, type[Parameter]] = {}
+    name: str
+    unit: str | None = None
 
-    def __init_subclass__(cls: type[Parameter], parameter_name: str) -> None:
+    def __init_subclass__(
+        cls: type[Parameter], parameter_name: str, unit: str | None = None
+    ) -> None:
         super().__init_subclass__()
         cls._REGISTRY[parameter_name] = cls
+        cls.name = parameter_name
+        cls.unit = unit
 
     @classmethod
-    def get_parameter(cls, parameter_name: str) -> type[Parameter]:
+    def get_parameter(cls, parameter_name: str) -> Parameter:
         """
         Get a parameter from its name.
 
@@ -34,7 +40,7 @@ class Parameter(ABC):
             parameter (type[Parameter]): A parameter object.
         """
         try:
-            return cls._REGISTRY[parameter_name]
+            return cls._REGISTRY[parameter_name]()
         except KeyError:
             error_message = (
                 f"Parameter '{parameter_name}' not found. "
@@ -51,6 +57,13 @@ class Parameter(ABC):
             parameters (list[str]): Available parameter names.
         """
         return list(cls._REGISTRY.keys())
+
+    @classmethod
+    def get_name_with_unit(cls) -> str:
+        if cls.unit:
+            return f"{cls.name} ({cls.unit})"
+        else:
+            return f"{cls.name} (-)"
 
     @staticmethod
     @abstractmethod
@@ -100,7 +113,7 @@ class Parameter(ABC):
         return new_vehicle
 
 
-class CurbMass(Parameter, parameter_name="Curb Mass"):
+class CurbMass(Parameter, parameter_name="Curb Mass", unit="kg"):
     """The mass of the vehicle without the driver."""
 
     @staticmethod

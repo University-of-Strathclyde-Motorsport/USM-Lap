@@ -19,7 +19,7 @@ class SensitivityAnalysis(object):
     """
 
     baseline_vehicle: Vehicle
-    parameter: Parameter
+    parameter: type[Parameter]
     simulation_settings: SimulationSettings
 
     @property

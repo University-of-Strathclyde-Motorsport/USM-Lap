@@ -1,9 +1,9 @@
 from vehicle.vehicle import Vehicle
-import vehicle.parameters as parameters
+from vehicle.parameters import Parameter
 from track.track_data import TrackData
 from track.mesh import MeshGenerator
 from simulation.simulation import SimulationSettings
-from simulation.sensitivity import SensitivityAnalysis
+from analysis.sweep_1d import sweep_1d, SweepSettings
 
 root = "D:/Repositories/USM-Lap/appdata/library/"
 
@@ -16,14 +16,15 @@ mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
 
 settings = SimulationSettings(track=mesh)
 
-sensitivity_analysis = SensitivityAnalysis(
+sweep_settings = SweepSettings(
+    parameter=Parameter.get_parameter("Curb Mass"),
+    start_value=200,
+    end_value=250,
+    number_of_steps=5,
+)
+sweep_results = sweep_1d(
     baseline_vehicle=vehicle,
-    parameter=parameters.CurbMass(),
+    sweep_settings=sweep_settings,
     simulation_settings=settings,
 )
-
-sensitivity = sensitivity_analysis.get_sensitivity()
-print(f"Sensitivity: {sensitivity:.4f}")
-
-print(parameters.Parameter.get_parameter("Nope").get_value(vehicle))
-print(parameters.Parameter.list_parameters())
+sweep_results.plot()
