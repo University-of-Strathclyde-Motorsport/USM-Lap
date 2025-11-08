@@ -5,6 +5,15 @@ from track.mesh import MeshGenerator
 from simulation.simulation import SimulationSettings
 from analysis.sweep_1d import sweep_1d, SweepSettings
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="{asctime} {levelname}: {message}",
+    style="{",
+    datefmt="%H:%M:%S",
+)
+
 root = "D:/Repositories/USM-Lap/appdata/library/"
 
 vehicle_file = root + "vehicles/USM23 Baseline.json"
@@ -17,9 +26,9 @@ mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
 settings = SimulationSettings(track=mesh)
 
 sweep_settings = SweepSettings(
-    parameter=Parameter.get_parameter("Curb Mass"),
-    start_value=200,
-    end_value=250,
+    parameter=Parameter.get_parameter("Final Drive Ratio"),
+    start_value=2.5,
+    end_value=4,
     number_of_steps=5,
 )
 sweep_results = sweep_1d(

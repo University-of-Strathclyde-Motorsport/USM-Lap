@@ -3,6 +3,7 @@ This module implements a quasi-steady-state solver.
 """
 
 import math
+import logging
 from .solver_interface import SolverInterface
 from track.mesh import Node as TrackNode
 from simulation.solution import Solution
@@ -16,6 +17,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
     def solve(self) -> Solution:
         self.solution = Solution()
+        logging.info("Solving maximum velocity...")
         for node in self.track_mesh.nodes:
             self.solution.append(
                 SolutionNode(
@@ -28,7 +30,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         apexes.insert(0, 0)
         self.solution[0].initial_velocity = 0
 
-        # Forward propagation
+        logging.info("Solving forward propagation...")
         for apex in apexes:
             if apex != 0:
                 self.solution[apex].initial_velocity = self.solution[
@@ -55,9 +57,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
                 i += 1
 
-        print(f"There are {len(apexes)} apexes before back propagation")
-
-        # Backward propagation
+        logging.info("Solving backward propagation...")
         for apex in apexes:
             i = apex
             while i > 0:
@@ -83,7 +83,6 @@ class QuasiSteadyStateSolver(SolverInterface):
 
                 i -= 1
 
-        print(f"There are {len(apexes)} apexes")
         return self.solution
 
     def solve_maximum_velocity(self, node: TrackNode) -> float:

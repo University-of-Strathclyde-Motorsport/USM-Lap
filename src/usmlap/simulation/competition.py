@@ -5,6 +5,7 @@ This module contains code for simulating a complete Formula Student competition.
 from __future__ import annotations
 from dataclasses import dataclass
 from copy import deepcopy
+import logging
 from vehicle.vehicle import Vehicle
 from track.mesh import MeshGenerator
 from track.track_data import TrackData
@@ -51,6 +52,7 @@ def simulate_acceleration(
     Returns:
         solution (Solution): The results of the simulation.
     """
+    logging.info("Simulating acceleration event...")
     track_data = TrackData.load_track_from_spreadsheet(ACCELERATION_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
     acceleration_settings = deepcopy(settings)
@@ -72,6 +74,7 @@ def simulate_skidpad(
     Returns:
         solution (Solution): The results of the simulation.
     """
+    logging.info("Simulating skidpad event...")
     track_data = TrackData.load_track_from_spreadsheet(SKIDPAD_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
     skidpad_settings = deepcopy(settings)
@@ -93,6 +96,7 @@ def simulate_autocross(
     Returns:
         solution (Solution): The results of the simulation.
     """
+    logging.info("Simulating autocross event...")
     solution = simulate(vehicle=vehicle, settings=settings)
     return solution
 
@@ -110,6 +114,7 @@ def simulate_endurance(
     Returns:
         solution (Solution): The results of the simulation.
     """
+    logging.info("Simulating endurance event...")
     mesh = settings.track.generate_endurance_mesh()
     endurance_settings = deepcopy(settings)
     endurance_settings.track = mesh

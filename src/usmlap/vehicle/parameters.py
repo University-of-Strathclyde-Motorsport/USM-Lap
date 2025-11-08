@@ -126,7 +126,7 @@ class CurbMass(Parameter, parameter_name="Curb Mass", unit="kg"):
 
 
 class LiftCoefficient(Parameter, parameter_name="Lift Coefficient"):
-    """The lift coefficient of the vehicle."""
+    """The lift coefficient of the aero package."""
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
@@ -138,7 +138,7 @@ class LiftCoefficient(Parameter, parameter_name="Lift Coefficient"):
 
 
 class DragCoefficient(Parameter, parameter_name="Drag Coefficient"):
-    """The drag coefficient of the vehicle."""
+    """The drag coefficient of the aero package."""
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
@@ -147,3 +147,15 @@ class DragCoefficient(Parameter, parameter_name="Drag Coefficient"):
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
         vehicle.aero.aero_model.drag_coefficient = value
+
+
+class FinalDriveRatio(Parameter, parameter_name="Final Drive Ratio"):
+    """The final drive ratio of the transmission."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.transmission.final_drive_ratio
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.transmission.final_drive_ratio = value

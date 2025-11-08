@@ -5,6 +5,7 @@ This module contains code for carrying out a 1D sweep of a parameter.
 from typing import Generator
 from dataclasses import dataclass, field
 import numpy as np
+import logging
 
 from vehicle.vehicle import Vehicle
 from vehicle.parameters import Parameter
@@ -99,6 +100,9 @@ def sweep_1d(
     sweep_results = SweepResults(parameter=sweep_settings.parameter)
 
     for value, vehicle in sweep_settings.get_vehicles(baseline_vehicle):
+        logging.info(
+            f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
+        )
         results = simulate_competition(vehicle, simulation_settings)
         points = calculate_points(results)
         sweep_results.data[value] = points.total
