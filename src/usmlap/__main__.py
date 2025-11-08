@@ -1,4 +1,5 @@
-from vehicle.vehicle import Vehicle
+import filepath
+from vehicle.vehicle import load_vehicle
 from vehicle.parameters import Parameter
 from track.track_data import TrackData
 from track.mesh import MeshGenerator
@@ -14,12 +15,12 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
-root = "D:/Repositories/USM-Lap/appdata/library/"
 
-vehicle_file = root + "vehicles/USM23 Baseline.json"
-vehicle = Vehicle.from_json(vehicle_file)
+root = filepath.LIBRARY_ROOT
 
-track_file = root + "tracks/FS AutoX Germany 2012.xlsx"
+vehicle = load_vehicle("USM23 Baseline.json")
+
+track_file = root / "tracks" / "FS AutoX Germany 2012.xlsx"
 track_data = TrackData.load_track_from_spreadsheet(track_file)
 mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
 

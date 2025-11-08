@@ -4,6 +4,7 @@ This module contains code for reading track data from an Excel file.
 
 from __future__ import annotations
 
+import pathlib
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from enum import Enum
@@ -336,7 +337,7 @@ class TrackData(BaseModel):
         )
 
     @classmethod
-    def load_track_from_spreadsheet(cls, filepath: str) -> Self:
+    def load_track_from_spreadsheet(cls, filepath: pathlib.Path) -> Self:
         reader = TrackReader(filepath)
         return cls(
             metadata=reader.get_metadata(),
@@ -360,7 +361,7 @@ class TrackReader(object):
         workbook (pandas.ExcelFile): The Excel file containing the track data.
     """
 
-    def __init__(self, filepath: str) -> None:
+    def __init__(self, filepath: pathlib.Path) -> None:
         """
         Initialises the TrackReader from a filepath.
 

@@ -2,6 +2,7 @@
 This module models the full vehicle.
 """
 
+import filepath
 from .common import Subsystem
 from .driver import Driver
 from .aero import AeroPackage
@@ -12,6 +13,9 @@ from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
 from .tyre.tyre_model import Tyres
+
+
+VEHICLE_LIBRARY = filepath.LIBRARY_ROOT / "vehicles"
 
 
 class Metadata(Subsystem):
@@ -87,3 +91,17 @@ class Vehicle(Subsystem):
 
     def velocity_to_motor_speed(self, velocity: float) -> float:
         return velocity * self._overall_motor_scaling
+
+
+def load_vehicle(filename: str) -> Vehicle:
+    """
+    Load a vehicle from the library.
+
+    Args:
+        filename (str): The name of the vehicle file.
+
+    Returns:
+        vehicle (Vehicle): The loaded vehicle.
+    """
+    filepath = VEHICLE_LIBRARY / filename
+    return Vehicle.from_json(filepath)

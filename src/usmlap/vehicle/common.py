@@ -6,6 +6,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from pydantic import BaseModel, model_validator
 import json
+import pathlib
 from typing import Self, Any, Optional, ClassVar
 
 
@@ -17,7 +18,7 @@ class Subsystem(BaseModel):
     """
 
     @classmethod
-    def from_json(cls, filepath: str) -> Self:
+    def from_json(cls, filepath: pathlib.Path) -> Self:
         """
         Load a subsystem from a JSON file.
 

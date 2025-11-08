@@ -6,15 +6,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from copy import deepcopy
 import logging
+import filepath
 from vehicle.vehicle import Vehicle
 from track.mesh import MeshGenerator
 from track.track_data import TrackData
 from .solution import Solution
 from .simulation import SimulationSettings, simulate
 
-LIBRARY_ROOT = "D:/Repositories/USM-Lap/appdata/library/"
-ACCELERATION_TRACK = LIBRARY_ROOT + "tracks/Acceleration.xlsx"
-SKIDPAD_TRACK = LIBRARY_ROOT + "tracks/Skidpad.xlsx"
+ACCELERATION_TRACK = filepath.LIBRARY_ROOT / "tracks" / "Acceleration.xlsx"
+SKIDPAD_TRACK = filepath.LIBRARY_ROOT / "tracks" / "Skidpad.xlsx"
 
 
 def simulate_competition(
