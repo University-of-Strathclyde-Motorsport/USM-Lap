@@ -27,7 +27,7 @@ class Inertia(Subsystem):
     """
     Inertia properties for a vehicle.
 
-    Args:
+    Attributes:
         curb_mass (float): Mass of the vehicle.
         front_mass_distribution (float): mass balance
         yaw_inertia (float): Yaw inertia of the vehicle.

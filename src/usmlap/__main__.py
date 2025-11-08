@@ -24,3 +24,6 @@ sensitivity_analysis = SensitivityAnalysis(
 
 sensitivity = sensitivity_analysis.get_sensitivity()
 print(f"Sensitivity: {sensitivity:.4f}")
+
+print(parameters.Parameter.get_parameter("Nope").get_value(vehicle))
+print(parameters.Parameter.list_parameters())

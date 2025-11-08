@@ -2,6 +2,7 @@
 This module contains code for getting and setting vehicle parameters.
 """
 
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from .vehicle import Vehicle
 from copy import deepcopy
@@ -11,6 +12,45 @@ class Parameter(ABC):
     """
     An abstract class representing a vehicle parameter.
     """
+
+    _REGISTRY: dict[str, type[Parameter]] = {}
+
+    def __init_subclass__(cls: type[Parameter], parameter_name: str) -> None:
+        super().__init_subclass__()
+        cls._REGISTRY[parameter_name] = cls
+
+    @classmethod
+    def get_parameter(cls, parameter_name: str) -> type[Parameter]:
+        """
+        Get a parameter from its name.
+
+        Args:
+            parameter_name (str): The name of the parameter.
+
+        Raises:
+            KeyError: If no parameter with the given name exists.
+
+        Returns:
+            parameter (type[Parameter]): A parameter object.
+        """
+        try:
+            return cls._REGISTRY[parameter_name]
+        except KeyError:
+            error_message = (
+                f"Parameter '{parameter_name}' not found. "
+                f"Available parameters: {list(cls._REGISTRY.keys())}"
+            )
+            raise KeyError(error_message)
+
+    @classmethod
+    def list_parameters(cls) -> list[str]:
+        """
+        Get a list of available parameters.
+
+        Returns:
+            parameters (list[str]): Available parameter names.
+        """
+        return list(cls._REGISTRY.keys())
 
     @staticmethod
     @abstractmethod
@@ -49,7 +89,7 @@ class Parameter(ABC):
         Generate a new vehicle with a modified parameter value.
 
         Args:
-            vehicle (Vehicle): The baseline vehicle to use.
+            baseline_vehicle (Vehicle): The baseline vehicle to use.
             value (float): The updated parameter value.
 
         Returns:
@@ -60,7 +100,9 @@ class Parameter(ABC):
         return new_vehicle
 
 
-class CurbMass(Parameter):
+class CurbMass(Parameter, parameter_name="Curb Mass"):
+    """The mass of the vehicle without the driver."""
+
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
         return vehicle.inertia.curb_mass
@@ -70,7 +112,9 @@ class CurbMass(Parameter):
         vehicle.inertia.curb_mass = value
 
 
-class LiftCoefficient(Parameter):
+class LiftCoefficient(Parameter, parameter_name="Lift Coefficient"):
+    """The lift coefficient of the vehicle."""
+
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
         return vehicle.aero.aero_model.lift_coefficient
@@ -80,7 +124,9 @@ class LiftCoefficient(Parameter):
         vehicle.aero.aero_model.lift_coefficient = value
 
 
-class DragCoefficient(Parameter):
+class DragCoefficient(Parameter, parameter_name="Drag Coefficient"):
+    """The drag coefficient of the vehicle."""
+
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
         return vehicle.aero.aero_model.drag_coefficient

@@ -73,7 +73,8 @@ class AeroPackage(Subsystem):
     The aerodynamic package of a vehicle.
 
     Attributes:
-        aero_model ()
+        frontal_area (float): The frontal area of the vehicle.
+        aero_model (AeroModel): The aerodynamic model to use.
     """
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
