@@ -104,6 +104,9 @@ def load_vehicle(filename: str) -> Vehicle:
 
     Returns:
         vehicle (Vehicle): The loaded vehicle.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
     """
     try:
         filepath = VEHICLE_LIBRARY / filename

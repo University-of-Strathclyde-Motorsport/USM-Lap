@@ -6,15 +6,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from copy import deepcopy
 import logging
-import filepath
 from vehicle.vehicle import Vehicle
 from track.mesh import MeshGenerator
-from track.track_data import TrackData
+from track.track_data import load_track_from_spreadsheet
 from .solution import Solution
 from .simulation import SimulationSettings, simulate
 
-ACCELERATION_TRACK = filepath.LIBRARY_ROOT / "tracks" / "Acceleration.xlsx"
-SKIDPAD_TRACK = filepath.LIBRARY_ROOT / "tracks" / "Skidpad.xlsx"
+ACCELERATION_TRACK = "Acceleration.xlsx"
+SKIDPAD_TRACK = "Skidpad.xlsx"
 
 
 def simulate_competition(
@@ -53,7 +52,7 @@ def simulate_acceleration(
         solution (Solution): The results of the simulation.
     """
     logging.info("Simulating acceleration event...")
-    track_data = TrackData.load_track_from_spreadsheet(ACCELERATION_TRACK)
+    track_data = load_track_from_spreadsheet(ACCELERATION_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
     acceleration_settings = deepcopy(settings)
     acceleration_settings.track = mesh
@@ -75,7 +74,7 @@ def simulate_skidpad(
         solution (Solution): The results of the simulation.
     """
     logging.info("Simulating skidpad event...")
-    track_data = TrackData.load_track_from_spreadsheet(SKIDPAD_TRACK)
+    track_data = load_track_from_spreadsheet(SKIDPAD_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
     skidpad_settings = deepcopy(settings)
     skidpad_settings.track = mesh

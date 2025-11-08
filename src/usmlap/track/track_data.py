@@ -4,7 +4,10 @@ This module contains code for reading track data from an Excel file.
 
 from __future__ import annotations
 
+import filepath
+import os
 import pathlib
+
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from enum import Enum
@@ -16,6 +19,9 @@ import math
 import pandas
 import numpy as np
 from utils.array import interp_previous, cumsum
+
+TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
+AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
 
 
 class Metadata(BaseModel):
@@ -353,6 +359,42 @@ class TrackData(BaseModel):
         )
 
 
+def load_track_from_spreadsheet(filename: str) -> TrackData:
+    """
+    Load a track from the library.
+
+    Args:
+        filename (str): The name of the track file.
+
+    Returns:
+        track_data (TrackData): The loaded track data.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+    """
+    try:
+        filepath = TRACK_LIBRARY / filename
+        reader = TrackReader(filepath)
+        return TrackData(
+            metadata=reader.get_metadata(),
+            shape=reader.get_shape_data(),
+            elevation=reader.get_elevation_data(),
+            banking=reader.get_banking_data(),
+            grip_factor=reader.get_grip_factor_data(),
+            sector=reader.get_sector_data(),
+            event=Event.AUTOX,
+            configuration=reader.get_configuration(),
+            direction=reader.get_direction(),
+            mirror=reader.get_mirror(),
+        )
+    except FileNotFoundError:
+        error_message = (
+            f"Unable to find '{filename}' in track library. "
+            f"Available tracks: {AVAILABLE_TRACKS}"
+        )
+        raise FileNotFoundError(error_message)
+
+
 class TrackReader(object):
     """
     Reads track data from an OpenLAP Excel spreadsheet.
@@ -366,7 +408,7 @@ class TrackReader(object):
         Initialises the TrackReader from a filepath.
 
         Args:
-            filepath (str): Path to the Excel file to be read.
+            filepath (pathlib.Path): Path to the Excel file to be read.
         """
         self.workbook = pandas.ExcelFile(filepath, engine="openpyxl")
 
