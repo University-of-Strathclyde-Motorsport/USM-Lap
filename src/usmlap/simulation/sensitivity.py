@@ -5,8 +5,7 @@ This module contains code for points sensitivity analysis.
 from dataclasses import dataclass
 from vehicle.vehicle import Vehicle
 from vehicle.parameters import Parameter
-from simulation.simulation import SimulationSettings
-from simulation.competition import simulate_competition
+from simulation.competition import CompetitionSettings, simulate_competition
 from simulation.points.points import calculate_points
 
 PARAMETER_DELTA_SCALAR = 0.0001
@@ -20,7 +19,7 @@ class SensitivityAnalysis(object):
 
     baseline_vehicle: Vehicle
     parameter: type[Parameter]
-    simulation_settings: SimulationSettings
+    competition_settings: CompetitionSettings
 
     @property
     def baseline_value(self) -> float:
@@ -53,7 +52,7 @@ class SensitivityAnalysis(object):
 
         for direction, vehicle in vehicles.items():
             results = simulate_competition(
-                vehicle=vehicle, settings=self.simulation_settings
+                vehicle=vehicle, settings=self.competition_settings
             )
             points = calculate_points(results=results)
             total_points[direction] = points.total

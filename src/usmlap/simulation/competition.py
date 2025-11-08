@@ -4,9 +4,9 @@ This module contains code for simulating a complete Formula Student competition.
 
 from __future__ import annotations
 from dataclasses import dataclass
-from copy import deepcopy
 import logging
 from vehicle.vehicle import Vehicle
+from track.track_data import TrackData
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
 from .solution import Solution
@@ -16,8 +16,22 @@ ACCELERATION_TRACK = "Acceleration.xlsx"
 SKIDPAD_TRACK = "Skidpad.xlsx"
 
 
+@dataclass
+class CompetitionSettings(object):
+    """
+    Settings for a complete competition simulation.
+
+    Attributes:
+        autocross_track (TrackData): The track to use for the autocross event.
+        simulation_settings (SimulationSettings): Settings for each simulation.
+    """
+
+    autocross_track: TrackData
+    simulation_settings: SimulationSettings
+
+
 def simulate_competition(
-    vehicle: Vehicle, settings: SimulationSettings
+    vehicle: Vehicle, settings: CompetitionSettings
 ) -> CompetitionResults:
     """
     Simulates all four Formula Student events:
@@ -25,7 +39,7 @@ def simulate_competition(
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (CompetitionSettings): Settings for the simulation.
 
     Returns:
         results (CompetitionResults): The results of all four simulations.
@@ -39,14 +53,14 @@ def simulate_competition(
 
 
 def simulate_acceleration(
-    vehicle: Vehicle, settings: SimulationSettings
+    vehicle: Vehicle, settings: CompetitionSettings
 ) -> Solution:
     """
     Simulate the acceleration event.
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (CompetitionSettings): Settings for the simulation.
 
     Returns:
         solution (Solution): The results of the simulation.
@@ -54,21 +68,21 @@ def simulate_acceleration(
     logging.info("Simulating acceleration event...")
     track_data = load_track_from_spreadsheet(ACCELERATION_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-    acceleration_settings = deepcopy(settings)
-    acceleration_settings.track = mesh
-    solution = simulate(vehicle=vehicle, settings=acceleration_settings)
+    solution = simulate(
+        vehicle=vehicle, track_mesh=mesh, settings=settings.simulation_settings
+    )
     return solution
 
 
 def simulate_skidpad(
-    vehicle: Vehicle, settings: SimulationSettings
+    vehicle: Vehicle, settings: CompetitionSettings
 ) -> Solution:
     """
     Simulate the skidpad event.
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (CompetitionSettings): Settings for the simulation.
 
     Returns:
         solution (Solution): The results of the simulation.
@@ -76,48 +90,57 @@ def simulate_skidpad(
     logging.info("Simulating skidpad event...")
     track_data = load_track_from_spreadsheet(SKIDPAD_TRACK)
     mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-    skidpad_settings = deepcopy(settings)
-    skidpad_settings.track = mesh
-    solution = simulate(vehicle=vehicle, settings=skidpad_settings)
+    solution = simulate(
+        vehicle=vehicle, track_mesh=mesh, settings=settings.simulation_settings
+    )
     return solution
 
 
 def simulate_autocross(
-    vehicle: Vehicle, settings: SimulationSettings
+    vehicle: Vehicle, settings: CompetitionSettings
 ) -> Solution:
     """
     Simulate the autocross event.
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (CompetitionSettings): Settings for the simulation.
 
     Returns:
         solution (Solution): The results of the simulation.
     """
     logging.info("Simulating autocross event...")
-    solution = simulate(vehicle=vehicle, settings=settings)
+    track_data = settings.autocross_track
+    mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+    solution = simulate(
+        vehicle=vehicle, track_mesh=mesh, settings=settings.simulation_settings
+    )
     return solution
 
 
 def simulate_endurance(
-    vehicle: Vehicle, settings: SimulationSettings
+    vehicle: Vehicle, settings: CompetitionSettings
 ) -> Solution:
     """
     Simulate the endurance event.
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (CompetitionSettings): Settings for the simulation.
 
     Returns:
         solution (Solution): The results of the simulation.
     """
     logging.info("Simulating endurance event...")
-    mesh = settings.track.generate_endurance_mesh()
-    endurance_settings = deepcopy(settings)
-    endurance_settings.track = mesh
-    solution = simulate(vehicle=vehicle, settings=endurance_settings)
+    track_data = settings.autocross_track
+    mesh = (
+        MeshGenerator(resolution=1)
+        .generate_mesh(track_data)
+        .generate_endurance_mesh()
+    )
+    solution = simulate(
+        vehicle=vehicle, track_mesh=mesh, settings=settings.simulation_settings
+    )
     return solution
 
 

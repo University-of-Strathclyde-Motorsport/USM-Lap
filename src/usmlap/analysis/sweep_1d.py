@@ -9,8 +9,7 @@ import logging
 
 from vehicle.vehicle import Vehicle
 from vehicle.parameters import Parameter
-from simulation.simulation import SimulationSettings
-from simulation.competition import simulate_competition
+from simulation.competition import CompetitionSettings, simulate_competition
 from simulation.points.points import calculate_points
 
 import matplotlib.pyplot as plt
@@ -87,7 +86,7 @@ class SweepResults(object):
 def sweep_1d(
     baseline_vehicle: Vehicle,
     sweep_settings: SweepSettings,
-    simulation_settings: SimulationSettings,
+    competition_settings: CompetitionSettings,
 ) -> SweepResults:
     """
     Carries out a 1D sweep of a parameter.
@@ -95,7 +94,8 @@ def sweep_1d(
     Args:
         vehicle (Vehicle): The vehicle to simulate.
         sweep_settings (SweepSettings): Settings for the sweep.
-        simulation_settings (SimulationSettings): Settings for the simulation.
+        competition_settings (CompetitionSettings):
+            Settings for the competition.
     """
     sweep_results = SweepResults(parameter=sweep_settings.parameter)
 
@@ -103,7 +103,7 @@ def sweep_1d(
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
-        results = simulate_competition(vehicle, simulation_settings)
+        results = simulate_competition(vehicle, competition_settings)
         points = calculate_points(results)
         sweep_results.data[value] = points.total
 

@@ -26,13 +26,14 @@ class SimulationSettings(BaseModel):
         solver (SolverInterface): The solver to use.
     """
 
-    track: Mesh
     environment: Environment = Environment()
     vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel
     solver: type[SolverInterface] = QuasiSteadyStateSolver
 
 
-def simulate(vehicle: Vehicle, settings: SimulationSettings) -> Solution:
+def simulate(
+    vehicle: Vehicle, track_mesh: Mesh, settings: SimulationSettings
+) -> Solution:
     """
     Simulate a vehicle driving around a track.
 
@@ -43,6 +44,6 @@ def simulate(vehicle: Vehicle, settings: SimulationSettings) -> Solution:
     vehicle_model = settings.vehicle_model(
         vehicle=vehicle, environment=settings.environment
     )
-    solver = settings.solver(vehicle_model, track_mesh=settings.track)
+    solver = settings.solver(vehicle_model, track_mesh=track_mesh)
     solution = solver.solve()
     return solution
