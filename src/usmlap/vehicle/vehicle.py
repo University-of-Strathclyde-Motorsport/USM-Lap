@@ -3,6 +3,7 @@ This module models the full vehicle.
 """
 
 import filepath
+import os
 from .common import Subsystem
 from .driver import Driver
 from .aero import AeroPackage
@@ -16,6 +17,7 @@ from .tyre.tyre_model import Tyres
 
 
 VEHICLE_LIBRARY = filepath.LIBRARY_ROOT / "vehicles"
+AVAILABLE_VEHICLES = os.listdir(VEHICLE_LIBRARY)
 
 
 class Metadata(Subsystem):
@@ -103,5 +105,12 @@ def load_vehicle(filename: str) -> Vehicle:
     Returns:
         vehicle (Vehicle): The loaded vehicle.
     """
-    filepath = VEHICLE_LIBRARY / filename
-    return Vehicle.from_json(filepath)
+    try:
+        filepath = VEHICLE_LIBRARY / filename
+        return Vehicle.from_json(filepath)
+    except FileNotFoundError:
+        error_message = (
+            f"Unable to find '{filename}' in vehicle library. "
+            f"Available vehicles: {AVAILABLE_VEHICLES}"
+        )
+        raise FileNotFoundError(error_message)
