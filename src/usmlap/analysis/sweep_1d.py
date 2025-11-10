@@ -89,13 +89,16 @@ def sweep_1d(
     competition_settings: CompetitionSettings,
 ) -> SweepResults:
     """
-    Carries out a 1D sweep of a parameter.
+    Carry out a 1D sweep of a parameter.
 
     Args:
-        vehicle (Vehicle): The vehicle to simulate.
+        baseline_vehicle (Vehicle): The vehicle to simulate.
         sweep_settings (SweepSettings): Settings for the sweep.
         competition_settings (CompetitionSettings):
             Settings for the competition.
+
+    Returns:
+        sweep_results (SweepResults): The results of the sweep.
     """
     sweep_results = SweepResults(parameter=sweep_settings.parameter)
 

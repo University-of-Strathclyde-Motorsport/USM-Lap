@@ -5,6 +5,7 @@ from track.mesh import MeshGenerator
 from simulation.simulation import SimulationSettings
 from simulation.competition import CompetitionSettings
 from analysis.sweep_1d import sweep_1d, SweepSettings
+from analysis.coupling import coupling
 
 import logging
 
@@ -26,15 +27,28 @@ competition_settings = CompetitionSettings(
 )
 
 
+# sweep_settings = SweepSettings(
+#     parameter=Parameter.get_parameter("Curb Mass"),
+#     start_value=194.43,
+#     end_value=194.46,
+#     number_of_steps=10,
+# )
 sweep_settings = SweepSettings(
-    parameter=Parameter.get_parameter("Final Drive Ratio"),
-    start_value=2.5,
-    end_value=4,
-    number_of_steps=5,
+    parameter=Parameter.get_parameter("Curb Mass"),
+    start_value=190,
+    end_value=200,
+    number_of_steps=10,
 )
-sweep_results = sweep_1d(
+# sweep_results = sweep_1d(
+#     baseline_vehicle=vehicle,
+#     sweep_settings=sweep_settings,
+#     competition_settings=competition_settings,
+# )
+# sweep_results.plot()
+coupling_results = coupling(
     baseline_vehicle=vehicle,
     sweep_settings=sweep_settings,
+    coupled_parameter=Parameter.get_parameter("Drag Coefficient"),
     competition_settings=competition_settings,
 )
-sweep_results.plot()
+coupling_results.plot()

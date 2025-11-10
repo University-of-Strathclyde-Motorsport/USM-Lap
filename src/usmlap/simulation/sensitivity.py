@@ -11,6 +11,27 @@ from simulation.points.points import calculate_points
 PARAMETER_DELTA_SCALAR = 0.0001
 
 
+def points_sensitivity(
+    vehicle: Vehicle, parameter: Parameter, settings: CompetitionSettings
+) -> float:
+    baseline_value = parameter.get_value(vehicle)
+    parameter_delta = baseline_value * PARAMETER_DELTA_SCALAR
+
+    increased_value = baseline_value + parameter_delta
+    increased_vehicle = parameter.get_new_vehicle(vehicle, increased_value)
+    increased_results = simulate_competition(increased_vehicle, settings)
+    increased_points = calculate_points(increased_results).total
+
+    decreased_value = baseline_value - parameter_delta
+    decreased_vehicle = parameter.get_new_vehicle(vehicle, decreased_value)
+    decreased_results = simulate_competition(decreased_vehicle, settings)
+    decreased_points = calculate_points(decreased_results).total
+
+    points_delta = increased_points - decreased_points
+    sensitivity = points_delta / (2 * parameter_delta)
+    return sensitivity
+
+
 @dataclass
 class SensitivityAnalysis(object):
     """
@@ -18,7 +39,7 @@ class SensitivityAnalysis(object):
     """
 
     baseline_vehicle: Vehicle
-    parameter: type[Parameter]
+    parameter: Parameter
     competition_settings: CompetitionSettings
 
     @property
