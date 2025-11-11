@@ -44,6 +44,6 @@ def simulate(
     vehicle_model = settings.vehicle_model(
         vehicle=vehicle, environment=settings.environment
     )
-    solver = settings.solver(vehicle_model, track_mesh=track_mesh)
-    solution = solver.solve()
+    solver = settings.solver()
+    solution = solver.solve(vehicle_model, track_mesh)
     return solution

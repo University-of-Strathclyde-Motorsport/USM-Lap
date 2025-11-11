@@ -3,6 +3,10 @@ from track.track_data import load_track_from_spreadsheet
 from track.mesh import MeshGenerator
 from simulation.simulation import SimulationSettings, simulate
 from simulation.competition import CompetitionSettings
+from vehicle.parameters import Parameter
+from analysis.sweep_1d import SweepSettings
+from analysis.coupling import coupling
+
 
 import logging
 
@@ -25,3 +29,17 @@ competition_settings = CompetitionSettings(
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
 simulation_results.plot_ggv()
+
+# sweep_settings = SweepSettings(
+#     parameter=Parameter.get_parameter("Curb Mass"),
+#     start_value=150,
+#     end_value=250,
+#     number_of_steps=10,
+# )
+# coupling_results = coupling(
+#     baseline_vehicle=vehicle,
+#     sweep_settings=sweep_settings,
+#     coupled_parameter=Parameter.get_parameter("Drag Coefficient"),
+#     competition_settings=competition_settings,
+# )
+# coupling_results.plot()

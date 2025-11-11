@@ -9,6 +9,7 @@ from vehicle.aero import AeroAttitude
 from simulation.environment import Environment
 from track.mesh import Node
 from pydantic import BaseModel
+from datatypes import Vector3
 
 
 class VehicleState(BaseModel):
@@ -44,6 +45,10 @@ class VehicleModelInterface(ABC):
 
     def weight_z(self, node: Node) -> float:
         return self.weight * math.cos(node.banking) * math.cos(node.inclination)
+
+    def weight_array(self, node: Node) -> Vector3:
+        weight = self.vehicle.total_mass * self.environment.gravity
+        return Vector3(z=weight)
 
     def _centripetal_force(
         self, vehicle_state: VehicleState, node: Node

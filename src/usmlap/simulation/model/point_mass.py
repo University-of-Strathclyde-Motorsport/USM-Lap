@@ -71,27 +71,6 @@ class PointMassVehicleModel(VehicleModelInterface):
         motor_limit = self.motor_force(vehicle_state)
         drive_limit = min(motor_limit, traction_limit)
         net_fx = drive_limit - self.resistive_fx(vehicle_state, node)
-        with open("log.csv", "a") as file:
-            file.write(
-                f"{vehicle_state.velocity},"
-                f"{self.required_fy(vehicle_state, node)},"
-                f"{traction_limit},"
-                f"{drive_limit},"
-                f"{motor_limit},"
-                f"{self.resistive_fx(vehicle_state, node)},"
-                f"{net_fx}\n"
-            )
-        # print(
-        #     f"Radius: {node.radius:.2f}, "
-        #     f"Velocity: {vehicle_state.velocity:.2f}, "
-        #     f"Normal: {self.normal_force(vehicle_state, node):.2f}, "
-        #     f"Fy: {self.required_fy(vehicle_state, node):.2f}, "
-        #     f"Traction: {traction_limit:.2f}, "
-        #     f"Drive: {drive_limit:.2f}, "
-        #     f"Motor limit: {motor_limit:.2f}, "
-        #     f"Resistive: {self.resistive_fx(vehicle_state, node):.2f}, "
-        #     f"Net: {net_fx:.2f}"
-        # )
         return net_fx / self.vehicle.equivalent_mass
 
     def calculate_decceleration(
@@ -105,13 +84,4 @@ class PointMassVehicleModel(VehicleModelInterface):
         )
         traction_limit = tyre_traction * 4
         net_fx = traction_limit + self.resistive_fx(vehicle_state, node)
-        print(
-            f"Radius: {node.radius:.2f}, "
-            f"Velocity: {vehicle_state.velocity:.2f}, "
-            f"Normal: {self.normal_force(vehicle_state, node):.2f}, "
-            f"Fy: {self.required_fy(vehicle_state, node):.2f}, "
-            f"Traction: {traction_limit:.2f}, "
-            f"Resistive: {self.resistive_fx(vehicle_state, node):.2f}, "
-            f"Net: {net_fx:.2f}"
-        )
         return net_fx / self.vehicle.equivalent_mass

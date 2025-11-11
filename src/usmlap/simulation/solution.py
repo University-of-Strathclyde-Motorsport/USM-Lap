@@ -2,11 +2,12 @@
 This module contains code for representing the solution to a simulation.
 """
 
-from collections import UserList
-from pydantic import BaseModel
-from scipy.signal import find_peaks
+from dataclasses import dataclass, field
+
 import matplotlib.pyplot as plt
+
 from track.mesh import Node as TrackNode
+from simulation.model.vehicle_model import VehicleState, VehicleModelInterface
 
 
 LABELS = {
@@ -16,21 +17,31 @@ LABELS = {
 }
 
 
-class Node(BaseModel):
+def default_vehicle_state() -> VehicleState:
+    """
+    Get a blank vehicle state.
+    """
+    return VehicleState(velocity=0)
+
+
+@dataclass
+class Node(object):
     """
     The solution at a single node.
     """
 
-    node: TrackNode
+    track_node: TrackNode
     maximum_velocity: float
     acceleration: float = 0
     initial_velocity: float = 0
     final_velocity: float = 0
+    initial_state: VehicleState = field(default_factory=default_vehicle_state)
+    final_state: VehicleState = field(default_factory=default_vehicle_state)
     anchor: bool = False
 
     @property
     def length(self) -> float:
-        return self.node.length
+        return self.track_node.length
 
     @property
     def velocity(self) -> float:
@@ -44,62 +55,59 @@ class Node(BaseModel):
 
     @property
     def lateral_acceleration(self) -> float:
-        return self.velocity**2 * self.node.curvature
+        return self.velocity**2 * self.track_node.curvature
 
     @property
     def time(self) -> float:
         return self.length / self.velocity
 
 
-class Solution(UserList[Node]):
+@dataclass
+class Solution(object):
     """
     The solution to a simulation.
     """
 
+    nodes: list[Node]
+    vehicle_model: VehicleModelInterface
+    apexes: list[int] = field(default_factory=list[int])
+
     @property
     def velocity(self) -> list[float]:
-        return [node.velocity for node in self.data]
+        return [node.velocity for node in self.nodes]
 
     @property
     def initial_velocity(self) -> list[float]:
-        return [node.initial_velocity for node in self.data]
+        return [node.initial_velocity for node in self.nodes]
 
     @property
     def lateral_acceleration(self) -> list[float]:
-        return [node.lateral_acceleration for node in self.data]
+        return [node.lateral_acceleration for node in self.nodes]
 
     @property
     def longitudinal_acceleration(self) -> list[float]:
-        return [node.longitudinal_acceleration for node in self.data]
+        return [node.longitudinal_acceleration for node in self.nodes]
 
     @property
     def total_time(self) -> float:
-        return sum(node.time for node in self.data)
+        return sum(node.time for node in self.nodes)
 
     @property
     def total_length(self) -> float:
-        return sum(node.length for node in self.data)
+        return sum(node.length for node in self.nodes)
 
     @property
     def average_velocity(self) -> float:
         return self.total_length / self.total_time
 
-    def find_apexes(self) -> list[int]:
-        apex_indices, _ = find_peaks(
-            [-node.maximum_velocity for node in self.data]
-        )
-        apex_indices = set(apex_indices.tolist())
-        apex_indices.update([0, len(self.data) - 1])
-        apex_velocities = [self.data[i].maximum_velocity for i in apex_indices]
-        _, sorted_apexes = zip(*sorted(zip(apex_velocities, apex_indices)))
-        return list(sorted_apexes)
-
     def plot_apexes(self) -> None:
-        position = [solution.node.position for solution in self.data]
-        maximum_velocity = [solution.maximum_velocity for solution in self.data]
-        apexes = self.find_apexes()
-        apex_velocity = [self.data[apex].maximum_velocity for apex in apexes]
-        apex_position = [self.data[apex].node.position for apex in apexes]
+        position = [solution.track_node.position for solution in self.nodes]
+        maximum_velocity = [
+            solution.maximum_velocity for solution in self.nodes
+        ]
+        apexes = [self.nodes[apex] for apex in self.apexes]
+        apex_velocity = [apex.maximum_velocity for apex in apexes]
+        apex_position = [apex.track_node.position for apex in apexes]
 
         fig, ax = plt.subplots()
         fig.suptitle("Solution")

@@ -13,15 +13,8 @@ class SolverInterface(ABC):
     Abstract base class for simulation solvers.
     """
 
-    vehicle_model: VehicleModelInterface
-    track_mesh: Mesh
-    solution: Solution = Solution()
-
-    def __init__(
-        self, vehicle_model: VehicleModelInterface, track_mesh: Mesh
-    ) -> None:
-        self.vehicle_model = vehicle_model
-        self.track_mesh = track_mesh
-
+    @staticmethod
     @abstractmethod
-    def solve(self) -> Solution: ...
+    def solve(
+        vehicle_model: VehicleModelInterface, track_mesh: Mesh
+    ) -> Solution: ...
