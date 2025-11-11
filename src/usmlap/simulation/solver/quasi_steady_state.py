@@ -4,6 +4,7 @@ This module implements a quasi-steady-state solver.
 
 import math
 import logging
+from simulation.model.vehicle_model import VehicleState
 from .solver_interface import SolverInterface
 from track.mesh import Node as TrackNode
 from simulation.solution import Solution
@@ -33,9 +34,8 @@ class QuasiSteadyStateSolver(SolverInterface):
         logging.info("Solving forward propagation...")
         for apex in apexes:
             if apex != 0:
-                self.solution[apex].initial_velocity = self.solution[
-                    apex
-                ].maximum_velocity
+                maximum_velocity = self.solution[apex].maximum_velocity
+                self.solution[apex].initial_velocity = maximum_velocity
 
             i = apex
             while i < len(self.solution):
@@ -103,10 +103,13 @@ class QuasiSteadyStateSolver(SolverInterface):
 
     def traction_limit_velocity(self, node_solution: SolutionNode) -> float:
         try:
+            vehicle_state = VehicleState(
+                velocity=node_solution.initial_velocity
+            )
             traction_limited_acceleration = (
                 self.vehicle_model.calculate_acceleration(
                     node=node_solution.node,
-                    velocity=node_solution.initial_velocity,
+                    vehicle_state=vehicle_state,
                 )
             )
             traction_limited_velocity = calculate_next_velocity(
@@ -116,24 +119,26 @@ class QuasiSteadyStateSolver(SolverInterface):
             )
             return traction_limited_velocity
         except ValueError:
-            return node_solution.maximum_velocity
+            return node_solution.initial_velocity  # TODO
 
     def traction_limit_velocity_braking(
         self, node_solution: SolutionNode
     ) -> float:
         try:
-            traction_limited_braking = self.vehicle_model.calculate_braking(
-                node=node_solution.node,
-                velocity=node_solution.final_velocity,
+            vehicle_state = VehicleState(velocity=node_solution.final_velocity)
+            traction_limited_decceleration = (
+                self.vehicle_model.calculate_decceleration(
+                    node=node_solution.node, vehicle_state=vehicle_state
+                )
             )
             traction_limited_velocity = calculate_previous_velocity(
-                initial_velocity=node_solution.final_velocity,
-                acceleration=traction_limited_braking,
+                final_velocity=node_solution.final_velocity,
+                decceleration=traction_limited_decceleration,
                 displacement=node_solution.node.length,
             )
             return traction_limited_velocity
         except ValueError:
-            return node_solution.maximum_velocity
+            return node_solution.final_velocity  # TODO
 
 
 def calculate_next_velocity(
@@ -143,9 +148,9 @@ def calculate_next_velocity(
 
 
 def calculate_previous_velocity(
-    initial_velocity: float, acceleration: float, displacement: float
+    final_velocity: float, decceleration: float, displacement: float
 ) -> float:
-    term = initial_velocity**2 + 2 * acceleration * displacement
+    term = final_velocity**2 + 2 * decceleration * displacement
     if term <= 0:
         return 0
     else:

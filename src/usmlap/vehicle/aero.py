@@ -51,6 +51,11 @@ class ConstantAero(AeroModelInterface, type="constant"):
     Constant aero model.
 
     Lift and drag coefficients do not change with velocity.
+
+    Attributes:
+        model_type (Literal["constant"]): The type of aero model.
+        lift_coefficient (float): The lift coefficient (positive).
+        drag_coefficient (float): The drag coefficient (positive).
     """
 
     model_type: Literal["constant"]

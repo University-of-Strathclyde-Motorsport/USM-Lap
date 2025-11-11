@@ -5,7 +5,6 @@ This module defines the point mass vehicle model.
 import math
 from track.mesh import Node
 from .vehicle_model import VehicleModelInterface, VehicleState
-from vehicle.aero import AeroAttitude
 from vehicle.tyre.tyre_model import TyreAttitude
 
 
@@ -14,130 +13,105 @@ class PointMassVehicleModel(VehicleModelInterface):
     Point mass vehicle model.
     """
 
+    def normal_load(self, vehicle_state: VehicleState, node: Node) -> float:
+        return self.normal_force(vehicle_state, node) / 4
+
+    def tyre_attitude(
+        self, vehicle_state: VehicleState, node: Node
+    ) -> TyreAttitude:
+        return TyreAttitude(normal_load=self.normal_load(vehicle_state, node))
+
     def lateral_vehicle_model(self, node: Node) -> VehicleState:
         if node.curvature == 0:
             return VehicleState(velocity=self.vehicle.maximum_velocity, ax=0)
-
-        weight = self.vehicle.total_mass * self.environment.gravity
-        weight_z = weight * math.cos(node.banking) * math.cos(node.inclination)
-        weight_y = -weight * math.sin(node.banking)
-        weight_x = weight * math.sin(node.inclination)
 
         v = self.vehicle.maximum_velocity
         i = 0
 
         while i < 10000:
             i += 1
-
-            # Aero forces
-            aero_attitude = AeroAttitude(
-                velocity=v, air_density=self.environment.air_density
-            )
-            downforce = self.vehicle.aero.get_downforce(aero_attitude)
-            drag = self.vehicle.aero.get_drag(aero_attitude)
-            normal_load = (weight_z + downforce) / 4
-
-            required_fx = drag + weight_x
-            centripetal_force = self.vehicle.total_mass * v**2 * node.curvature
-            required_fy = abs(weight_y + centripetal_force)
-
-            tyre_attitude = TyreAttitude(normal_load=normal_load)
+            vehicle_state = VehicleState(velocity=v, ax=0)
             try:
-                fy_front = (
+                front_tyre_traction = (
                     self.vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude, required_fx=0
+                        tyre_attitude=self.tyre_attitude(vehicle_state, node),
+                        required_fx=0,
                     )
                 )
-                fy_rear = (
+                rear_tyre_traction = (
                     self.vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude, required_fx / 2
+                        tyre_attitude=self.tyre_attitude(vehicle_state, node),
+                        required_fx=self.resistive_fx(vehicle_state, node) / 2,
                     )
                 )
-                available_fy = 2 * (fy_front + fy_rear)
+                available_fy = 2 * (front_tyre_traction + rear_tyre_traction)
             except ValueError:
                 available_fy = 0
 
-            if available_fy < required_fy:
-                ay = (available_fy + weight_y) / self.vehicle.total_mass
+            if available_fy < abs(self.required_fy(vehicle_state, node)):
+                net_force = available_fy - self.weight_y(node)
+                ay = net_force / self.vehicle.total_mass
                 v = math.sqrt(ay / abs(node.curvature)) - 0.001
             else:
                 break
 
-        return VehicleState(velocity=v, ax=0)
+        vehicle_state = VehicleState(velocity=v, ax=0)
+        return vehicle_state
 
-    def calculate_acceleration(self, node: Node, velocity: float) -> float:
-        weight = self.vehicle.total_mass * self.environment.gravity
-        weight_z = weight * math.cos(node.banking) * math.cos(node.inclination)
-        weight_y = -weight * math.sin(node.banking)
-        weight_x = weight * math.sin(node.inclination)
-
-        centripetal_force = (
-            self.vehicle.total_mass * velocity**2 * node.curvature
-        )
-        required_fy = abs(weight_y + centripetal_force)
-
-        aero_attitude = AeroAttitude(
-            velocity=velocity, air_density=self.environment.air_density
-        )
-        downforce = self.vehicle.aero.get_downforce(aero_attitude)
-        drag = self.vehicle.aero.get_drag(aero_attitude)
-        normal_load = (weight_z + downforce) / 4
-
-        tyre_attitude = TyreAttitude(normal_load=normal_load)
-        traction_limit_fx = (
+    def calculate_acceleration(
+        self, vehicle_state: VehicleState, node: Node
+    ) -> float:
+        tyre_traction = (
             self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
-                tyre_attitude, required_fy / 4
+                self.tyre_attitude(vehicle_state, node),
+                abs(self.required_fy(vehicle_state, node)) / 4,
             )
-            * 2
         )
-        motor_limit_fx = self.get_drive_force(velocity)
-        drive_fx = min(motor_limit_fx, traction_limit_fx)
-        resistive_fx = drag + weight_x
-        net_fx = drive_fx - resistive_fx
+        traction_limit = tyre_traction * 2
+        motor_limit = self.motor_force(vehicle_state)
+        drive_limit = min(motor_limit, traction_limit)
+        net_fx = drive_limit - self.resistive_fx(vehicle_state, node)
+        with open("log.csv", "a") as file:
+            file.write(
+                f"{vehicle_state.velocity},"
+                f"{self.required_fy(vehicle_state, node)},"
+                f"{traction_limit},"
+                f"{drive_limit},"
+                f"{motor_limit},"
+                f"{self.resistive_fx(vehicle_state, node)},"
+                f"{net_fx}\n"
+            )
+        # print(
+        #     f"Radius: {node.radius:.2f}, "
+        #     f"Velocity: {vehicle_state.velocity:.2f}, "
+        #     f"Normal: {self.normal_force(vehicle_state, node):.2f}, "
+        #     f"Fy: {self.required_fy(vehicle_state, node):.2f}, "
+        #     f"Traction: {traction_limit:.2f}, "
+        #     f"Drive: {drive_limit:.2f}, "
+        #     f"Motor limit: {motor_limit:.2f}, "
+        #     f"Resistive: {self.resistive_fx(vehicle_state, node):.2f}, "
+        #     f"Net: {net_fx:.2f}"
+        # )
         return net_fx / self.vehicle.equivalent_mass
 
-    def calculate_braking(self, node: Node, velocity: float) -> float:
-        weight = self.vehicle.total_mass * self.environment.gravity
-        weight_z = weight * math.cos(node.banking) * math.cos(node.inclination)
-        weight_y = -weight * math.sin(node.banking)
-        weight_x = weight * math.sin(node.inclination)
-
-        centripetal_force = (
-            self.vehicle.total_mass * velocity**2 * node.curvature
-        )
-        required_fy = abs(weight_y + centripetal_force)
-
-        aero_attitude = AeroAttitude(
-            velocity=velocity, air_density=self.environment.air_density
-        )
-        downforce = self.vehicle.aero.get_downforce(aero_attitude)
-        drag = self.vehicle.aero.get_drag(aero_attitude)
-        normal_load = (weight_z + downforce) / 4
-
-        tyre_attitude = TyreAttitude(normal_load=normal_load)
-        traction_fx = (
+    def calculate_decceleration(
+        self, vehicle_state: VehicleState, node: Node
+    ) -> float:
+        tyre_traction = (
             self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
-                tyre_attitude, required_fy / 4
+                self.tyre_attitude(vehicle_state, node),
+                abs(self.required_fy(vehicle_state, node)) / 4,
             )
-            * 4
         )
-        resistive_fx = drag + weight_x
-        net_fx = traction_fx + resistive_fx
+        traction_limit = tyre_traction * 4
+        net_fx = traction_limit + self.resistive_fx(vehicle_state, node)
+        print(
+            f"Radius: {node.radius:.2f}, "
+            f"Velocity: {vehicle_state.velocity:.2f}, "
+            f"Normal: {self.normal_force(vehicle_state, node):.2f}, "
+            f"Fy: {self.required_fy(vehicle_state, node):.2f}, "
+            f"Traction: {traction_limit:.2f}, "
+            f"Resistive: {self.resistive_fx(vehicle_state, node):.2f}, "
+            f"Net: {net_fx:.2f}"
+        )
         return net_fx / self.vehicle.equivalent_mass
-
-    def get_motor_power(self, velocity: float) -> float:
-        motor_speed = self.vehicle.velocity_to_motor_speed(velocity)
-        power = self.vehicle.powertrain.get_motor_power(
-            state_of_charge=1, current=0, motor_speed=motor_speed
-        )
-        return power
-
-    def get_drive_force(self, velocity: float) -> float:
-        motor_speed = self.vehicle.velocity_to_motor_speed(velocity)
-        motor_torque = self.vehicle.powertrain.get_motor_torque(
-            state_of_charge=1,
-            current=self.vehicle.powertrain.accumulator.maximum_discharge_current,
-            motor_speed=motor_speed,
-        )
-        drive_force = self.vehicle.motor_torque_to_drive_force(motor_torque)
-        return drive_force

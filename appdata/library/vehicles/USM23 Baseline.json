@@ -79,7 +79,7 @@
         }
     },
     "transmission": {
-        "final_drive_ratio": 3
+        "final_drive_ratio": 3.2
     },
     "tyres": {
         "front": "Hoozier 16 x 7.5 - 10 R20",

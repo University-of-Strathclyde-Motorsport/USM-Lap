@@ -26,10 +26,10 @@ class Node(BaseModel):
     Attributes:
         Position (float): The position of the node from the start of the track.
         Length (float): The length of the track section.
-        Curvature (float): The curvature of the track section.
+        Curvature (float): The curvature of the track section (left +ve).
         Elevation (float): The elevation of the track section.
         Inclination (float): The inclination angle of the track section.
-        Banking (float): The banking angle of the track section.
+        Banking (float): The banking angle of the track section (+ve slope right to left).
         GripFactor (float): The grip factor of the track section.
         Sector (int): The sector of the track section.
     """
@@ -42,6 +42,10 @@ class Node(BaseModel):
     banking: float = Field(ge=-pi / 2, le=pi / 2, default=0)
     grip_factor: float = Field(gt=0, default=1)
     sector: int = Field(gt=0, default=1)
+
+    @property
+    def radius(self) -> float:
+        return 1 / self.curvature
 
 
 class Mesh(BaseModel):
