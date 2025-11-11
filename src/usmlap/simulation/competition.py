@@ -3,14 +3,16 @@ This module contains code for simulating a complete Formula Student competition.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
+
 import logging
-from vehicle.vehicle import Vehicle
-from track.track_data import TrackData
+from dataclasses import dataclass
+
 from track.mesh import MeshGenerator
-from track.track_data import load_track_from_spreadsheet
-from .solution import Solution
+from track.track_data import TrackData, load_track_from_spreadsheet
+from vehicle.vehicle import Vehicle
+
 from .simulation import SimulationSettings, simulate
+from .solution import Solution
 
 ACCELERATION_TRACK = "Acceleration.xlsx"
 SKIDPAD_TRACK = "Skidpad.xlsx"

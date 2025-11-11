@@ -3,10 +3,12 @@ This module models the electric powertrain of a vehicle.
 """
 
 from __future__ import annotations
+
 from abc import ABC
-from pydantic.dataclasses import dataclass
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+from pydantic.dataclasses import dataclass
 
 from ..common import Subsystem
 from .accumulator import Accumulator

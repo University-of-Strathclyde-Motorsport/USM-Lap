@@ -2,9 +2,10 @@
 This module contains code for handling competition data.
 """
 
-from pydantic import BaseModel
-from typing import Any, Self
 import json
+from typing import Any, Self
+
+from pydantic import BaseModel
 
 
 class CompetitionData(BaseModel):

@@ -2,17 +2,17 @@
 This module contains code for carrying out a 1D sweep of a parameter.
 """
 
-from typing import Generator
-from dataclasses import dataclass, field
-import numpy as np
 import logging
-
-from vehicle.vehicle import Vehicle
-from vehicle.parameters import Parameter
-from simulation.competition import CompetitionSettings, simulate_competition
-from simulation.points.points import calculate_points
+from dataclasses import dataclass, field
+from typing import Generator
 
 import matplotlib.pyplot as plt
+import numpy as np
+
+from simulation.competition import CompetitionSettings, simulate_competition
+from simulation.points.points import calculate_points
+from vehicle.parameters import Parameter
+from vehicle.vehicle import Vehicle
 
 
 @dataclass

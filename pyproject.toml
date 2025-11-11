@@ -36,3 +36,16 @@ omit = ["__main__.py"]
 
 [tool.coverage.report]
 skip_empty = true
+
+[tool.ruff]
+fix = true
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["analysis", "simulation", "track", "utils", "vehicle"]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true

@@ -3,12 +3,15 @@ This module models the aerodynamics of a vehicle.
 """
 
 from __future__ import annotations
-from .common import Subsystem, AbstractSubsystem
+
 from abc import ABC, abstractmethod
-from typing import Literal, Annotated
+from math import pi
+from typing import Annotated, Literal
+
 from annotated_types import Unit
 from pydantic import BaseModel, Field
-import math
+
+from .common import AbstractSubsystem, Subsystem
 
 
 class AeroAttitude(BaseModel):
@@ -29,9 +32,9 @@ class AeroAttitude(BaseModel):
     velocity: float = Field(ge=0)
     front_ride_height: float = Field(ge=0, default=0)
     rear_ride_height: float = Field(ge=0, default=0)
-    roll_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
-    pitch_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
-    yaw_angle: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
+    roll_angle: float = Field(ge=-pi / 2, le=pi / 2, default=0)
+    pitch_angle: float = Field(ge=-pi / 2, le=pi / 2, default=0)
+    yaw_angle: float = Field(ge=-pi / 2, le=pi / 2, default=0)
 
 
 class AeroModelInterface(ABC, AbstractSubsystem):

@@ -28,7 +28,7 @@ competition_settings = CompetitionSettings(
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
-simulation_results.plot_ggv()
+simulation_results.plot_g()
 
 # sweep_settings = SweepSettings(
 #     parameter=Parameter.get_parameter("Curb Mass"),

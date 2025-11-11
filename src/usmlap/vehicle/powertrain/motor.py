@@ -3,6 +3,7 @@ This module models the motor of a vehicle.
 """
 
 import math
+
 from ..common import Component
 
 

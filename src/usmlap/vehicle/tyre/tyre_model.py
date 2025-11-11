@@ -3,12 +3,14 @@ This module contains various tyre model implementations.
 """
 
 from abc import abstractmethod
+from math import sqrt
 from typing import Annotated, Literal
+
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 from pydantic.dataclasses import dataclass
-from math import sqrt
-from ..common import Component, Subsystem, AbstractSubsystem
+
+from ..common import AbstractSubsystem, Component, Subsystem
 
 
 @dataclass

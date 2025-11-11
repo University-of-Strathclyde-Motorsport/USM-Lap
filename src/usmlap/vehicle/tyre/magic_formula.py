@@ -19,11 +19,14 @@ The following repositories have been used as a starting point for this module:
     https://github.com/teasit/magic-formula-tyre-library/tree/main
 """
 
-from .tir import TIRParameters
-from datatypes import Coordinate
-from pydantic import BaseModel
-from math import pi, sqrt, pow, exp, sin, cos, tan, atan
+from math import atan, cos, exp, pi, pow, sin, sqrt, tan
+
 from numpy import sign
+from pydantic import BaseModel
+
+from utils.datatypes import Coordinate
+
+from .tir import TIRParameters
 
 EPSILON = 0.1
 

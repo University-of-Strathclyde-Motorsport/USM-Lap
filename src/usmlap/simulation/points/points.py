@@ -3,10 +3,12 @@ This module contains code for calculating points from competition results.
 """
 
 from dataclasses import dataclass
-from .points_functions import PointsFunctions, FSUKPointsFunctions
-from .competition_data import CompetitionData
-from ..competition import CompetitionResults
+
 import matplotlib.pyplot as plt
+
+from ..competition import CompetitionResults
+from .competition_data import CompetitionData
+from .points_functions import FSUKPointsFunctions, PointsFunctions
 
 
 @dataclass
@@ -71,16 +73,13 @@ def calculate_points(
             t_min=data.acceleration_t_min,
         ),
         skidpad=formulae.calculate_skidpad_points(
-            t_team=results.skidpad.total_time / 2,
-            t_min=data.skidpad_t_min,
+            t_team=results.skidpad.total_time / 2, t_min=data.skidpad_t_min
         ),
         autocross=formulae.calculate_autocross_points(
-            t_team=results.autocross.total_time,
-            t_min=data.autocross_t_min,
+            t_team=results.autocross.total_time, t_min=data.autocross_t_min
         ),
         endurance=formulae.calculate_endurance_points(
-            t_team=results.endurance.total_time,
-            t_min=data.endurance_t_min,
+            t_team=results.endurance.total_time, t_min=data.endurance_t_min
         ),
     )
     return points

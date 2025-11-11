@@ -6,9 +6,8 @@ from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
 
+from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
 from track.mesh import Node as TrackNode
-from simulation.model.vehicle_model import VehicleState, VehicleModelInterface
-
 
 LABELS = {
     "velocity": "Velocity (m/s)",

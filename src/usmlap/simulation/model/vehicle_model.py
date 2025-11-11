@@ -3,13 +3,15 @@ This module defines the interface for vehicle models.
 """
 
 from abc import ABC, abstractmethod
-import math
-from vehicle.vehicle import Vehicle
-from vehicle.aero import AeroAttitude
+from math import cos, sin
+
+from pydantic import BaseModel
+
 from simulation.environment import Environment
 from track.mesh import Node
-from pydantic import BaseModel
-from datatypes import Vector3
+from utils.datatypes import Vector3
+from vehicle.aero import AeroAttitude
+from vehicle.vehicle import Vehicle
 
 
 class VehicleState(BaseModel):
@@ -38,13 +40,13 @@ class VehicleModelInterface(ABC):
         return self.vehicle.total_mass * self.environment.gravity
 
     def weight_x(self, node: Node) -> float:
-        return self.weight * math.sin(node.inclination)
+        return self.weight * sin(node.inclination)
 
     def weight_y(self, node: Node) -> float:
-        return self.weight * math.sin(node.banking)
+        return self.weight * sin(node.banking)
 
     def weight_z(self, node: Node) -> float:
-        return self.weight * math.cos(node.banking) * math.cos(node.inclination)
+        return self.weight * cos(node.banking) * cos(node.inclination)
 
     def weight_array(self, node: Node) -> Vector3:
         weight = self.vehicle.total_mass * self.environment.gravity
@@ -60,16 +62,12 @@ class VehicleModelInterface(ABC):
     def centripetal_force_y(
         self, vehicle_state: VehicleState, node: Node
     ) -> float:
-        return self._centripetal_force(vehicle_state, node) * math.cos(
-            node.banking
-        )
+        return self._centripetal_force(vehicle_state, node) * cos(node.banking)
 
     def centripetal_force_z(
         self, vehicle_state: VehicleState, node: Node
     ) -> float:
-        return self._centripetal_force(vehicle_state, node) * math.sin(
-            node.banking
-        )
+        return self._centripetal_force(vehicle_state, node) * sin(node.banking)
 
     def downforce(self, vehicle_state: VehicleState) -> float:
         aero_attitude = AeroAttitude(

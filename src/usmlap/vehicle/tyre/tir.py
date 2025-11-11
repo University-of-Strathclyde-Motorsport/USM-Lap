@@ -9,10 +9,11 @@ https://functionbay.com/documentation/onlinehelp/Documents/Tire/MFTyre-MFSwift_H
 in section 5.3.
 """
 
+import re
 from abc import ABC
 from typing import Optional, Self
+
 from pydantic import BaseModel
-import re
 
 
 class _ParameterGroup(ABC, BaseModel):

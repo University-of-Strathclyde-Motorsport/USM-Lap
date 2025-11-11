@@ -2,12 +2,12 @@
 This module defines custom datatypes used throughout the project.
 """
 
+import math
 from dataclasses import dataclass
 from typing import Annotated, TypeVar
-from pydantic import BaseModel, Field
-import math
-from math import sin, cos
+
 import numpy as np
+from pydantic import BaseModel, Field
 
 T = TypeVar("T")
 

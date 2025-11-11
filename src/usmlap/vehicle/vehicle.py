@@ -2,19 +2,20 @@
 This module models the full vehicle.
 """
 
-import filepath
 import os
-from .common import Subsystem
-from .driver import Driver
+
+import filepath
+
 from .aero import AeroPackage
 from .brakes import Brakes
+from .common import Subsystem
+from .driver import Driver
 from .inertia import Inertia
 from .powertrain.powertrain import RWDPowertrain
 from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
 from .tyre.tyre_model import Tyres
-
 
 VEHICLE_LIBRARY = filepath.LIBRARY_ROOT / "vehicles"
 AVAILABLE_VEHICLES = os.listdir(VEHICLE_LIBRARY)

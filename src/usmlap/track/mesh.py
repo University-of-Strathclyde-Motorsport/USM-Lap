@@ -3,18 +3,20 @@ This module contains code for generating a track mesh.
 """
 
 from __future__ import annotations
+
+import copy
+from math import atan, ceil, pi
+from typing import Annotated
+
+import matplotlib.pyplot as plt
+import numpy as np
+from annotated_types import Unit
 from pydantic import BaseModel, Field
 from pydantic.dataclasses import dataclass
-from typing import Annotated
-from annotated_types import Unit
-from math import pi, atan, ceil
-import copy
-import numpy as np
-import matplotlib.pyplot as plt
 
-from .track_data import Configuration, TrackData
 from utils.array import diff
 
+from .track_data import Configuration, TrackData
 
 ENDURANCE_TRACK_LENGTH = 22000
 

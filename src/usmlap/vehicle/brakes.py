@@ -2,12 +2,15 @@
 This module models the brake system of a vehicle.
 """
 
-from .common import Component, Subsystem
-from usmlap.utils import geometry, proportion
-from pydantic import PositiveFloat, PositiveInt
-from usmlap.datatypes import FrontRear, Percentage
 from typing import Annotated
+
 from annotated_types import Unit
+from pydantic import PositiveFloat, PositiveInt
+
+from usmlap.utils import geometry, proportion
+from utils.datatypes import FrontRear, Percentage
+
+from .common import Component, Subsystem
 
 
 class MasterCylinder(Component):

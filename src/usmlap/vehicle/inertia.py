@@ -2,11 +2,14 @@
 This module models the inertia of a vehicle.
 """
 
-from .common import Subsystem
-from datatypes import Percentage
 from typing import Annotated
+
 from annotated_types import Unit
 from pydantic import PositiveFloat
+
+from utils.datatypes import Percentage
+
+from .common import Subsystem
 
 
 class UnsprungMass(Subsystem):

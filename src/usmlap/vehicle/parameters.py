@@ -3,9 +3,11 @@ This module contains code for getting and setting vehicle parameters.
 """
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from .vehicle import Vehicle
 from copy import deepcopy
+
+from .vehicle import Vehicle
 
 
 class Parameter(ABC):

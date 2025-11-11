@@ -3,10 +3,11 @@ This module contains code for points sensitivity analysis.
 """
 
 from dataclasses import dataclass
-from vehicle.vehicle import Vehicle
-from vehicle.parameters import Parameter
+
 from simulation.competition import CompetitionSettings, simulate_competition
 from simulation.points.points import calculate_points
+from vehicle.parameters import Parameter
+from vehicle.vehicle import Vehicle
 
 PARAMETER_DELTA_SCALAR = 0.0001
 

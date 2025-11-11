@@ -4,21 +4,22 @@ This module contains code for reading track data from an Excel file.
 
 from __future__ import annotations
 
-import filepath
+import math
 import os
-import pathlib
-
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from enum import Enum
-from typing import Annotated, Self, overload, TypeVar
-from pydantic import BaseModel, Field, ConfigDict
-from pydantic.dataclasses import dataclass
-from annotated_types import Unit
-import math
-import pandas
+from pathlib import Path
+from typing import Annotated, Self, TypeVar, overload
+
+import filepath
 import numpy as np
-from utils.array import interp_previous, cumsum
+import pandas
+from annotated_types import Unit
+from pydantic import BaseModel, ConfigDict, Field
+from pydantic.dataclasses import dataclass
+
+from utils.array import cumsum, interp_previous
 
 TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
@@ -343,7 +344,7 @@ class TrackData(BaseModel):
         )
 
     @classmethod
-    def load_track_from_spreadsheet(cls, filepath: pathlib.Path) -> Self:
+    def load_track_from_spreadsheet(cls, filepath: Path) -> Self:
         reader = TrackReader(filepath)
         return cls(
             metadata=reader.get_metadata(),
@@ -403,12 +404,12 @@ class TrackReader(object):
         workbook (pandas.ExcelFile): The Excel file containing the track data.
     """
 
-    def __init__(self, filepath: pathlib.Path) -> None:
+    def __init__(self, filepath: Path) -> None:
         """
         Initialises the TrackReader from a filepath.
 
         Args:
-            filepath (pathlib.Path): Path to the Excel file to be read.
+            filepath (Path): Path to the Excel file to be read.
         """
         self.workbook = pandas.ExcelFile(filepath, engine="openpyxl")
 

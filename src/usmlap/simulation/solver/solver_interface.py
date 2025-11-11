@@ -3,8 +3,9 @@ This module defines the interface for simulation solvers.
 """
 
 from abc import ABC, abstractmethod
-from simulation.solution import Solution
+
 from simulation.model.vehicle_model import VehicleModelInterface
+from simulation.solution import Solution
 from track.mesh import Mesh
 
 

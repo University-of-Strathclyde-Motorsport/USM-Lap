@@ -3,15 +3,18 @@ This module contains code for running a simulation.
 """
 
 from __future__ import annotations
+
 from pydantic import BaseModel
-from vehicle.vehicle import Vehicle
+
 from simulation.environment import Environment
-from .model.vehicle_model import VehicleModelInterface
-from .model.point_mass import PointMassVehicleModel
-from .solver.solver_interface import SolverInterface
-from .solver.quasi_steady_state import QuasiSteadyStateSolver
-from .solution import Solution
 from track.mesh import Mesh
+from vehicle.vehicle import Vehicle
+
+from .model.point_mass import PointMassVehicleModel
+from .model.vehicle_model import VehicleModelInterface
+from .solution import Solution
+from .solver.quasi_steady_state import QuasiSteadyStateSolver
+from .solver.solver_interface import SolverInterface
 
 
 # @dataclass

@@ -2,17 +2,17 @@
 This module implements a quasi-steady-state solver.
 """
 
-import math
 import logging
+from math import sqrt
 
 from scipy.signal import find_peaks
 
-from simulation.model.vehicle_model import VehicleState
-from .solver_interface import SolverInterface
-from track.mesh import Mesh
-from simulation.solution import Solution
+from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
 from simulation.solution import Node as SolutionNode
-from simulation.model.vehicle_model import VehicleModelInterface
+from simulation.solution import Solution
+from track.mesh import Mesh
+
+from .solver_interface import SolverInterface
 
 
 class QuasiSteadyStateSolver(SolverInterface):
@@ -182,8 +182,7 @@ def traction_limit_velocity(
     try:
         vehicle_state = VehicleState(velocity=node_solution.initial_velocity)
         traction_limited_acceleration = vehicle_model.calculate_acceleration(
-            node=node_solution.track_node,
-            vehicle_state=vehicle_state,
+            node=node_solution.track_node, vehicle_state=vehicle_state
         )
         traction_limited_velocity = calculate_next_velocity(
             initial_velocity=node_solution.initial_velocity,
@@ -226,7 +225,7 @@ def traction_limit_velocity_braking(
 def calculate_next_velocity(
     initial_velocity: float, acceleration: float, displacement: float
 ) -> float:
-    return math.sqrt(initial_velocity**2 + 2 * acceleration * displacement)
+    return sqrt(initial_velocity**2 + 2 * acceleration * displacement)
 
 
 def calculate_previous_velocity(
@@ -236,4 +235,4 @@ def calculate_previous_velocity(
     if term <= 0:
         return 0
     else:
-        return math.sqrt(term)
+        return sqrt(term)

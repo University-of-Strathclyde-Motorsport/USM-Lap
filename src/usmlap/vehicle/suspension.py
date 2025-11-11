@@ -2,11 +2,13 @@
 This module models the suspension of a vehicle.
 """
 
-from .common import Subsystem, AbstractSubsystem
-from typing import Annotated, Union, Literal
+from abc import ABC
+from typing import Annotated, Literal, Union
+
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
-from abc import ABC
+
+from .common import AbstractSubsystem, Subsystem
 
 
 class SuspensionAxle(ABC, AbstractSubsystem):

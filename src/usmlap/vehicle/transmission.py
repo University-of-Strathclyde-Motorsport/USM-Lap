@@ -2,8 +2,9 @@
 This module models the transmission of a vehicle.
 """
 
-from .common import Subsystem
 from pydantic import PositiveFloat
+
+from .common import Subsystem
 
 
 class Transmission(Subsystem):

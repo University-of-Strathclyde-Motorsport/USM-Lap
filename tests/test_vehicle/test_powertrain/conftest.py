@@ -1,5 +1,6 @@
-import pytest
 import math
+
+import pytest
 
 from usmlap.vehicle.powertrain.accumulator import Accumulator, Cell
 from usmlap.vehicle.powertrain.motor import Motor
@@ -51,7 +52,5 @@ def powertrain(
     accumulator: Accumulator, motor: Motor, motor_controller: MotorController
 ) -> RWDPowertrain:
     return RWDPowertrain(
-        accumulator=accumulator,
-        motor=motor,
-        motor_controller=motor_controller,
+        accumulator=accumulator, motor=motor, motor_controller=motor_controller
     )

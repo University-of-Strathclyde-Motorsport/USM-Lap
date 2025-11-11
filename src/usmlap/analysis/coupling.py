@@ -3,12 +3,14 @@ This module contains code for analysing the coupling between two parameters.
 """
 
 from dataclasses import dataclass, field
-from vehicle.vehicle import Vehicle
-from vehicle.parameters import Parameter
+
+import matplotlib.pyplot as plt
+
+from analysis.sweep_1d import SweepSettings
 from simulation.competition import CompetitionSettings
 from simulation.sensitivity import SensitivityAnalysis
-from analysis.sweep_1d import SweepSettings
-import matplotlib.pyplot as plt
+from vehicle.parameters import Parameter
+from vehicle.vehicle import Vehicle
 
 
 @dataclass

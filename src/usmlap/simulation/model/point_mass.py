@@ -2,10 +2,12 @@
 This module defines the point mass vehicle model.
 """
 
-import math
+from math import sqrt
+
 from track.mesh import Node
-from .vehicle_model import VehicleModelInterface, VehicleState
 from vehicle.tyre.tyre_model import TyreAttitude
+
+from .vehicle_model import VehicleModelInterface, VehicleState
 
 
 class PointMassVehicleModel(VehicleModelInterface):
@@ -51,7 +53,7 @@ class PointMassVehicleModel(VehicleModelInterface):
             if available_fy < abs(self.required_fy(vehicle_state, node)):
                 net_force = available_fy - self.weight_y(node)
                 ay = net_force / self.vehicle.total_mass
-                v = math.sqrt(ay / abs(node.curvature)) - 0.001
+                v = sqrt(ay / abs(node.curvature)) - 0.001
             else:
                 break
 

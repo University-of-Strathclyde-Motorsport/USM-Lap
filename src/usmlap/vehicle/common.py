@@ -3,11 +3,13 @@ This module contains code shared by all vehicle components.
 """
 
 from __future__ import annotations
-from abc import ABC, abstractmethod
-from pydantic import BaseModel, model_validator
+
 import json
-import pathlib
-from typing import Self, Any, Optional, ClassVar
+from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Any, ClassVar, Optional, Self
+
+from pydantic import BaseModel, model_validator
 
 
 class Subsystem(BaseModel):
@@ -18,7 +20,7 @@ class Subsystem(BaseModel):
     """
 
     @classmethod
-    def from_json(cls, filepath: pathlib.Path) -> Self:
+    def from_json(cls, filepath: Path) -> Self:
         """
         Load a subsystem from a JSON file.
 

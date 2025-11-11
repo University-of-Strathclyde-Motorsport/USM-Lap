@@ -2,10 +2,12 @@
 This module models the steering system of a vehicle.
 """
 
-from .common import Subsystem
 from typing import Annotated
+
 from annotated_types import Unit
 from pydantic import PositiveFloat
+
+from .common import Subsystem
 
 
 class Steering(Subsystem):
