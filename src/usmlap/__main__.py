@@ -1,14 +1,13 @@
-from vehicle.vehicle import load_vehicle
-from track.track_data import load_track_from_spreadsheet
-from track.mesh import MeshGenerator
-from simulation.simulation import SimulationSettings, simulate
-from simulation.competition import CompetitionSettings
-from vehicle.parameters import Parameter
-from analysis.sweep_1d import SweepSettings
-from analysis.coupling import coupling
-
-
 import logging
+
+from analysis.coupling import coupling
+from analysis.sweep_1d import SweepSettings
+from simulation.competition import CompetitionSettings
+from simulation.simulation import SimulationSettings, simulate
+from track.mesh import MeshGenerator
+from track.track_data import load_track_from_spreadsheet
+from vehicle.parameters import Parameter
+from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,7 +27,7 @@ competition_settings = CompetitionSettings(
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
-simulation_results.plot_g()
+simulation_results.plot_ggv()
 
 # sweep_settings = SweepSettings(
 #     parameter=Parameter.get_parameter("Curb Mass"),

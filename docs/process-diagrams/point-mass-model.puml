@@ -1,0 +1,16 @@
+@startuml QSS Solver
+partition #LightBlue Vehicle Model {
+:Initial velocity estimate;
+repeat :Velocity estimate;
+    split
+        :Calculate\nrequired\n traction;
+    split again
+        :Calculate aerodynamic forces;
+        :Calculate tyre loads;
+        :Calculate available traction;
+    end split
+backward: Update\n velocity\nestimate;
+repeat while (|Available traction - required traction| < eps) is (no) not (yes);
+#LightGreen:Velocity found;
+}
+@enduml
