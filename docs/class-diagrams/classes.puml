@@ -1,0 +1,1128 @@
+@startuml classes
+set namespaceSeparator none
+class "AbstractSubsystem" as src.usmlap.vehicle.common.AbstractSubsystem {
+  get_subtype_dictionary() -> dict[str, type]
+}
+class "Accumulator" as src.usmlap.vehicle.powertrain.accumulator.Accumulator {
+  capacity : float
+  cell
+  cells_in_parallel : int
+  cells_in_series : int
+  maximum_discharge_current : float
+  maximum_voltage : float
+  minimum_voltage : float
+  number_of_cells : int
+  resistance : float
+  get_voltage(state_of_charge: float) -> float
+}
+class "AeroAttitude" as src.usmlap.vehicle.aero.AeroAttitude {
+  air_density : Optional[float]
+  front_ride_height : Optional[float]
+  pitch_angle : Optional[float]
+  rear_ride_height : Optional[float]
+  roll_angle : Optional[float]
+  velocity : Optional[float]
+  yaw_angle : Optional[float]
+}
+class "AeroModelInterface" as src.usmlap.vehicle.aero.AeroModelInterface {
+  {abstract}get_drag_coefficient(attitude: AeroAttitude) -> float
+  {abstract}get_lift_coefficient(attitude: AeroAttitude) -> float
+}
+class "AeroPackage" as src.usmlap.vehicle.aero.AeroPackage {
+  aero_model
+  frontal_area : Annotated[float, Field(gt=0), Unit('m^2')]
+  calculate_aero_force(coefficient: float, attitude: AeroAttitude) -> float
+  get_downforce(attitude: AeroAttitude) -> float
+  get_drag(attitude: AeroAttitude) -> float
+}
+class "AligningCoefficients" as src.usmlap.vehicle.tyre.tir.AligningCoefficients {
+  PPZ1 : float
+  PPZ2 : float
+  QBZ1 : float
+  QBZ10 : float
+  QBZ2 : float
+  QBZ3 : float
+  QBZ4 : float
+  QBZ5 : float
+  QBZ6 : Optional[float]
+  QBZ9 : float
+  QCZ1 : float
+  QDZ1 : float
+  QDZ10 : float
+  QDZ11 : float
+  QDZ2 : float
+  QDZ3 : float
+  QDZ4 : float
+  QDZ6 : float
+  QDZ7 : float
+  QDZ8 : float
+  QDZ9 : float
+  QEZ1 : float
+  QEZ2 : float
+  QEZ3 : float
+  QEZ4 : float
+  QEZ5 : float
+  QHZ1 : float
+  QHZ2 : float
+  QHZ3 : float
+  QHZ4 : float
+  SSZ1 : float
+  SSZ2 : float
+  SSZ3 : float
+  SSZ4 : float
+}
+class "BankingData" as src.usmlap.track.track_data.BankingData {
+  value : list[Annotated[float, Field(ge=-math.pi / 2, le=math.pi / 2), Unit('rad')]]
+}
+class "BrakeCaliper" as src.usmlap.vehicle.brakes.BrakeCaliper {
+  piston_area : float
+  piston_count
+  piston_diameter : Annotated[PositiveFloat, Unit('m')]
+  library_name() -> str
+}
+class "BrakeDisc" as src.usmlap.vehicle.brakes.BrakeDisc {
+  outer_diameter : Annotated[PositiveFloat, Unit('m')]
+  library_name() -> str
+}
+class "BrakeLine" as src.usmlap.vehicle.brakes.BrakeLine {
+  area_scaling_factor : float
+  caliper
+  cylinder
+  disc
+  effective_radius : float
+  force_to_torque_scaling_factor : float
+  pad
+  force_to_torque(cylinder_force: float) -> float
+  get_brake_pressure(cylinder_force: float) -> float
+  torque_to_force(braking_torque: float) -> float
+}
+class "BrakePad" as src.usmlap.vehicle.brakes.BrakePad {
+  coefficient_of_friction
+  height : Annotated[PositiveFloat, Unit('m')]
+  library_name() -> str
+}
+class "Brakes" as src.usmlap.vehicle.brakes.Brakes {
+  brake_bias : FrontRear[float]
+  brake_lines : FrontRear[BrakeLine]
+  front
+  front_brake_bias
+  pedal_ratio
+  rear
+  regen_torque : Annotated[PositiveFloat, Unit('Nm')]
+  get_overall_brake_balance() -> FrontRear[float]
+  pedal_force_to_wheel_torque(pedal_force: float) -> FrontRear[float]
+}
+class "Cell" as src.usmlap.vehicle.powertrain.accumulator.Cell {
+  capacity : float
+  charge_voltage : float
+  datasheet_url : str
+  discharge_current : float
+  discharge_voltage : float
+  nominal_voltage : float
+  resistance : float
+  get_voltage(state_of_charge: float) -> float
+  library_name() -> str
+}
+class "CompetitionData" as src.usmlap.simulation.points.competition_data.CompetitionData {
+  acceleration_t_min : float
+  autocross_t_min : float
+  dataset : str
+  endurance_t_min : float
+  skidpad_t_min : float
+  check_dataset_exists(name: str) -> None
+  get_dataset(name: str) -> Self
+  list_datasets() -> list[str]
+  load_library() -> dict[str, dict[str, Any]]
+}
+class "CompetitionPoints" as src.usmlap.simulation.points.points.CompetitionPoints {
+  acceleration : float
+  autocross : float
+  endurance : float
+  skidpad : float
+  total : float
+  plot_pie_chart() -> None
+}
+class "CompetitionResults" as src.usmlap.simulation.competition.CompetitionResults {
+  acceleration
+  autocross
+  endurance
+  skidpad
+}
+class "CompetitionSettings" as src.usmlap.simulation.competition.CompetitionSettings {
+  autocross_track
+  simulation_settings
+}
+class "Component" as src.usmlap.vehicle.common.Component {
+  name : str
+  check_component_exists(name: str) -> None
+  expand_component(data: Any) -> Any
+  from_library(name: str) -> Self
+  get_component(name: str) -> dict[str, Any]
+  {abstract}library_name() -> str
+  list_components() -> list[str]
+  load_library() -> dict[str, dict[str, Any]]
+}
+class "Configuration" as src.usmlap.track.track_data.Configuration {
+  name
+}
+class "ConstantAero" as src.usmlap.vehicle.aero.ConstantAero {
+  drag_coefficient : Optional[float]
+  lift_coefficient : Optional[float]
+  model_type : Literal['constant']
+  get_drag_coefficient(attitude: AeroAttitude) -> float
+  get_lift_coefficient(attitude: AeroAttitude) -> float
+}
+class "ContactPatch" as src.usmlap.vehicle.tyre.tir.ContactPatch {
+  ELLIPS_HEIGHT : Optional[float]
+  ELLIPS_LENGTH : Optional[float]
+  ELLIPS_MAX_STEP : Optional[float]
+  ELLIPS_NLENGTH : Optional[float]
+  ELLIPS_NWIDTH : Optional[float]
+  ELLIPS_ORDER : Optional[float]
+  ELLIPS_SHIFT : Optional[float]
+  ENV_C1 : Optional[float]
+  ENV_C2 : Optional[float]
+  Q_A1 : Optional[float]
+  Q_A2 : Optional[float]
+  Q_RA1 : Optional[float]
+  Q_RA2 : Optional[float]
+  Q_RB1 : Optional[float]
+  Q_RB2 : Optional[float]
+}
+class "Coordinate" as src.usmlap.utils.datatypes.Coordinate {
+  x : float
+  y : float
+  z : float
+  norm() -> float
+}
+class "CouplingResults" as src.usmlap.analysis.coupling.CouplingResults {
+  coupled_parameter
+  data : dict[float, float]
+  sweep_parameter
+  plot() -> None
+}
+class "CurbMass" as src.usmlap.vehicle.parameters.CurbMass {
+  get_value(vehicle: Vehicle) -> float
+  set_value(vehicle: Vehicle, value: float) -> None
+}
+class "DecoupledSuspension" as src.usmlap.vehicle.suspension.DecoupledSuspension {
+  heave_motion_ratio
+  heave_spring_rate : Annotated[PositiveFloat, Unit('N/m')]
+  roll_centre_height : Annotated[PositiveFloat, Unit('m')]
+  roll_motion_ratio
+  roll_spring_rate : Annotated[PositiveFloat, Unit('N/m')]
+  suspension_type : Literal['decoupled']
+}
+class "Dimension" as src.usmlap.vehicle.tyre.tir.Dimension {
+  ASPECT_RATIO : Optional[float]
+  RIM_RADIUS : Optional[float]
+  RIM_WIDTH : Optional[float]
+  UNLOADED_RADIUS : float
+  WIDTH : Optional[float]
+}
+class "DirectActuationSuspension" as src.usmlap.vehicle.suspension.DirectActuationSuspension {
+  suspension_type : Literal['direct_actuation']
+}
+class "Direction" as src.usmlap.track.track_data.Direction {
+  name
+}
+class "DragCoefficient" as src.usmlap.vehicle.parameters.DragCoefficient {
+  get_value(vehicle: Vehicle) -> float
+  set_value(vehicle: Vehicle, value: float) -> None
+}
+class "Driver" as src.usmlap.vehicle.driver.Driver {
+  height : float
+  mass : float
+  library_name() -> str
+}
+class "ElevationData" as src.usmlap.track.track_data.ElevationData {
+  value : list[Annotated[float, Unit('m')]]
+}
+class "Environment" as src.usmlap.simulation.environment.Environment {
+  air_density : float
+  gravity : float
+}
+class "Event" as src.usmlap.track.track_data.Event {
+  name
+}
+class "FSUKPointsFunctions" as src.usmlap.simulation.points.points_functions.FSUKPointsFunctions {
+  calculate_acceleration_points(t_team: float, t_min: float) -> float
+  calculate_autocross_points(t_team: float, t_min: float) -> float
+  calculate_endurance_points(t_team: float, t_min: float) -> float
+  calculate_skidpad_points(t_team: float, t_min: float) -> float
+}
+class "FinalDriveRatio" as src.usmlap.vehicle.parameters.FinalDriveRatio {
+  get_value(vehicle: Vehicle) -> float
+  set_value(vehicle: Vehicle, value: float) -> None
+}
+class "FrontRear" as src.usmlap.utils.datatypes.FrontRear {
+  front : T
+  rear : T
+}
+class "GripFactorData" as src.usmlap.track.track_data.GripFactorData {
+  value : list[Annotated[float, Field(gt=0)]]
+}
+class "InclinationAngleRange" as src.usmlap.vehicle.tyre.tir.InclinationAngleRange {
+  CAMMAX : Optional[float]
+  CAMMIN : Optional[float]
+}
+class "Inertia" as src.usmlap.vehicle.inertia.Inertia {
+  centre_of_gravity_height : Annotated[PositiveFloat, Unit('m')]
+  curb_mass : Annotated[PositiveFloat, Unit('kg')]
+  front_mass_distribution
+  front_unsprung_mass
+  rear_unsprung_mass
+  yaw_inertia : Annotated[PositiveFloat, Unit('kg.m^2')]
+}
+class "Inertia" as src.usmlap.vehicle.tyre.tir.Inertia {
+  BELT_IXX : Optional[float]
+  BELT_IYY : Optional[float]
+  BELT_MASS : Optional[float]
+  GRAVITY : Optional[float]
+  IXX : Optional[float]
+  IYY : Optional[float]
+  MASS : Optional[float]
+}
+class "InflationPressureRange" as src.usmlap.vehicle.tyre.tir.InflationPressureRange {
+  PRESMAX : Optional[float]
+  PRESMIN : Optional[float]
+}
+class "LateralCoefficients" as src.usmlap.vehicle.tyre.tir.LateralCoefficients {
+  PCY1 : float
+  PDY1 : float
+  PDY2 : float
+  PDY3 : float
+  PEY1 : float
+  PEY2 : float
+  PEY3 : float
+  PEY4 : float
+  PEY5 : float
+  PHY1 : float
+  PHY2 : float
+  PKY1 : float
+  PKY2 : float
+  PKY3 : float
+  PKY4 : float
+  PKY5 : float
+  PKY6 : float
+  PKY7 : float
+  PPY1 : float
+  PPY2 : float
+  PPY3 : float
+  PPY4 : float
+  PPY5 : float
+  PVY1 : float
+  PVY2 : float
+  PVY3 : float
+  PVY4 : float
+  RBY1 : float
+  RBY2 : float
+  RBY3 : float
+  RBY4 : float
+  RCY1 : float
+  REY1 : float
+  REY2 : float
+  RHY1 : float
+  RHY2 : float
+  RVY1 : float
+  RVY2 : float
+  RVY3 : float
+  RVY4 : float
+  RVY5 : float
+  RVY6 : float
+}
+class "LiftCoefficient" as src.usmlap.vehicle.parameters.LiftCoefficient {
+  get_value(vehicle: Vehicle) -> float
+  set_value(vehicle: Vehicle, value: float) -> None
+}
+class "LinearTyreModel" as src.usmlap.vehicle.tyre.tyre_model.LinearTyreModel {
+  cornering_stiffness : float
+  model_type : Literal['linear']
+  mu_x_load_sensitivity : Annotated[float, Unit('1/N')]
+  mu_x_peak
+  mu_y_load_sensitivity : Annotated[float, Unit('1/N')]
+  mu_y_peak
+  slip_stiffness : float
+  calculate_lateral_force(tyre_attitude: TyreAttitude, required_fx: float) -> float
+  calculate_longitudinal_force(tyre_attitude: TyreAttitude, required_fy: float) -> float
+  get_slip_angle(tyre_attitude: TyreAttitude, fy: float) -> float
+  get_slip_ratio(tyre_attitude: TyreAttitude, fx: float) -> float
+}
+class "LocationData" as src.usmlap.track.track_data.LocationData {
+  interpolate(position: list[float]) -> list[float]
+}
+class "LongSlipRange" as src.usmlap.vehicle.tyre.tir.LongSlipRange {
+  KPUMAX : Optional[float]
+  KPUMIN : Optional[float]
+}
+class "LongitudinalCoefficients" as src.usmlap.vehicle.tyre.tir.LongitudinalCoefficients {
+  PCX1 : float
+  PDX1 : float
+  PDX2 : float
+  PDX3 : float
+  PEX1 : float
+  PEX2 : float
+  PEX3 : float
+  PEX4 : float
+  PHX1 : float
+  PHX2 : float
+  PKX1 : float
+  PKX2 : float
+  PKX3 : float
+  PPX1 : float
+  PPX2 : float
+  PPX3 : float
+  PPX4 : float
+  PVX1 : float
+  PVX2 : float
+  RBX1 : float
+  RBX2 : float
+  RBX3 : float
+  RCX1 : float
+  REX1 : float
+  REX2 : float
+  RHX1 : float
+}
+class "MagicFormula" as src.usmlap.vehicle.tyre.magic_formula.MagicFormula {
+  AMU : int
+  Br : float
+  Bt : float
+  Bx : float
+  Bxa : float
+  By : float
+  Byk : float
+  Cr : float
+  Ct : float
+  Cx : float
+  Cxa : float
+  Cy : float
+  Cyk : float
+  DVyk : float
+  Dr : float
+  Dt : float
+  Dt0 : float
+  Dx : float
+  Dy : float
+  Et : float
+  Ex : float
+  Exa : float
+  Ey : float
+  Eyk : float
+  Fx : float
+  Fx0 : float
+  Fy : float
+  Fy0 : float
+  Fy_prime : float
+  Fz : float
+  Fz0_prime : float
+  Gxa : float
+  Gxa0 : float
+  Gyk : float
+  Gyk0 : float
+  Kxk : float
+  Kya : float
+  Kyc0 : float
+  LMUV : int
+  Mx : float
+  My : float
+  Mz : float
+  Mz0 : float
+  Mz0_prime : float
+  Mz_prime : float
+  Mzr : float
+  Mzr0 : float
+  R0 : float
+  SHf : float
+  SHt : float
+  SHx : float
+  SHxa : float
+  SHy : float
+  SHyk : float
+  SVx : float
+  SVy : float
+  SVyc : float
+  SVyk : float
+  a_r : float
+  a_req : float
+  a_t : float
+  a_teq : float
+  alpha : float
+  alpha_s : float
+  alpha_y : float
+  cos_a : float
+  dfz : float
+  dpi : float
+  gamma : float
+  k_s : float
+  kappa : float
+  kx : float
+  lmux_prime : float
+  lmux_star : float
+  lmuy_prime : float
+  lmuy_star : float
+  mux : float
+  muy : float
+  parameters
+  pressure_ratio : float
+  s : float
+  t : float
+  t0 : float
+  tyre
+  use_alpha_star : bool
+  digressive_friction_factor(lmu_star: float) -> float
+  magic_formula(B: float, C: float, D: float, E: float, x: float, SV: float) -> float
+  magic_formula_cosine(B: float, C: float, D: float, E: float, x: float) -> float
+}
+class "MasterCylinder" as src.usmlap.vehicle.brakes.MasterCylinder {
+  colour : str
+  piston_area : float
+  piston_diameter : Annotated[PositiveFloat, Unit('m')]
+  library_name() -> str
+}
+class "Mesh" as src.usmlap.track.mesh.Mesh {
+  configuration
+  node_count : float
+  nodes : list[Node]
+  resolution : float
+  track_length : float
+  generate_endurance_mesh() -> Mesh
+  plot_traces() -> None
+}
+class "MeshGenerator" as src.usmlap.track.mesh.MeshGenerator {
+  node_count
+  position
+  resolution : Annotated[float, Field(gt=0, default=1), Unit('m')]
+  spacing
+  track_data
+  track_length
+  generate_mesh(track_data: TrackData) -> Mesh
+}
+class "Metadata" as src.usmlap.track.track_data.Metadata {
+  city : str | None
+  country : str | None
+  display_name : str
+  location : str
+  name : str | None
+}
+class "Metadata" as src.usmlap.vehicle.vehicle.Metadata {
+  description : str
+  name : str
+  year : int
+}
+class "Model" as src.usmlap.vehicle.tyre.tir.Model {
+  FITTYP : int
+  LONGVL : float
+  ROAD_DIRECTION : Optional[float]
+  ROAD_INCREMENT : Optional[float]
+  TYRESIDE : str
+  VXLOW : float
+}
+class "Motor" as src.usmlap.vehicle.powertrain.motor.Motor {
+  continuous_current : float
+  continuous_torque : float
+  datasheet_url : str
+  electrical_resistance : float
+  maximum_rpm : float
+  maximum_speed : float
+  peak_current : float
+  peak_torque : float
+  rated_voltage : float
+  speed_per_volt : float
+  torque_per_amp : float
+  get_speed(voltage: float) -> float
+  get_torque(current: float) -> float
+  library_name() -> str
+}
+class "MotorController" as src.usmlap.vehicle.powertrain.motor_controller.MotorController {
+  resistance : float
+  library_name() -> str
+}
+class "MotorCurve" as src.usmlap.vehicle.powertrain.powertrain.MotorCurve {
+  power : list[float]
+  power_kw : list[float]
+  rpm : list[float]
+  speed : list[float]
+  torque : list[float]
+  plot() -> None
+}
+class "MotorCurveGenerator" as src.usmlap.vehicle.powertrain.powertrain.MotorCurveGenerator {
+  resolution : int
+  generate(powertrain: RWDPowertrain, state_of_charge: float, current: float) -> MotorCurve
+}
+class "Node" as src.usmlap.simulation.solution.Node {
+  acceleration : float
+  anchor : bool
+  final_state
+  final_velocity : float
+  initial_state
+  initial_velocity : float
+  lateral_acceleration : float
+  length : float
+  longitudinal_acceleration : float
+  maximum_velocity : float
+  time : float
+  track_node
+  velocity : float
+}
+class "Node" as src.usmlap.track.mesh.Node {
+  banking : Optional[float]
+  curvature : float
+  elevation : float
+  grip_factor : Optional[float]
+  inclination : Optional[float]
+  length : Optional[float]
+  position : Optional[float]
+  radius : float
+  sector : Optional[int]
+}
+class "OperatingConditions" as src.usmlap.vehicle.tyre.tir.OperatingConditions {
+  INFLPRES : float
+  NOMPRES : float
+}
+class "OverturningCoefficients" as src.usmlap.vehicle.tyre.tir.OverturningCoefficients {
+  PPMX1 : float
+  QSX1 : float
+  QSX10 : float
+  QSX11 : float
+  QSX12 : Optional[float]
+  QSX13 : Optional[float]
+  QSX14 : Optional[float]
+  QSX2 : float
+  QSX3 : float
+  QSX4 : float
+  QSX5 : float
+  QSX6 : float
+  QSX7 : float
+  QSX8 : float
+  QSX9 : float
+}
+class "Parameter" as src.usmlap.vehicle.parameters.Parameter {
+  name : str
+  unit : str | None
+  get_name_with_unit() -> str
+  get_new_vehicle(baseline_vehicle: Vehicle, value: float) -> Vehicle
+  get_parameter(parameter_name: str) -> Parameter
+  {abstract}get_value(vehicle: Vehicle) -> float
+  list_parameters() -> list[str]
+  {abstract}set_value(vehicle: Vehicle, value: float) -> None
+}
+class "PointMassVehicleModel" as src.usmlap.simulation.model.point_mass.PointMassVehicleModel {
+  calculate_acceleration(vehicle_state: VehicleState, node: Node) -> float
+  calculate_decceleration(vehicle_state: VehicleState, node: Node) -> float
+  lateral_vehicle_model(node: Node) -> VehicleState
+  normal_load(vehicle_state: VehicleState, node: Node) -> float
+  tyre_attitude(vehicle_state: VehicleState, node: Node) -> TyreAttitude
+}
+class "PointsFunctions" as src.usmlap.simulation.points.points_functions.PointsFunctions {
+  {abstract}calculate_acceleration_points(t_team: float, t_min: float) -> float
+  {abstract}calculate_autocross_points(t_team: float, t_min: float) -> float
+  {abstract}calculate_endurance_points(t_team: float, t_min: float) -> float
+  {abstract}calculate_skidpad_points(t_team: float, t_min: float) -> float
+}
+class "PositionData" as src.usmlap.track.track_data.PositionData {
+  T : NoneType
+  position : list[Annotated[float, Field(ge=0), Unit('m')]]
+  value : list[T]
+  {abstract}interpolate(position: list[float]) -> list[T]
+}
+class "Powertrain" as src.usmlap.vehicle.powertrain.powertrain.Powertrain {
+}
+class "QuasiSteadyStateSolver" as src.usmlap.simulation.solver.quasi_steady_state.QuasiSteadyStateSolver {
+  solve(vehicle_model: VehicleModelInterface, track_mesh: Mesh) -> Solution
+}
+class "RWDPowertrain" as src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain {
+  accumulator
+  motor
+  motor_controller
+  get_knee_speed(state_of_charge: float, current: float) -> float
+  get_maximum_motor_speed(state_of_charge: float) -> float
+  get_motor_power(state_of_charge: float, current: float, motor_speed: float) -> float
+  get_motor_torque(state_of_charge: float, current: float, motor_speed: float) -> float
+  get_motor_voltage(state_of_charge: float, current: float) -> float
+  get_voltage_drop(current: float) -> float
+  plot_motor_curve(state_of_charge: float) -> None
+}
+class "RollingCoefficients" as src.usmlap.vehicle.tyre.tir.RollingCoefficients {
+  QSY1 : float
+  QSY2 : float
+  QSY3 : float
+  QSY4 : float
+  QSY5 : float
+  QSY6 : float
+  QSY7 : float
+  QSY8 : float
+}
+class "ScalingCoefficients" as src.usmlap.vehicle.tyre.tir.ScalingCoefficients {
+  LCX : float
+  LCY : float
+  LEX : float
+  LEY : float
+  LFZO : float
+  LHX : float
+  LHY : float
+  LKX : float
+  LKY : float
+  LKYC : float
+  LKZC : float
+  LMP : Optional[float]
+  LMUX : float
+  LMUY : float
+  LMX : float
+  LMY : float
+  LRES : float
+  LS : float
+  LTR : float
+  LVMX : float
+  LVX : float
+  LVY : float
+  LVYKA : float
+  LXAL : float
+  LYKA : float
+}
+class "SectionType" as src.usmlap.track.track_data.SectionType {
+  name
+}
+class "SectorData" as src.usmlap.track.track_data.SectorData {
+  value : list[Annotated[int, Field(gt=0)]]
+  list_sectors() -> str
+}
+class "Segment" as src.usmlap.track.track_data.Segment {
+  corner_radius : Annotated[float, Unit('m')]
+  curvature : float
+  length : Annotated[float, Field(gt=0), Unit('m')]
+  model_config : ConfigDict
+  section_type
+}
+class "SensitivityAnalysis" as src.usmlap.simulation.sensitivity.SensitivityAnalysis {
+  baseline_value : float
+  baseline_vehicle
+  competition_settings
+  decreased_value_vehicle : Vehicle
+  increased_value_vehicle : Vehicle
+  parameter
+  parameter_delta : float
+  get_sensitivity() -> float
+}
+class "ShapeData" as src.usmlap.track.track_data.ShapeData {
+  model_config : ConfigDict
+  segment_count : float
+  segments : list[Segment]
+  total_length : float
+  interpolate_curvature(position: list[float], closed_track: bool) -> list[float]
+}
+class "SimulationSettings" as src.usmlap.simulation.simulation.SimulationSettings {
+  environment
+  solver : type[SolverInterface]
+  vehicle_model : type[VehicleModelInterface]
+}
+class "SlipAngleRange" as src.usmlap.vehicle.tyre.tir.SlipAngleRange {
+  ALPMAX : Optional[float]
+  ALPMIN : Optional[float]
+}
+class "Solution" as src.usmlap.simulation.solution.Solution {
+  apexes : list[int]
+  average_velocity : float
+  initial_velocity : list[float]
+  lateral_acceleration : list[float]
+  longitudinal_acceleration : list[float]
+  nodes : list[Node]
+  total_length : float
+  total_time : float
+  vehicle_model
+  velocity : list[float]
+  plot_apexes() -> None
+  plot_gg() -> None
+  plot_ggv() -> None
+  plot_velocity_acceleration() -> None
+}
+class "SolverInterface" as src.usmlap.simulation.solver.solver_interface.SolverInterface {
+  {abstract}solve(vehicle_model: VehicleModelInterface, track_mesh: Mesh) -> Solution
+}
+class "StartpointData" as src.usmlap.track.track_data.StartpointData {
+  T : NoneType
+  interpolate(position: list[float]) -> list[T]
+}
+class "Steering" as src.usmlap.vehicle.steering.Steering {
+  steering_ratio
+  steering_wheel_radius : Annotated[PositiveFloat, Unit('m')]
+  get_steering_wheel_angle(wheel_angle: float) -> float
+  get_wheel_angle(steering_wheel_angle: float) -> float
+}
+class "Structural" as src.usmlap.vehicle.tyre.tir.Structural {
+  DAMP_LAT : Optional[float]
+  DAMP_LONG : Optional[float]
+  DAMP_RESIDUAL : Optional[float]
+  DAMP_VLOW : Optional[float]
+  DAMP_WINDUP : Optional[float]
+  DAMP_YAW : Optional[float]
+  FREQ_LAT : Optional[float]
+  FREQ_LONG : Optional[float]
+  FREQ_WINDUP : Optional[float]
+  FREQ_YAW : Optional[float]
+  LATERAL_STIFFNESS : Optional[float]
+  LONGITUDINAL_STIFFNESS : Optional[float]
+  PCFX1 : Optional[float]
+  PCFX2 : Optional[float]
+  PCFX3 : Optional[float]
+  PCFY1 : Optional[float]
+  PCFY2 : Optional[float]
+  PCFY3 : Optional[float]
+  PCMZ1 : Optional[float]
+  Q_BVT : Optional[float]
+  Q_BVX : Optional[float]
+  YAW_STIFFNESS : Optional[float]
+}
+class "Subsystem" as src.usmlap.vehicle.common.Subsystem {
+  from_json(filepath: Path) -> Self
+  to_json() -> str
+}
+class "Suspension" as src.usmlap.vehicle.suspension.Suspension {
+  centre_of_gravity_height : Annotated[PositiveFloat, Unit('m')]
+  front
+  rear
+  wheelbase : Annotated[PositiveFloat, Unit('m')]
+}
+class "SuspensionAxle" as src.usmlap.vehicle.suspension.SuspensionAxle {
+  track_width : Annotated[PositiveFloat, Unit('m')]
+}
+class "SweepResults" as src.usmlap.analysis.sweep_1d.SweepResults {
+  data : dict[float, float]
+  parameter
+  plot() -> None
+}
+class "SweepSettings" as src.usmlap.analysis.sweep_1d.SweepSettings {
+  end_value : float
+  number_of_steps : int
+  parameter
+  start_value : float
+  values : list[float]
+  get_vehicles(baseline_vehicle: Vehicle) -> Generator[tuple[float, Vehicle]]
+}
+class "TIRParameters" as src.usmlap.vehicle.tyre.tir.TIRParameters {
+  ALIGNING_COEFFICIENTS
+  CONTACT_PATCH
+  DIMENSION
+  INCLINATION_ANGLE_RANGE
+  INERTIA
+  INFLATION_PRESSURE_RANGE
+  LATERAL_COEFFICIENTS
+  LONGITUDINAL_COEFFICIENTS
+  LONG_SLIP_RANGE
+  MODEL
+  OPERATING_CONDITIONS
+  OVERTURNING_COEFFICIENTS
+  ROLLING_COEFFICIENTS
+  SCALING_COEFFICIENTS
+  SLIP_ANGLE_RANGE
+  STRUCTURAL
+  TURNSLIP_COEFFICIENTS
+  UNITS
+  VERTICAL
+  VERTICAL_FORCE_RANGE
+  from_file(filepath: str) -> Self
+}
+class "TrackData" as src.usmlap.track.track_data.TrackData {
+  banking
+  configuration
+  direction
+  elevation
+  event
+  grip_factor
+  metadata
+  mirror : bool
+  model_config : ConfigDict
+  sector
+  shape
+  load_track_from_spreadsheet(filepath: Path) -> Self
+}
+class "TrackReader" as src.usmlap.track.track_data.TrackReader {
+  workbook : ExcelFile
+  get_banking_data() -> BankingData
+  get_configuration() -> Configuration
+  get_direction() -> Direction
+  get_elevation_data() -> ElevationData
+  get_grip_factor_data() -> GripFactorData
+  get_metadata() -> Metadata
+  get_mirror() -> bool
+  get_sector_data() -> SectorData
+  get_shape_data() -> ShapeData
+}
+class "Transmission" as src.usmlap.vehicle.transmission.Transmission {
+  final_drive_ratio
+}
+class "TurnslipCoefficients" as src.usmlap.vehicle.tyre.tir.TurnslipCoefficients {
+  PDXP1 : Optional[float]
+  PDXP2 : Optional[float]
+  PDXP3 : Optional[float]
+  PDYP1 : Optional[float]
+  PDYP2 : Optional[float]
+  PDYP3 : Optional[float]
+  PDYP4 : Optional[float]
+  PECP1 : Optional[float]
+  PECP2 : Optional[float]
+  PHYP1 : Optional[float]
+  PHYP2 : Optional[float]
+  PHYP3 : Optional[float]
+  PHYP4 : Optional[float]
+  PKYP1 : Optional[float]
+  QBRP1 : Optional[float]
+  QCRP1 : Optional[float]
+  QCRP2 : Optional[float]
+  QDRP1 : Optional[float]
+  QDTP1 : Optional[float]
+}
+class "Tyre" as src.usmlap.vehicle.tyre.tyre_model.Tyre {
+  tyre_model
+  unloaded_radius : float
+  library_name() -> str
+}
+class "TyreAttitude" as src.usmlap.vehicle.tyre.magic_formula.TyreAttitude {
+  Vc
+  Vs
+  Vx : float
+  alpha : float
+  fz : float
+  gamma : float
+  kappa : float
+  omega : float
+  pressure : float
+}
+class "TyreAttitude" as src.usmlap.vehicle.tyre.tyre_model.TyreAttitude {
+  normal_load : Annotated[float, Field(ge=0), Unit('N')]
+}
+class "TyreModelInterface" as src.usmlap.vehicle.tyre.tyre_model.TyreModelInterface {
+  {abstract}calculate_lateral_force(tyre_attitude: TyreAttitude, required_fx: float) -> float
+  {abstract}calculate_longitudinal_force(tyre_attitude: TyreAttitude, required_fy: float) -> float
+  {abstract}get_slip_angle(tyre_attitude: TyreAttitude, fy: float) -> float
+  {abstract}get_slip_ratio(tyre_attitude: TyreAttitude, fx: float) -> float
+}
+class "Tyres" as src.usmlap.vehicle.tyre.tyre_model.Tyres {
+  front
+  rear
+}
+class "Units" as src.usmlap.vehicle.tyre.tir.Units {
+  ANGLE : str
+  FORCE : str
+  LENGTH : str
+  MASS : str
+  TIME : str
+}
+class "UnsprungMass" as src.usmlap.vehicle.inertia.UnsprungMass {
+  centre_of_gravity_height : Annotated[PositiveFloat, Unit('m')]
+  mass : Annotated[PositiveFloat, Unit('kg')]
+}
+class "Vector3" as src.usmlap.utils.datatypes.Vector3 {
+  x : float
+  y : float
+  z : float
+}
+class "Vehicle" as src.usmlap.vehicle.vehicle.Vehicle {
+  aero
+  brakes
+  driver
+  equivalent_mass : float
+  inertia
+  maximum_velocity : float
+  metadata
+  powertrain
+  steering
+  suspension
+  total_mass : float
+  transmission
+  tyres
+  motor_speed_to_velocity(motor_speed: float) -> float
+  motor_torque_to_drive_force(motor_torque: float) -> float
+  traction_force_to_motor_torque(traction_force: float) -> float
+  velocity_to_motor_speed(velocity: float) -> float
+}
+class "VehicleModelInterface" as src.usmlap.simulation.model.vehicle_model.VehicleModelInterface {
+  environment
+  vehicle
+  weight : float
+  {abstract}calculate_acceleration(vehicle_state: VehicleState, node: Node) -> float
+  {abstract}calculate_decceleration(vehicle_state: VehicleState, node: Node) -> float
+  centripetal_force_y(vehicle_state: VehicleState, node: Node) -> float
+  centripetal_force_z(vehicle_state: VehicleState, node: Node) -> float
+  downforce(vehicle_state: VehicleState) -> float
+  drag(vehicle_state: VehicleState) -> float
+  {abstract}lateral_vehicle_model(node: Node) -> VehicleState
+  motor_force(vehicle_state: VehicleState) -> float
+  normal_force(vehicle_state: VehicleState, node: Node) -> float
+  required_fy(vehicle_state: VehicleState, node: Node) -> float
+  resistive_fx(vehicle_state: VehicleState, node: Node) -> float
+  weight_array(node: Node) -> Vector3
+  weight_x(node: Node) -> float
+  weight_y(node: Node) -> float
+  weight_z(node: Node) -> float
+}
+class "VehicleState" as src.usmlap.simulation.model.vehicle_model.VehicleState {
+  ax : float
+  velocity : float
+}
+class "Vertical" as src.usmlap.vehicle.tyre.tir.Vertical {
+  BOTTOM_OFFST : Optional[float]
+  BOTTOM_STIFF : Optional[float]
+  BREFF : Optional[float]
+  DREFF : Optional[float]
+  FNOMIN : float
+  FREFF : Optional[float]
+  MC_CONTOUR_A : Optional[float]
+  MC_CONTOUR_B : Optional[float]
+  PFZ1 : Optional[float]
+  Q_CAM : Optional[float]
+  Q_CAM1 : Optional[float]
+  Q_CAM2 : Optional[float]
+  Q_CAM3 : Optional[float]
+  Q_FCX : Optional[float]
+  Q_FCY : Optional[float]
+  Q_FCY2 : Optional[float]
+  Q_FYS1 : Optional[float]
+  Q_FYS2 : Optional[float]
+  Q_FYS3 : Optional[float]
+  Q_FZ2 : Optional[float]
+  Q_RE0 : Optional[float]
+  Q_V1 : Optional[float]
+  Q_V2 : Optional[float]
+  VERTICAL_DAMPING : Optional[float]
+  VERTICAL_STIFFNESS : Optional[float]
+}
+class "VerticalForceRange" as src.usmlap.vehicle.tyre.tir.VerticalForceRange {
+  FZMAX : Optional[float]
+  FZMIN : Optional[float]
+}
+class "_ParameterGroup" as src.usmlap.vehicle.tyre.tir._ParameterGroup {
+}
+class "_TIRReader" as src.usmlap.vehicle.tyre.tir._TIRReader {
+  active_parameter_group : Optional[str]
+  data : dict[str, dict[str, str]]
+  read(filepath: str) -> dict[str, dict[str, str]]
+}
+src.usmlap.simulation.model.point_mass.PointMassVehicleModel --|> src.usmlap.simulation.model.vehicle_model.VehicleModelInterface
+src.usmlap.simulation.points.points_functions.FSUKPointsFunctions --|> src.usmlap.simulation.points.points_functions.PointsFunctions
+src.usmlap.simulation.solver.quasi_steady_state.QuasiSteadyStateSolver --|> src.usmlap.simulation.solver.solver_interface.SolverInterface
+src.usmlap.track.track_data.BankingData --|> src.usmlap.track.track_data.LocationData
+src.usmlap.track.track_data.ElevationData --|> src.usmlap.track.track_data.LocationData
+src.usmlap.track.track_data.GripFactorData --|> src.usmlap.track.track_data.StartpointData
+src.usmlap.track.track_data.LocationData --|> src.usmlap.track.track_data.PositionData
+src.usmlap.track.track_data.SectorData --|> src.usmlap.track.track_data.StartpointData
+src.usmlap.track.track_data.StartpointData --|> src.usmlap.track.track_data.PositionData
+src.usmlap.vehicle.aero.AeroModelInterface --|> src.usmlap.vehicle.common.AbstractSubsystem
+src.usmlap.vehicle.aero.AeroPackage --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.aero.ConstantAero --|> src.usmlap.vehicle.aero.AeroModelInterface
+src.usmlap.vehicle.brakes.BrakeCaliper --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.brakes.BrakeDisc --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.brakes.BrakeLine --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.brakes.BrakePad --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.brakes.Brakes --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.brakes.MasterCylinder --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.common.AbstractSubsystem --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.common.Component --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.driver.Driver --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.inertia.Inertia --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.inertia.UnsprungMass --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.parameters.CurbMass --|> src.usmlap.vehicle.parameters.Parameter
+src.usmlap.vehicle.parameters.DragCoefficient --|> src.usmlap.vehicle.parameters.Parameter
+src.usmlap.vehicle.parameters.FinalDriveRatio --|> src.usmlap.vehicle.parameters.Parameter
+src.usmlap.vehicle.parameters.LiftCoefficient --|> src.usmlap.vehicle.parameters.Parameter
+src.usmlap.vehicle.powertrain.accumulator.Accumulator --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.powertrain.accumulator.Cell --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.powertrain.motor.Motor --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.powertrain.motor_controller.MotorController --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.powertrain.powertrain.Powertrain --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain --|> src.usmlap.vehicle.powertrain.powertrain.Powertrain
+src.usmlap.vehicle.steering.Steering --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.suspension.DecoupledSuspension --|> src.usmlap.vehicle.suspension.SuspensionAxle
+src.usmlap.vehicle.suspension.DirectActuationSuspension --|> src.usmlap.vehicle.suspension.SuspensionAxle
+src.usmlap.vehicle.suspension.Suspension --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.suspension.SuspensionAxle --|> src.usmlap.vehicle.common.AbstractSubsystem
+src.usmlap.vehicle.transmission.Transmission --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.tyre.tir.AligningCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.ContactPatch --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Dimension --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.InclinationAngleRange --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Inertia --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.InflationPressureRange --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.LateralCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.LongSlipRange --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.LongitudinalCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Model --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.OperatingConditions --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.OverturningCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.RollingCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.ScalingCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.SlipAngleRange --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Structural --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.TurnslipCoefficients --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Units --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.Vertical --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tir.VerticalForceRange --|> src.usmlap.vehicle.tyre.tir._ParameterGroup
+src.usmlap.vehicle.tyre.tyre_model.LinearTyreModel --|> src.usmlap.vehicle.tyre.tyre_model.TyreModelInterface
+src.usmlap.vehicle.tyre.tyre_model.Tyre --|> src.usmlap.vehicle.common.Component
+src.usmlap.vehicle.tyre.tyre_model.TyreModelInterface --|> src.usmlap.vehicle.common.AbstractSubsystem
+src.usmlap.vehicle.tyre.tyre_model.Tyres --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.vehicle.Metadata --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.vehicle.vehicle.Vehicle --|> src.usmlap.vehicle.common.Subsystem
+src.usmlap.simulation.competition.CompetitionSettings --> src.usmlap.simulation.simulation.SimulationSettings : simulation_settings
+src.usmlap.simulation.competition.CompetitionResults --> src.usmlap.simulation.solution.Solution : acceleration
+src.usmlap.simulation.competition.CompetitionResults --> src.usmlap.simulation.solution.Solution : skidpad
+src.usmlap.simulation.competition.CompetitionResults --> src.usmlap.simulation.solution.Solution : autocross
+src.usmlap.simulation.competition.CompetitionResults --> src.usmlap.simulation.solution.Solution : endurance
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.BankingData : banking
+src.usmlap.track.mesh.Mesh --> src.usmlap.track.track_data.Configuration : configuration
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.Configuration : configuration
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.Direction : direction
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.ElevationData : elevation
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.Event : event
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.GripFactorData : grip_factor
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.Metadata : metadata
+src.usmlap.track.track_data.Segment --> src.usmlap.track.track_data.SectionType : section_type
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.SectorData : sector
+src.usmlap.track.track_data.TrackData --> src.usmlap.track.track_data.ShapeData : shape
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.aero.AeroPackage : aero
+src.usmlap.vehicle.brakes.BrakeLine --> src.usmlap.vehicle.brakes.BrakeCaliper : caliper
+src.usmlap.vehicle.brakes.BrakeLine --> src.usmlap.vehicle.brakes.BrakeDisc : disc
+src.usmlap.vehicle.brakes.Brakes --> src.usmlap.vehicle.brakes.BrakeLine : front
+src.usmlap.vehicle.brakes.Brakes --> src.usmlap.vehicle.brakes.BrakeLine : rear
+src.usmlap.vehicle.brakes.BrakeLine --> src.usmlap.vehicle.brakes.BrakePad : pad
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.brakes.Brakes : brakes
+src.usmlap.vehicle.brakes.BrakeLine --> src.usmlap.vehicle.brakes.MasterCylinder : cylinder
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.driver.Driver : driver
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.inertia.Inertia : inertia
+src.usmlap.vehicle.inertia.Inertia --> src.usmlap.vehicle.inertia.UnsprungMass : front_unsprung_mass
+src.usmlap.vehicle.inertia.Inertia --> src.usmlap.vehicle.inertia.UnsprungMass : rear_unsprung_mass
+src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain --> src.usmlap.vehicle.powertrain.accumulator.Accumulator : accumulator
+src.usmlap.vehicle.powertrain.accumulator.Accumulator --> src.usmlap.vehicle.powertrain.accumulator.Cell : cell
+src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain --> src.usmlap.vehicle.powertrain.motor.Motor : motor
+src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain --> src.usmlap.vehicle.powertrain.motor_controller.MotorController : motor_controller
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain : powertrain
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.steering.Steering : steering
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.suspension.Suspension : suspension
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.transmission.Transmission : transmission
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.AligningCoefficients : ALIGNING_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.ContactPatch : CONTACT_PATCH
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Dimension : DIMENSION
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.InclinationAngleRange : INCLINATION_ANGLE_RANGE
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Inertia : INERTIA
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.InflationPressureRange : INFLATION_PRESSURE_RANGE
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.LateralCoefficients : LATERAL_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.LongSlipRange : LONG_SLIP_RANGE
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.LongitudinalCoefficients : LONGITUDINAL_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Model : MODEL
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.OperatingConditions : OPERATING_CONDITIONS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.OverturningCoefficients : OVERTURNING_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.RollingCoefficients : ROLLING_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.ScalingCoefficients : SCALING_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.SlipAngleRange : SLIP_ANGLE_RANGE
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Structural : STRUCTURAL
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.TurnslipCoefficients : TURNSLIP_COEFFICIENTS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Units : UNITS
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.Vertical : VERTICAL
+src.usmlap.vehicle.tyre.tir.TIRParameters --> src.usmlap.vehicle.tyre.tir.VerticalForceRange : VERTICAL_FORCE_RANGE
+src.usmlap.vehicle.tyre.tyre_model.Tyres --> src.usmlap.vehicle.tyre.tyre_model.Tyre : front
+src.usmlap.vehicle.tyre.tyre_model.Tyres --> src.usmlap.vehicle.tyre.tyre_model.Tyre : rear
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.tyre.tyre_model.Tyres : tyres
+src.usmlap.vehicle.vehicle.Vehicle --> src.usmlap.vehicle.vehicle.Metadata : metadata
+src.usmlap.track.track_data.TrackData --o src.usmlap.track.mesh.MeshGenerator : track_data
+src.usmlap.vehicle.tyre.magic_formula.TyreAttitude --o src.usmlap.vehicle.tyre.magic_formula.MagicFormula : tyre
+src.usmlap.vehicle.tyre.tir.TIRParameters --o src.usmlap.vehicle.tyre.magic_formula.MagicFormula : parameters
+@enduml

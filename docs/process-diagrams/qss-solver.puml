@@ -1,0 +1,24 @@
+@startuml QSS Solver
+
+partition Solve Apexes {    
+#LightBlue:Calculate maximum velocities;
+:Identify apexes;
+}
+partition Forward Propagation {
+repeat :Select slowest apex;
+    repeat :Select next node;
+    #LightBlue:Calculate acceleration-limited velocity;
+    repeat while (Calculated velocity > maximum velocity) is (no) not (yes);
+    #LightGreen:Acceleration profile solved;
+repeat while (All apexes processed?) is (no) not (yes);   
+}
+partition Backward Propagation {
+repeat: Select slowest apex;
+    repeat :Select previous node;
+    #LightBlue:Calculate braking-limited velocity;
+    repeat while (Calculated velocity > maximum velocity) is (no) not (yes);
+    #LightGreen:Braking profile solved;
+repeat while (All apexes processed?) is (no) not (yes);
+}
+#LightGreen:Full velocity profile solved;
+@enduml
