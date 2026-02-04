@@ -8,8 +8,7 @@ from math import sqrt
 from scipy.signal import find_peaks
 
 from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
-from simulation.solution import Node as SolutionNode
-from simulation.solution import Solution
+from simulation.solution import Solution, SolutionNode, create_new_solution
 from track.mesh import Mesh
 
 from .solver_interface import SolverInterface
@@ -25,7 +24,9 @@ class QuasiSteadyStateSolver(SolverInterface):
         vehicle_model: VehicleModelInterface, track_mesh: Mesh
     ) -> Solution:
         logging.info("Solving maximum velocities...")
-        solution = solve_maximum_velocities(vehicle_model, track_mesh)
+
+        solution = create_new_solution(track_mesh, vehicle_model)
+        solution = solve_maximum_velocities(solution)
         solution.apexes = find_apexes(solution)
         solution.nodes[0].initial_velocity = 0
 
@@ -40,28 +41,21 @@ class QuasiSteadyStateSolver(SolverInterface):
         return solution
 
 
-def solve_maximum_velocities(
-    vehicle_model: VehicleModelInterface, track_mesh: Mesh
-) -> Solution:
+def solve_maximum_velocities(solution: Solution) -> Solution:
     """
     Solve the maximum velocities of a track mesh.
 
     Args:
-        vehicle_model (VehicleModelInterface): The vehicle model.
-        track_mesh (Mesh): The track mesh.
+        solution (Solution): The solution with no maximum velocities.
 
     Returns:
         solution (Solution): The solution with maximum velocities solved.
     """
-    solution_nodes: list[SolutionNode] = []
-    for node in track_mesh.nodes:
-        pure_lateral = vehicle_model.lateral_vehicle_model(node)
-        node_solution = SolutionNode(
-            track_node=node, maximum_velocity=pure_lateral.velocity
-        )
-        solution_nodes.append(node_solution)
-    solution_nodes[0].maximum_velocity = 0
-    return Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
+    vehicle_model = solution.vehicle_model.lateral_vehicle_model
+    for node in solution.nodes:
+        node.maximum_velocity = vehicle_model(node.track_node).velocity
+    solution.nodes[0].maximum_velocity = 0
+    return solution
 
 
 def find_apexes(solution: Solution) -> list[int]:

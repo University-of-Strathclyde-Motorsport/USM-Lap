@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
 
 from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
+from track.mesh import Mesh
 from track.mesh import Node as TrackNode
 
 LABELS = {
@@ -24,13 +25,13 @@ def default_vehicle_state() -> VehicleState:
 
 
 @dataclass
-class Node(object):
+class SolutionNode(object):
     """
     The solution at a single node.
     """
 
     track_node: TrackNode
-    maximum_velocity: float
+    maximum_velocity: float = 0
     acceleration: float = 0
     initial_velocity: float = 0
     final_velocity: float = 0
@@ -67,7 +68,7 @@ class Solution(object):
     The solution to a simulation.
     """
 
-    nodes: list[Node]
+    nodes: list[SolutionNode]
     vehicle_model: VehicleModelInterface
     apexes: list[int] = field(default_factory=list[int])
 
@@ -156,3 +157,23 @@ class Solution(object):
         ax.set_ylim(-50, 50)
         ax.grid()
         plt.show()
+
+
+def create_new_solution(
+    track_mesh: Mesh, vehicle_model: VehicleModelInterface
+) -> Solution:
+    """
+    Create a new solution from a track mesh and vehicle model.
+
+    Args:
+        track_mesh (Mesh): The track mesh.
+        vehicle_model (VehicleModelInterface): The vehicle model.
+
+    Returns:
+        solution (Solution): A blank solution.
+    """
+    solution_nodes = [
+        SolutionNode(track_node=track_node) for track_node in track_mesh.nodes
+    ]
+    solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
+    return solution
