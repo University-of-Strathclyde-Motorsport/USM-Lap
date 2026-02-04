@@ -1,12 +1,9 @@
 import logging
 
-from analysis.coupling import coupling
-from analysis.sweep_1d import SweepSettings
 from simulation.competition import CompetitionSettings
 from simulation.simulation import SimulationSettings, simulate
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
-from vehicle.parameters import Parameter
 from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(

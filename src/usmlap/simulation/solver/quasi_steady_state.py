@@ -43,7 +43,11 @@ class QuasiSteadyStateSolver(SolverInterface):
 
 def solve_maximum_velocities(solution: Solution) -> Solution:
     """
-    Solve the maximum velocities of a track mesh.
+    Calculate the theoretical maximum velocity at each node.
+
+    Nodes are solved independently of each other.
+    Only the potential lateral acceleration of the vehicle is considered.
+    The potential longitudinal acceleration is assumed to be infinite.
 
     Args:
         solution (Solution): The solution with no maximum velocities.

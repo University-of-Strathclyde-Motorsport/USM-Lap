@@ -21,7 +21,7 @@ from .track_data import Configuration, TrackData
 ENDURANCE_TRACK_LENGTH = 22000
 
 
-class Node(BaseModel):
+class TrackNode(BaseModel):
     """
     A node of a track.
 
@@ -60,7 +60,7 @@ class Mesh(BaseModel):
             (OPEN or CLOSED).
     """
 
-    nodes: list[Node]
+    nodes: list[TrackNode]
     configuration: Configuration
 
     @property
@@ -78,7 +78,7 @@ class Mesh(BaseModel):
     def generate_endurance_mesh(self) -> Mesh:
         number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / self.track_length)
 
-        endurance_nodes: list[Node] = []
+        endurance_nodes: list[TrackNode] = []
         for _ in range(number_of_laps):
             for node in self.nodes:
                 endurance_nodes.append(copy.copy(node))
@@ -157,7 +157,7 @@ class MeshGenerator(object):
         inclination = self._calculate_inclination(self.position, elevation)
 
         nodes = [
-            Node(
+            TrackNode(
                 position=self.position[i],
                 length=length[i],
                 curvature=curvature[i],

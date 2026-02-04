@@ -7,8 +7,7 @@ from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
 
 from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
-from track.mesh import Mesh
-from track.mesh import Node as TrackNode
+from track.mesh import Mesh, TrackNode
 
 LABELS = {
     "velocity": "Velocity (m/s)",
@@ -144,7 +143,7 @@ class Solution(object):
 
     def plot_ggv(self) -> None:
         fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")
+        ax = fig.add_subplot(111, projection="3d")  # type: ignore
         ax.scatter(
             self.lateral_acceleration,
             self.longitudinal_acceleration,

@@ -4,7 +4,7 @@ This module defines the point mass vehicle model.
 
 from math import sqrt
 
-from track.mesh import Node
+from track.mesh import TrackNode
 from vehicle.tyre.tyre_model import TyreAttitude
 
 from .vehicle_model import VehicleModelInterface, VehicleState
@@ -15,15 +15,17 @@ class PointMassVehicleModel(VehicleModelInterface):
     Point mass vehicle model.
     """
 
-    def normal_load(self, vehicle_state: VehicleState, node: Node) -> float:
+    def normal_load(
+        self, vehicle_state: VehicleState, node: TrackNode
+    ) -> float:
         return self.normal_force(vehicle_state, node) / 4
 
     def tyre_attitude(
-        self, vehicle_state: VehicleState, node: Node
+        self, vehicle_state: VehicleState, node: TrackNode
     ) -> TyreAttitude:
         return TyreAttitude(normal_load=self.normal_load(vehicle_state, node))
 
-    def lateral_vehicle_model(self, node: Node) -> VehicleState:
+    def lateral_vehicle_model(self, node: TrackNode) -> VehicleState:
         if node.curvature == 0:
             return VehicleState(velocity=self.vehicle.maximum_velocity, ax=0)
 
@@ -61,7 +63,7 @@ class PointMassVehicleModel(VehicleModelInterface):
         return vehicle_state
 
     def calculate_acceleration(
-        self, vehicle_state: VehicleState, node: Node
+        self, vehicle_state: VehicleState, node: TrackNode
     ) -> float:
         tyre_traction = (
             self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
@@ -76,7 +78,7 @@ class PointMassVehicleModel(VehicleModelInterface):
         return net_fx / self.vehicle.equivalent_mass
 
     def calculate_decceleration(
-        self, vehicle_state: VehicleState, node: Node
+        self, vehicle_state: VehicleState, node: TrackNode
     ) -> float:
         tyre_traction = (
             self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
