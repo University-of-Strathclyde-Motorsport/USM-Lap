@@ -13,6 +13,8 @@ from track.mesh import Mesh
 
 from .solver_interface import SolverInterface
 
+logger = logging.getLogger(__name__)
+
 
 class QuasiSteadyStateSolver(SolverInterface):
     """
@@ -23,21 +25,27 @@ class QuasiSteadyStateSolver(SolverInterface):
     def solve(
         vehicle_model: VehicleModelInterface, track_mesh: Mesh
     ) -> Solution:
-        logging.info("Solving maximum velocities...")
-
+        logger.info("Creating new solution...")
         solution = create_new_solution(track_mesh, vehicle_model)
+        solution.nodes[0].anchor_initial_velocity(0)
+
+        logger.info("Solving maximum velocities...")
         solution = solve_maximum_velocities(solution)
+
+        logger.info("Finding apexes...")
         solution.apexes = find_apexes(solution)
-        solution.nodes[0].initial_velocity = 0
 
-        logging.info("Solving forward propagation...")
-        for apex in solution.apexes:
-            solution = propagate_forward(solution, apex)
+        logger.info("Solving forward propagation...")
+        for apex in solution.apexes.copy():
+            if apex in solution.apexes:
+                solution = propagate_forward(solution, apex)
 
-        logging.info("Solving backward propagation...")
-        for apex in solution.apexes:
-            solution = propagate_backward(solution, apex)
+        logger.info("Solving backward propagation...")
+        for apex in solution.apexes.copy():
+            if apex in solution.apexes:
+                solution = propagate_backward(solution, apex)
 
+        solution = calculate_state_variables(solution)
         return solution
 
 
@@ -58,7 +66,6 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     vehicle_model = solution.vehicle_model.lateral_vehicle_model
     for node in solution.nodes:
         node.maximum_velocity = vehicle_model(node.track_node).velocity
-    solution.nodes[0].maximum_velocity = 0
     return solution
 
 
@@ -81,6 +88,7 @@ def find_apexes(solution: Solution) -> list[int]:
     apex_velocities = [solution.nodes[i].maximum_velocity for i in apex_indices]
     _, sorted_apexes = zip(*sorted(zip(apex_velocities, apex_indices)))
     apexes = list(sorted_apexes)
+    logger.debug(f"Identified {len(apexes)} apexes: {apexes}")
     return apexes
 
 
@@ -94,9 +102,11 @@ def propagate_forward(solution: Solution, apex: int) -> Solution:
     Returns:
         solution (Solution): The forward-propagated solution.
     """
-    if apex != 0:
-        maximum_velocity = solution.nodes[apex].maximum_velocity
-        solution.nodes[apex].initial_velocity = maximum_velocity
+
+    logger.debug(f"Forward propagating apex {apex}")
+
+    maximum_velocity = solution.nodes[apex].maximum_velocity
+    solution.nodes[apex].set_initial_velocity(maximum_velocity)
 
     i = apex
     while i < len(solution.nodes):
@@ -108,22 +118,24 @@ def propagate_forward(solution: Solution, apex: int) -> Solution:
         )
         final_velocity = min(traction_limited_velocity, maximum_velocity)
 
-        current_node.final_velocity = final_velocity
+        current_node.set_final_velocity(final_velocity)
 
         if i >= len(solution.nodes) - 1:
             break
 
         next_node = solution.nodes[i + 1]
-        next_node.initial_velocity = final_velocity
+        next_node.set_initial_velocity(final_velocity)
 
         if i + 1 in solution.apexes:
             if final_velocity < next_node.maximum_velocity:
+                logger.debug(f"Removing apex {i + 1}")
                 solution.apexes.remove(i + 1)
             else:
                 break
 
         i += 1
 
+    logger.debug(f"Solved forward propogation of apex {apex}.")
     return solution
 
 
@@ -137,6 +149,9 @@ def propagate_backward(solution: Solution, apex: int) -> Solution:
     Returns:
         solution (Solution): The backward-propagated solution.
     """
+
+    logger.debug(f"Backward propagating apex {apex}")
+
     i = apex
     while i > 0:
         current_node = solution.nodes[i]
@@ -151,16 +166,19 @@ def propagate_backward(solution: Solution, apex: int) -> Solution:
         )
         initial_velocity = min(traction_limit_velocity, maximum_velocity)
 
-        current_node.initial_velocity = initial_velocity
-        previous_node.final_velocity = initial_velocity
+        current_node.set_initial_velocity(initial_velocity)
+        previous_node.set_final_velocity(initial_velocity)
 
         if i - 1 in solution.apexes:
             if initial_velocity < previous_node.final_velocity:
+                logger.debug(f"Removing apex {i + 1}")
                 solution.apexes.remove(i - 1)
             else:
                 break
 
         i -= 1
+
+    logger.debug(f"Solved backward propogation of apex {apex}.")
     return solution
 
 
@@ -234,3 +252,7 @@ def calculate_previous_velocity(
         return 0
     else:
         return sqrt(term)
+
+
+def calculate_state_variables(solution: Solution) -> Solution:
+    return solution

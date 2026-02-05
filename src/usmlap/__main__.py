@@ -12,7 +12,9 @@ logging.basicConfig(
     style="{",
     datefmt="%H:%M:%S",
 )
-
+logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
+    logging.DEBUG
+)
 
 vehicle = load_vehicle("USM23 Baseline.json")
 track_data = load_track_from_spreadsheet("FS AutoX Germany 2012.xlsx")
@@ -25,6 +27,7 @@ competition_settings = CompetitionSettings(
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
 simulation_results.plot_apexes()
+logging.info(f"Total time: {simulation_results.total_time:.3f}s")
 
 # sweep_settings = SweepSettings(
 #     parameter=Parameter.get_parameter("Curb Mass"),

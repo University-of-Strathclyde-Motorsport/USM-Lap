@@ -32,15 +32,22 @@ class SolutionNode(object):
     track_node: TrackNode
     maximum_velocity: float = 0
     acceleration: float = 0
-    initial_velocity: float = 0
-    final_velocity: float = 0
     initial_state: VehicleState = field(default_factory=default_vehicle_state)
     final_state: VehicleState = field(default_factory=default_vehicle_state)
-    anchor: bool = False
+    _initial_velocity_anchored: bool = False
+    _final_velocity_anchored: bool = False
 
     @property
     def length(self) -> float:
         return self.track_node.length
+
+    @property
+    def initial_velocity(self) -> float:
+        return self.initial_state.velocity
+
+    @property
+    def final_velocity(self) -> float:
+        return self.final_state.velocity
 
     @property
     def velocity(self) -> float:
@@ -59,6 +66,50 @@ class SolutionNode(object):
     @property
     def time(self) -> float:
         return self.length / self.velocity
+
+    def set_initial_velocity(self, velocity: float) -> None:
+        """
+        Set the velocity at the start of the node.
+        If the initial velocity has been anchored, it will not be modified.
+
+        Args:
+            velocity (float): The initial velocity to be set.
+        """
+        if not self._initial_velocity_anchored:
+            self.initial_state.velocity = velocity
+
+    def set_final_velocity(self, velocity: float) -> None:
+        """
+        Set the velocity at the end of the node.
+        If the final velocity has been anchored, it will not be modified.
+
+        Args:
+            velocity (float): The final velocity to be set.
+        """
+        if not self._final_velocity_anchored:
+            self.final_state.velocity = velocity
+
+    def anchor_initial_velocity(self, velocity: float) -> None:
+        """
+        Anchor the initial velocity of this node.
+        It can no longer be modified.
+
+        Args:
+            velocity (float): The initial velocity to be set.
+        """
+        self.set_initial_velocity(velocity)
+        self._initial_velocity_anchored = True
+
+    def anchor_final_velocity(self, velocity: float) -> None:
+        """
+        Anchor the final velocity of this node.
+        It can no longer be modified.
+
+        Args:
+            velocity (float): The final velocity to be set.
+        """
+        self.set_final_velocity(velocity)
+        self._final_velocity_anchored = True
 
 
 @dataclass
