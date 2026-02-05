@@ -7,8 +7,9 @@ from math import sqrt
 
 from scipy.signal import find_peaks
 
-from simulation.model.vehicle_model import StateVariables, VehicleModelInterface
+from simulation.model.vehicle_model import VehicleModelInterface
 from simulation.solution import Solution, SolutionNode, create_new_solution
+from simulation.vehicle_state import StateVariables
 from track.mesh import Mesh
 
 from .solver_interface import SolverInterface
@@ -45,6 +46,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             if apex in solution.apexes:
                 solution = propagate_backward(solution, apex)
 
+        logger.info("Resolving full vehicle state...")
         return solution
 
 

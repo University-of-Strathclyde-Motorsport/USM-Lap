@@ -4,11 +4,12 @@ This module defines the point mass vehicle model.
 
 import math
 
+from simulation.vehicle_state import StateVariables
 from track.mesh import TrackNode
 from utils.datatypes import FourCorner
 from vehicle.tyre.tyre_model import TyreAttitude
 
-from .vehicle_model import StateVariables, VehicleModelInterface
+from .vehicle_model import VehicleModelInterface
 
 
 class PointMassVehicleModel(VehicleModelInterface):

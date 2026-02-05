@@ -36,6 +36,7 @@ class SolutionNode(object):
         default_factory=default_state_variables
     )
     final_state: StateVariables = field(default_factory=default_state_variables)
+    
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
 
