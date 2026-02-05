@@ -4,15 +4,13 @@ This module defines custom datatypes used throughout the project.
 
 import math
 from dataclasses import dataclass
-from typing import Annotated, TypeVar
+from typing import Annotated
 
 import numpy as np
 from pydantic import BaseModel, Field
 
-T = TypeVar("T")
 
-
-class FrontRear(tuple[T, T]):
+class FrontRear[T](tuple[T, T]):
     """
     Represents a property with a front and rear value.
 
@@ -33,6 +31,34 @@ class FrontRear(tuple[T, T]):
 
     def __str__(self) -> str:
         return f"front: {self.front}, rear: {self.rear}"
+
+
+class FourCorner[T](tuple[T, T, T, T]):
+    """
+    Represents a property with values for each corner of the vehicle.
+
+    Attributes:
+        front_left (T): Value for the front left corner.
+        front_right (T): Value for the front right corner.
+        rear_left (T): Value for the rear left corner.
+        rear_right (T): Value for the rear right corner.
+    """
+
+    @property
+    def front_left(self) -> T:
+        return self[0]
+
+    @property
+    def front_right(self) -> T:
+        return self[1]
+
+    @property
+    def rear_left(self) -> T:
+        return self[2]
+
+    @property
+    def rear_right(self) -> T:
+        return self[3]
 
 
 type Percentage = Annotated[float, Field(ge=0, le=1)]

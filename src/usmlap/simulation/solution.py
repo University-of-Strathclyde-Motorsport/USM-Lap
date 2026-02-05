@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
 
-from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
+from simulation.model.vehicle_model import StateVariables, VehicleModelInterface
 from track.mesh import Mesh, TrackNode
 
 LABELS = {
@@ -16,11 +16,11 @@ LABELS = {
 }
 
 
-def default_vehicle_state() -> VehicleState:
+def default_state_variables() -> StateVariables:
     """
     Get a blank vehicle state.
     """
-    return VehicleState(velocity=0)
+    return StateVariables(velocity=0)
 
 
 @dataclass
@@ -32,8 +32,10 @@ class SolutionNode(object):
     track_node: TrackNode
     maximum_velocity: float = 0
     acceleration: float = 0
-    initial_state: VehicleState = field(default_factory=default_vehicle_state)
-    final_state: VehicleState = field(default_factory=default_vehicle_state)
+    initial_state: StateVariables = field(
+        default_factory=default_state_variables
+    )
+    final_state: StateVariables = field(default_factory=default_state_variables)
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
 

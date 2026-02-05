@@ -607,11 +607,11 @@ class "Parameter" as src.usmlap.vehicle.parameters.Parameter {
   {abstract}set_value(vehicle: Vehicle, value: float) -> None
 }
 class "PointMassVehicleModel" as src.usmlap.simulation.model.point_mass.PointMassVehicleModel {
-  calculate_acceleration(vehicle_state: VehicleState, node: Node) -> float
-  calculate_decceleration(vehicle_state: VehicleState, node: Node) -> float
-  lateral_vehicle_model(node: Node) -> VehicleState
-  normal_load(vehicle_state: VehicleState, node: Node) -> float
-  tyre_attitude(vehicle_state: VehicleState, node: Node) -> TyreAttitude
+  calculate_acceleration(state_variables: StateVariables, node: Node) -> float
+  calculate_decceleration(state_variables: StateVariables, node: Node) -> float
+  lateral_vehicle_model(node: Node) -> StateVariables
+  normal_load(state_variables: StateVariables, node: Node) -> float
+  tyre_attitude(state_variables: StateVariables, node: Node) -> TyreAttitude
 }
 class "PointsFunctions" as src.usmlap.simulation.points.points_functions.PointsFunctions {
   {abstract}calculate_acceleration_points(t_team: float, t_min: float) -> float
@@ -939,23 +939,23 @@ class "VehicleModelInterface" as src.usmlap.simulation.model.vehicle_model.Vehic
   environment
   vehicle
   weight : float
-  {abstract}calculate_acceleration(vehicle_state: VehicleState, node: Node) -> float
-  {abstract}calculate_decceleration(vehicle_state: VehicleState, node: Node) -> float
-  centripetal_force_y(vehicle_state: VehicleState, node: Node) -> float
-  centripetal_force_z(vehicle_state: VehicleState, node: Node) -> float
-  downforce(vehicle_state: VehicleState) -> float
-  drag(vehicle_state: VehicleState) -> float
-  {abstract}lateral_vehicle_model(node: Node) -> VehicleState
-  motor_force(vehicle_state: VehicleState) -> float
-  normal_force(vehicle_state: VehicleState, node: Node) -> float
-  required_fy(vehicle_state: VehicleState, node: Node) -> float
-  resistive_fx(vehicle_state: VehicleState, node: Node) -> float
+  {abstract}calculate_acceleration(state_variables: StateVariables, node: Node) -> float
+  {abstract}calculate_decceleration(state_variables: StateVariables, node: Node) -> float
+  centripetal_force_y(state_variables: StateVariables, node: Node) -> float
+  centripetal_force_z(state_variables: StateVariables, node: Node) -> float
+  downforce(state_variables: StateVariables) -> float
+  drag(state_variables: StateVariables) -> float
+  {abstract}lateral_vehicle_model(node: Node) -> StateVariables
+  motor_force(state_variables: StateVariables) -> float
+  normal_force(state_variables: StateVariables, node: Node) -> float
+  required_fy(state_variables: StateVariables, node: Node) -> float
+  resistive_fx(state_variables: StateVariables, node: Node) -> float
   weight_array(node: Node) -> Vector3
   weight_x(node: Node) -> float
   weight_y(node: Node) -> float
   weight_z(node: Node) -> float
 }
-class "VehicleState" as src.usmlap.simulation.model.vehicle_model.VehicleState {
+class "StateVariables" as src.usmlap.simulation.model.vehicle_model.StateVariables {
   ax : float
   velocity : float
 }

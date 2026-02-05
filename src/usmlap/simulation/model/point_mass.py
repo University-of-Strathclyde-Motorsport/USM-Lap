@@ -2,12 +2,13 @@
 This module defines the point mass vehicle model.
 """
 
-from math import sqrt
+import math
 
 from track.mesh import TrackNode
+from utils.datatypes import FourCorner
 from vehicle.tyre.tyre_model import TyreAttitude
 
-from .vehicle_model import VehicleModelInterface, VehicleState
+from .vehicle_model import StateVariables, VehicleModelInterface
 
 
 class PointMassVehicleModel(VehicleModelInterface):
@@ -15,77 +16,110 @@ class PointMassVehicleModel(VehicleModelInterface):
     Point mass vehicle model.
     """
 
-    def normal_load(
-        self, vehicle_state: VehicleState, node: TrackNode
-    ) -> float:
-        return self.normal_force(vehicle_state, node) / 4
+    def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
+        normal_load = normal_force / 4
+        return FourCorner([normal_load] * 4)
 
-    def tyre_attitude(
-        self, vehicle_state: VehicleState, node: TrackNode
-    ) -> TyreAttitude:
-        return TyreAttitude(normal_load=self.normal_load(vehicle_state, node))
+    def get_tyre_attitudes(
+        self, normal_loads: FourCorner[float]
+    ) -> FourCorner[TyreAttitude]:
+        return FourCorner(
+            [
+                TyreAttitude(normal_load=normal_load)
+                for normal_load in normal_loads
+            ]
+        )
 
-    def lateral_vehicle_model(self, node: TrackNode) -> VehicleState:
+    def get_lateral_traction(
+        self, attitudes: FourCorner[TyreAttitude], required_fx: float
+    ) -> FourCorner[float]:
+        front_tyre = self.vehicle.tyres.front.tyre_model.calculate_lateral_force
+        rear_tyre = self.vehicle.tyres.rear.tyre_model.calculate_lateral_force
+        try:
+            return FourCorner(
+                [
+                    front_tyre(attitudes.front_left, required_fx=0),
+                    front_tyre(attitudes.front_right, required_fx=0),
+                    rear_tyre(attitudes.rear_left, required_fx=required_fx / 2),
+                    rear_tyre(
+                        attitudes.rear_right, required_fx=required_fx / 2
+                    ),
+                ]
+            )
+        except ValueError:
+            return FourCorner([0] * 4)
+
+    def get_longitudinal_traction(
+        self, attitudes: FourCorner[TyreAttitude], required_fy: float
+    ) -> FourCorner[float]:
+        front_tyre = (
+            self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force
+        )
+        rear_tyre = (
+            self.vehicle.tyres.rear.tyre_model.calculate_longitudinal_force
+        )
+        fy_per_tyre = abs(required_fy / 4)
+        try:
+            return FourCorner(
+                [
+                    front_tyre(attitudes.front_left, required_fy=fy_per_tyre),
+                    front_tyre(attitudes.front_right, required_fy=fy_per_tyre),
+                    rear_tyre(attitudes.rear_left, required_fy=fy_per_tyre),
+                    rear_tyre(attitudes.rear_right, required_fy=fy_per_tyre),
+                ]
+            )
+        except ValueError:
+            return FourCorner([0] * 4)
+
+    def lateral_vehicle_model(self, node: TrackNode) -> StateVariables:
         if node.curvature == 0:
-            return VehicleState(velocity=self.vehicle.maximum_velocity, ax=0)
+            return StateVariables(velocity=self.vehicle.maximum_velocity, ax=0)
 
         v = self.vehicle.maximum_velocity
         i = 0
 
         while i < 10000:
             i += 1
-            vehicle_state = VehicleState(velocity=v, ax=0)
+            state_variables = StateVariables(velocity=v, ax=0)
+            vehicle_state = self.resolve_vehicle_state(
+                self.vehicle, state_variables, node
+            )
             try:
-                front_tyre_traction = (
-                    self.vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude=self.tyre_attitude(vehicle_state, node),
-                        required_fx=0,
-                    )
-                )
-                rear_tyre_traction = (
-                    self.vehicle.tyres.front.tyre_model.calculate_lateral_force(
-                        tyre_attitude=self.tyre_attitude(vehicle_state, node),
-                        required_fx=self.resistive_fx(vehicle_state, node) / 2,
-                    )
-                )
-                available_fy = 2 * (front_tyre_traction + rear_tyre_traction)
+                available_fy = vehicle_state.total_lateral_traction
             except ValueError:
                 available_fy = 0
 
-            if available_fy < abs(self.required_fy(vehicle_state, node)):
-                net_force = available_fy - self.weight_y(node)
+            if available_fy < abs(vehicle_state.required_fy):
+                net_force = available_fy - node.z_to_y(vehicle_state.weight)
                 ay = net_force / self.vehicle.total_mass
-                v = sqrt(ay / abs(node.curvature)) - 0.001
+                v = math.sqrt(ay / abs(node.curvature)) - 0.001
             else:
                 break
 
-        vehicle_state = VehicleState(velocity=v, ax=0)
-        return vehicle_state
+        state_variables = StateVariables(velocity=v, ax=0)
+        return state_variables
 
     def calculate_acceleration(
-        self, vehicle_state: VehicleState, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode
     ) -> float:
-        tyre_traction = (
-            self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
-                self.tyre_attitude(vehicle_state, node),
-                abs(self.required_fy(vehicle_state, node)) / 4,
-            )
+        vehicle_state = self.resolve_vehicle_state(
+            self.vehicle, state_variables, node
         )
-        traction_limit = tyre_traction * 2
-        motor_limit = self.motor_force(vehicle_state)
+        traction_limit = (
+            vehicle_state.longitudinal_traction.rear_left
+            + vehicle_state.longitudinal_traction.rear_right
+        )
+        motor_limit = vehicle_state.motor_force
         drive_limit = min(motor_limit, traction_limit)
-        net_fx = drive_limit - self.resistive_fx(vehicle_state, node)
+        net_fx = drive_limit - vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass
 
     def calculate_decceleration(
-        self, vehicle_state: VehicleState, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode
     ) -> float:
-        tyre_traction = (
-            self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force(
-                self.tyre_attitude(vehicle_state, node),
-                abs(self.required_fy(vehicle_state, node)) / 4,
-            )
+        vehicle_state = self.resolve_vehicle_state(
+            self.vehicle, state_variables, node
         )
-        traction_limit = tyre_traction * 4
-        net_fx = traction_limit + self.resistive_fx(vehicle_state, node)
+        traction_limit = sum(vehicle_state.longitudinal_traction)
+        net_fx = traction_limit + vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass

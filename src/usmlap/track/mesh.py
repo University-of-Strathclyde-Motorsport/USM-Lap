@@ -5,6 +5,7 @@ This module contains code for generating a track mesh.
 from __future__ import annotations
 
 import copy
+import math
 from math import atan, ceil, pi
 from typing import Annotated
 
@@ -48,6 +49,21 @@ class TrackNode(BaseModel):
     @property
     def radius(self) -> float:
         return 1 / self.curvature
+
+    def y_to_y(self, value: float) -> float:
+        return value * math.cos(self.banking)
+
+    def y_to_z(self, value: float) -> float:
+        return value * math.sin(self.banking)
+
+    def z_to_x(self, value: float) -> float:
+        return value * math.sin(self.inclination)
+
+    def z_to_y(self, value: float) -> float:
+        return value * math.sin(self.banking)
+
+    def z_to_z(self, value: float) -> float:
+        return value * math.cos(self.banking) * math.cos(self.inclination)
 
 
 class Mesh(BaseModel):

@@ -7,7 +7,7 @@ from math import sqrt
 
 from scipy.signal import find_peaks
 
-from simulation.model.vehicle_model import VehicleModelInterface, VehicleState
+from simulation.model.vehicle_model import StateVariables, VehicleModelInterface
 from simulation.solution import Solution, SolutionNode, create_new_solution
 from track.mesh import Mesh
 
@@ -45,7 +45,6 @@ class QuasiSteadyStateSolver(SolverInterface):
             if apex in solution.apexes:
                 solution = propagate_backward(solution, apex)
 
-        solution = calculate_state_variables(solution)
         return solution
 
 
@@ -196,9 +195,11 @@ def traction_limit_velocity(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        vehicle_state = VehicleState(velocity=node_solution.initial_velocity)
+        state_variables = StateVariables(
+            velocity=node_solution.initial_velocity
+        )
         traction_limited_acceleration = vehicle_model.calculate_acceleration(
-            node=node_solution.track_node, vehicle_state=vehicle_state
+            node=node_solution.track_node, state_variables=state_variables
         )
         traction_limited_velocity = calculate_next_velocity(
             initial_velocity=node_solution.initial_velocity,
@@ -224,9 +225,9 @@ def traction_limit_velocity_braking(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        vehicle_state = VehicleState(velocity=node_solution.final_velocity)
+        state_variables = StateVariables(velocity=node_solution.final_velocity)
         traction_limited_decceleration = vehicle_model.calculate_decceleration(
-            node=node_solution.track_node, vehicle_state=vehicle_state
+            node=node_solution.track_node, state_variables=state_variables
         )
         traction_limited_velocity = calculate_previous_velocity(
             final_velocity=node_solution.final_velocity,
@@ -252,7 +253,3 @@ def calculate_previous_velocity(
         return 0
     else:
         return sqrt(term)
-
-
-def calculate_state_variables(solution: Solution) -> Solution:
-    return solution
