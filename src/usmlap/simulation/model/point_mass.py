@@ -82,9 +82,7 @@ class PointMassVehicleModel(VehicleModelInterface):
         while i < 10000:
             i += 1
             state_variables = StateVariables(velocity=v, ax=0)
-            vehicle_state = self.resolve_vehicle_state(
-                self.vehicle, state_variables, node
-            )
+            vehicle_state = self.resolve_vehicle_state(state_variables, node)
             try:
                 available_fy = vehicle_state.total_lateral_traction
             except ValueError:
@@ -103,9 +101,7 @@ class PointMassVehicleModel(VehicleModelInterface):
     def calculate_acceleration(
         self, state_variables: StateVariables, node: TrackNode
     ) -> float:
-        vehicle_state = self.resolve_vehicle_state(
-            self.vehicle, state_variables, node
-        )
+        vehicle_state = self.resolve_vehicle_state(state_variables, node)
         traction_limit = (
             vehicle_state.longitudinal_traction.rear_left
             + vehicle_state.longitudinal_traction.rear_right
@@ -118,9 +114,7 @@ class PointMassVehicleModel(VehicleModelInterface):
     def calculate_decceleration(
         self, state_variables: StateVariables, node: TrackNode
     ) -> float:
-        vehicle_state = self.resolve_vehicle_state(
-            self.vehicle, state_variables, node
-        )
+        vehicle_state = self.resolve_vehicle_state(state_variables, node)
         traction_limit = sum(vehicle_state.longitudinal_traction)
         net_fx = traction_limit + vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass

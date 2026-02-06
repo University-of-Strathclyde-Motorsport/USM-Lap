@@ -4,9 +4,8 @@ This module contains code for representing the solution to a simulation.
 
 from dataclasses import dataclass, field
 
-import matplotlib.pyplot as plt
-
-from simulation.model.vehicle_model import StateVariables, VehicleModelInterface
+from simulation.model.vehicle_model import VehicleModelInterface
+from simulation.vehicle_state import FullVehicleState, StateVariables
 from track.mesh import Mesh, TrackNode
 
 LABELS = {
@@ -36,7 +35,9 @@ class SolutionNode(object):
         default_factory=default_state_variables
     )
     final_state: StateVariables = field(default_factory=default_state_variables)
-    
+    vehicle_state: FullVehicleState = field(
+        default_factory=FullVehicleState.get_empty
+    )
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
 
@@ -69,6 +70,17 @@ class SolutionNode(object):
     @property
     def time(self) -> float:
         return self.length / self.velocity
+
+    @property
+    def state_variables(self) -> StateVariables:
+        return StateVariables(velocity=self.velocity, ax=self.acceleration)
+
+    def evaluate_vehicle_state(
+        self, vehicle_model: VehicleModelInterface
+    ) -> None:
+        self.vehicle_state = vehicle_model.resolve_vehicle_state(
+            self.state_variables, self.track_node
+        )
 
     def set_initial_velocity(self, velocity: float) -> None:
         """
@@ -153,63 +165,11 @@ class Solution(object):
     def average_velocity(self) -> float:
         return self.total_length / self.total_time
 
-    def plot_apexes(self) -> None:
-        position = [solution.track_node.position for solution in self.nodes]
-        maximum_velocity = [
-            solution.maximum_velocity for solution in self.nodes
-        ]
-        apexes = [self.nodes[apex] for apex in self.apexes]
-        apex_velocity = [apex.maximum_velocity for apex in apexes]
-        apex_position = [apex.track_node.position for apex in apexes]
-
-        fig, ax = plt.subplots()
-        fig.suptitle("Solution")
-        ax.plot(position, maximum_velocity, color="lightblue")
-        ax.plot(position, self.velocity, color="blue")
-        ax.scatter(apex_position, apex_velocity, color="red")
-        for i in range(len(apexes)):
-            plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))
-        ax.set_xlabel("Position (m)")
-        ax.set_ylabel(LABELS["velocity"])
-        ax.set_title("Maximum Velocity")
-        ax.grid()
-        plt.show()
-
-    def plot_velocity_acceleration(self) -> None:
-        fig = plt.figure()
-        ax = fig.add_subplot()
-        ax.scatter(self.velocity, self.longitudinal_acceleration)
-        ax.set_xlabel(LABELS["velocity"])
-        ax.set_ylabel(LABELS["longitudinal_acceleration"])
-        ax.set_title("Velocity - Acceleration")
-        ax.grid()
-        plt.show()
-
-    def plot_gg(self) -> None:
-        fig = plt.figure()
-        ax = fig.add_subplot()
-        ax.scatter(self.lateral_acceleration, self.longitudinal_acceleration)
-        ax.set_xlabel(LABELS["lateral_acceleration"])
-        ax.set_ylabel(LABELS["longitudinal_acceleration"])
-        ax.set_title("GG Plot")
-        ax.grid()
-        plt.show()
-
-    def plot_ggv(self) -> None:
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")  # type: ignore
-        ax.scatter(
-            self.lateral_acceleration,
-            self.longitudinal_acceleration,
-            self.velocity,
-        )
-        ax.set_xlabel(LABELS["lateral_acceleration"])
-        ax.set_ylabel(LABELS["longitudinal_acceleration"])
-        ax.set_zlabel(LABELS["velocity"])
-        ax.set_title("GGV Plot")
-        ax.set_ylim(-50, 50)
-        ax.grid()
-        plt.show()
+    def evaluate_full_vehicle_state(
+        self, vehicle_model: VehicleModelInterface
+    ) -> None:
+        for node in self.nodes:
+            node.evaluate_vehicle_state(vehicle_model)
 
 
 def create_new_solution(

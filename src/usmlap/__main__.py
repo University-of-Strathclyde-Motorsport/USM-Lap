@@ -1,6 +1,7 @@
 import logging
 
 from simulation.competition import CompetitionSettings
+from simulation.plots import plot_apexes, plot_channels
 from simulation.simulation import SimulationSettings, simulate
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
@@ -26,7 +27,11 @@ competition_settings = CompetitionSettings(
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
-simulation_results.plot_apexes()
+plot_apexes(simulation_results)
+plot_channels(
+    simulation_results,
+    ["Downforce", "Motor Speed", "Motor Torque", "Normal Force"],
+)
 logging.info(f"Total time: {simulation_results.total_time:.3f}s")
 
 # sweep_settings = SweepSettings(

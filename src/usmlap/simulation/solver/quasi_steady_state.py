@@ -47,6 +47,7 @@ class QuasiSteadyStateSolver(SolverInterface):
                 solution = propagate_backward(solution, apex)
 
         logger.info("Resolving full vehicle state...")
+        solution.evaluate_full_vehicle_state(vehicle_model)
         return solution
 
 

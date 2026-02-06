@@ -2,10 +2,11 @@
 This module defines the variables associated with a vehicle's state.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from utils.datatypes import FourCorner
-from vehicle.aero import AeroAttitude
 from vehicle.tyre.tyre_model import TyreAttitude
 
 
@@ -27,7 +28,6 @@ class FullVehicleState(object):
 
     weight: float
     centripetal_force: float
-    aero_attitude: AeroAttitude
     downforce: float
     drag: float
     resistive_fx: float
@@ -44,3 +44,29 @@ class FullVehicleState(object):
     @property
     def total_lateral_traction(self) -> float:
         return sum(self.lateral_traction)
+
+    @staticmethod
+    def get_empty() -> FullVehicleState:
+        return FullVehicleState(
+            weight=0,
+            centripetal_force=0,
+            downforce=0,
+            drag=0,
+            resistive_fx=0,
+            required_fy=0,
+            normal_force=0,
+            normal_loads=FourCorner([0, 0, 0, 0]),
+            tyre_attitudes=FourCorner(
+                [
+                    TyreAttitude(normal_load=0),
+                    TyreAttitude(normal_load=0),
+                    TyreAttitude(normal_load=0),
+                    TyreAttitude(normal_load=0),
+                ]
+            ),
+            lateral_traction=FourCorner([0, 0, 0, 0]),
+            longitudinal_traction=FourCorner([0, 0, 0, 0]),
+            motor_speed=0,
+            motor_torque=0,
+            motor_force=0,
+        )

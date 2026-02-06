@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from copy import deepcopy
+from typing import Optional
 
 from .vehicle import Vehicle
 
@@ -17,10 +18,10 @@ class Parameter(ABC):
 
     _REGISTRY: dict[str, type[Parameter]] = {}
     name: str
-    unit: str | None = None
+    unit: Optional[str] = None
 
     def __init_subclass__(
-        cls: type[Parameter], parameter_name: str, unit: str | None = None
+        cls: type[Parameter], parameter_name: str, unit: Optional[str] = None
     ) -> None:
         super().__init_subclass__()
         cls._REGISTRY[parameter_name] = cls

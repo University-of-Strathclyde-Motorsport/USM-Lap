@@ -26,7 +26,7 @@ class VehicleModelInterface(ABC):
         self.environment = environment
 
     def resolve_vehicle_state(
-        self, vehicle: Vehicle, state_variables: StateVariables, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode
     ) -> FullVehicleState:
         """
         Calculate the full state of the vehicle at a node.
@@ -39,6 +39,8 @@ class VehicleModelInterface(ABC):
             vehicle_state (FullVehicleState): The full state of the vehicle,
                 including forces, torques, and energy.
         """
+        vehicle = self.vehicle
+
         weight = vehicle.total_mass * self.environment.gravity
         centripetal_force = (
             vehicle.total_mass * state_variables.velocity**2 * node.curvature
@@ -77,7 +79,6 @@ class VehicleModelInterface(ABC):
         return FullVehicleState(
             weight=weight,
             centripetal_force=centripetal_force,
-            aero_attitude=aero_attitude,
             downforce=downforce,
             drag=drag,
             resistive_fx=resistive_fx,
