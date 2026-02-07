@@ -15,13 +15,6 @@ LABELS = {
 }
 
 
-def default_state_variables() -> StateVariables:
-    """
-    Get a blank vehicle state.
-    """
-    return StateVariables(velocity=0)
-
-
 @dataclass
 class SolutionNode(object):
     """

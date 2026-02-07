@@ -8,14 +8,14 @@ from track.track_data import load_track_from_spreadsheet
 from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARN,
     format="{asctime} {levelname}: {message}",
     style="{",
     datefmt="%H:%M:%S",
 )
-logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
-    logging.DEBUG
-)
+# logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
+#     logging.INFO
+# )
 
 vehicle = load_vehicle("USM23 Baseline.json")
 track_data = load_track_from_spreadsheet("FS AutoX Germany 2012.xlsx")

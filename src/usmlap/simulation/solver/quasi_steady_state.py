@@ -5,6 +5,7 @@ This module implements a quasi-steady-state solver.
 import logging
 from math import sqrt
 
+from rich import progress
 from scipy.signal import find_peaks
 
 from simulation.model.vehicle_model import VehicleModelInterface
@@ -37,12 +38,17 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution.apexes = find_apexes(solution)
 
         logger.info("Solving forward propagation...")
-        for apex in solution.apexes.copy():
+        for apex in progress.track(
+            solution.apexes.copy(), description="Solving forward propagation..."
+        ):
             if apex in solution.apexes:
                 solution = propagate_forward(solution, apex)
 
         logger.info("Solving backward propagation...")
-        for apex in solution.apexes.copy():
+        for apex in progress.track(
+            solution.apexes.copy(),
+            description="Solving backward propagation...",
+        ):
             if apex in solution.apexes:
                 solution = propagate_backward(solution, apex)
 
@@ -66,7 +72,9 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
         solution (Solution): The solution with maximum velocities solved.
     """
     lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
-    for node in solution.nodes:
+    for node in progress.track(
+        solution.nodes, description="Solving maximum velocities..."
+    ):
         node.maximum_velocity = lateral_vehicle_model(node.track_node)
     return solution
 
