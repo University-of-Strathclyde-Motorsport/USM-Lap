@@ -30,16 +30,14 @@ class SolutionNode(object):
 
     track_node: TrackNode
     maximum_velocity: float = 0
+    _initial_velocity: float = 0
+    _final_velocity: float = 0
+    _initial_velocity_anchored: bool = False
+    _final_velocity_anchored: bool = False
     acceleration: float = 0
-    initial_state: StateVariables = field(
-        default_factory=default_state_variables
-    )
-    final_state: StateVariables = field(default_factory=default_state_variables)
     vehicle_state: FullVehicleState = field(
         default_factory=FullVehicleState.get_empty
     )
-    _initial_velocity_anchored: bool = False
-    _final_velocity_anchored: bool = False
 
     @property
     def length(self) -> float:
@@ -47,14 +45,14 @@ class SolutionNode(object):
 
     @property
     def initial_velocity(self) -> float:
-        return self.initial_state.velocity
+        return self._initial_velocity
 
     @property
     def final_velocity(self) -> float:
-        return self.final_state.velocity
+        return self._final_velocity
 
     @property
-    def velocity(self) -> float:
+    def average_velocity(self) -> float:
         return (self.initial_velocity + self.final_velocity) / 2
 
     @property
@@ -65,15 +63,17 @@ class SolutionNode(object):
 
     @property
     def lateral_acceleration(self) -> float:
-        return self.velocity**2 * self.track_node.curvature
+        return self.average_velocity**2 * self.track_node.curvature
 
     @property
     def time(self) -> float:
-        return self.length / self.velocity
+        return self.length / self.average_velocity
 
     @property
     def state_variables(self) -> StateVariables:
-        return StateVariables(velocity=self.velocity, ax=self.acceleration)
+        return StateVariables(
+            velocity=self.average_velocity, ax=self.acceleration
+        )
 
     def evaluate_vehicle_state(
         self, vehicle_model: VehicleModelInterface
@@ -91,7 +91,7 @@ class SolutionNode(object):
             velocity (float): The initial velocity to be set.
         """
         if not self._initial_velocity_anchored:
-            self.initial_state.velocity = velocity
+            self._initial_velocity = velocity
 
     def set_final_velocity(self, velocity: float) -> None:
         """
@@ -102,7 +102,7 @@ class SolutionNode(object):
             velocity (float): The final velocity to be set.
         """
         if not self._final_velocity_anchored:
-            self.final_state.velocity = velocity
+            self._final_velocity = velocity
 
     def anchor_initial_velocity(self, velocity: float) -> None:
         """
@@ -139,7 +139,7 @@ class Solution(object):
 
     @property
     def velocity(self) -> list[float]:
-        return [node.velocity for node in self.nodes]
+        return [node.average_velocity for node in self.nodes]
 
     @property
     def initial_velocity(self) -> list[float]:

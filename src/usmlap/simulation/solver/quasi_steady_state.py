@@ -65,9 +65,9 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     Returns:
         solution (Solution): The solution with maximum velocities solved.
     """
-    vehicle_model = solution.vehicle_model.lateral_vehicle_model
+    lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
     for node in solution.nodes:
-        node.maximum_velocity = vehicle_model(node.track_node).velocity
+        node.maximum_velocity = lateral_vehicle_model(node.track_node)
     return solution
 
 

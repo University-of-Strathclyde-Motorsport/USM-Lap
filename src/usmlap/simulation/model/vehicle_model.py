@@ -94,7 +94,19 @@ class VehicleModelInterface(ABC):
         )
 
     @abstractmethod
-    def lateral_vehicle_model(self, node: TrackNode) -> StateVariables:
+    def lateral_vehicle_model(self, node: TrackNode) -> float:
+        """
+        Calculate the lateral-traction-limited velocity at a node.
+
+        This is the maximum velocity that the vehicle can travel at
+        while maintaining lateral traction with no longitudinal acceleration.
+
+        Args:
+            node (TrackNode): The track node to evaluate.
+
+        Returns:
+            velocity (float): The lateral traction limited velocity.
+        """
         pass
 
     @abstractmethod

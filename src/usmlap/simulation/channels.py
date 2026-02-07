@@ -171,9 +171,17 @@ class CornerRadius(Channel, name="Corner Radius", unit="m"):
         return solution_node.track_node.radius
 
 
+class SegmentLength(Channel, name="Segment Length", unit="m"):
+    """Length of the track segment."""
+
+    @staticmethod
+    def get_value(solution_node: SolutionNode) -> float:
+        return solution_node.track_node.length
+
+
 class Velocity(Channel, name="Velocity", unit="m/s"):
     """Velocity of the vehicle."""
 
     @staticmethod
     def get_value(solution_node: SolutionNode) -> float:
-        return solution_node.velocity
+        return solution_node.average_velocity

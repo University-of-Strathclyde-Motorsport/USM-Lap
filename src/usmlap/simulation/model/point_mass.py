@@ -72,16 +72,15 @@ class PointMassVehicleModel(VehicleModelInterface):
         except ValueError:
             return FourCorner([0] * 4)
 
-    def lateral_vehicle_model(self, node: TrackNode) -> StateVariables:
+    def lateral_vehicle_model(self, node: TrackNode) -> float:
+        velocity = self.vehicle.maximum_velocity
         if node.curvature == 0:
-            return StateVariables(velocity=self.vehicle.maximum_velocity, ax=0)
+            return velocity
 
-        v = self.vehicle.maximum_velocity
         i = 0
-
         while i < 10000:
             i += 1
-            state_variables = StateVariables(velocity=v, ax=0)
+            state_variables = StateVariables(velocity=velocity, ax=0)
             vehicle_state = self.resolve_vehicle_state(state_variables, node)
             try:
                 available_fy = vehicle_state.total_lateral_traction
@@ -91,12 +90,11 @@ class PointMassVehicleModel(VehicleModelInterface):
             if available_fy < abs(vehicle_state.required_fy):
                 net_force = available_fy - node.z_to_y(vehicle_state.weight)
                 ay = net_force / self.vehicle.total_mass
-                v = math.sqrt(ay / abs(node.curvature)) - 0.001
+                velocity = math.sqrt(ay / abs(node.curvature)) - 0.001
             else:
                 break
 
-        state_variables = StateVariables(velocity=v, ax=0)
-        return state_variables
+        return velocity
 
     def calculate_acceleration(
         self, state_variables: StateVariables, node: TrackNode
