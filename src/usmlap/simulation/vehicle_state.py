@@ -18,6 +18,11 @@ class StateVariables(object):
 
     velocity: float
     ax: float = 0
+    state_of_charge: float = 1
+
+    @staticmethod
+    def get_empty() -> StateVariables:
+        return StateVariables(velocity=0)
 
 
 @dataclass
@@ -39,6 +44,8 @@ class FullVehicleState(object):
     longitudinal_traction: FourCorner[float]
     motor_speed: float
     motor_torque: float
+    motor_power: float
+    accumulator_power: float
     motor_force: float
 
     @property
@@ -68,5 +75,7 @@ class FullVehicleState(object):
             longitudinal_traction=FourCorner([0, 0, 0, 0]),
             motor_speed=0,
             motor_torque=0,
+            motor_power=0,
+            accumulator_power=0,
             motor_force=0,
         )

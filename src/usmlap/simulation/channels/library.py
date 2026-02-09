@@ -230,3 +230,13 @@ class ResultantAcceleration(
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return fcn.hypotenuse(LongitudinalAcceleration, LateralAcceleration)
+
+
+class StateOfCharge(Channel, name="State of Charge", unit=Unit.UNITLESS):
+    """State of charge of the battery."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.state_variables.state_of_charge for node in solution.nodes
+        ]

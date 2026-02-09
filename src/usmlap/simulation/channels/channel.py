@@ -5,6 +5,7 @@ This module defines the interface for data channels.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from simulation.solution import Solution
 from utils.units import Unit
@@ -16,9 +17,15 @@ class Channel(ABC):
     """
     An abstract class representing a data channel.
 
-    A channel can be extracted from a solution by calling
-    `channel(solution)`
-    where `solution` is a `Solution` object.
+    Channels must define the _channel_fcn class method,
+    which returns a ChannelFcn callable.
+    This callable accepts a Solution object,
+    and returns a list of floats corresponding to the values of the channel.
+
+    Attributes:
+        name (str): The name of the channel,
+            used to access it from the channel registry.
+        unit (Unit): The default unit to use when displaying the channel.
     """
 
     _REGISTRY: dict[str, type[Channel]] = {}
@@ -34,14 +41,13 @@ class Channel(ABC):
         cls.unit = unit
 
     def __new__(cls, solution: Solution) -> list[float]:
-        """
-        Overwrite the __new__ method to allow for static calls.
-
-        """
+        """Overwrite the __new__ method to allow for static calls."""
         return cls._channel_fcn()(solution)
 
     @classmethod
-    def get_values(cls, solution: Solution) -> list[float]:
+    def get_values(
+        cls, solution: Solution, unit: Optional[Unit] = None
+    ) -> list[float]:
         """
         Extract a list of values from a solution.
 
@@ -49,12 +55,25 @@ class Channel(ABC):
 
         Args:
             solution (Solution): A solution object.
+            unit (Unit): The unit to convert the values to.
+                If not specified, the channel's default unit is used.
+                (default = None)
 
         Returns:
             values (list[float]): The values of the corresponding data channel.
         """
+
+        if unit is None:
+            unit = cls.unit
+        else:
+            error_message = (
+                f"Unit '{unit}' of quantity '{unit.quantity}' does not match "
+                f"the quantity '{cls.unit.quantity}' for channel '{cls.name}'."
+            )
+            assert unit.quantity == cls.unit.quantity, error_message
+
         si_values = cls._channel_fcn()(solution)
-        return [cls.unit.convert(value) for value in si_values]
+        return [unit.convert(value) for value in si_values]
 
     @classmethod
     def get_channel(cls, channel_name: str) -> type[Channel]:

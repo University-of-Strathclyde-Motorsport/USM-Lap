@@ -130,6 +130,20 @@ class RWDPowertrain(Powertrain):
         )
         motor_curve.plot()
 
+    def get_powertrain_efficiency(self) -> float:
+        return 1  # TODO: efficiency calculation
+
+    def motor_to_accumulator_power(self, motor_power: float) -> float:
+        return motor_power / self.get_powertrain_efficiency()
+
+    def update_state_of_charge(
+        self, state_of_charge: float, energy_used: float
+    ) -> float:
+        print("Here!")
+        state_of_charge_used = energy_used / self.accumulator.capacity
+        print(f"Current SOC: {state_of_charge}, used: {state_of_charge_used}")
+        return state_of_charge - state_of_charge_used
+
 
 @dataclass
 class MotorCurveGenerator(object):

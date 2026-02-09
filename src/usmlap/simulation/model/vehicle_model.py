@@ -74,6 +74,10 @@ class VehicleModelInterface(ABC):
             current=vehicle.powertrain.accumulator.maximum_discharge_current,
             motor_speed=motor_speed,
         )
+        motor_power = motor_speed * motor_torque
+        accumulator_power = vehicle.powertrain.motor_to_accumulator_power(
+            motor_power
+        )
         motor_force = vehicle.motor_torque_to_drive_force(motor_torque)
 
         return FullVehicleState(
@@ -90,6 +94,8 @@ class VehicleModelInterface(ABC):
             longitudinal_traction=longitudinal_traction,
             motor_speed=motor_speed,
             motor_torque=motor_torque,
+            motor_power=motor_power,
+            accumulator_power=accumulator_power,
             motor_force=motor_force,
         )
 

@@ -54,6 +54,10 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         logger.info("Resolving full vehicle state...")
         solution.evaluate_full_vehicle_state(vehicle_model)
+
+        logger.info("Recalculating state variables...")
+        solution = recalculate_state_variables(solution)
+
         return solution
 
 
@@ -264,3 +268,34 @@ def calculate_previous_velocity(
         return 0
     else:
         return sqrt(term)
+
+
+def recalculate_state_variables(solution: Solution) -> Solution:
+    """
+    Recalculate the state variables of the vehicle.
+
+    Args:
+        solution (Solution): The solution object.
+
+    Returns:
+        solution (Solution): The solution with updated state variables.
+    """
+    for i in range(len(solution.nodes) - 1):
+        current_node = solution.nodes[i]
+        next_node = solution.nodes[i + 1]
+        updated_soc = (
+            solution.vehicle_model.vehicle.powertrain.update_state_of_charge(
+                state_of_charge=current_node.state_variables.state_of_charge,
+                energy_used=current_node.energy_used,
+            )
+        )
+        print(f"Updated SOC: {updated_soc}")
+        new_state_variables = StateVariables(
+            velocity=next_node.state_variables.velocity,
+            ax=next_node.state_variables.ax,
+            state_of_charge=updated_soc,
+        )
+        solution.nodes[i + 1].state_variables = new_state_variables
+        print(solution.nodes[i + 1].state_variables)
+
+    return solution

@@ -28,6 +28,9 @@ class SolutionNode(object):
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
     acceleration: float = 0
+    state_variables: StateVariables = field(
+        default_factory=StateVariables.get_empty
+    )
     vehicle_state: FullVehicleState = field(
         default_factory=FullVehicleState.get_empty
     )
@@ -63,10 +66,8 @@ class SolutionNode(object):
         return self.length / self.average_velocity
 
     @property
-    def state_variables(self) -> StateVariables:
-        return StateVariables(
-            velocity=self.average_velocity, ax=self.acceleration
-        )
+    def energy_used(self) -> float:
+        return self.vehicle_state.accumulator_power * self.time
 
     def evaluate_vehicle_state(
         self, vehicle_model: VehicleModelInterface
@@ -85,6 +86,7 @@ class SolutionNode(object):
         """
         if not self._initial_velocity_anchored:
             self._initial_velocity = velocity
+            self.state_variables.velocity = self.average_velocity
 
     def set_final_velocity(self, velocity: float) -> None:
         """
@@ -96,6 +98,7 @@ class SolutionNode(object):
         """
         if not self._final_velocity_anchored:
             self._final_velocity = velocity
+            self.state_variables.velocity = self.average_velocity
 
     def anchor_initial_velocity(self, velocity: float) -> None:
         """
@@ -118,6 +121,9 @@ class SolutionNode(object):
         """
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
+
+    def update_state_variables(self, state_variables: StateVariables) -> None:
+        self.state_variables = state_variables
 
 
 @dataclass

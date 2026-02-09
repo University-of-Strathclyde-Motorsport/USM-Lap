@@ -29,6 +29,9 @@ class Quantity(Enum):
     ENERGY = "energy"
     POWER = "power"
 
+    def __str__(self) -> str:
+        return self.value
+
 
 class Unit(Enum):
     """

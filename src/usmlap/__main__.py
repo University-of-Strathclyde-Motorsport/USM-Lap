@@ -35,7 +35,7 @@ plot_channels(
         "Drag",
         "Longitudinal Acceleration",
         "Lateral Acceleration",
-        "Resultant Acceleration",
+        "State of Charge",
     ],
 )
 logging.info(f"Total time: {simulation_results.total_time:.3f}s")
