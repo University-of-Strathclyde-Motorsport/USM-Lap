@@ -4,7 +4,7 @@ This module contains functions for plotting simulation results.
 
 import matplotlib.pyplot as plt
 
-from simulation.channels import Channel
+from simulation.channels.channel import Channel
 from simulation.solution import Solution
 
 LABELS = {
@@ -109,7 +109,7 @@ def plot_channels(solution: Solution, channels: list[str]) -> None:
     position = [node.track_node.position for node in solution.nodes]
     for i, channel_name in enumerate(channels):
         channel = Channel.get_channel(channel_name)
-        data = [channel.get_value(node) for node in solution.nodes]
+        data = channel.get_values(solution)
         axs[i].plot(position, data)
         axs[i].set_ylabel(f"{channel_name} ({channel.unit})")
         axs[i].grid()
