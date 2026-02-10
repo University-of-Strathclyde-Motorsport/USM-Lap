@@ -4,9 +4,7 @@ This module defines the interface for simulation solvers.
 
 from abc import ABC, abstractmethod
 
-from simulation.model.vehicle_model import VehicleModelInterface
 from simulation.solution import Solution
-from track.mesh import Mesh
 
 
 class SolverInterface(ABC):
@@ -16,6 +14,4 @@ class SolverInterface(ABC):
 
     @staticmethod
     @abstractmethod
-    def solve(
-        vehicle_model: VehicleModelInterface, track_mesh: Mesh
-    ) -> Solution: ...
+    def solve(previous_solution: Solution) -> Solution: ...

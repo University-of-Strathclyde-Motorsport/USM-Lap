@@ -97,5 +97,6 @@ class Unit(Enum):
     NEWTON_METER = ("newton meter", Quantity.TORQUE, "Nm")
     JOULE = ("joule", Quantity.ENERGY, "J")
     MEGAJOULE = ("megajoule", Quantity.ENERGY, "MJ", 1e6)
+    KILOWATT_HOUR = ("kilowatt hour", Quantity.ENERGY, "kWh", 3.6e6)
     WATT = ("watt", Quantity.POWER, "W")
     KILOWATT = ("kilowatt", Quantity.POWER, "kW", 1e3)

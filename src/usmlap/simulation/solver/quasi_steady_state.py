@@ -9,9 +9,8 @@ from rich import progress
 from scipy.signal import find_peaks
 
 from simulation.model.vehicle_model import VehicleModelInterface
-from simulation.solution import Solution, SolutionNode, create_new_solution
+from simulation.solution import Solution, SolutionNode
 from simulation.vehicle_state import StateVariables
-from track.mesh import Mesh
 
 from .solver_interface import SolverInterface
 
@@ -24,11 +23,10 @@ class QuasiSteadyStateSolver(SolverInterface):
     """
 
     @staticmethod
-    def solve(
-        vehicle_model: VehicleModelInterface, track_mesh: Mesh
-    ) -> Solution:
-        logger.info("Creating new solution...")
-        solution = create_new_solution(track_mesh, vehicle_model)
+    def solve(previous_solution: Solution) -> Solution:
+
+        solution = previous_solution
+
         solution.nodes[0].anchor_initial_velocity(0)
 
         logger.info("Solving maximum velocities...")
@@ -53,7 +51,7 @@ class QuasiSteadyStateSolver(SolverInterface):
                 solution = propagate_backward(solution, apex)
 
         logger.info("Resolving full vehicle state...")
-        solution.evaluate_full_vehicle_state(vehicle_model)
+        solution.evaluate_full_vehicle_state(solution.vehicle_model)
 
         logger.info("Recalculating state variables...")
         solution = recalculate_state_variables(solution)
@@ -79,7 +77,9 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     for node in progress.track(
         solution.nodes, description="Solving maximum velocities..."
     ):
-        node.maximum_velocity = lateral_vehicle_model(node.track_node)
+        node.maximum_velocity = lateral_vehicle_model(
+            node.state_variables, node.track_node
+        )
     return solution
 
 
@@ -124,24 +124,24 @@ def propagate_forward(solution: Solution, apex: int) -> Solution:
 
     i = apex
     while i < len(solution.nodes):
-        current_node = solution.nodes[i]
+        previous_node = solution.nodes[i]
 
-        maximum_velocity = current_node.maximum_velocity
+        maximum_velocity = previous_node.maximum_velocity
         traction_limited_velocity = traction_limit_velocity(
-            solution.vehicle_model, current_node
+            solution.vehicle_model, previous_node
         )
         final_velocity = min(traction_limited_velocity, maximum_velocity)
 
-        current_node.set_final_velocity(final_velocity)
+        previous_node.set_final_velocity(final_velocity)
 
         if i >= len(solution.nodes) - 1:
             break
 
-        next_node = solution.nodes[i + 1]
-        next_node.set_initial_velocity(final_velocity)
+        this_node = solution.nodes[i + 1]
+        this_node.set_initial_velocity(final_velocity)
 
         if i + 1 in solution.apexes:
-            if final_velocity < next_node.maximum_velocity:
+            if final_velocity < this_node.maximum_velocity:
                 logger.debug(f"Removing apex {i + 1}")
                 solution.apexes.remove(i + 1)
             else:
@@ -168,19 +168,19 @@ def propagate_backward(solution: Solution, apex: int) -> Solution:
 
     i = apex
     while i > 0:
-        current_node = solution.nodes[i]
+        previous_node = solution.nodes[i]
         previous_node = solution.nodes[i - 1]
 
         maximum_velocity = previous_node.final_velocity
-        if maximum_velocity <= current_node.final_velocity:
+        if maximum_velocity <= previous_node.final_velocity:
             break
 
         traction_limit_velocity = traction_limit_velocity_braking(
-            solution.vehicle_model, current_node
+            solution.vehicle_model, previous_node
         )
         initial_velocity = min(traction_limit_velocity, maximum_velocity)
 
-        current_node.set_initial_velocity(initial_velocity)
+        previous_node.set_initial_velocity(initial_velocity)
         previous_node.set_final_velocity(initial_velocity)
 
         if i - 1 in solution.apexes:
@@ -210,11 +210,10 @@ def traction_limit_velocity(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        state_variables = StateVariables(
-            velocity=node_solution.initial_velocity
-        )
         traction_limited_acceleration = vehicle_model.calculate_acceleration(
-            node=node_solution.track_node, state_variables=state_variables
+            node=node_solution.track_node,
+            state_variables=node_solution.state_variables,
+            velocity=node_solution.initial_velocity,
         )
         traction_limited_velocity = calculate_next_velocity(
             initial_velocity=node_solution.initial_velocity,
@@ -240,13 +239,14 @@ def traction_limit_velocity_braking(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        state_variables = StateVariables(velocity=node_solution.final_velocity)
-        traction_limited_decceleration = vehicle_model.calculate_decceleration(
-            node=node_solution.track_node, state_variables=state_variables
+        traction_limited_deceleration = vehicle_model.calculate_deceleration(
+            node=node_solution.track_node,
+            state_variables=node_solution.state_variables,
+            velocity=node_solution.final_velocity,
         )
         traction_limited_velocity = calculate_previous_velocity(
             final_velocity=node_solution.final_velocity,
-            decceleration=traction_limited_decceleration,
+            deceleration=traction_limited_deceleration,
             displacement=node_solution.track_node.length,
         )
         return traction_limited_velocity
@@ -261,9 +261,9 @@ def calculate_next_velocity(
 
 
 def calculate_previous_velocity(
-    final_velocity: float, decceleration: float, displacement: float
+    final_velocity: float, deceleration: float, displacement: float
 ) -> float:
-    term = final_velocity**2 + 2 * decceleration * displacement
+    term = final_velocity**2 + 2 * deceleration * displacement
     if term <= 0:
         return 0
     else:
@@ -280,22 +280,15 @@ def recalculate_state_variables(solution: Solution) -> Solution:
     Returns:
         solution (Solution): The solution with updated state variables.
     """
-    for i in range(len(solution.nodes) - 1):
-        current_node = solution.nodes[i]
-        next_node = solution.nodes[i + 1]
+    for i in range(1, len(solution.nodes)):
+        previous_node = solution.nodes[i - 1]
         updated_soc = (
             solution.vehicle_model.vehicle.powertrain.update_state_of_charge(
-                state_of_charge=current_node.state_variables.state_of_charge,
-                energy_used=current_node.energy_used,
+                state_of_charge=previous_node.state_variables.state_of_charge,
+                energy_used=previous_node.energy_used,
             )
         )
-        print(f"Updated SOC: {updated_soc}")
-        new_state_variables = StateVariables(
-            velocity=next_node.state_variables.velocity,
-            ax=next_node.state_variables.ax,
-            state_of_charge=updated_soc,
-        )
-        solution.nodes[i + 1].state_variables = new_state_variables
-        print(solution.nodes[i + 1].state_variables)
+        new_state_variables = StateVariables(state_of_charge=updated_soc)
+        solution.nodes[i].state_variables = new_state_variables
 
     return solution

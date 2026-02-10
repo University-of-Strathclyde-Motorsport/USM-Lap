@@ -72,7 +72,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         except ValueError:
             return FourCorner([0] * 4)
 
-    def lateral_vehicle_model(self, node: TrackNode) -> float:
+    def lateral_vehicle_model(
+        self, state_variables: StateVariables, node: TrackNode
+    ) -> float:
         velocity = self.vehicle.maximum_velocity
         if node.curvature == 0:
             return velocity
@@ -80,8 +82,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         i = 0
         while i < 10000:
             i += 1
-            state_variables = StateVariables(velocity=velocity, ax=0)
-            vehicle_state = self.resolve_vehicle_state(state_variables, node)
+            vehicle_state = self.resolve_vehicle_state(
+                state_variables, node, velocity
+            )
             try:
                 available_fy = vehicle_state.total_lateral_traction
             except ValueError:
@@ -97,9 +100,11 @@ class PointMassVehicleModel(VehicleModelInterface):
         return velocity
 
     def calculate_acceleration(
-        self, state_variables: StateVariables, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> float:
-        vehicle_state = self.resolve_vehicle_state(state_variables, node)
+        vehicle_state = self.resolve_vehicle_state(
+            state_variables, node, velocity
+        )
         traction_limit = (
             vehicle_state.longitudinal_traction.rear_left
             + vehicle_state.longitudinal_traction.rear_right
@@ -109,10 +114,12 @@ class PointMassVehicleModel(VehicleModelInterface):
         net_fx = drive_limit - vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass
 
-    def calculate_decceleration(
-        self, state_variables: StateVariables, node: TrackNode
+    def calculate_deceleration(
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> float:
-        vehicle_state = self.resolve_vehicle_state(state_variables, node)
+        vehicle_state = self.resolve_vehicle_state(
+            state_variables, node, velocity
+        )
         traction_limit = sum(vehicle_state.longitudinal_traction)
         net_fx = traction_limit + vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass

@@ -608,7 +608,7 @@ class "Parameter" as src.usmlap.vehicle.parameters.Parameter {
 }
 class "PointMassVehicleModel" as src.usmlap.simulation.model.point_mass.PointMassVehicleModel {
   calculate_acceleration(state_variables: StateVariables, node: Node) -> float
-  calculate_decceleration(state_variables: StateVariables, node: Node) -> float
+  calculate_deceleration(state_variables: StateVariables, node: Node) -> float
   lateral_vehicle_model(node: Node) -> StateVariables
   normal_load(state_variables: StateVariables, node: Node) -> float
   tyre_attitude(state_variables: StateVariables, node: Node) -> TyreAttitude
@@ -940,7 +940,7 @@ class "VehicleModelInterface" as src.usmlap.simulation.model.vehicle_model.Vehic
   vehicle
   weight : float
   {abstract}calculate_acceleration(state_variables: StateVariables, node: Node) -> float
-  {abstract}calculate_decceleration(state_variables: StateVariables, node: Node) -> float
+  {abstract}calculate_deceleration(state_variables: StateVariables, node: Node) -> float
   centripetal_force_y(state_variables: StateVariables, node: Node) -> float
   centripetal_force_z(state_variables: StateVariables, node: Node) -> float
   downforce(state_variables: StateVariables) -> float

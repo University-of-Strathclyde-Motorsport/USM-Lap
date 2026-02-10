@@ -124,7 +124,7 @@ class MotorPower(Channel, name="Motor Power", unit=Unit.KILOWATT):
         return fcn.product(MotorTorque, MotorSpeed)
 
 
-class MotorEnergy(Channel, name="Motor Energy", unit=Unit.MEGAJOULE):
+class MotorEnergy(Channel, name="Motor Energy", unit=Unit.KILOWATT_HOUR):
     """Energy output by the motor."""
 
     @classmethod

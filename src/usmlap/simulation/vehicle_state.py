@@ -14,15 +14,21 @@ from vehicle.tyre.tyre_model import TyreAttitude
 class StateVariables(object):
     """
     The state of the vehicle at a point.
+
+    Attributes:
+        state_of_charge (float): The state of charge of the accumulator.
+            1 = fully charged, 0 = fully discharged
+            (default = 1).
     """
 
-    velocity: float
-    ax: float = 0
     state_of_charge: float = 1
 
     @staticmethod
-    def get_empty() -> StateVariables:
-        return StateVariables(velocity=0)
+    def get_default() -> StateVariables:
+        """
+        Get a state variable object with default values.
+        """
+        return StateVariables()
 
 
 @dataclass

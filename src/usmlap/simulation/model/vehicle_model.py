@@ -26,7 +26,7 @@ class VehicleModelInterface(ABC):
         self.environment = environment
 
     def resolve_vehicle_state(
-        self, state_variables: StateVariables, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> FullVehicleState:
         """
         Calculate the full state of the vehicle at a node.
@@ -42,13 +42,10 @@ class VehicleModelInterface(ABC):
         vehicle = self.vehicle
 
         weight = vehicle.total_mass * self.environment.gravity
-        centripetal_force = (
-            vehicle.total_mass * state_variables.velocity**2 * node.curvature
-        )
+        centripetal_force = vehicle.total_mass * velocity**2 * node.curvature
 
         aero_attitude = AeroAttitude(
-            velocity=state_variables.velocity,
-            air_density=self.environment.air_density,
+            velocity=velocity, air_density=self.environment.air_density
         )
         downforce = self.vehicle.aero.get_downforce(aero_attitude)
         drag = self.vehicle.aero.get_drag(aero_attitude)
@@ -68,10 +65,10 @@ class VehicleModelInterface(ABC):
             tyre_attitudes, required_fy
         )
 
-        motor_speed = vehicle.velocity_to_motor_speed(state_variables.velocity)
+        motor_speed = vehicle.velocity_to_motor_speed(velocity)
         motor_torque = vehicle.powertrain.get_motor_torque(
-            state_of_charge=1,  # TODO
-            current=vehicle.powertrain.accumulator.maximum_discharge_current,
+            state_of_charge=state_variables.state_of_charge,
+            current=vehicle.powertrain.accumulator.maximum_discharge_current,  # TODO
             motor_speed=motor_speed,
         )
         motor_power = motor_speed * motor_torque
@@ -100,7 +97,9 @@ class VehicleModelInterface(ABC):
         )
 
     @abstractmethod
-    def lateral_vehicle_model(self, node: TrackNode) -> float:
+    def lateral_vehicle_model(
+        self, state_variables: StateVariables, node: TrackNode
+    ) -> float:
         """
         Calculate the lateral-traction-limited velocity at a node.
 
@@ -117,13 +116,13 @@ class VehicleModelInterface(ABC):
 
     @abstractmethod
     def calculate_acceleration(
-        self, state_variables: StateVariables, node: TrackNode
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> float:
         pass
 
     @abstractmethod
-    def calculate_decceleration(
-        self, state_variables: StateVariables, node: TrackNode
+    def calculate_deceleration(
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> float:
         pass
 

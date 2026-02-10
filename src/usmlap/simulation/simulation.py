@@ -4,6 +4,8 @@ This module contains code for running a simulation.
 
 from __future__ import annotations
 
+import logging
+
 from pydantic import BaseModel
 
 from simulation.environment import Environment
@@ -12,9 +14,11 @@ from vehicle.vehicle import Vehicle
 
 from .model.point_mass import PointMassVehicleModel
 from .model.vehicle_model import VehicleModelInterface
-from .solution import Solution
+from .solution import Solution, create_new_solution
 from .solver.quasi_steady_state import QuasiSteadyStateSolver
 from .solver.solver_interface import SolverInterface
+
+MAXIMUM_TRANSIENT_ITERATIONS = 100
 
 
 # @dataclass
@@ -48,5 +52,16 @@ def simulate(
         vehicle=vehicle, environment=settings.environment
     )
     solver = settings.solver()
-    solution = solver.solve(vehicle_model, track_mesh)
+    solution = create_new_solution(track_mesh, vehicle_model)
+    times: list[float] = []
+
+    for i in range(1, MAXIMUM_TRANSIENT_ITERATIONS):
+        solution = solver.solve(previous_solution=solution)
+        times.append(solution.total_time)
+        logging.warning(f"Iteration {i}, time: {solution.total_time:.3f}s")
+        if len(times) > 1 and abs(times[-1] - times[-2]) < 1e-4:
+            break
+
+    logging.warning(f"Final iteration, total time: {solution.total_time:.3f}s")
+
     return solution

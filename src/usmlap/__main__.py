@@ -32,10 +32,11 @@ plot_channels(
     simulation_results,
     [
         "Velocity",
-        "Drag",
+        "Curvature",
         "Longitudinal Acceleration",
         "Lateral Acceleration",
         "State of Charge",
+        "Motor Energy",
     ],
 )
 logging.info(f"Total time: {simulation_results.total_time:.3f}s")

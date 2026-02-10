@@ -139,9 +139,7 @@ class RWDPowertrain(Powertrain):
     def update_state_of_charge(
         self, state_of_charge: float, energy_used: float
     ) -> float:
-        print("Here!")
         state_of_charge_used = energy_used / self.accumulator.capacity
-        print(f"Current SOC: {state_of_charge}, used: {state_of_charge_used}")
         return state_of_charge - state_of_charge_used
 
 
