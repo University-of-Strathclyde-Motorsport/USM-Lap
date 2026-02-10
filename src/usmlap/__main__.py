@@ -1,7 +1,7 @@
 import logging
 
 from simulation.competition import CompetitionSettings
-from simulation.plots import plot_channels
+from simulation.plots import plot_apexes, plot_channels
 from simulation.simulation import SimulationSettings, simulate
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
@@ -13,9 +13,9 @@ logging.basicConfig(
     style="{",
     datefmt="%H:%M:%S",
 )
-# logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
-#     logging.INFO
-# )
+logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
+    logging.DEBUG
+)
 
 vehicle = load_vehicle("USM23 Baseline.json")
 track_data = load_track_from_spreadsheet("FS AutoX Germany 2012.xlsx")
@@ -27,7 +27,7 @@ competition_settings = CompetitionSettings(
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
-# plot_apexes(simulation_results)
+plot_apexes(simulation_results)
 plot_channels(
     simulation_results,
     [

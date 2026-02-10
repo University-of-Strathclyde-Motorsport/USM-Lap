@@ -124,24 +124,24 @@ def propagate_forward(solution: Solution, apex: int) -> Solution:
 
     i = apex
     while i < len(solution.nodes):
-        previous_node = solution.nodes[i]
+        current_node = solution.nodes[i]
 
-        maximum_velocity = previous_node.maximum_velocity
+        maximum_velocity = current_node.maximum_velocity
         traction_limited_velocity = traction_limit_velocity(
-            solution.vehicle_model, previous_node
+            solution.vehicle_model, current_node
         )
         final_velocity = min(traction_limited_velocity, maximum_velocity)
 
-        previous_node.set_final_velocity(final_velocity)
+        current_node.set_final_velocity(final_velocity)
 
         if i >= len(solution.nodes) - 1:
             break
 
-        this_node = solution.nodes[i + 1]
-        this_node.set_initial_velocity(final_velocity)
+        next_node = solution.nodes[i + 1]
+        next_node.set_initial_velocity(final_velocity)
 
         if i + 1 in solution.apexes:
-            if final_velocity < this_node.maximum_velocity:
+            if final_velocity < next_node.maximum_velocity:
                 logger.debug(f"Removing apex {i + 1}")
                 solution.apexes.remove(i + 1)
             else:
@@ -168,22 +168,22 @@ def propagate_backward(solution: Solution, apex: int) -> Solution:
 
     i = apex
     while i > 0:
-        previous_node = solution.nodes[i]
+        current_node = solution.nodes[i]
         previous_node = solution.nodes[i - 1]
 
         maximum_velocity = previous_node.final_velocity
-        if maximum_velocity <= previous_node.final_velocity:
+        if maximum_velocity <= current_node.final_velocity:
             break
 
         traction_limit_velocity = traction_limit_velocity_braking(
-            solution.vehicle_model, previous_node
+            solution.vehicle_model, current_node
         )
         initial_velocity = min(traction_limit_velocity, maximum_velocity)
 
-        previous_node.set_initial_velocity(initial_velocity)
+        current_node.set_initial_velocity(initial_velocity)
         previous_node.set_final_velocity(initial_velocity)
 
-        if i - 1 in solution.apexes:
+        if i - 1 in solution.apexes:  # If previous node is an apex
             if initial_velocity < previous_node.final_velocity:
                 logger.debug(f"Removing apex {i + 1}")
                 solution.apexes.remove(i - 1)
