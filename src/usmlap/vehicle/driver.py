@@ -5,7 +5,7 @@ This module models the driver of the vehicle.
 from .common import Component
 
 
-class Driver(Component):
+class Driver(Component, library="drivers.json"):
     """
     The driver of the vehicle.
 
@@ -16,7 +16,3 @@ class Driver(Component):
 
     mass: float
     height: float
-
-    @classmethod
-    def library_name(cls) -> str:
-        return "drivers.json"

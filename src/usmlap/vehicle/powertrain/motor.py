@@ -7,7 +7,7 @@ import math
 from ..common import Component
 
 
-class Motor(Component):
+class Motor(Component, library="motors.json"):
     """
     An electric motor.
 
@@ -34,9 +34,6 @@ class Motor(Component):
     rated_voltage: float
     datasheet_url: str
 
-    @classmethod
-    def library_name(cls) -> str:
-        return "motors.json"
 
     @property
     def maximum_speed(self) -> float:

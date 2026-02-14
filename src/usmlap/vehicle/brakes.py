@@ -13,7 +13,7 @@ from utils.datatypes import FrontRear, Percentage
 from .common import Component, Subsystem
 
 
-class MasterCylinder(Component):
+class MasterCylinder(Component, library="master_cylinders.json"):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
 
@@ -30,12 +30,8 @@ class MasterCylinder(Component):
     def piston_area(self) -> float:
         return geometry.area_of_circle(self.piston_diameter)
 
-    @classmethod
-    def library_name(cls) -> str:
-        return "master_cylinders.json"
 
-
-class BrakeCaliper(Component):
+class BrakeCaliper(Component, library="brake_calipers.json"):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
 
@@ -52,12 +48,8 @@ class BrakeCaliper(Component):
     def piston_area(self) -> float:
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
-    @classmethod
-    def library_name(cls) -> str:
-        return "brake_calipers.json"
 
-
-class BrakeDisc(Component):
+class BrakeDisc(Component, library="brake_discs.json"):
     """
     The brake disc attached to the wheel.
 
@@ -67,12 +59,8 @@ class BrakeDisc(Component):
 
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
-    @classmethod
-    def library_name(cls) -> str:
-        return "brake_discs.json"
 
-
-class BrakePad(Component):
+class BrakePad(Component, library="brake_pads.json"):
     """
     The brake pad attached to the caliper.
 
@@ -84,10 +72,6 @@ class BrakePad(Component):
 
     height: Annotated[PositiveFloat, Unit("m")]
     coefficient_of_friction: PositiveFloat
-
-    @classmethod
-    def library_name(cls) -> str:
-        return "brake_pads.json"
 
 
 class BrakeLine(Subsystem):

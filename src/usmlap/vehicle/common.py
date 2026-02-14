@@ -5,11 +5,13 @@ This module contains code shared by all vehicle components.
 from __future__ import annotations
 
 import json
-from abc import ABC, abstractmethod
+from abc import ABC
 from pathlib import Path
 from typing import Any, ClassVar, Optional, Self
 
 from pydantic import BaseModel, model_validator
+
+type JSONDict = dict[str, Any]
 
 
 class Subsystem(BaseModel):
@@ -57,9 +59,9 @@ class AbstractSubsystem(Subsystem):
     _subtypes: ClassVar[dict[str, type]] = {}
 
     def __init_subclass__(
-        cls: Any, type: Optional[str] = None, **kwargs: Any
+        cls: type[AbstractSubsystem], type: Optional[str] = None
     ) -> None:
-        super().__init_subclass__(**kwargs)
+        super().__init_subclass__()
         if type:
             cls.type = type
             if type in cls._subtypes:
@@ -85,10 +87,11 @@ class Component(ABC, Subsystem):
     """
 
     name: str
+    _library: str
 
-    @classmethod
-    @abstractmethod
-    def library_name(cls) -> str: ...
+    def __init_subclass__(cls: type[Component], library: str) -> None:
+        super().__init_subclass__()
+        cls._library = library
 
     @classmethod
     def _get_library_path(cls) -> str:
@@ -98,13 +101,11 @@ class Component(ABC, Subsystem):
         Returns:
             library_path (str): Path to the component library.
         """
-        if not cls.library_name():
-            error_message = f"No library specified for class {cls.__name__}"
-            raise ValueError(error_message)
-        return "appdata/library/components/" + cls.library_name()
+
+        return "appdata/library/components/" + cls._library
 
     @classmethod
-    def load_library(cls) -> dict[str, dict[str, Any]]:
+    def load_library(cls) -> dict[str, JSONDict]:
         """
         Load the component library as a dictionary.
 
@@ -112,7 +113,7 @@ class Component(ABC, Subsystem):
         specified by the  `library_name` method.
 
         Returns:
-            library (dict[str, dict[str, Any]]):
+            library (dict[str, JSONDict]):
                 A dictionary of components.
                 The component names are used as keys.
                 The values are dictionaries containing component data.
@@ -145,13 +146,13 @@ class Component(ABC, Subsystem):
         if name not in components:
             error_message = (
                 f"Component '{name}' not found "
-                f"in library '{cls.library_name()}' "
+                f"in library '{cls._library}' "
                 f"(available components: {components})"
             )
             raise KeyError(error_message)
 
     @classmethod
-    def get_component(cls, name: str) -> dict[str, Any]:
+    def get_component(cls, name: str) -> JSONDict:
         """
         Select a component from the library.
 
@@ -164,7 +165,7 @@ class Component(ABC, Subsystem):
             KeyError: If no component with the given name is found.
 
         Returns:
-            component (dict[str, Any]):
+            component (JSONDict):
                 A dictionary containing the component data.
         """
         cls.check_component_exists(name)

@@ -5,7 +5,7 @@ This module models the electric accumulator of a vehicle.
 from ..common import Component, Subsystem
 
 
-class Cell(Component):
+class Cell(Component, library="cells.json"):
     """
     An electrochemical cell.
 
@@ -27,10 +27,6 @@ class Cell(Component):
     discharge_current: float
     resistance: float
     datasheet_url: str
-
-    @classmethod
-    def library_name(cls) -> str:
-        return "cells.json"
 
     def get_voltage(self, state_of_charge: float) -> float:
         """

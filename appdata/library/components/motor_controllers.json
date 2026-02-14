@@ -1,5 +1,6 @@
 {
     "BAMOCAR": {
-        "resistance": 0.29
+        "resistance": 0.29,
+        "efficiency": 0.85
     }
 }

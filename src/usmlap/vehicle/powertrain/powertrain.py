@@ -131,7 +131,7 @@ class RWDPowertrain(Powertrain):
         motor_curve.plot()
 
     def get_powertrain_efficiency(self) -> float:
-        return 1  # TODO: efficiency calculation
+        return 0.8  # TODO: efficiency calculation
 
     def motor_to_accumulator_power(self, motor_power: float) -> float:
         return motor_power / self.get_powertrain_efficiency()

@@ -167,7 +167,7 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
 TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
 
 
-class Tyre(Component):
+class Tyre(Component, library="tyres.json"):
     """
     A racing tyre.
 
@@ -178,10 +178,6 @@ class Tyre(Component):
 
     unloaded_radius: float
     tyre_model: TyreModel
-
-    @classmethod
-    def library_name(cls) -> str:
-        return "tyres.json"
 
 
 class Tyres(Subsystem):
