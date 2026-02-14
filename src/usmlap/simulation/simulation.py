@@ -4,8 +4,6 @@ This module contains code for running a simulation.
 
 from __future__ import annotations
 
-import logging
-
 from pydantic import BaseModel
 
 from simulation.environment import Environment
@@ -52,15 +50,4 @@ def simulate(
     )
     solver = settings.solver()
     solution = create_new_solution(track_mesh, vehicle_model)
-    times: list[float] = []
-
-    for i in range(1, MAXIMUM_TRANSIENT_ITERATIONS):
-        solution = solver.solve(previous_solution=solution)
-        times.append(solution.total_time)
-        logging.warning(f"Iteration {i}, time: {solution.total_time:.3f}s")
-        if len(times) > 1 and abs(times[-1] - times[-2]) < 1e-4:
-            break
-
-    logging.warning(f"Final iteration, total time: {solution.total_time:.3f}s")
-
-    return solution
+    return solver.solve(solution)

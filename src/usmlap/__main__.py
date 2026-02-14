@@ -3,43 +3,33 @@ import logging
 from simulation.competition import CompetitionSettings
 from simulation.plots import plot_apexes, plot_channels
 from simulation.simulation import SimulationSettings, simulate
+from simulation.solver.quasi_transient import QuasiTransientSolver
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
 from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(
-    level=logging.WARN,
+    level=logging.INFO,
     format="{asctime} {levelname}: {message}",
     style="{",
     datefmt="%H:%M:%S",
 )
-logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
-    logging.DEBUG
-)
+# logging.getLogger("simulation.solver.quasi_steady_state").setLevel(
+#     logging.DEBUG
+# )
 
 vehicle = load_vehicle("USM23 Baseline.json")
 track_data = load_track_from_spreadsheet("FS AutoX Germany 2012.xlsx")
 
 mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-simulation_settings = SimulationSettings()
+simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
 competition_settings = CompetitionSettings(
     autocross_track=track_data, simulation_settings=simulation_settings
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
-for i in range(len(simulation_results.nodes) - 1):
-    this_final = simulation_results.nodes[i].final_velocity
-    next_initial = simulation_results.nodes[i + 1].initial_velocity
-    if abs(this_final - next_initial):
-        logging.warning(
-            f"Velocity mismatch between nodes {i} and {i + 1}: {this_final} and {next_initial}"
-        )
-print(
-    f"Node 1: {simulation_results.nodes[0].initial_velocity:.3f} m/s, final: {simulation_results.nodes[0].final_velocity:.3f} m/s"
-)
-print(
-    f"Final node: {simulation_results.nodes[-1].initial_velocity:.3f} m/s, {simulation_results.nodes[-1].final_velocity:.3f} m/s"
-)
+print(f"Solution time: {simulation_results.total_time:.3f}s")
+
 plot_apexes(simulation_results)
 plot_channels(
     simulation_results,
