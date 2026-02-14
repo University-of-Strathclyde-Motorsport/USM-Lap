@@ -98,8 +98,9 @@ class RWDPowertrain(Powertrain):
         return self.get_knee_speed(state_of_charge, 0)
 
     def get_motor_torque(
-        self, state_of_charge: float, current: float, motor_speed: float
+        self, state_of_charge: float, motor_speed: float
     ) -> float:
+        current = self.accumulator.get_discharge_current(state_of_charge)
         knee_speed = self.get_knee_speed(state_of_charge, current)
         maximum_speed = self.get_maximum_motor_speed(state_of_charge)
         maximum_torque = self.motor.get_torque(current)
@@ -116,9 +117,9 @@ class RWDPowertrain(Powertrain):
             )
 
     def get_motor_power(
-        self, state_of_charge: float, current: float, motor_speed: float
+        self, state_of_charge: float, motor_speed: float
     ) -> float:
-        torque = self.get_motor_torque(state_of_charge, current, motor_speed)
+        torque = self.get_motor_torque(state_of_charge, motor_speed)
         power = motor_speed * torque
         return power
 
@@ -173,7 +174,7 @@ class MotorCurveGenerator(object):
         motor_torques = np.zeros(self.resolution)
         for i in range(self.resolution):
             motor_torques[i] = powertrain.get_motor_torque(
-                state_of_charge, current, motor_speeds[i]
+                state_of_charge, motor_speeds[i]
             )
         motor_powers = motor_speeds * motor_torques
 

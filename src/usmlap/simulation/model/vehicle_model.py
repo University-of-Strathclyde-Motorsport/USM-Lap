@@ -68,7 +68,6 @@ class VehicleModelInterface(ABC):
         motor_speed = vehicle.velocity_to_motor_speed(velocity)
         motor_torque = vehicle.powertrain.get_motor_torque(
             state_of_charge=state_variables.state_of_charge,
-            current=vehicle.powertrain.accumulator.maximum_discharge_current,  # TODO
             motor_speed=motor_speed,
         )
         motor_power = motor_speed * motor_torque

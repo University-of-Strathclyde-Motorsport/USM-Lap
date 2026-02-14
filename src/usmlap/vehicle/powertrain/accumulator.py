@@ -63,6 +63,7 @@ class Accumulator(Subsystem):
     cell: Cell
     cells_in_parallel: int
     cells_in_series: int
+    soc_current_derate_point: float
 
     @property
     def number_of_cells(self) -> int:
@@ -101,3 +102,26 @@ class Accumulator(Subsystem):
             voltage (float): Voltage of the accumulator.
         """
         return self.cell.get_voltage(state_of_charge) * self.cells_in_series
+
+    def get_discharge_current(self, state_of_charge: float) -> float:
+        """
+        Get the available discharge current at a given state of charge.
+
+        Above the current derate point,
+        the maximum discharge current is available.
+
+        Below the current derate point,
+        the current is scaled linearly to zero.
+
+        Args:
+            state_of_charge (float): State of charge, between 0 and 1.
+
+        Returns:
+            current (float): Available discharge current.
+        """
+        if state_of_charge >= self.soc_current_derate_point:
+            scalar = 1
+        else:
+            scalar = state_of_charge / self.soc_current_derate_point
+
+        return self.maximum_discharge_current * scalar
