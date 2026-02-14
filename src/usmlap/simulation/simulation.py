@@ -21,7 +21,6 @@ from .solver.solver_interface import SolverInterface
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 
 
-# @dataclass
 class SimulationSettings(BaseModel):
     """
     Settings for a simulation.

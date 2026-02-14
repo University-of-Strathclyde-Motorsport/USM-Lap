@@ -18,11 +18,9 @@ def plot_apexes(solution: Solution) -> None:
     """
     Plot a velocity profile, with apexes highlighted.
     """
-    position = [solution.track_node.position for solution in solution.nodes]
-    maximum_velocity = [
-        solution.maximum_velocity for solution in solution.nodes
-    ]
-    apexes = [solution.nodes[apex] for apex in solution.apexes]
+    position = [node.track_node.position for node in solution.nodes]
+    maximum_velocity = [node.maximum_velocity for node in solution.nodes]
+    apexes = solution.get_apexes()
     apex_velocity = [apex.maximum_velocity for apex in apexes]
     apex_position = [apex.track_node.position for apex in apexes]
 

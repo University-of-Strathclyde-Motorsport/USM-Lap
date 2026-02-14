@@ -27,6 +27,19 @@ competition_settings = CompetitionSettings(
 )
 
 simulation_results = simulate(vehicle, mesh, simulation_settings)
+for i in range(len(simulation_results.nodes) - 1):
+    this_final = simulation_results.nodes[i].final_velocity
+    next_initial = simulation_results.nodes[i + 1].initial_velocity
+    if abs(this_final - next_initial):
+        logging.warning(
+            f"Velocity mismatch between nodes {i} and {i + 1}: {this_final} and {next_initial}"
+        )
+print(
+    f"Node 1: {simulation_results.nodes[0].initial_velocity:.3f} m/s, final: {simulation_results.nodes[0].final_velocity:.3f} m/s"
+)
+print(
+    f"Final node: {simulation_results.nodes[-1].initial_velocity:.3f} m/s, {simulation_results.nodes[-1].final_velocity:.3f} m/s"
+)
 plot_apexes(simulation_results)
 plot_channels(
     simulation_results,

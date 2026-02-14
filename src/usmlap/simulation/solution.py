@@ -2,27 +2,47 @@
 This module contains code for representing the solution to a simulation.
 """
 
+from __future__ import annotations
+
+import logging
 from dataclasses import dataclass, field
+from typing import Optional
 
 from simulation.model.vehicle_model import VehicleModelInterface
 from simulation.vehicle_state import FullVehicleState, StateVariables
 from track.mesh import Mesh, TrackNode
-
-LABELS = {
-    "velocity": "Velocity (m/s)",
-    "longitudinal_acceleration": "Longitudinal Acceleration (m/s^2)",
-    "lateral_acceleration": "Lateral Acceleration (m/s^2)",
-}
 
 
 @dataclass
 class SolutionNode(object):
     """
     The solution at a single node.
+
+    Attributes:
+        track_node (TrackNode): The corresponding track node.
+        maximum_velocity (float): The maximum possible velocity at the node,
+            obtained from the lateral vehicle model.
+        acceleration (float): The longitudinal acceleration at the node.
+        state_variables (StateVariables): The state variables at the node.
+        vehicle_state (FullVehicleState): The state of the vehicle at the node.
+        next (Optional[SolutionNode]): The next node in the solution
+            (`None` if this is the final node).
+        previous (Optional[SolutionNode]): The previous node in the solution
+            (`None` if this is the first node).
+        length (float): The length of the track segment.
+        initial_velocity (float): The velocity at the start of the node.
+        final_velocity (float): The velocity at the end of the node.
+        average_velocity (float): The average velocity for the node.
+        longitudinal_acceleration (float):
+            The longitudinal acceleration for the node.
+        lateral_acceleration (float): The lateral acceleration for the node.
+        time (float): The time taken to drive this node.
+        energy_used (float): The energy used to drive this node.
     """
 
     track_node: TrackNode
     maximum_velocity: float = 0
+    _apex: bool = False
     _initial_velocity: float = 0
     _final_velocity: float = 0
     _initial_velocity_anchored: bool = False
@@ -34,6 +54,8 @@ class SolutionNode(object):
     vehicle_state: FullVehicleState = field(
         default_factory=FullVehicleState.get_empty
     )
+    next: Optional[SolutionNode] = None
+    previous: Optional[SolutionNode] = None
 
     @property
     def length(self) -> float:
@@ -69,9 +91,37 @@ class SolutionNode(object):
     def energy_used(self) -> float:
         return self.vehicle_state.accumulator_power * self.time
 
+    def is_apex(self) -> bool:
+        """
+        Check if the node is an apex.
+
+        Returns:
+            is_apex (bool): `True` is the node is an apex, otherwise `False`.
+        """
+        return self._apex
+
+    def add_apex(self) -> None:
+        """
+        Add the node as an apex.
+        """
+        self._apex = True
+
+    def remove_apex(self) -> None:
+        """
+        Remove the node as an apex.
+        """
+        logging.debug("Removing apex")
+        self._apex = False
+
     def evaluate_vehicle_state(
         self, vehicle_model: VehicleModelInterface
     ) -> None:
+        """
+        Evaluate the full state of the vehicle at this node.
+
+        Args:
+            vehicle_model (VehicleModelInterface): The vehicle model to use.
+        """
         self.vehicle_state = vehicle_model.resolve_vehicle_state(
             self.state_variables, self.track_node, self.average_velocity
         )
@@ -132,7 +182,11 @@ class Solution(object):
 
     nodes: list[SolutionNode]
     vehicle_model: VehicleModelInterface
-    apexes: list[int] = field(default_factory=list[int])
+
+    def __post_init__(self) -> None:
+        for i in range(len(self.nodes) - 1):
+            self.nodes[i].next = self.nodes[i + 1]
+            self.nodes[i + 1].previous = self.nodes[i]
 
     @property
     def velocity(self) -> list[float]:
@@ -167,6 +221,31 @@ class Solution(object):
     ) -> None:
         for node in self.nodes:
             node.evaluate_vehicle_state(vehicle_model)
+
+    def get_sorted_apex_indices(self) -> list[int]:
+        """
+        Get a list of apex indices, sorted by maximum velocity from low to high.
+
+        Returns:
+            sorted_apex_indices (list[int]): Indices of apexes.
+        """
+        indices = [i for i, node in enumerate(self.nodes) if node.is_apex()]
+        velocities = [self.nodes[i].maximum_velocity for i in indices]
+        _, sorted_indices = zip(*sorted(zip(velocities, indices)))
+        return list(sorted_indices)
+
+    def get_apexes(self) -> list[SolutionNode]:
+        """
+        Get a list of apex nodes.
+
+        Returns:
+            apexes (list[SolutionNode]): Solution nodes which are apexes.
+        """
+        return [node for node in self.nodes if node.is_apex()]
+
+    def set_apexes(self, apexes: list[int]) -> None:
+        for i in apexes:
+            self.nodes[i].add_apex()
 
 
 def create_new_solution(

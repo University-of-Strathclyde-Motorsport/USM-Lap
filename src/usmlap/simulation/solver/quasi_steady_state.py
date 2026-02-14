@@ -33,22 +33,23 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution = solve_maximum_velocities(solution)
 
         logger.info("Finding apexes...")
-        solution.apexes = find_apexes(solution)
+        solution.set_apexes(find_apexes(solution))
 
         logger.info("Solving forward propagation...")
         for apex in progress.track(
-            solution.apexes.copy(), description="Solving forward propagation..."
+            solution.get_sorted_apex_indices(),
+            description="Solving forward propagation...",
         ):
-            if apex in solution.apexes:
-                solution = propagate_forward(solution, apex)
+            if solution.nodes[apex].is_apex():
+                solution = propagate_forward(solution, start_index=apex)
 
         logger.info("Solving backward propagation...")
         for apex in progress.track(
-            solution.apexes.copy(),
+            solution.get_sorted_apex_indices(),
             description="Solving backward propagation...",
         ):
-            if apex in solution.apexes:
-                solution = propagate_backward(solution, apex)
+            if solution.nodes[apex].is_apex():
+                solution = propagate_backward(solution, start_index=apex)
 
         logger.info("Resolving full vehicle state...")
         solution.evaluate_full_vehicle_state(solution.vehicle_model)
@@ -99,100 +100,81 @@ def find_apexes(solution: Solution) -> list[int]:
     apex_indices, _ = find_peaks(maximum_velocities)
     apex_indices = set(apex_indices.tolist())
     apex_indices.update([0, len(solution.nodes) - 1])
-    apex_velocities = [solution.nodes[i].maximum_velocity for i in apex_indices]
-    _, sorted_apexes = zip(*sorted(zip(apex_velocities, apex_indices)))
-    apexes = list(sorted_apexes)
-    logger.debug(f"Identified {len(apexes)} apexes: {apexes}")
-    return apexes
+    return list(apex_indices)
 
 
-def propagate_forward(solution: Solution, apex: int) -> Solution:
+def propagate_forward(solution: Solution, start_index: int) -> Solution:
     """
     Propagate the solution forward.
 
     Args:
-        solution (Solution): The initial solution.
+        solution (Solution): The initial unpropagated solution.
+        start_index (int): The index of the node to begin propagating from.
 
     Returns:
         solution (Solution): The forward-propagated solution.
     """
+    logger.debug(f"Forward propagating from apex {start_index}")
 
-    logger.debug(f"Forward propagating apex {apex}")
+    maximum_velocity = solution.nodes[start_index].maximum_velocity
+    solution.nodes[start_index].set_initial_velocity(maximum_velocity)
 
-    maximum_velocity = solution.nodes[apex].maximum_velocity
-    solution.nodes[apex].set_initial_velocity(maximum_velocity)
-
-    i = apex
-    while i < len(solution.nodes):
-        current_node = solution.nodes[i]
-
-        maximum_velocity = current_node.maximum_velocity
+    for node in solution.nodes[start_index:]:
         traction_limited_velocity = traction_limit_velocity(
-            solution.vehicle_model, current_node
+            solution.vehicle_model, node
         )
-        final_velocity = min(traction_limited_velocity, maximum_velocity)
+        final_velocity = min(traction_limited_velocity, node.maximum_velocity)
 
-        current_node.set_final_velocity(final_velocity)
-
-        if i >= len(solution.nodes) - 1:
+        node.set_final_velocity(final_velocity)
+        if node.next is None:
             break
+        node.next.set_initial_velocity(final_velocity)
 
-        next_node = solution.nodes[i + 1]
-        next_node.set_initial_velocity(final_velocity)
-
-        if i + 1 in solution.apexes:
-            if final_velocity < next_node.maximum_velocity:
-                logger.debug(f"Removing apex {i + 1}")
-                solution.apexes.remove(i + 1)
+        if node.next.is_apex():
+            if final_velocity < node.next.maximum_velocity:
+                node.next.remove_apex()
             else:
                 break
 
-        i += 1
-
-    logger.debug(f"Solved forward propogation of apex {apex}.")
+    logger.debug(f"Solved forward propogation of apex {start_index}.")
     return solution
 
 
-def propagate_backward(solution: Solution, apex: int) -> Solution:
+def propagate_backward(solution: Solution, start_index: int) -> Solution:
     """
     Propagate the solution backwards.
 
     Args:
-        solution (Solution): The initial solution.
+        solution (Solution): The initial unpropagated solution.
+        start_index (int): The index of the node to begin propagating from.
 
     Returns:
         solution (Solution): The backward-propagated solution.
     """
 
-    logger.debug(f"Backward propagating apex {apex}")
+    logger.debug(f"Backward propagating apex {start_index}")
 
-    i = apex
-    while i > 0:
-        current_node = solution.nodes[i]
-        previous_node = solution.nodes[i - 1]
-
-        maximum_velocity = previous_node.final_velocity
-        if maximum_velocity <= current_node.final_velocity:
+    for node in solution.nodes[start_index::-1]:
+        if node.previous is None:
             break
 
+        if node.previous.final_velocity < node.final_velocity:
+            break
+
+        if node.previous.is_apex():
+            node.previous.remove_apex()
+
         traction_limit_velocity = traction_limit_velocity_braking(
-            solution.vehicle_model, current_node
+            solution.vehicle_model, node
         )
-        initial_velocity = min(traction_limit_velocity, maximum_velocity)
+        initial_velocity = min(
+            traction_limit_velocity, node.previous.final_velocity
+        )
 
-        current_node.set_initial_velocity(initial_velocity)
-        previous_node.set_final_velocity(initial_velocity)
+        node.set_initial_velocity(initial_velocity)
+        node.previous.set_final_velocity(initial_velocity)
 
-        if i - 1 in solution.apexes:  # If previous node is an apex
-            if initial_velocity < previous_node.final_velocity:
-                logger.debug(f"Removing apex {i + 1}")
-                solution.apexes.remove(i - 1)
-            else:
-                break
-
-        i -= 1
-
-    logger.debug(f"Solved backward propogation of apex {apex}.")
+    logger.debug(f"Solved backward propogation of apex {start_index}.")
     return solution
 
 
