@@ -275,7 +275,7 @@ def create_new_solution(
         solution (Solution): A blank solution.
     """
     solution_nodes = [
-        SolutionNode(track_node=track_node) for track_node in track_mesh.nodes
+        SolutionNode(track_node=track_node) for track_node in track_mesh
     ]
     solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
     return solution
