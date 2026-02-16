@@ -46,7 +46,10 @@ class Channel(ABC):
 
     @classmethod
     def get_values(
-        cls, solution: Solution, unit: Optional[Unit] = None
+        cls,
+        solution: Solution,
+        unit: Optional[Unit] = None,
+        indices: Optional[list[int]] = None,
     ) -> list[float]:
         """
         Extract a list of values from a solution.
@@ -71,6 +74,9 @@ class Channel(ABC):
                 f"the quantity '{cls.unit.quantity}' for channel '{cls.name}'."
             )
             assert unit.quantity == cls.unit.quantity, error_message
+
+        if indices is not None:
+            solution = solution.get_subset(indices)
 
         si_values = cls._channel_fcn()(solution)
         return [unit.convert(value) for value in si_values]

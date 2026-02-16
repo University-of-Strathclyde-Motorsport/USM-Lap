@@ -1,9 +1,9 @@
 import logging
 
+from plot.apex import plot_apexes
 from plot.channels import plot_channels
 
 from simulation.competition import CompetitionSettings
-from simulation.plots import plot_apexes
 from simulation.simulation import SimulationSettings, simulate
 from simulation.solver.quasi_transient import QuasiTransientSolver
 from track.mesh import MeshGenerator
@@ -12,7 +12,7 @@ from vehicle.parameters import Parameter, get_new_vehicle
 from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARN,
     format="{asctime} {levelname}: {message}",
     style="{",
     datefmt="%H:%M:%S",

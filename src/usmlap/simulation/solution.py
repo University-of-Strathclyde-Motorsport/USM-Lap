@@ -5,6 +5,7 @@ This module contains code for representing the solution to a simulation.
 from __future__ import annotations
 
 import logging
+from copy import copy
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -222,6 +223,15 @@ class Solution(object):
         for node in self.nodes:
             node.evaluate_vehicle_state(vehicle_model)
 
+    def get_apex_indices(self) -> list[int]:
+        """
+        Get a list of apex indices.
+
+        Returns:
+            apex_indices (list[int]): Indices of apexes.
+        """
+        return [i for i, node in enumerate(self.nodes) if node.is_apex()]
+
     def get_sorted_apex_indices(self) -> list[int]:
         """
         Get a list of apex indices, sorted by maximum velocity from low to high.
@@ -229,7 +239,7 @@ class Solution(object):
         Returns:
             sorted_apex_indices (list[int]): Indices of apexes.
         """
-        indices = [i for i, node in enumerate(self.nodes) if node.is_apex()]
+        indices = self.get_apex_indices()
         velocities = [self.nodes[i].maximum_velocity for i in indices]
         _, sorted_indices = zip(*sorted(zip(velocities, indices)))
         return list(sorted_indices)
@@ -246,6 +256,21 @@ class Solution(object):
     def set_apexes(self, apexes: list[int]) -> None:
         for i in apexes:
             self.nodes[i].add_apex()
+
+    def get_subset(self, indices: list[int]) -> Solution:
+        """
+        Return a new solution containing only the nodes at the given indices.
+
+        Args:
+            indices (list[int]):
+                The indices of the nodes to include in the new solution.
+
+        Returns:
+            new_solution (Solution): The new solution.
+        """
+        new_solution = copy(self)
+        new_solution.nodes = [self.nodes[i] for i in indices]
+        return new_solution
 
 
 def create_new_solution(

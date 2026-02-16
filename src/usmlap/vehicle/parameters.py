@@ -97,24 +97,6 @@ class Parameter(ABC):
         """
         ...
 
-    # @classmethod
-    # def get_new_vehicle(
-    #     cls, baseline_vehicle: Vehicle, value: float
-    # ) -> Vehicle:
-    #     """
-    #     Generate a new vehicle with a modified parameter value.
-
-    #     Args:
-    #         baseline_vehicle (Vehicle): The baseline vehicle to use.
-    #         value (float): The updated parameter value.
-
-    #     Returns:
-    #         new_vehicle(Vehicle): A new vehicle with the updated parameter.
-    #     """
-    #     new_vehicle = deepcopy(baseline_vehicle)
-    #     cls.set_value(new_vehicle, value)
-    #     return new_vehicle
-
 
 def get_new_vehicle(
     baseline: Vehicle, parameter: Parameter, value: float

@@ -192,6 +192,18 @@ class Velocity(Channel, name="Velocity", unit=Unit.KILOMETER_PER_HOUR):
         ]
 
 
+class MaximumVelocity(
+    Channel, name="Maximum Velocity", unit=Unit.KILOMETER_PER_HOUR
+):
+    """Maximum, velocity of the vehicle, limited by lateral grip."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.maximum_velocity for node in solution.nodes
+        ]
+
+
 class Time(Channel, name="Time", unit=Unit.SECOND):
     """The time taken to traverse the track segment."""
 

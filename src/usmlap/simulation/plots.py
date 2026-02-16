@@ -13,30 +13,6 @@ LABELS = {
 }
 
 
-def plot_apexes(solution: Solution) -> None:
-    """
-    Plot a velocity profile, with apexes highlighted.
-    """
-    position = [node.track_node.position for node in solution.nodes]
-    maximum_velocity = [node.maximum_velocity for node in solution.nodes]
-    apexes = solution.get_apexes()
-    apex_velocity = [apex.maximum_velocity for apex in apexes]
-    apex_position = [apex.track_node.position for apex in apexes]
-
-    fig, ax = plt.subplots()
-    fig.suptitle("Solution")
-    ax.plot(position, maximum_velocity, color="lightblue")
-    ax.plot(position, solution.velocity, color="blue")
-    ax.scatter(apex_position, apex_velocity, color="red")
-    for i in range(len(apexes)):
-        plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))
-    ax.set_xlabel("Position (m)")
-    ax.set_ylabel(LABELS["velocity"])
-    ax.set_title("Maximum Velocity")
-    ax.grid()
-    plt.show()
-
-
 def plot_velocity_acceleration(solution: Solution) -> None:
     """
     Create a scatter plot of velocity and longitudinal acceleration.
