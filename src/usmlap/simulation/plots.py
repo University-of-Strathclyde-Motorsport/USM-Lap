@@ -4,7 +4,6 @@ This module contains functions for plotting simulation results.
 
 import matplotlib.pyplot as plt
 
-from simulation.channels.channel import Channel
 from simulation.solution import Solution
 
 LABELS = {
@@ -86,29 +85,4 @@ def plot_ggv(solution: Solution) -> None:
     ax.set_title("GGV Plot")
     ax.set_ylim(-50, 50)
     ax.grid()
-    plt.show()
-
-
-def plot_channels(solution: Solution, channels: list[str]) -> None:
-    """
-    Plot a list of data channels.
-
-    Args:
-        solution (Solution): The solution to plot.
-        channels (list[str]): The names of the data channels to plot.
-
-    Raises:
-        KeyError: If no data channel with a given name exists.
-    """
-
-    fig, axs = plt.subplots(nrows=len(channels), sharex=True)
-    fig.suptitle("Solution")
-    axs[-1].set_xlabel("Position (m)")
-    position = [node.track_node.position for node in solution.nodes]
-    for i, channel_name in enumerate(channels):
-        channel = Channel.get_channel(channel_name)
-        data = channel.get_values(solution)
-        axs[i].plot(position, data)
-        axs[i].set_ylabel(f"{channel_name} ({channel.unit})")
-        axs[i].grid()
     plt.show()

@@ -1,11 +1,14 @@
 import logging
 
+from plot.channels import plot_channels
+
 from simulation.competition import CompetitionSettings
-from simulation.plots import plot_apexes, plot_channels
+from simulation.plots import plot_apexes
 from simulation.simulation import SimulationSettings, simulate
 from simulation.solver.quasi_transient import QuasiTransientSolver
 from track.mesh import MeshGenerator
 from track.track_data import load_track_from_spreadsheet
+from vehicle.parameters import Parameter, get_new_vehicle
 from vehicle.vehicle import load_vehicle
 
 logging.basicConfig(
@@ -30,9 +33,14 @@ competition_settings = CompetitionSettings(
 simulation_results = simulate(vehicle, mesh, simulation_settings)
 print(f"Solution time: {simulation_results.total_time:.3f}s")
 
+mass = Parameter.get_parameter("Curb Mass")
+heavy_car = get_new_vehicle(vehicle, mass, 300)
+heavy_results = simulate(heavy_car, mesh, simulation_settings)
+print(f"Heavy time: {heavy_results.total_time:.3f}s")
+
 plot_apexes(simulation_results)
 plot_channels(
-    simulation_results,
+    [simulation_results, heavy_results],
     [
         "Velocity",
         "Curvature",

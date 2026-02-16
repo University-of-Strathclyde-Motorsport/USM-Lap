@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from simulation.competition import CompetitionSettings, simulate_competition
 from simulation.points.points import calculate_points
-from vehicle.parameters import Parameter
+from vehicle.parameters import Parameter, get_new_vehicle
 from vehicle.vehicle import Vehicle
 
 PARAMETER_DELTA_SCALAR = 0.0001
@@ -19,12 +19,12 @@ def points_sensitivity(
     parameter_delta = baseline_value * PARAMETER_DELTA_SCALAR
 
     increased_value = baseline_value + parameter_delta
-    increased_vehicle = parameter.get_new_vehicle(vehicle, increased_value)
+    increased_vehicle = get_new_vehicle(vehicle, parameter, increased_value)
     increased_results = simulate_competition(increased_vehicle, settings)
     increased_points = calculate_points(increased_results).total
 
     decreased_value = baseline_value - parameter_delta
-    decreased_vehicle = parameter.get_new_vehicle(vehicle, decreased_value)
+    decreased_vehicle = get_new_vehicle(vehicle, parameter, decreased_value)
     decreased_results = simulate_competition(decreased_vehicle, settings)
     decreased_points = calculate_points(decreased_results).total
 
@@ -53,17 +53,13 @@ class SensitivityAnalysis(object):
 
     @property
     def increased_value_vehicle(self) -> Vehicle:
-        return self.parameter.get_new_vehicle(
-            baseline_vehicle=self.baseline_vehicle,
-            value=self.baseline_value + self.parameter_delta,
-        )
+        new_value = self.baseline_value + self.parameter_delta
+        return get_new_vehicle(self.baseline_vehicle, self.parameter, new_value)
 
     @property
     def decreased_value_vehicle(self) -> Vehicle:
-        return self.parameter.get_new_vehicle(
-            baseline_vehicle=self.baseline_vehicle,
-            value=self.baseline_value - self.parameter_delta,
-        )
+        new_value = self.baseline_value - self.parameter_delta
+        return get_new_vehicle(self.baseline_vehicle, self.parameter, new_value)
 
     def get_sensitivity(self) -> float:
         vehicles = {

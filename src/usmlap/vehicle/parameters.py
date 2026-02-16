@@ -97,23 +97,42 @@ class Parameter(ABC):
         """
         ...
 
-    @classmethod
-    def get_new_vehicle(
-        cls, baseline_vehicle: Vehicle, value: float
-    ) -> Vehicle:
-        """
-        Generate a new vehicle with a modified parameter value.
+    # @classmethod
+    # def get_new_vehicle(
+    #     cls, baseline_vehicle: Vehicle, value: float
+    # ) -> Vehicle:
+    #     """
+    #     Generate a new vehicle with a modified parameter value.
 
-        Args:
-            baseline_vehicle (Vehicle): The baseline vehicle to use.
-            value (float): The updated parameter value.
+    #     Args:
+    #         baseline_vehicle (Vehicle): The baseline vehicle to use.
+    #         value (float): The updated parameter value.
 
-        Returns:
-            new_vehicle(Vehicle): A new vehicle with the updated parameter.
-        """
-        new_vehicle = deepcopy(baseline_vehicle)
-        cls.set_value(new_vehicle, value)
-        return new_vehicle
+    #     Returns:
+    #         new_vehicle(Vehicle): A new vehicle with the updated parameter.
+    #     """
+    #     new_vehicle = deepcopy(baseline_vehicle)
+    #     cls.set_value(new_vehicle, value)
+    #     return new_vehicle
+
+
+def get_new_vehicle(
+    baseline: Vehicle, parameter: Parameter, value: float
+) -> Vehicle:
+    """
+    Generate a new vehicle with a modified parameter value.
+
+    Args:
+        baseline (Vehicle): The baseline vehicle to use.
+        parameter (Parameter): The parameter to modify.
+        value (float): The updated parameter value.
+
+    Returns:
+        new_vehicle(Vehicle): A new vehicle with the updated parameter.
+    """
+    new_vehicle = deepcopy(baseline)
+    parameter.set_value(new_vehicle, value)
+    return new_vehicle
 
 
 class CurbMass(Parameter, parameter_name="Curb Mass", unit="kg"):

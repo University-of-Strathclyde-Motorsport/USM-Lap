@@ -11,7 +11,7 @@ import numpy as np
 
 from simulation.competition import CompetitionSettings, simulate_competition
 from simulation.points.points import calculate_points
-from vehicle.parameters import Parameter
+from vehicle.parameters import Parameter, get_new_vehicle
 from vehicle.vehicle import Vehicle
 
 
@@ -53,9 +53,7 @@ class SweepSettings(object):
                 and the corresponding vehicle.
         """
         for value in self.values:
-            vehicle = self.parameter.get_new_vehicle(
-                baseline_vehicle=baseline_vehicle, value=value
-            )
+            vehicle = get_new_vehicle(baseline_vehicle, self.parameter, value)
             yield (value, vehicle)
 
 
