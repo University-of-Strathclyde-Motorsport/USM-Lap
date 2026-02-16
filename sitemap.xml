@@ -2,130 +2,270 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/explanation/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/how-to-guides/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/tutorials/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/summary/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/__main__/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
-         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/datatypes/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/filepath/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/analysis/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/analysis/coupling/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/analysis/sweep_1d/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/plot/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/plot/apex/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/plot/channels/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/plot/common/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/plot/ggv/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/competition/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/environment/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/sensitivity/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/simulation/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/solution/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/vehicle_state/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/channels/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/channels/channel/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/channels/functions/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/channels/library/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/model/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/model/point_mass/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/model/vehicle_model/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/points/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/points/competition_data/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/points/points/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/points/points_functions/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/solver/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/solver/quasi_steady_state/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/solver/quasi_transient/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/simulation/solver/solver_interface/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/track/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/track/mesh/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/track/track_data/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/array/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/datatypes/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/geometry/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/proportion/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/utils/units/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/aero/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/brakes/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/common/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/driver/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/inertia/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/parameters/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/steering/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/suspension/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/transmission/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/vehicle/</loc>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/powertrain/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/powertrain/accumulator/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/powertrain/motor/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/powertrain/motor_controller/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/powertrain/powertrain/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/magic_formula/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/tir/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://university-of-strathclyde-motorsport.github.io/USM-Lap/autoapi/usmlap/vehicle/tyre/tyre_model/</loc>
-         <lastmod>2025-10-07</lastmod>
+         <lastmod>2026-02-16</lastmod>
     </url>
 </urlset>

@@ -1,0 +1,70 @@
+@startuml Brakes
+
+class "MasterCylinder" as brakes.MasterCylinder {
+  colour : str
+  piston_diameter : float
+  piston_area() -> float
+  library_name() -> str
+}
+
+class "BrakeCaliper" as brakes.BrakeCaliper {
+  piston_area : float
+  piston_count : int
+  piston_diameter() -> float
+  library_name() -> str
+}
+
+class "BrakeDisc" as brakes.BrakeDisc {
+  outer_diameter : float
+  library_name() -> str
+}
+
+class "BrakePad" as brakes.BrakePad {
+  coefficient_of_friction : float
+  height : float
+  library_name() -> str
+}
+
+class "BrakeLine" as brakes.BrakeLine {
+  cylinder : brakes.MasterCylinder
+  caliper : brakes.BrakeCaliper
+  disc : brakes.BrakeDisc
+  pad : brakes.BrakePad
+  - area_scaling_factor() -> float
+  - effective_radius() -> float
+  - force_to_torque_scaling_factor() -> float
+  + force_to_torque(cylinder_force: float) -> float
+  + torque_to_force(braking_torque: float) -> float
+  + get_brake_pressure(cylinder_force: float) -> float
+}
+
+class "Brakes" as brakes.Brakes {
+  front : brakes.BrakeLine
+  rear: brakes.BrakeLine
+  pedal_ratio : float
+  front_brake_bias : float
+  regen_torque : float
+  + get_overall_brake_balance() -> tuple[float, float]
+  + pedal_force_to_wheel_torque(pedal_force: float) -> tuple[float, float]
+}
+
+abstract "Component" as common.Component {
+  {abstract} + name : str
+  {abstract}{static} # library_name() -> str
+  {static} + from_library(name: str) -> Component
+  {static} + list_components() -> list[str]
+}
+
+note left: Provides logic for\nloading component\ndata from a library
+
+brakes.Brakes --> brakes.BrakeLine : front
+brakes.Brakes --> brakes.BrakeLine : rear
+brakes.BrakeLine --> brakes.MasterCylinder : cylinder
+brakes.BrakeLine --> brakes.BrakeCaliper : caliper
+brakes.BrakeLine --> brakes.BrakeDisc : disc
+brakes.BrakeLine --> brakes.BrakePad : pad
+
+brakes.MasterCylinder o-- common.Component
+brakes.BrakeCaliper o-- common.Component
+brakes.BrakeDisc o-- common.Component
+brakes.BrakePad o-- common.Component
