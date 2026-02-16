@@ -2,16 +2,22 @@
 This module contains functions for plotting traces of channels.
 """
 
+from typing import Literal
+
 import matplotlib.pyplot as plt
 
-from simulation.channels import get_channel, library
+from simulation.channels import get_channel
 from simulation.solution import Solution
 
 from .common import show_after_plotting
 
 
 @show_after_plotting
-def plot_channels(solutions: list[Solution], channels: list[str]) -> None:
+def plot_channels(
+    solutions: list[Solution],
+    channels: list[str],
+    x_axis: Literal["Position", "Time"] = "Position",
+) -> None:
     """
     Plot traces of the specified data channels.
 
@@ -23,7 +29,7 @@ def plot_channels(solutions: list[Solution], channels: list[str]) -> None:
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
     fig.suptitle("Solution")
 
-    x_channel = library.Position
+    x_channel = get_channel(x_axis)
     axs[-1].set_xlabel(x_channel.get_label())
 
     y_channels = [get_channel(channel_name) for channel_name in channels]

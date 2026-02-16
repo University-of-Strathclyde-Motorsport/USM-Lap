@@ -129,7 +129,7 @@ class MotorEnergy(Channel, name="Motor Energy", unit=Unit.KILOWATT_HOUR):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return fcn.integral(MotorPower, Time)
+        return fcn.integral(MotorPower, SegmentTime)
 
 
 class MotorForce(Channel, name="Motor Force", unit=Unit.NEWTON):
@@ -204,12 +204,20 @@ class MaximumVelocity(
         ]
 
 
-class Time(Channel, name="Time", unit=Unit.SECOND):
-    """The time taken to traverse the track segment."""
+class SegmentTime(Channel, name="Segment Time", unit=Unit.SECOND):
+    """Time taken to traverse the track segment."""
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [node.time for node in solution.nodes]
+
+
+class Time(Channel, name="Time", unit=Unit.SECOND):
+    """Cumulative time for the simulation."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return fcn.cumulative_sum(SegmentTime)
 
 
 class LateralAcceleration(Channel, name="Lateral Acceleration", unit=Unit.G):

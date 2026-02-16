@@ -48,6 +48,7 @@ plot_channels(
         "Lateral Acceleration",
         "State of Charge",
     ],
+    x_axis="Time",
 )
 logging.info(f"Total time: {simulation_results.total_time:.3f}s")
 
