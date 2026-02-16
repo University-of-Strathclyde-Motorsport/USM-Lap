@@ -76,7 +76,7 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     """
     lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
     for node in progress.track(
-        solution.nodes, description="Solving maximum velocities..."
+        solution, description="Solving maximum velocities..."
     ):
         node.maximum_velocity = lateral_vehicle_model(
             node.state_variables, node.track_node
@@ -96,7 +96,7 @@ def find_apexes(solution: Solution) -> list[int]:
     Returns:
         apexes (list[int]): The indices of the apexes.
     """
-    maximum_velocities = [-node.maximum_velocity for node in solution.nodes]
+    maximum_velocities = [-node.maximum_velocity for node in solution]
     apex_indices, _ = find_peaks(maximum_velocities)
     apex_indices = set(apex_indices.tolist())
     apex_indices.update([0, len(solution.nodes) - 1])

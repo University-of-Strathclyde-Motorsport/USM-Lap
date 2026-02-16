@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from copy import copy
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Generator, Optional
 
 from simulation.model.vehicle_model import VehicleModelInterface
 from simulation.vehicle_state import FullVehicleState, StateVariables
@@ -189,13 +189,17 @@ class Solution(object):
             self.nodes[i].next = self.nodes[i + 1]
             self.nodes[i + 1].previous = self.nodes[i]
 
+    def __iter__(self) -> Generator[SolutionNode]:
+        for node in self.nodes:
+            yield node
+
     @property
     def total_time(self) -> float:
-        return sum(node.time for node in self.nodes)
+        return sum(node.time for node in self)
 
     @property
     def total_length(self) -> float:
-        return sum(node.length for node in self.nodes)
+        return sum(node.length for node in self)
 
     @property
     def average_velocity(self) -> float:
@@ -235,7 +239,7 @@ class Solution(object):
         Returns:
             apexes (list[SolutionNode]): Solution nodes which are apexes.
         """
-        return [node for node in self.nodes if node.is_apex()]
+        return [node for node in self if node.is_apex()]
 
     def set_apexes(self, apexes: list[int]) -> None:
         for i in apexes:
