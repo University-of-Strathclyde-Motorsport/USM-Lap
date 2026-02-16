@@ -190,22 +190,6 @@ class Solution(object):
             self.nodes[i + 1].previous = self.nodes[i]
 
     @property
-    def velocity(self) -> list[float]:
-        return [node.average_velocity for node in self.nodes]
-
-    @property
-    def initial_velocity(self) -> list[float]:
-        return [node.initial_velocity for node in self.nodes]
-
-    @property
-    def lateral_acceleration(self) -> list[float]:
-        return [node.lateral_acceleration for node in self.nodes]
-
-    @property
-    def longitudinal_acceleration(self) -> list[float]:
-        return [node.longitudinal_acceleration for node in self.nodes]
-
-    @property
     def total_time(self) -> float:
         return sum(node.time for node in self.nodes)
 
