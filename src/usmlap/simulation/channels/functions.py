@@ -93,8 +93,8 @@ def divide(channel_1: ChannelFcn, channel_2: ChannelFcn) -> ChannelFcn:
     Perform element-wise division of two channels.
 
     Args:
-        numerator (ChannelFcn): A channel to be divided.
-        denominator (ChannelFcn): Another channel to divide by.
+        channel_1 (ChannelFcn): A channel to be divided.
+        channel_2 (ChannelFcn): Another channel to divide by.
 
     Returns:
         division (ChannelFcn):

@@ -6,30 +6,38 @@ from typing import Literal
 
 import matplotlib.pyplot as plt
 
-from simulation.channels import get_channel
+from simulation.channels import Channel, get_channel
+from simulation.channels.library import Position, Time
 from simulation.solution import Solution
 
 from .common import show_after_plotting
+
+X_AXIS_OPTIONS = Literal["Position", "Time"]
+X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
+    "Position": Position,
+    "Time": Time,
+}
 
 
 @show_after_plotting
 def plot_channels(
     solutions: list[Solution],
     channels: list[str],
-    x_axis: Literal["Position", "Time"] = "Position",
+    x_axis: X_AXIS_OPTIONS = "Position",
 ) -> None:
     """
     Plot traces of the specified data channels.
 
     Args:
-        solution (Solution): The solution to plot.
+        solutions (list[Solution]): The solution to plot.
         channels (list[str]): The names of the data channels to plot.
+        x_axis (Literal["Position", "Time"]): The function to plot on the x-axis
     """
 
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
     fig.suptitle("Solution")
 
-    x_channel = get_channel(x_axis)
+    x_channel = X_AXIS_CHANNELS[x_axis]
     axs[-1].set_xlabel(x_channel.get_label())
 
     y_channels = [get_channel(channel_name) for channel_name in channels]
