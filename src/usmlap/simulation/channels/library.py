@@ -14,7 +14,7 @@ class CentripetalForce(Channel, name="Centripetal Force", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.centripetal_force for node in solution.nodes
+            node.vehicle_state.centripetal_force for node in solution
         ]
 
 
@@ -24,7 +24,7 @@ class Downforce(Channel, name="Downforce", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.downforce for node in solution.nodes
+            node.vehicle_state.downforce for node in solution
         ]
 
 
@@ -33,9 +33,7 @@ class Drag(Channel, name="Drag", unit=Unit.NEWTON):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.vehicle_state.drag for node in solution.nodes
-        ]
+        return lambda solution: [node.vehicle_state.drag for node in solution]
 
 
 class DragPower(Channel, name="Drag Power", unit=Unit.KILOWATT):
@@ -60,7 +58,7 @@ class ResistiveFx(Channel, name="Resistive Force", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.resistive_fx for node in solution.nodes
+            node.vehicle_state.resistive_fx for node in solution
         ]
 
 
@@ -70,7 +68,7 @@ class RequiredFy(Channel, name="Required Fy", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.required_fy for node in solution.nodes
+            node.vehicle_state.required_fy for node in solution
         ]
 
 
@@ -80,7 +78,7 @@ class NormalForce(Channel, name="Normal Force", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.normal_force for node in solution.nodes
+            node.vehicle_state.normal_force for node in solution
         ]
 
 
@@ -92,7 +90,7 @@ class TotalLateralTraction(
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.total_lateral_traction for node in solution.nodes
+            node.vehicle_state.total_lateral_traction for node in solution
         ]
 
 
@@ -102,7 +100,7 @@ class MotorSpeed(Channel, name="Motor Speed", unit=Unit.RADIANS_PER_SECOND):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.motor_speed for node in solution.nodes
+            node.vehicle_state.motor_speed for node in solution
         ]
 
 
@@ -112,7 +110,7 @@ class MotorTorque(Channel, name="Motor Torque", unit=Unit.NEWTON_METER):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.motor_torque for node in solution.nodes
+            node.vehicle_state.motor_torque for node in solution
         ]
 
 
@@ -138,7 +136,7 @@ class MotorForce(Channel, name="Motor Force", unit=Unit.NEWTON):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.vehicle_state.motor_force for node in solution.nodes
+            node.vehicle_state.motor_force for node in solution
         ]
 
 
@@ -147,9 +145,7 @@ class Curvature(Channel, name="Curvature", unit=Unit.PER_METER):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.track_node.curvature for node in solution.nodes
-        ]
+        return lambda solution: [node.track_node.curvature for node in solution]
 
 
 class CornerRadius(Channel, name="Corner Radius", unit=Unit.METER):
@@ -157,9 +153,7 @@ class CornerRadius(Channel, name="Corner Radius", unit=Unit.METER):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.track_node.radius for node in solution.nodes
-        ]
+        return lambda solution: [node.track_node.radius for node in solution]
 
 
 class Distance(Channel, name="Distance", unit=Unit.METER):
@@ -167,9 +161,7 @@ class Distance(Channel, name="Distance", unit=Unit.METER):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.track_node.length for node in solution.nodes
-        ]
+        return lambda solution: [node.track_node.length for node in solution]
 
 
 class Position(Channel, name="Position", unit=Unit.METER):
@@ -177,9 +169,7 @@ class Position(Channel, name="Position", unit=Unit.METER):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.track_node.position for node in solution.nodes
-        ]
+        return lambda solution: [node.track_node.position for node in solution]
 
 
 class Velocity(Channel, name="Velocity", unit=Unit.KILOMETER_PER_HOUR):
@@ -187,9 +177,7 @@ class Velocity(Channel, name="Velocity", unit=Unit.KILOMETER_PER_HOUR):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.average_velocity for node in solution.nodes
-        ]
+        return lambda solution: [node.average_velocity for node in solution]
 
 
 class MaximumVelocity(
@@ -199,9 +187,7 @@ class MaximumVelocity(
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.maximum_velocity for node in solution.nodes
-        ]
+        return lambda solution: [node.maximum_velocity for node in solution]
 
 
 class SegmentTime(Channel, name="Segment Time", unit=Unit.SECOND):
@@ -209,7 +195,7 @@ class SegmentTime(Channel, name="Segment Time", unit=Unit.SECOND):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [node.time for node in solution.nodes]
+        return lambda solution: [node.time for node in solution]
 
 
 class Time(Channel, name="Time", unit=Unit.SECOND):
@@ -225,9 +211,7 @@ class LateralAcceleration(Channel, name="Lateral Acceleration", unit=Unit.G):
 
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
-        return lambda solution: [
-            node.lateral_acceleration for node in solution.nodes
-        ]
+        return lambda solution: [node.lateral_acceleration for node in solution]
 
 
 class LongitudinalAcceleration(
@@ -238,7 +222,7 @@ class LongitudinalAcceleration(
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.longitudinal_acceleration for node in solution.nodes
+            node.longitudinal_acceleration for node in solution
         ]
 
 
@@ -258,5 +242,5 @@ class StateOfCharge(Channel, name="State of Charge", unit=Unit.UNITLESS):
     @classmethod
     def _channel_fcn(cls) -> ChannelFcn:
         return lambda solution: [
-            node.state_variables.state_of_charge for node in solution.nodes
+            node.state_variables.state_of_charge for node in solution
         ]

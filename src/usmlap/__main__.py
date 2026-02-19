@@ -20,48 +20,19 @@ logging.basicConfig(
 #     logging.DEBUG
 # )
 
-vehicle = load_vehicle("USM23 Baseline.json")
 track_data = load_track_from_spreadsheet("FS AutoX Germany 2012.xlsx")
-
 mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
-simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
-competition_settings = CompetitionSettings(
-    autocross_track=track_data, simulation_settings=simulation_settings
-)
 
-simulation_results = simulate(vehicle, mesh, simulation_settings)
-print(f"Solution time: {simulation_results.total_time:.3f}s")
-
+vehicle = load_vehicle("USM23 Baseline.json")
 mass = Parameter.get_parameter("Curb Mass")
 heavy_car = get_new_vehicle(vehicle, mass, 300)
-heavy_results = simulate(heavy_car, mesh, simulation_settings)
-print(f"Heavy time: {heavy_results.total_time:.3f}s")
 
-plot_apexes(simulation_results)
-plot_channels(
-    [simulation_results, heavy_results],
-    [
-        "Velocity",
-        "Curvature",
-        "Longitudinal Acceleration",
-        "Lateral Acceleration",
-        "State of Charge",
-    ],
-    x_axis="Time",
-)
-logging.info(f"Total time: {simulation_results.total_time:.3f}s")
+simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
+results = compare_vehicles([vehicle, heavy_car], mesh, simulation_settings)
+baseline_solution = results.get_solutions()[0]
 
-# sweep_settings = SweepSettings(
-#     parameter=Parameter.get_parameter("Curb Mass"),
-#     start_value=150,
-#     end_value=250,
-#     number_of_steps=10,
-# )
-# coupling_results = coupling(
-#     baseline_vehicle=vehicle,
-#     sweep_settings=sweep_settings,
-#     coupled_parameter=Parameter.get_parameter("Drag Coefficient"),
-#     competition_settings=competition_settings,
-# )
-# coupling_results.plot()
-# plot GGV
+for _, solution in results:
+    print(f"Total time: {solution.total_time:.3f}s")
+
+plot_apexes(baseline_solution)
+plot_channels(results.get_solutions(), CHANNELS, x_axis="Position")

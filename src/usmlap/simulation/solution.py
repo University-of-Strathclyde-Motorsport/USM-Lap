@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from copy import copy
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Generator, Optional
 
 from usmlap.track.mesh import Mesh, TrackNode
 
@@ -190,13 +190,17 @@ class Solution(object):
             self.nodes[i].next = self.nodes[i + 1]
             self.nodes[i + 1].previous = self.nodes[i]
 
+    def __iter__(self) -> Generator[SolutionNode]:
+        for node in self.nodes:
+            yield node
+
     @property
     def total_time(self) -> float:
-        return sum(node.time for node in self.nodes)
+        return sum(node.time for node in self)
 
     @property
     def total_length(self) -> float:
-        return sum(node.length for node in self.nodes)
+        return sum(node.length for node in self)
 
     @property
     def average_velocity(self) -> float:
@@ -236,7 +240,7 @@ class Solution(object):
         Returns:
             apexes (list[SolutionNode]): Solution nodes which are apexes.
         """
-        return [node for node in self.nodes if node.is_apex()]
+        return [node for node in self if node.is_apex()]
 
     def set_apexes(self, apexes: list[int]) -> None:
         for i in apexes:
@@ -272,7 +276,7 @@ def create_new_solution(
         solution (Solution): A blank solution.
     """
     solution_nodes = [
-        SolutionNode(track_node=track_node) for track_node in track_mesh.nodes
+        SolutionNode(track_node=track_node) for track_node in track_mesh
     ]
     solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
     return solution

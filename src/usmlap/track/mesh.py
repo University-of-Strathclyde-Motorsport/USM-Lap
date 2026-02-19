@@ -7,7 +7,7 @@ from __future__ import annotations
 import copy
 import math
 from math import atan, ceil, pi
-from typing import Annotated
+from typing import Annotated, Generator
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -66,7 +66,7 @@ class TrackNode(BaseModel):
         return value * math.cos(self.banking) * math.cos(self.inclination)
 
 
-class Mesh(BaseModel):
+class Mesh(object):
     """
     A mesh of a track.
 
@@ -79,13 +79,23 @@ class Mesh(BaseModel):
     nodes: list[TrackNode]
     configuration: Configuration
 
+    def __init__(
+        self, nodes: list[TrackNode], configuration: Configuration
+    ) -> None:
+        self.nodes = nodes
+        self.configuration = configuration
+
+    def __iter__(self) -> Generator[TrackNode]:
+        for node in self.nodes:
+            yield node
+
     @property
     def node_count(self) -> float:
         return len(self.nodes)
 
     @property
     def track_length(self) -> float:
-        return sum(node.length for node in self.nodes)
+        return sum(node.length for node in self)
 
     @property
     def resolution(self) -> float:
@@ -96,7 +106,7 @@ class Mesh(BaseModel):
 
         endurance_nodes: list[TrackNode] = []
         for _ in range(number_of_laps):
-            for node in self.nodes:
+            for node in self:
                 endurance_nodes.append(copy.copy(node))
 
         position = 0
@@ -107,11 +117,11 @@ class Mesh(BaseModel):
         return Mesh(nodes=endurance_nodes, configuration=self.configuration)
 
     def plot_traces(self) -> None:
-        position = [node.position for node in self.nodes]
-        curvature = [node.curvature for node in self.nodes]
-        elevation = [node.elevation for node in self.nodes]
-        inclination = [node.inclination for node in self.nodes]
-        banking = [node.banking for node in self.nodes]
+        position = [node.position for node in self]
+        curvature = [node.curvature for node in self]
+        elevation = [node.elevation for node in self]
+        inclination = [node.inclination for node in self]
+        banking = [node.banking for node in self]
 
         data: dict[str, list[float]] = {
             "Curvature": curvature,
