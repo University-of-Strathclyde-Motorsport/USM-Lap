@@ -1,14 +1,22 @@
 import logging
 
+from usmlap.analysis.compare import compare_vehicles
 from usmlap.plot.apex import plot_apexes
 from usmlap.plot.channels import plot_channels
-from usmlap.simulation.competition import CompetitionSettings
-from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.simulation import SimulationSettings
 from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
 from usmlap.track.mesh import MeshGenerator
 from usmlap.track.track_data import load_track_from_spreadsheet
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import load_vehicle
+
+CHANNELS = [
+    "Velocity",
+    "Curvature",
+    "Longitudinal Acceleration",
+    "Lateral Acceleration",
+    "State of Charge",
+]
 
 logging.basicConfig(
     level=logging.WARN,
