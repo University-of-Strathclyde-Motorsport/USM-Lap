@@ -6,8 +6,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from utils.datatypes import FourCorner
-from vehicle.tyre.tyre_model import TyreAttitude
+from usmlap.utils.datatypes import FourCorner
+from usmlap.vehicle.tyre.tyre_model import TyreAttitude
 
 
 @dataclass
@@ -68,17 +68,17 @@ class FullVehicleState(object):
             resistive_fx=0,
             required_fy=0,
             normal_force=0,
-            normal_loads=FourCorner([0, 0, 0, 0]),
+            normal_loads=FourCorner((0, 0, 0, 0)),
             tyre_attitudes=FourCorner(
-                [
+                (
                     TyreAttitude(normal_load=0),
                     TyreAttitude(normal_load=0),
                     TyreAttitude(normal_load=0),
                     TyreAttitude(normal_load=0),
-                ]
+                )
             ),
-            lateral_traction=FourCorner([0, 0, 0, 0]),
-            longitudinal_traction=FourCorner([0, 0, 0, 0]),
+            lateral_traction=FourCorner((0, 0, 0, 0)),
+            longitudinal_traction=FourCorner((0, 0, 0, 0)),
             motor_speed=0,
             motor_torque=0,
             motor_power=0,

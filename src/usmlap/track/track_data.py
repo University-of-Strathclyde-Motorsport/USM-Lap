@@ -12,14 +12,14 @@ from enum import Enum
 from pathlib import Path
 from typing import Annotated, Self, TypeVar, overload
 
-import filepath
 import numpy as np
 import pandas
 from annotated_types import Unit
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.dataclasses import dataclass
 
-from utils.array import cumsum, interp_previous
+from usmlap import filepath
+from usmlap.utils.array import cumsum, interp_previous
 
 TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)

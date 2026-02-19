@@ -7,7 +7,7 @@ from typing import Annotated
 from annotated_types import Unit
 from pydantic import PositiveFloat
 
-from utils.datatypes import Percentage
+from usmlap.utils.datatypes import Percentage
 
 from .common import Subsystem
 

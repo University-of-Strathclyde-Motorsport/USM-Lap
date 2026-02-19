@@ -8,9 +8,9 @@ from math import sqrt
 from rich import progress
 from scipy.signal import find_peaks
 
-from simulation.model.vehicle_model import VehicleModelInterface
-from simulation.solution import Solution, SolutionNode
-from simulation.vehicle_state import StateVariables
+from usmlap.simulation.model.vehicle_model import VehicleModelInterface
+from usmlap.simulation.solution import Solution, SolutionNode
+from usmlap.simulation.vehicle_state import StateVariables
 
 from .solver_interface import SolverInterface
 

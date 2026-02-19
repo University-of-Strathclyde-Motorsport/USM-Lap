@@ -4,7 +4,7 @@ This module implements a quasi-transient solver.
 
 import logging
 
-from simulation.solution import Solution
+from usmlap.simulation.solution import Solution
 
 from .quasi_steady_state import QuasiSteadyStateSolver
 from .solver_interface import SolverInterface

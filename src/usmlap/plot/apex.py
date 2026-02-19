@@ -4,8 +4,12 @@ This module contains functions for plotting velocity profiles and apexes.
 
 import matplotlib.pyplot as plt
 
-from simulation.channels.library import MaximumVelocity, Position, Velocity
-from simulation.solution import Solution
+from usmlap.simulation.channels.library import (
+    MaximumVelocity,
+    Position,
+    Velocity,
+)
+from usmlap.simulation.solution import Solution
 
 
 def plot_apexes(solution: Solution) -> None:

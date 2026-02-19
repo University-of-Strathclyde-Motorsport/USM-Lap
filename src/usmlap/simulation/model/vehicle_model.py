@@ -4,13 +4,13 @@ This module defines the interface for vehicle models.
 
 from abc import ABC, abstractmethod
 
-from simulation.environment import Environment
-from simulation.vehicle_state import FullVehicleState, StateVariables
-from track.mesh import TrackNode
-from utils.datatypes import FourCorner
-from vehicle.aero import AeroAttitude
-from vehicle.tyre.tyre_model import TyreAttitude
-from vehicle.vehicle import Vehicle
+from usmlap.simulation.environment import Environment
+from usmlap.simulation.vehicle_state import FullVehicleState, StateVariables
+from usmlap.track.mesh import TrackNode
+from usmlap.utils.datatypes import FourCorner
+from usmlap.vehicle.aero import AeroAttitude
+from usmlap.vehicle.tyre.tyre_model import TyreAttitude
+from usmlap.vehicle.vehicle import Vehicle
 
 
 class VehicleModelInterface(ABC):

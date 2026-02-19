@@ -9,9 +9,10 @@ from copy import copy
 from dataclasses import dataclass, field
 from typing import Optional
 
-from simulation.model.vehicle_model import VehicleModelInterface
-from simulation.vehicle_state import FullVehicleState, StateVariables
-from track.mesh import Mesh, TrackNode
+from usmlap.track.mesh import Mesh, TrackNode
+
+from .model.vehicle_model import VehicleModelInterface
+from .vehicle_state import FullVehicleState, StateVariables
 
 
 @dataclass

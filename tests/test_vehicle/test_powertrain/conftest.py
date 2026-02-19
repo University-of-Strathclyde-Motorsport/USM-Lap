@@ -24,7 +24,12 @@ def cell() -> Cell:
 
 @pytest.fixture
 def accumulator(cell: Cell) -> Accumulator:
-    return Accumulator(cell=cell, cells_in_parallel=5, cells_in_series=100)
+    return Accumulator(
+        cell=cell,
+        cells_in_parallel=5,
+        cells_in_series=100,
+        soc_current_derate_point=0.3,
+    )
 
 
 @pytest.fixture
@@ -44,7 +49,9 @@ def motor() -> Motor:
 
 @pytest.fixture
 def motor_controller() -> MotorController:
-    return MotorController(name="Test Motor Controller", resistance=0.2)
+    return MotorController(
+        name="Test Motor Controller", resistance=0.2, efficiency=0.8
+    )
 
 
 @pytest.fixture

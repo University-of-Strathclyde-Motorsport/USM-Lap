@@ -15,7 +15,7 @@ from annotated_types import Unit
 from pydantic import BaseModel, Field
 from pydantic.dataclasses import dataclass
 
-from utils.array import diff
+from usmlap.utils.array import diff
 
 from .track_data import Configuration, TrackData
 

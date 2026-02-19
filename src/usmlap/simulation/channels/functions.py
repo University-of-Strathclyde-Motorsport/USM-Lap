@@ -6,7 +6,7 @@ import math
 from collections.abc import Callable
 from itertools import accumulate
 
-from simulation.solution import Solution
+from ..solution import Solution
 
 type ChannelFcn = Callable[[Solution], list[float]]
 

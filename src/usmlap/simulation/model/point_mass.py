@@ -4,10 +4,10 @@ This module defines the point mass vehicle model.
 
 import math
 
-from simulation.vehicle_state import StateVariables
-from track.mesh import TrackNode
-from utils.datatypes import FourCorner
-from vehicle.tyre.tyre_model import TyreAttitude
+from usmlap.simulation.vehicle_state import StateVariables
+from usmlap.track.mesh import TrackNode
+from usmlap.utils.datatypes import FourCorner
+from usmlap.vehicle.tyre.tyre_model import TyreAttitude
 
 from .vehicle_model import VehicleModelInterface
 
@@ -19,16 +19,17 @@ class PointMassVehicleModel(VehicleModelInterface):
 
     def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
         normal_load = normal_force / 4
-        return FourCorner([normal_load] * 4)
+        return FourCorner((normal_load, normal_load, normal_load, normal_load))
 
     def get_tyre_attitudes(
         self, normal_loads: FourCorner[float]
     ) -> FourCorner[TyreAttitude]:
+        attitudes = [
+            TyreAttitude(normal_load=normal_load)
+            for normal_load in normal_loads
+        ]
         return FourCorner(
-            [
-                TyreAttitude(normal_load=normal_load)
-                for normal_load in normal_loads
-            ]
+            (attitudes[0], attitudes[1], attitudes[2], attitudes[3])
         )
 
     def get_lateral_traction(
@@ -38,17 +39,17 @@ class PointMassVehicleModel(VehicleModelInterface):
         rear_tyre = self.vehicle.tyres.rear.tyre_model.calculate_lateral_force
         try:
             return FourCorner(
-                [
+                (
                     front_tyre(attitudes.front_left, required_fx=0),
                     front_tyre(attitudes.front_right, required_fx=0),
                     rear_tyre(attitudes.rear_left, required_fx=required_fx / 2),
                     rear_tyre(
                         attitudes.rear_right, required_fx=required_fx / 2
                     ),
-                ]
+                )
             )
         except ValueError:
-            return FourCorner([0] * 4)
+            return FourCorner((0, 0, 0, 0))
 
     def get_longitudinal_traction(
         self, attitudes: FourCorner[TyreAttitude], required_fy: float
@@ -62,15 +63,15 @@ class PointMassVehicleModel(VehicleModelInterface):
         fy_per_tyre = abs(required_fy / 4)
         try:
             return FourCorner(
-                [
+                (
                     front_tyre(attitudes.front_left, required_fy=fy_per_tyre),
                     front_tyre(attitudes.front_right, required_fy=fy_per_tyre),
                     rear_tyre(attitudes.rear_left, required_fy=fy_per_tyre),
                     rear_tyre(attitudes.rear_right, required_fy=fy_per_tyre),
-                ]
+                )
             )
         except ValueError:
-            return FourCorner([0] * 4)
+            return FourCorner((0, 0, 0, 0))
 
     def lateral_vehicle_model(
         self, state_variables: StateVariables, node: TrackNode

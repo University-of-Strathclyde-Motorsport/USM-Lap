@@ -6,11 +6,11 @@ from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
 
-from analysis.sweep_1d import SweepSettings
-from simulation.competition import CompetitionSettings
-from simulation.sensitivity import SensitivityAnalysis
-from vehicle.parameters import Parameter
-from vehicle.vehicle import Vehicle
+from usmlap.analysis.sweep_1d import SweepSettings
+from usmlap.simulation.competition import CompetitionSettings
+from usmlap.simulation.sensitivity import SensitivityAnalysis
+from usmlap.vehicle.parameters import Parameter
+from usmlap.vehicle.vehicle import Vehicle
 
 
 @dataclass

@@ -4,7 +4,7 @@ This module models the full vehicle.
 
 import os
 
-import filepath
+from usmlap import filepath
 
 from .aero import AeroPackage
 from .brakes import Brakes

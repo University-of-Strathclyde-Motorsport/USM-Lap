@@ -8,7 +8,7 @@ from annotated_types import Unit
 from pydantic import PositiveFloat, PositiveInt
 
 from usmlap.utils import geometry, proportion
-from utils.datatypes import FrontRear, Percentage
+from usmlap.utils.datatypes import FrontRear, Percentage
 
 from .common import Component, Subsystem
 
@@ -193,16 +193,21 @@ class Brakes(Subsystem):
                 Force applied to the master cylinders.
         """
         total_force = pedal_force * self.pedal_ratio
-        return FrontRear([total_force * bias for bias in self.brake_bias])
+        front_force = total_force * self.brake_bias.front
+        rear_force = total_force * self.brake_bias.rear
+        return FrontRear((front_force, rear_force))
 
     def pedal_force_to_wheel_torque(
         self, pedal_force: float
     ) -> FrontRear[float]:
         cylinder_forces = self._get_cylinder_forces(pedal_force)
-        return FrontRear(
-            brake_line.force_to_torque(force)
-            for brake_line, force in zip(self.brake_lines, cylinder_forces)
+        front_torque = self.brake_lines.front.force_to_torque(
+            cylinder_forces.front
         )
+        rear_torque = self.brake_lines.rear.force_to_torque(
+            cylinder_forces.rear
+        )
+        return FrontRear((front_torque, rear_torque))
 
     def get_overall_brake_balance(self) -> FrontRear[float]:
         torques = self.pedal_force_to_wheel_torque(1)

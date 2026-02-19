@@ -24,7 +24,7 @@ from math import atan, cos, exp, pi, pow, sin, sqrt, tan
 from numpy import sign
 from pydantic import BaseModel
 
-from utils.datatypes import Coordinate
+from usmlap.utils.datatypes import Coordinate
 
 from .tir import TIRParameters
 

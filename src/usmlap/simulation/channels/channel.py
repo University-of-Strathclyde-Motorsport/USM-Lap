@@ -7,8 +7,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from simulation.solution import Solution
-from utils.units import Unit
+from usmlap.simulation.solution import Solution
+from usmlap.utils.units import Unit
 
 from .functions import ChannelFcn
 

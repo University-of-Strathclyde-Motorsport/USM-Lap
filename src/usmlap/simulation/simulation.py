@@ -6,10 +6,10 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from simulation.environment import Environment
-from track.mesh import Mesh
-from vehicle.vehicle import Vehicle
+from usmlap.track.mesh import Mesh
+from usmlap.vehicle.vehicle import Vehicle
 
+from .environment import Environment
 from .model.point_mass import PointMassVehicleModel
 from .model.vehicle_model import VehicleModelInterface
 from .solution import Solution, create_new_solution

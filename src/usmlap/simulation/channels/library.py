@@ -2,8 +2,8 @@
 This module contains definitions of data channels.
 """
 
-import simulation.channels.functions as fcn
-from utils.units import Unit
+from usmlap.simulation.channels import functions as fcn
+from usmlap.utils.units import Unit
 
 from .channel import Channel, ChannelFcn
 

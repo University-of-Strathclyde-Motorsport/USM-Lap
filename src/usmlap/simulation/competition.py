@@ -7,9 +7,9 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 
-from track.mesh import MeshGenerator
-from track.track_data import TrackData, load_track_from_spreadsheet
-from vehicle.vehicle import Vehicle
+from usmlap.track.mesh import MeshGenerator
+from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
+from usmlap.vehicle.vehicle import Vehicle
 
 from .simulation import SimulationSettings, simulate
 from .solution import Solution
