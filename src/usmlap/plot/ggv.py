@@ -58,7 +58,7 @@ def plot_ggv(solution: Solution) -> None:
     """
 
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")  # type: ignore
+    ax = fig.add_subplot(111, projection="3d")
 
     lateral = LateralAcceleration.get_values(solution)
     longitudinal = LongitudinalAcceleration.get_values(solution)

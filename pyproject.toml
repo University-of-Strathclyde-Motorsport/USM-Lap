@@ -48,7 +48,7 @@ src = ["src"]
 extend-select = ["I"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["analysis", "simulation", "track", "utils", "vehicle"]
+known-first-party = ["analysis", "plot", "simulation", "track", "utils", "vehicle"]
 
 [tool.ruff.format]
 skip-magic-trailing-comma = true
