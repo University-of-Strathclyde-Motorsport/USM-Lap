@@ -4,10 +4,10 @@ This module contains code for comparing two or more distinct vehicles.
 
 from typing import Generator
 
-from simulation.simulation import SimulationSettings, simulate
-from simulation.solution import Solution
-from track.mesh import Mesh
-from vehicle.vehicle import Vehicle
+from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.solution import Solution
+from usmlap.track.mesh import Mesh
+from usmlap.vehicle.vehicle import Vehicle
 
 
 class ComparisonResults(object):

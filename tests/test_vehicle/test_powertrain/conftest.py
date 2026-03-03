@@ -1,3 +1,5 @@
+"""Fixtures for powertrain module unit tests."""
+
 import math
 
 import pytest

@@ -183,7 +183,7 @@ class PositionData[T](Sequence[T], ABC):
     @overload
     def __getitem__(self, key: slice) -> Sequence[T]: ...
 
-    def __getitem__(self, key: int | slice) -> Sequence[T] | T:
+    def __getitem__(self, key: int | slice) -> Sequence[T] | T:  # type: ignore
         if isinstance(key, int):
             return self.value[key]
         else:

@@ -1,5 +1,8 @@
+"""Unit tests for accumulator module."""
+
 import pytest
-from usmlap.vehicle.powertrain.accumulator import Cell, Accumulator
+
+from usmlap.vehicle.powertrain.accumulator import Accumulator, Cell
 
 
 def test_cell_voltage(cell: Cell) -> None:

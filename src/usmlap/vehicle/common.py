@@ -87,7 +87,7 @@ class Component(ABC, Subsystem):
     """
 
     name: str
-    _library: str
+    _library: ClassVar[str]
 
     def __init_subclass__(cls: type[Component], library: str) -> None:
         super().__init_subclass__()

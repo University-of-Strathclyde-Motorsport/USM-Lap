@@ -1,4 +1,7 @@
+"""Unit tests for motor module."""
+
 import pytest
+
 from usmlap.vehicle.powertrain.motor import Motor
 
 

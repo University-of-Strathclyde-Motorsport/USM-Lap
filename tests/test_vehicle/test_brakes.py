@@ -1,12 +1,16 @@
-import pytest
+"""Unit tests for brake module."""
+
 import math
+
+import pytest
+
 from usmlap.vehicle.brakes import (
-    MasterCylinder,
     BrakeCaliper,
     BrakeDisc,
-    BrakePad,
     BrakeLine,
+    BrakePad,
     Brakes,
+    MasterCylinder,
 )
 
 
