@@ -32,11 +32,13 @@ class RWDPowertrain(Powertrain):
         accumulator (Accumulator): The accumulator storing energy.
         motor (Motor): The electric motor.
         motor_controller (MotorController): The motor controller.
+        discharge_current_limit (float): Scaling factor for the current limit.
     """
 
     accumulator: Accumulator
     motor: Motor
     motor_controller: MotorController
+    discharge_current_limit: float = 1
 
     def get_voltage_drop(self, current: float) -> float:
         """
@@ -100,10 +102,11 @@ class RWDPowertrain(Powertrain):
     def get_motor_torque(
         self, state_of_charge: float, motor_speed: float
     ) -> float:
-        current = self.accumulator.get_discharge_current(state_of_charge)
-        knee_speed = self.get_knee_speed(state_of_charge, current)
+        max_current = self.accumulator.get_discharge_current(state_of_charge)
+        discharge_current = max_current * self.discharge_current_limit
+        knee_speed = self.get_knee_speed(state_of_charge, discharge_current)
         maximum_speed = self.get_maximum_motor_speed(state_of_charge)
-        maximum_torque = self.motor.get_torque(current)
+        maximum_torque = self.motor.get_torque(discharge_current)
 
         if motor_speed < knee_speed:
             return maximum_torque

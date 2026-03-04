@@ -9,11 +9,8 @@ from typing import Generator
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.simulation.competition import (
-    CompetitionSettings,
-    simulate_competition,
-)
-from usmlap.simulation.points.points import calculate_points
+from usmlap.competition.competition import Competition
+from usmlap.competition.points.points import calculate_points
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -86,8 +83,8 @@ class SweepResults(object):
 
 def sweep_1d(
     baseline_vehicle: Vehicle,
+    competition: Competition,
     sweep_settings: SweepSettings,
-    competition_settings: CompetitionSettings,
 ) -> SweepResults:
     """
     Carry out a 1D sweep of a parameter.
@@ -107,7 +104,7 @@ def sweep_1d(
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
-        results = simulate_competition(vehicle, competition_settings)
+        results = competition.simulate(vehicle)
         points = calculate_points(results)
         sweep_results.data[value] = points.total
 

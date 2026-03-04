@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 
-from ..competition import CompetitionResults
+from ..results import CompetitionResults
 from .competition_data import CompetitionData
 from .points_functions import FSUKPointsFunctions, PointsFunctions
 

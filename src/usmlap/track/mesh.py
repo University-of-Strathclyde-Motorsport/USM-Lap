@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import copy
 import math
-from math import atan, ceil, pi
+from math import atan, pi
 from typing import Annotated, Generator
 
 import matplotlib.pyplot as plt
@@ -18,8 +18,6 @@ from pydantic.dataclasses import dataclass
 from usmlap.utils.array import diff
 
 from .track_data import Configuration, TrackData
-
-ENDURANCE_TRACK_LENGTH = 22000
 
 
 class TrackNode(BaseModel):
@@ -101,20 +99,28 @@ class Mesh(object):
     def resolution(self) -> float:
         return self.track_length / self.node_count
 
-    def generate_endurance_mesh(self) -> Mesh:
-        number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / self.track_length)
+    def get_repeating_mesh(self, number_of_laps: int) -> Mesh:
+        """
+        Generate a new mesh that repeats the track a number of times.
 
-        endurance_nodes: list[TrackNode] = []
+        Args:
+            number_of_laps (int): The number of times to repeat the track.
+
+        Returns:
+            mesh (Mesh): A new mesh that repeats the track a number of times.
+        """
+
+        new_nodes: list[TrackNode] = []
         for _ in range(number_of_laps):
             for node in self:
-                endurance_nodes.append(copy.copy(node))
+                new_nodes.append(copy.copy(node))
 
         position = 0
-        for node in endurance_nodes:
+        for node in new_nodes:
             node.position = position
             position += node.length
 
-        return Mesh(nodes=endurance_nodes, configuration=self.configuration)
+        return Mesh(nodes=new_nodes, configuration=self.configuration)
 
     def plot_traces(self) -> None:
         position = [node.position for node in self]

@@ -4,11 +4,8 @@ This module contains code for points sensitivity analysis.
 
 from dataclasses import dataclass
 
-from usmlap.simulation.competition import (
-    CompetitionSettings,
-    simulate_competition,
-)
-from usmlap.simulation.points.points import calculate_points
+from usmlap.competition.competition import Competition
+from usmlap.competition.points.points import calculate_points
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -16,23 +13,22 @@ PARAMETER_DELTA_SCALAR = 0.0001
 
 
 def points_sensitivity(
-    vehicle: Vehicle, parameter: Parameter, settings: CompetitionSettings
+    vehicle: Vehicle, competition: Competition, parameter: Parameter
 ) -> float:
-    baseline_value = parameter.get_value(vehicle)
-    parameter_delta = baseline_value * PARAMETER_DELTA_SCALAR
+    """
+    Evaluate the points sensitivity of a vehicle parameter.
 
-    increased_value = baseline_value + parameter_delta
-    increased_vehicle = get_new_vehicle(vehicle, parameter, increased_value)
-    increased_results = simulate_competition(increased_vehicle, settings)
-    increased_points = calculate_points(increased_results).total
+    Args:
+        vehicle (Vehicle): The baseline vehicle to simulate.
+        competition (Competition): The competition to simulate.
+        parameter (Parameter): The parameter to analyse the sensitivity of.
 
-    decreased_value = baseline_value - parameter_delta
-    decreased_vehicle = get_new_vehicle(vehicle, parameter, decreased_value)
-    decreased_results = simulate_competition(decreased_vehicle, settings)
-    decreased_points = calculate_points(decreased_results).total
-
-    points_delta = increased_points - decreased_points
-    sensitivity = points_delta / (2 * parameter_delta)
+    Returns:
+        sensitivity (float): The points sensitivity of the parameter,
+            measured in points per unit.
+    """
+    analysis = SensitivityAnalysis(vehicle, competition, parameter)
+    sensitivity = analysis.get_sensitivity()
     return sensitivity
 
 
@@ -43,8 +39,8 @@ class SensitivityAnalysis(object):
     """
 
     baseline_vehicle: Vehicle
+    competition: Competition
     parameter: Parameter
-    competition_settings: CompetitionSettings
 
     @property
     def baseline_value(self) -> float:
@@ -72,9 +68,7 @@ class SensitivityAnalysis(object):
         total_points: dict[str, float] = {}
 
         for direction, vehicle in vehicles.items():
-            results = simulate_competition(
-                vehicle=vehicle, settings=self.competition_settings
-            )
+            results = self.competition.simulate(vehicle=vehicle)
             points = calculate_points(results=results)
             total_points[direction] = points.total
 

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import Optional
+from typing import ClassVar, Optional
 
 from .vehicle import Vehicle
 
@@ -16,9 +16,9 @@ class Parameter(ABC):
     An abstract class representing a vehicle parameter.
     """
 
-    _REGISTRY: dict[str, type[Parameter]] = {}
-    name: str
-    unit: Optional[str] = None
+    _REGISTRY: ClassVar[dict[str, type[Parameter]]] = {}
+    name: ClassVar[str]
+    unit: ClassVar[Optional[str]] = None
 
     def __init_subclass__(
         cls: type[Parameter], parameter_name: str, unit: Optional[str] = None
@@ -99,14 +99,14 @@ class Parameter(ABC):
 
 
 def get_new_vehicle(
-    baseline: Vehicle, parameter: Parameter, value: float
+    baseline: Vehicle, parameter: type[Parameter], value: float
 ) -> Vehicle:
     """
     Generate a new vehicle with a modified parameter value.
 
     Args:
         baseline (Vehicle): The baseline vehicle to use.
-        parameter (Parameter): The parameter to modify.
+        parameter (type[Parameter]): The parameter to modify.
         value (float): The updated parameter value.
 
     Returns:
@@ -163,3 +163,17 @@ class FinalDriveRatio(Parameter, parameter_name="Final Drive Ratio"):
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
         vehicle.transmission.final_drive_ratio = value
+
+
+class DischargeCurrentLimit(
+    Parameter, parameter_name="Discharge Current Limit"
+):
+    """The discharge current limit of the powertrain."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.discharge_current_limit
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.discharge_current_limit = value

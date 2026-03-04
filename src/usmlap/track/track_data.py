@@ -183,7 +183,7 @@ class PositionData[T](Sequence[T], ABC):
     @overload
     def __getitem__(self, key: slice) -> Sequence[T]: ...
 
-    def __getitem__(self, key: int | slice) -> Sequence[T] | T:  # type: ignore
+    def __getitem__(self, key: int | slice) -> Sequence[T] | T:
         if isinstance(key, int):
             return self.value[key]
         else:
@@ -358,6 +358,7 @@ class TrackData(BaseModel):
             direction=reader.get_direction(),
             mirror=reader.get_mirror(),
         )
+
 
 
 def load_track_from_spreadsheet(filename: str) -> TrackData:

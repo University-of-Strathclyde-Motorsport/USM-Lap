@@ -6,11 +6,12 @@ from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
 
-from usmlap.analysis.sweep_1d import SweepSettings
-from usmlap.simulation.competition import CompetitionSettings
-from usmlap.simulation.sensitivity import SensitivityAnalysis
+from usmlap.competition.competition import Competition
 from usmlap.vehicle.parameters import Parameter
 from usmlap.vehicle.vehicle import Vehicle
+
+from .sensitivity import points_sensitivity
+from .sweep_1d import SweepSettings
 
 
 @dataclass
@@ -45,9 +46,9 @@ class CouplingResults(object):
 
 def coupling(
     baseline_vehicle: Vehicle,
+    competition: Competition,
     sweep_settings: SweepSettings,
     coupled_parameter: Parameter,
-    competition_settings: CompetitionSettings,
 ) -> CouplingResults:
     """
     Carry out a coupling analysis between two parameters.
@@ -69,10 +70,10 @@ def coupling(
         coupled_parameter=coupled_parameter,
     )
     for value, vehicle in sweep_settings.get_vehicles(baseline_vehicle):
-        analysis = SensitivityAnalysis(
-            baseline_vehicle=vehicle,
+        sensitivity = points_sensitivity(
+            vehicle=vehicle,
+            competition=competition,
             parameter=coupled_parameter,
-            competition_settings=competition_settings,
         )
-        coupling_results.data[value] = analysis.get_sensitivity()
+        coupling_results.data[value] = sensitivity
     return coupling_results

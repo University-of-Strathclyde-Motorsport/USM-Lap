@@ -46,10 +46,17 @@ class EventInterface(ABC):
         track_data = self.load_track()
         return MeshGenerator(resolution=1).generate_mesh(track_data)
 
+    def get_simulation_settings(self) -> SimulationSettings:
+        return self.simulation_settings
+
+    def modify_vehicle_for_event(self, vehicle: Vehicle) -> Vehicle:
+        return vehicle
+
     def simulate(self, vehicle: Vehicle) -> Solution:
+        vehicle = self.modify_vehicle_for_event(vehicle)
         solution = simulate(
             vehicle=vehicle,
             track_mesh=self.track_mesh,
-            settings=self.simulation_settings,
+            settings=self.get_simulation_settings(),
         )
         return solution

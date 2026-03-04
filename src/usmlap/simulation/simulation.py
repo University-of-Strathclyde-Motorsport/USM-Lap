@@ -4,7 +4,7 @@ This module contains code for running a simulation.
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from dataclasses import dataclass, field
 
 from usmlap.track.mesh import Mesh
 from usmlap.vehicle.vehicle import Vehicle
@@ -19,7 +19,8 @@ from .solver.solver_interface import SolverInterface
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 
 
-class SimulationSettings(BaseModel):
+@dataclass
+class SimulationSettings(object):
     """
     Settings for a simulation.
 
@@ -30,7 +31,7 @@ class SimulationSettings(BaseModel):
         solver (SolverInterface): The solver to use.
     """
 
-    environment: Environment = Environment()
+    environment: Environment = field(default_factory=Environment)
     vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel
     solver: type[SolverInterface] = QuasiSteadyStateSolver
 
