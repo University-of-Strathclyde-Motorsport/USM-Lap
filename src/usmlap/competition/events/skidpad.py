@@ -9,7 +9,7 @@ from .event import EventInterface
 SKIDPAD_TRACK = "Skidpad.xlsx"
 
 
-class Skidpad(EventInterface):
+class Skidpad(EventInterface, label="skidpad"):
     """
     Skidpad event at Formula Student.
     """

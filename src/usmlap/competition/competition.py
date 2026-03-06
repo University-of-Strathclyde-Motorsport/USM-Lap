@@ -4,7 +4,10 @@ This module contains code for simulating a Formula Student competition.
 
 from dataclasses import dataclass, field
 
+from rich import progress
+
 from usmlap.simulation.simulation import SimulationSettings
+from usmlap.simulation.solution import Solution
 from usmlap.vehicle.vehicle import Vehicle
 
 from . import events
@@ -32,6 +35,10 @@ class Competition(object):
     autocross: events.Autocross = field(init=False)
     endurance: events.Endurance = field(init=False)
 
+    @property
+    def events(self) -> list[EventInterface]:
+        return [self.acceleration, self.skidpad, self.autocross, self.endurance]
+
     def __post_init__(self) -> None:
         self.acceleration = self.create_event(events.Acceleration)
         self.skidpad = self.create_event(events.Skidpad)
@@ -55,14 +62,16 @@ class Competition(object):
             results (CompetitionResults): The results of the competition.
         """
 
-        acceleration_solution = self.acceleration.simulate(vehicle)
-        skidpad_solution = self.skidpad.simulate(vehicle)
-        autocross_solution = self.autocross.simulate(vehicle)
-        endurance_solution = self.endurance.simulate(vehicle)
+        solutions: dict[str, Solution] = {}
+        for event in progress.track(
+            self.events, description="Simulating competition...", transient=True
+        ):
+            event_solution = event.simulate(vehicle)
+            solutions[event.label] = event_solution
 
         return CompetitionResults(
-            acceleration=acceleration_solution,
-            skidpad=skidpad_solution,
-            autocross=autocross_solution,
-            endurance=endurance_solution,
+            acceleration=solutions["acceleration"],
+            skidpad=solutions["skidpad"],
+            autocross=solutions["autocross"],
+            endurance=solutions["endurance"],
         )

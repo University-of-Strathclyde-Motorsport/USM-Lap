@@ -2,7 +2,6 @@
 This module defines the endurance and efficiency events at Formula Student.
 """
 
-from copy import copy
 from math import ceil
 
 from usmlap.track.mesh import Mesh, MeshGenerator
@@ -15,7 +14,7 @@ from .event import EventInterface
 ENDURANCE_TRACK_LENGTH = 22000
 
 
-class Endurance(EventInterface):
+class Endurance(EventInterface, label="endurance"):
     """
     Endurance and efficiency events at Formula Student.
     """
@@ -23,7 +22,6 @@ class Endurance(EventInterface):
     def load_track(self) -> TrackData:
         track_file = self.competition_settings.autocross_track
         track_data = load_track_from_spreadsheet(track_file)
-        # TODO
         return track_data
 
     def generate_mesh(self) -> Mesh:

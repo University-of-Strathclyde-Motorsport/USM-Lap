@@ -7,7 +7,7 @@ from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
 from .event import EventInterface
 
 
-class Autocross(EventInterface):
+class Autocross(EventInterface, label="autocross"):
     """
     Autocross event at Formula Student.
     """

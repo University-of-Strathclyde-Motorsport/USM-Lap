@@ -13,7 +13,7 @@ PARAMETER_DELTA_SCALAR = 0.0001
 
 
 def points_sensitivity(
-    vehicle: Vehicle, competition: Competition, parameter: Parameter
+    vehicle: Vehicle, competition: Competition, parameter: type[Parameter]
 ) -> float:
     """
     Evaluate the points sensitivity of a vehicle parameter.
@@ -40,7 +40,7 @@ class SensitivityAnalysis(object):
 
     baseline_vehicle: Vehicle
     competition: Competition
-    parameter: Parameter
+    parameter: type[Parameter]
 
     @property
     def baseline_value(self) -> float:

@@ -39,6 +39,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         for apex in progress.track(
             solution.get_sorted_apex_indices(),
             description="Solving forward propagation...",
+            transient=True,
         ):
             if solution.nodes[apex].is_apex():
                 solution = propagate_forward(solution, start_index=apex)
@@ -47,6 +48,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         for apex in progress.track(
             solution.get_sorted_apex_indices(),
             description="Solving backward propagation...",
+            transient=True,
         ):
             if solution.nodes[apex].is_apex():
                 solution = propagate_backward(solution, start_index=apex)
@@ -76,7 +78,9 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     """
     lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
     for node in progress.track(
-        solution, description="Solving maximum velocities..."
+        solution.nodes,
+        description="Solving maximum velocities...",
+        transient=True,
     ):
         node.maximum_velocity = lateral_vehicle_model(
             node.state_variables, node.track_node

@@ -4,12 +4,13 @@ Main entry point for the program.
 
 import logging
 
-from usmlap.analysis.sweep_1d import SweepSettings, sweep_1d
+from usmlap.analysis.coupling import coupling
+from usmlap.analysis.sweep_1d import SweepSettings
 from usmlap.competition.competition import Competition
 from usmlap.competition.settings import CompetitionSettings
 from usmlap.simulation.simulation import SimulationSettings
 from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
-from usmlap.vehicle.parameters import Parameter
+from usmlap.vehicle.parameters import DragCoefficient, LiftCoefficient
 from usmlap.vehicle.vehicle import load_vehicle
 
 CHANNELS = [
@@ -34,11 +35,9 @@ competition_settings = CompetitionSettings(
 )
 competition = Competition(simulation_settings, competition_settings)
 sweep_settings = SweepSettings(
-    parameter=Parameter.get_parameter("Curb Mass"),
-    start_value=200,
-    end_value=250,
-    number_of_steps=10,
+    parameter=LiftCoefficient, start_value=3, end_value=6, number_of_steps=10
 )
 
-results = sweep_1d(vehicle, competition, sweep_settings)
+
+results = coupling(vehicle, competition, sweep_settings, DragCoefficient)
 results.plot()

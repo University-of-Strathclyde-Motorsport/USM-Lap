@@ -4,6 +4,8 @@ This module implements a quasi-transient solver.
 
 import logging
 
+from rich import progress
+
 from usmlap.simulation.solution import Solution
 
 from .quasi_steady_state import QuasiSteadyStateSolver
@@ -23,7 +25,11 @@ class QuasiTransientSolver(SolverInterface):
         times: list[float] = []
         solution = previous_solution
 
-        for i in range(MAXIMUM_TRANSIENT_ITERATIONS):
+        for i in progress.track(
+            range(MAXIMUM_TRANSIENT_ITERATIONS),
+            description="Solving transient simulation...",
+            transient=True,
+        ):
             solution = _solve_next_iteration(previous_solution=solution)
             times.append(solution.total_time)
             logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")

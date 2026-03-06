@@ -2,8 +2,11 @@
 This module defines the interface for Formula Student events.
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import ClassVar
 
 from usmlap.simulation.simulation import SimulationSettings, simulate
 from usmlap.simulation.solution import Solution
@@ -20,6 +23,7 @@ class EventInterface(ABC):
     Interface for Formula Student events.
 
     Attributes:
+        label (str): Name of the event.
         simulation_settings (SimulationSettings):
             Settings for the simulation.
         competition_settings (CompetitionSettings):
@@ -30,10 +34,15 @@ class EventInterface(ABC):
             Track mesh for the event.
     """
 
+    name: ClassVar[str]
     simulation_settings: SimulationSettings
     competition_settings: CompetitionSettings
     track_data: TrackData = field(init=False)
     track_mesh: Mesh = field(init=False)
+
+    def __init_subclass__(cls: type[EventInterface], label: str) -> None:
+        super().__init_subclass__()
+        cls.label = label
 
     def __post_init__(self) -> None:
         self.track_data = self.load_track()

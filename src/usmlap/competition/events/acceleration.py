@@ -9,7 +9,7 @@ from .event import EventInterface
 ACCELERATION_TRACK = "Acceleration.xlsx"
 
 
-class Acceleration(EventInterface):
+class Acceleration(EventInterface, label="acceleration"):
     """
     Acceleration event at Formula Student.
     """

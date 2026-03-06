@@ -8,6 +8,7 @@ from typing import Generator
 
 import matplotlib.pyplot as plt
 import numpy as np
+from rich import progress
 
 from usmlap.competition.competition import Competition
 from usmlap.competition.points.points import calculate_points
@@ -21,13 +22,13 @@ class SweepSettings(object):
     Settings for a 1D sweep of a parameter.
 
     Attributes:
-        parameter (Parameter): The parameter to sweep.
+        parameter (type[Parameter]): The parameter to sweep.
         start_value (float): The start value of the sweep.
         end_value (float): The end value of the sweep.
         number_of_steps (int): The number of steps in the sweep.
     """
 
-    parameter: Parameter
+    parameter: type[Parameter]
     start_value: float
     end_value: float
     number_of_steps: int
@@ -69,7 +70,7 @@ class SweepResults(object):
             and the corresponding points scored.
     """
 
-    parameter: Parameter
+    parameter: type[Parameter]
     data: dict[float, float] = field(default_factory=lambda: {})
 
     def plot(self) -> None:
@@ -100,7 +101,11 @@ def sweep_1d(
     """
     sweep_results = SweepResults(parameter=sweep_settings.parameter)
 
-    for value, vehicle in sweep_settings.get_vehicles(baseline_vehicle):
+    sweep_vehicles = list(sweep_settings.get_vehicles(baseline_vehicle))
+    for value, vehicle in progress.track(
+        sweep_vehicles,
+        description=f"Sweeping parameter {sweep_settings.parameter.name}",
+    ):
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
