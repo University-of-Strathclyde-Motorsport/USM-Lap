@@ -92,9 +92,8 @@ def sweep_1d(
 
     Args:
         baseline_vehicle (Vehicle): The vehicle to simulate.
+        competition (Competition): The competition to simulate.
         sweep_settings (SweepSettings): Settings for the sweep.
-        competition_settings (CompetitionSettings):
-            Settings for the competition.
 
     Returns:
         sweep_results (SweepResults): The results of the sweep.
