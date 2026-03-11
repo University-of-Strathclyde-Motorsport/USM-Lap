@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import copy
 import math
-from math import atan, pi
 from typing import Annotated, Generator
 
 import matplotlib.pyplot as plt
@@ -39,14 +38,20 @@ class TrackNode(BaseModel):
     length: float = Field(gt=0)
     curvature: float
     elevation: float
-    inclination: float = Field(gt=-pi / 2, lt=pi / 2, default=0)
-    banking: float = Field(ge=-pi / 2, le=pi / 2, default=0)
+    inclination: float = Field(gt=-math.pi / 2, lt=math.pi / 2, default=0)
+    banking: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
     grip_factor: float = Field(gt=0, default=1)
     sector: int = Field(gt=0, default=1)
+    start_coordinate: tuple[float, float] = Field(default=(0, 0))
+    end_coordinate: tuple[float, float] = Field(default=(0, 0))
 
     @property
     def radius(self) -> float:
         return 1 / self.curvature
+
+    @property
+    def swept_angle(self) -> float:
+        return self.length * self.curvature
 
     def y_to_y(self, value: float) -> float:
         return value * math.cos(self.banking)
@@ -149,6 +154,25 @@ class Mesh(object):
             i += 1
         plt.show()
 
+    def plot_map(self) -> None:
+        coordinates = [node.start_coordinate for node in self]
+        coordinates.append(self.nodes[-1].end_coordinate)
+        x, y = zip(*coordinates)
+
+        _, ax = plt.subplots()
+        ax.set_title("Track Map")
+
+        ax.plot(x, y)
+        ax.plot([0, 0], [-10, 10], color="red")
+        ax.annotate(
+            "",
+            xytext=(0, 0),
+            xy=(50, 0),
+            arrowprops={"arrowstyle": "->", "color": "red"},
+        )
+        ax.grid()
+        plt.show()
+
 
 @dataclass
 class MeshGenerator(object):
@@ -171,26 +195,30 @@ class MeshGenerator(object):
         Returns:
             mesh (Mesh): A mesh of the track.
         """
-        self.track_data = track_data
-        self.track_length = track_data.shape.total_length
-        self.node_count = round(self.track_length / self.resolution)
-        self.spacing = self.track_length / (self.node_count - 1)
-        self.position = np.arange(0, self.track_length, self.spacing).tolist()
+        track_data = track_data
+        track_length = track_data.shape.total_length
+        node_count = round(track_length / self.resolution)
+        spacing = track_length / (node_count - 1)
+        position = np.arange(0, track_length, spacing)
 
-        length = diff(self.position + [self.track_length])
-        curvature = track_data.shape.interpolate_curvature(self.position)
+        length = np.diff(np.append(position, track_length))
+        curvature = np.array(track_data.shape.interpolate_curvature(position))
+        fractional_position = position / track_length
+
+        if track_data.configuration == Configuration.CLOSED:
+            curvature = correct_tangency(curvature, length, fractional_position)
+
         # TODO: Implement code for closing the track
-        # fractional_position = [p / self.track_length for p in position]
 
-        elevation = track_data.elevation.interpolate(self.position)
-        banking = track_data.banking.interpolate(self.position)
-        grip_factor = track_data.grip_factor.interpolate(self.position)
-        sector = track_data.sector.interpolate(self.position)
-        inclination = self._calculate_inclination(self.position, elevation)
+        elevation = track_data.elevation.interpolate(position)
+        banking = track_data.banking.interpolate(position)
+        grip_factor = track_data.grip_factor.interpolate(position)
+        sector = track_data.sector.interpolate(position)
+        inclination = self._calculate_inclination(position, elevation)
 
         nodes = [
             TrackNode(
-                position=self.position[i],
+                position=position[i],
                 length=length[i],
                 curvature=curvature[i],
                 elevation=elevation[i],
@@ -199,8 +227,11 @@ class MeshGenerator(object):
                 grip_factor=grip_factor[i],
                 sector=sector[i],
             )
-            for i in range(len(self.position))
+            for i in range(len(position))
         ]
+
+        close_track = track_data.configuration == Configuration.CLOSED
+        nodes = self._set_coordinates(nodes, close_track)
 
         return Mesh(nodes=nodes, configuration=track_data.configuration)
 
@@ -215,9 +246,80 @@ class MeshGenerator(object):
             for i in range(len(diff_position))
         ]
         inclination_value = [
-            atan(diff_elevation[i] / diff_position[i])
+            math.atan(diff_elevation[i] / diff_position[i])
             for i in range(len(diff_position))
         ]
         return np.interp(
             position, inclination_position, inclination_value
         ).tolist()
+
+    @staticmethod
+    def _set_coordinates(
+        nodes: list[TrackNode], close_track: bool
+    ) -> list[TrackNode]:
+        cursor = (0, 0)
+        heading = 0
+
+        for node in nodes:
+            node.start_coordinate = cursor
+            heading += node.swept_angle
+            cursor = (
+                cursor[0] + math.cos(heading) * node.length,
+                cursor[1] + math.sin(heading) * node.length,
+            )
+            node.end_coordinate = cursor
+
+        if not close_track:
+            return nodes
+
+        error_x = nodes[-1].end_coordinate[0]
+        error_y = nodes[-1].end_coordinate[1]
+        unit_error_x = error_x / len(nodes)
+        unit_error_y = error_y / len(nodes)
+        for i, node in enumerate(nodes):
+            start_x = node.start_coordinate[0] - (i * unit_error_x)
+            start_y = node.start_coordinate[1] - (i * unit_error_y)
+            node.start_coordinate = (start_x, start_y)
+
+            end_x = node.end_coordinate[0] - ((i + 1) * unit_error_x)
+            end_y = node.end_coordinate[1] - ((i + 1) * unit_error_y)
+            node.end_coordinate = (end_x, end_y)
+
+        return nodes
+
+
+type Array = np.ndarray[tuple[int], np.dtype[np.float64]]
+
+
+def correct_tangency(
+    curvature: Array, length: Array, fractional_position: Array
+) -> Array:
+    """
+    Adjust track curvature to correct the tangency of closed tracks.
+
+    The tangency error is calculated by summing the sweep angle of each node.
+
+    Args:
+        curvature (list[float]): The curvature of each node.
+        length (list[float]): The length of each node.
+        fractional_position (list[float]): The fractional position of each node.
+
+    Returns:
+        corrected_curvature (list[float]): Corrected curvature of each node.
+    """
+
+    sweep_angle = curvature * length
+    heading_angle = np.cumsum(sweep_angle)
+    tangency_error = math.remainder(heading_angle[-1], 2 * math.pi)
+
+    if abs(tangency_error) < math.pi:  # 'Uncurl' the track
+        tangency_correction = -tangency_error
+    else:  # 'Curl' the track
+        tangency_correction = (
+            2 * math.pi * np.sign(tangency_error) - tangency_error
+        )
+
+    heading_angle = heading_angle + (fractional_position * tangency_correction)
+    sweep_angle = np.array([heading_angle[0], *np.diff(heading_angle)])
+    curvature = sweep_angle / length
+    return curvature
