@@ -10,6 +10,7 @@ from scipy.signal import find_peaks
 
 from usmlap.simulation.model.vehicle_model import VehicleModelInterface
 from usmlap.simulation.solution import Solution, SolutionNode
+from usmlap.simulation.solver.apex_velocity import solve_apex_velocity
 from usmlap.simulation.vehicle_state import StateVariables
 
 from .solver_interface import SolverInterface
@@ -76,14 +77,14 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     Returns:
         solution (Solution): The solution with maximum velocities solved.
     """
-    lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
     previous_velocity = None
     for node in progress.track(
         solution.nodes,
         description="Solving maximum velocities...",
         transient=True,
     ):
-        velocity = lateral_vehicle_model(
+        velocity = solve_apex_velocity(
+            vehicle_model=solution.vehicle_model,
             state_variables=node.state_variables,
             node=node.track_node,
             velocity_estimate=previous_velocity,

@@ -3,8 +3,6 @@ This module defines the point mass vehicle model.
 """
 
 import logging
-import math
-from typing import Optional
 
 from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track.mesh import TrackNode
@@ -79,51 +77,6 @@ class PointMassVehicleModel(VehicleModelInterface):
             )
         except ValueError:
             return FourCorner((0, 0, 0, 0))
-
-    def lateral_vehicle_model(
-        self,
-        state_variables: StateVariables,
-        node: TrackNode,
-        velocity_estimate: Optional[float] = None,
-    ) -> float:
-        if node.curvature == 0:
-            return self.vehicle.maximum_velocity
-
-        if velocity_estimate is None:
-            velocity = self.vehicle.maximum_velocity
-        else:
-            velocity = velocity_estimate
-
-        i = 0
-        while i < MAXIMUM_ITERATIONS:
-            i += 1
-
-            vehicle_state = self.resolve_vehicle_state(
-                state_variables, node, velocity
-            )
-            try:
-                available_fy = vehicle_state.total_lateral_traction
-            except ValueError:
-                available_fy = 0
-
-            fy_error = available_fy - abs(vehicle_state.required_fy)
-
-            if abs(fy_error) < PRECISION:
-                break
-            else:
-                velocity = math.sqrt(
-                    velocity**2
-                    + (
-                        fy_error
-                        / (abs(node.curvature) * self.vehicle.total_mass)
-                    )
-                )
-                if velocity > self.vehicle.maximum_velocity:
-                    velocity = self.vehicle.maximum_velocity
-                    break
-
-        logger.debug(f"Apex velocity found after {i} iterations.")
-        return velocity
 
     def calculate_acceleration(
         self, state_variables: StateVariables, node: TrackNode, velocity: float

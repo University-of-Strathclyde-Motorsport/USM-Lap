@@ -3,7 +3,6 @@ This module defines the interface for vehicle models.
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from usmlap.simulation.environment import Environment
 from usmlap.simulation.vehicle_state import FullVehicleState, StateVariables
@@ -95,27 +94,6 @@ class VehicleModelInterface(ABC):
             accumulator_power=accumulator_power,
             motor_force=motor_force,
         )
-
-    @abstractmethod
-    def lateral_vehicle_model(
-        self,
-        state_variables: StateVariables,
-        node: TrackNode,
-        velocity_estimate: Optional[float] = None,
-    ) -> float:
-        """
-        Calculate the lateral-traction-limited velocity at a node.
-
-        This is the maximum velocity that the vehicle can travel at
-        while maintaining lateral traction with no longitudinal acceleration.
-
-        Args:
-            node (TrackNode): The track node to evaluate.
-
-        Returns:
-            velocity (float): The lateral traction limited velocity.
-        """
-        pass
 
     @abstractmethod
     def calculate_acceleration(
