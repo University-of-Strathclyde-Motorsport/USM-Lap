@@ -77,14 +77,19 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
         solution (Solution): The solution with maximum velocities solved.
     """
     lateral_vehicle_model = solution.vehicle_model.lateral_vehicle_model
+    previous_velocity = None
     for node in progress.track(
         solution.nodes,
         description="Solving maximum velocities...",
         transient=True,
     ):
-        node.maximum_velocity = lateral_vehicle_model(
-            node.state_variables, node.track_node
+        velocity = lateral_vehicle_model(
+            state_variables=node.state_variables,
+            node=node.track_node,
+            velocity_estimate=previous_velocity,
         )
+        node.maximum_velocity = velocity
+        previous_velocity = velocity
     return solution
 
 

@@ -2,7 +2,9 @@
 This module defines the point mass vehicle model.
 """
 
+import logging
 import math
+from typing import Optional
 
 from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track.mesh import TrackNode
@@ -10,6 +12,11 @@ from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.tyre.tyre_model import TyreAttitude
 
 from .vehicle_model import VehicleModelInterface
+
+logger = logging.getLogger(__name__)
+
+PRECISION = 1e-2
+MAXIMUM_ITERATIONS = 100
 
 
 class PointMassVehicleModel(VehicleModelInterface):
@@ -74,15 +81,23 @@ class PointMassVehicleModel(VehicleModelInterface):
             return FourCorner((0, 0, 0, 0))
 
     def lateral_vehicle_model(
-        self, state_variables: StateVariables, node: TrackNode
+        self,
+        state_variables: StateVariables,
+        node: TrackNode,
+        velocity_estimate: Optional[float] = None,
     ) -> float:
-        velocity = self.vehicle.maximum_velocity
         if node.curvature == 0:
-            return velocity
+            return self.vehicle.maximum_velocity
+
+        if velocity_estimate is None:
+            velocity = self.vehicle.maximum_velocity
+        else:
+            velocity = velocity_estimate
 
         i = 0
-        while i < 10000:
+        while i < MAXIMUM_ITERATIONS:
             i += 1
+
             vehicle_state = self.resolve_vehicle_state(
                 state_variables, node, velocity
             )
@@ -91,13 +106,23 @@ class PointMassVehicleModel(VehicleModelInterface):
             except ValueError:
                 available_fy = 0
 
-            if available_fy < abs(vehicle_state.required_fy):
-                net_force = available_fy - node.z_to_y(vehicle_state.weight)
-                ay = net_force / self.vehicle.total_mass
-                velocity = math.sqrt(ay / abs(node.curvature)) - 0.001
-            else:
-                break
+            fy_error = available_fy - abs(vehicle_state.required_fy)
 
+            if abs(fy_error) < PRECISION:
+                break
+            else:
+                velocity = math.sqrt(
+                    velocity**2
+                    + (
+                        fy_error
+                        / (abs(node.curvature) * self.vehicle.total_mass)
+                    )
+                )
+                if velocity > self.vehicle.maximum_velocity:
+                    velocity = self.vehicle.maximum_velocity
+                    break
+
+        logger.debug(f"Apex velocity found after {i} iterations.")
         return velocity
 
     def calculate_acceleration(
