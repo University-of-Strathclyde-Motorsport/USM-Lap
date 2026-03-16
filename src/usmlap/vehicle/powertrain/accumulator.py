@@ -2,6 +2,10 @@
 This module models the electric accumulator of a vehicle.
 """
 
+from functools import cached_property
+
+import numpy as np
+
 from ..common import Component, Subsystem
 
 
@@ -24,9 +28,18 @@ class Cell(Component, library="cells.json"):
     nominal_voltage: float
     charge_voltage: float
     discharge_voltage: float
+    voltage_lookup: list[tuple[float, float]]
     discharge_current: float
     resistance: float
     datasheet_url: str
+
+    @cached_property
+    def _soc_lookup_values(self) -> list[float]:
+        return [soc for soc, _ in self.voltage_lookup]
+
+    @cached_property
+    def _voltage_lookup_values(self) -> list[float]:
+        return [voltage for _, voltage in self.voltage_lookup]
 
     def get_voltage(self, state_of_charge: float) -> float:
         """
@@ -44,10 +57,16 @@ class Cell(Component, library="cells.json"):
         if state_of_charge < 0 or state_of_charge > 1:
             raise ValueError("State of charge must be between 0 and 1.")
 
-        return (
-            self.charge_voltage * state_of_charge
-            + self.discharge_voltage * (1 - state_of_charge)
+        voltage = np.interp(
+            state_of_charge,
+            self._soc_lookup_values,
+            self._voltage_lookup_values,
         )
+        return voltage
+        # return (
+        #     self.charge_voltage * state_of_charge
+        #     + self.discharge_voltage * (1 - state_of_charge)
+        # )
 
 
 class Accumulator(Subsystem):

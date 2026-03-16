@@ -3,6 +3,7 @@ This module models the motor of a vehicle.
 """
 
 import math
+from functools import cached_property
 
 from ..common import Component
 
@@ -34,16 +35,15 @@ class Motor(Component, library="motors.json"):
     rated_voltage: float
     datasheet_url: str
 
-
-    @property
+    @cached_property
     def maximum_speed(self) -> float:
         return rpm_to_rads(self.maximum_rpm)
 
-    @property
+    @cached_property
     def speed_per_volt(self) -> float:
         return self.maximum_speed / self.rated_voltage
 
-    @property
+    @cached_property
     def torque_per_amp(self) -> float:
         return self.peak_torque / self.peak_current
 

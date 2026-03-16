@@ -2,7 +2,6 @@
 Main entry point for the program.
 """
 
-import cProfile
 import logging
 import time
 
@@ -44,9 +43,7 @@ vehicle = load_vehicle("USM23 Baseline.json")
 simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
 
 start_time = time.time()
-cProfile.run("simulate(vehicle, mesh, simulation_settings)")
-# results = simulate(vehicle, mesh, simulation_settings)
-# print(f"Simulation took {time.time() - start_time:.3f}s")
+results = simulate(vehicle, mesh, simulation_settings)
 
 # plot_apexes(results)
 
