@@ -100,10 +100,11 @@ def sweep_1d(
     """
     sweep_results = SweepResults(parameter=sweep_settings.parameter)
 
-    sweep_vehicles = list(sweep_settings.get_vehicles(baseline_vehicle))
     for value, vehicle in progress.track(
-        sweep_vehicles,
-        description=f"Sweeping parameter {sweep_settings.parameter.name}",
+        sweep_settings.get_vehicles(baseline_vehicle),
+        description=f"Sweeping {sweep_settings.parameter.name}...",
+        transient=True,
+        total=sweep_settings.number_of_steps,
     ):
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"

@@ -4,12 +4,15 @@ This module contains code for points sensitivity analysis.
 
 from dataclasses import dataclass
 
+from rich.progress import Progress
+
 from usmlap.competition.competition import Competition
 from usmlap.competition.points.points import calculate_points
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
 PARAMETER_DELTA_SCALAR = 0.0001
+TASK_DESCRIPTION = "Evaluating sensitivity..."
 
 
 def points_sensitivity(
@@ -67,10 +70,16 @@ class SensitivityAnalysis(object):
         }
         total_points: dict[str, float] = {}
 
-        for direction, vehicle in vehicles.items():
-            results = self.competition.simulate(vehicle=vehicle)
-            points = calculate_points(results=results)
-            total_points[direction] = points.total
+        with Progress(transient=True) as progress:
+            task = progress.add_task(TASK_DESCRIPTION, total=2)
+            for i, (direction, vehicle) in enumerate(vehicles.items()):
+                progress.update(
+                    task, description=f"{TASK_DESCRIPTION} ({i + 1}/2)"
+                )
+                results = self.competition.simulate(vehicle=vehicle)
+                points = calculate_points(results=results)
+                total_points[direction] = points.total
+                progress.advance(task)
 
         points_delta = total_points["increased"] - total_points["decreased"]
         sensitivity = points_delta / (2 * self.parameter_delta)

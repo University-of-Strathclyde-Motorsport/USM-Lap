@@ -5,6 +5,7 @@ This module contains code for analysing the coupling between two parameters.
 from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
+from rich import progress
 
 from usmlap.competition.competition import Competition
 from usmlap.vehicle.parameters import Parameter
@@ -69,7 +70,12 @@ def coupling(
         sweep_parameter=sweep_settings.parameter,
         coupled_parameter=coupled_parameter,
     )
-    for value, vehicle in sweep_settings.get_vehicles(baseline_vehicle):
+    for value, vehicle in progress.track(
+        sweep_settings.get_vehicles(baseline_vehicle),
+        description=f"Sweeping {sweep_settings.parameter.name}...",
+        transient=True,
+        total=sweep_settings.number_of_steps,
+    ):
         sensitivity = points_sensitivity(
             vehicle=vehicle,
             competition=competition,

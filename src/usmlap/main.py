@@ -2,6 +2,7 @@
 Main entry point for the program.
 """
 
+import cProfile
 import logging
 import time
 
@@ -36,17 +37,18 @@ logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
 # track_sheet = "Spa-Francorchamps.xlsx"
 track_sheet = "FS AutoX Germany 2012.xlsx"
 track_data = load_track_from_spreadsheet(track_sheet)
-mesh = MeshGenerator(resolution=1).generate_mesh(track_data)
+mesh = MeshGenerator(resolution=0.1).generate_mesh(track_data)
 # mesh.plot_map()
 
 vehicle = load_vehicle("USM23 Baseline.json")
 simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
 
 start_time = time.time()
-results = simulate(vehicle, mesh, simulation_settings)
-print(f"Simulation took {time.time() - start_time:.3f}s")
+cProfile.run("simulate(vehicle, mesh, simulation_settings)")
+# results = simulate(vehicle, mesh, simulation_settings)
+# print(f"Simulation took {time.time() - start_time:.3f}s")
 
-plot_apexes(results)
+# plot_apexes(results)
 
 # competition_settings = CompetitionSettings(
 #     autocross_track="FS AutoX Germany 2012.xlsx"

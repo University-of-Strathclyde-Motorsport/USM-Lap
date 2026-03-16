@@ -4,15 +4,16 @@ This module implements a quasi-transient solver.
 
 import logging
 
-from rich import progress
+from rich.progress import Progress
 
 from usmlap.simulation.solution import Solution
 
 from .quasi_steady_state import QuasiSteadyStateSolver
-from .solver_interface import SolverInterface
+from .solver_interface import MaximumIterationsExceededError, SolverInterface
 
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 CONVERGENCE_TOLERANCE = 1e-4
+TASK_DESCRIPTION = "Solving transient simulation..."
 
 
 class QuasiTransientSolver(SolverInterface):
@@ -25,20 +26,24 @@ class QuasiTransientSolver(SolverInterface):
         times: list[float] = []
         solution = previous_solution
 
-        for i in progress.track(
-            range(MAXIMUM_TRANSIENT_ITERATIONS),
-            description="Solving transient simulation...",
-            transient=True,
-        ):
-            solution = _solve_next_iteration(previous_solution=solution)
-            times.append(solution.total_time)
-            logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
+        with Progress(transient=True) as progress:
+            task = progress.add_task(TASK_DESCRIPTION, total=None)
+            for i in range(MAXIMUM_TRANSIENT_ITERATIONS):
+                progress.update(
+                    task,
+                    advance=1,
+                    description=f"{TASK_DESCRIPTION} ({i + 1}/?)",
+                )
 
-            if _convergence_achieved(times, CONVERGENCE_TOLERANCE):
-                logging.info(f"Converged after {i} iterations.")
-                break
+                solution = _solve_next_iteration(previous_solution=solution)
+                times.append(solution.total_time)
+                logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
 
-        return solution
+                if _convergence_achieved(times, CONVERGENCE_TOLERANCE):
+                    logging.info(f"Converged after {i} iterations.")
+                    return solution
+
+        raise MaximumIterationsExceededError()
 
 
 def _solve_next_iteration(previous_solution: Solution) -> Solution:

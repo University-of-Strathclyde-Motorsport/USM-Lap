@@ -4,7 +4,7 @@ This module contains code for simulating a Formula Student competition.
 
 from dataclasses import dataclass, field
 
-from rich import progress
+from rich.progress import Progress
 
 from usmlap.simulation.simulation import SimulationSettings
 from usmlap.simulation.solution import Solution
@@ -63,11 +63,19 @@ class Competition(object):
         """
 
         solutions: dict[str, Solution] = {}
-        for event in progress.track(
-            self.events, description="Simulating competition...", transient=True
-        ):
-            event_solution = event.simulate(vehicle)
-            solutions[event.label] = event_solution
+
+        with Progress(transient=True) as progress:
+            task = progress.add_task(
+                "Simulating competition...", total=len(self.events)
+            )
+
+            for event in self.events:
+                progress.update(
+                    task, description=f"Simulating {event.label}..."
+                )
+                event_solution = event.simulate(vehicle)
+                solutions[event.label] = event_solution
+                progress.advance(task)
 
         return CompetitionResults(
             acceleration=solutions["acceleration"],
