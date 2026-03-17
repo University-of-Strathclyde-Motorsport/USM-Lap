@@ -2,6 +2,7 @@
 This module models the electric accumulator of a vehicle.
 """
 
+from dataclasses import dataclass
 from functools import cached_property
 
 import numpy as np
@@ -9,11 +10,20 @@ import numpy as np
 from ..common import Component, Subsystem
 
 
-class Cell(Component, library="cells.json"):
+@dataclass
+class CellVoltageLookup(object):
+    """Value from cell voltage lookup table."""
+
+    state_of_charge: float
+    voltage: float
+
+
+class Cell(Component, library="cells"):
     """
     An electrochemical cell.
 
     Attributes:
+        print_name (str): Printable name of the cell.
         capacity (float): Capacity of the cell.
         nominal_voltage (float): Nominal voltage of the cell.
         charge_voltage (float): Maximum voltage of the fully charged cell.
@@ -24,22 +34,24 @@ class Cell(Component, library="cells.json"):
         datasheet_url (str): URL to the datasheet of the cell.
     """
 
+    print_name: str
     capacity: float
     nominal_voltage: float
     charge_voltage: float
     discharge_voltage: float
-    voltage_lookup: list[tuple[float, float]]
+    voltage_lookup: list[CellVoltageLookup]
+    # voltage_lookup: list[tuple[float, float]]
     discharge_current: float
     resistance: float
     datasheet_url: str
 
     @cached_property
     def _soc_lookup_values(self) -> list[float]:
-        return [soc for soc, _ in self.voltage_lookup]
+        return [node.state_of_charge for node in self.voltage_lookup]
 
     @cached_property
     def _voltage_lookup_values(self) -> list[float]:
-        return [voltage for _, voltage in self.voltage_lookup]
+        return [node.voltage for node in self.voltage_lookup]
 
     def get_voltage(self, state_of_charge: float) -> float:
         """

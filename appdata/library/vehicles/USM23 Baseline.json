@@ -3,7 +3,7 @@
     "name": "USM23 Baseline",
     "year": 2023
   },
-  "driver": "small",
+  "driver": "acceleration",
   "aero": {
     "frontal_area": 1.002,
     "aero_model": {
@@ -15,13 +15,13 @@
   "brakes": {
     "front": {
       "cylinder": "CP7855-94",
-      "caliper": "front caliper",
+      "caliper": "front_caliper",
       "disc": "default",
       "pad": "default"
     },
     "rear": {
       "cylinder": "CP7855-96",
-      "caliper": "rear caliper",
+      "caliper": "rear_caliper",
       "disc": "default",
       "pad": "default"
     },
@@ -46,12 +46,12 @@
   },
   "powertrain": {
     "accumulator": {
-      "cell": "Molicel P30b",
+      "cell": "molicel_P30b",
       "cells_in_parallel": 6,
       "cells_in_series": 112,
       "soc_current_derate_point": 0.3
     },
-    "motor": "EMRAX 228",
+    "motor": "EMRAX_228",
     "motor_controller": "BAMOCAR"
   },
   "steering": {
@@ -84,7 +84,7 @@
     "final_drive_ratio": 3.2
   },
   "tyres": {
-    "front": "Hoozier 16 x 7.5 - 10 R20",
-    "rear": "Hoozier 16 x 7.5 - 10 R20"
+    "front": "hoozier_16x7.5-10_R20",
+    "rear": "hoozier_16x7.5-10_R20"
   }
 }

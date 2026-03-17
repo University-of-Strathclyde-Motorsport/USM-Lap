@@ -14,6 +14,44 @@ from pydantic import BaseModel, model_validator
 type JSONDict = dict[str, Any]
 
 
+class LibraryNotFoundError(KeyError):
+    """
+    Raised if a component library cannot be found.
+
+    Args:
+        library (Path): The name of the library
+    """
+
+    def __init__(self, component: type[Component], path: Path) -> None:
+        super().__init__(
+            f"Library for {component.__name__} not found at {path}."
+        )
+        self.component = component
+        self.path = path
+
+
+class ComponentNotFoundError(KeyError):
+    """
+    Raised if a component cannot be found in the library.
+
+    Args:
+        component (str): The name of the component.
+        library (str): The name of the library.
+        available_components (list[str]): A list of available components.
+    """
+
+    def __init__(
+        self, component: str, library: str, available_components: list[str]
+    ) -> None:
+        super().__init__(
+            f"Component '{component}' not found in {library} library. "
+            f"Available components: {available_components}"
+        )
+        self.component = component
+        self.library = library
+        self.available_components = available_components
+
+
 class Subsystem(BaseModel):
     """
     Abstract base class for vehicle subsystems.
@@ -86,7 +124,6 @@ class Component(ABC, Subsystem):
     Provides functionality for loading components from a library.
     """
 
-    name: str
     _library: ClassVar[str]
 
     def __init_subclass__(cls: type[Component], library: str) -> None:
@@ -94,15 +131,19 @@ class Component(ABC, Subsystem):
         cls._library = library
 
     @classmethod
-    def _get_library_path(cls) -> str:
+    def _get_library_path(cls) -> Path:
         """
         Get the path to the component library.
 
         Returns:
-            library_path (str): Path to the component library.
+            library_path (Path): Path to the component library.
         """
 
-        return "appdata/library/components/" + cls._library
+        library_path = Path("appdata/library/components/") / cls._library
+        if not library_path.is_dir():
+            raise LibraryNotFoundError(component=cls, path=library_path)
+
+        return library_path
 
     @classmethod
     def load_library(cls) -> dict[str, JSONDict]:
@@ -118,8 +159,12 @@ class Component(ABC, Subsystem):
                 The component names are used as keys.
                 The values are dictionaries containing component data.
         """
-        with open(cls._get_library_path(), "r") as library_file:
-            return json.load(library_file)
+        library: dict[str, JSONDict] = {}
+        for file in cls._get_library_path().iterdir():
+            with open(file, "r") as component_file:
+                library[file.stem] = json.load(component_file)
+
+        return library
 
     @classmethod
     def list_components(cls) -> list[str]:
@@ -144,12 +189,7 @@ class Component(ABC, Subsystem):
         """
         components = cls.list_components()
         if name not in components:
-            error_message = (
-                f"Component '{name}' not found "
-                f"in library '{cls._library}' "
-                f"(available components: {components})"
-            )
-            raise KeyError(error_message)
+            raise ComponentNotFoundError(name, cls._library, components)
 
     @classmethod
     def get_component(cls, name: str) -> JSONDict:
@@ -171,7 +211,6 @@ class Component(ABC, Subsystem):
         cls.check_component_exists(name)
         library = cls.load_library()
         component = library[name]
-        component["name"] = name
         return component
 
     @classmethod

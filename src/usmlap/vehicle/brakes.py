@@ -13,16 +13,18 @@ from usmlap.utils.datatypes import FrontRear, Percentage
 from .common import Component, Subsystem
 
 
-class MasterCylinder(Component, library="master_cylinders.json"):
+class MasterCylinder(Component, library="master_cylinders"):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
 
     Attributes:
+        print_name (str): The printable name of the master cylinder.
         piston_diameter (float): The diameter of the piston.
         colour (str): The colour of the master cylinder.
         piston_area (float): The area of the piston.
     """
 
+    print_name: str
     piston_diameter: Annotated[PositiveFloat, Unit("m")]
     colour: str
 
@@ -31,16 +33,18 @@ class MasterCylinder(Component, library="master_cylinders.json"):
         return geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeCaliper(Component, library="brake_calipers.json"):
+class BrakeCaliper(Component, library="brake_calipers"):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
 
     Attributes:
+        print_name (str): The printable name of the caliper.
         piston_count (int): The number of pistons in the caliper.
         piston_diameter (float): The diameter of the piston.
         piston_area (float): The total area of the pistons.
     """
 
+    print_name: str
     piston_count: PositiveInt
     piston_diameter: Annotated[PositiveFloat, Unit("m")]
 
@@ -49,27 +53,31 @@ class BrakeCaliper(Component, library="brake_calipers.json"):
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeDisc(Component, library="brake_discs.json"):
+class BrakeDisc(Component, library="brake_discs"):
     """
     The brake disc attached to the wheel.
 
     Attributes:
+        print_name (str): The printable name of the brake disc.
         outer_diameter (float): The outer diameter of the brake disc.
     """
 
+    print_name: str
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
-class BrakePad(Component, library="brake_pads.json"):
+class BrakePad(Component, library="brake_pads"):
     """
     The brake pad attached to the caliper.
 
     Attributes:
+        print_name (str): The printable name of the brake pad.
         height (float): The height of the brake pad.
         coefficient_of_friction (float):
             The coefficient of friction between the brake pad and brake disc.
     """
 
+    print_name: str
     height: Annotated[PositiveFloat, Unit("m")]
     coefficient_of_friction: PositiveFloat
 

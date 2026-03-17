@@ -8,11 +8,12 @@ from functools import cached_property
 from ..common import Component
 
 
-class Motor(Component, library="motors.json"):
+class Motor(Component, library="motors"):
     """
     An electric motor.
 
     Attributes:
+        print_name (str): Printable name of the motor.
         electrical_resistance (float): Electrical resistance of the motor.
         peak_torque (float):
             Peak torque which the motor can deliver for a short period.
@@ -26,6 +27,7 @@ class Motor(Component, library="motors.json"):
         datasheet_url (str): URL for the datasheet of the motor.
     """
 
+    print_name: str
     electrical_resistance: float
     peak_torque: float
     continuous_torque: float

@@ -167,15 +167,17 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
 TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
 
 
-class Tyre(Component, library="tyres.json"):
+class Tyre(Component, library="tyres"):
     """
     A racing tyre.
 
     Attributes:
+        print_name (str): Printable name of the tyre.
         unloaded_radius (float): The unloaded radius of the tyre.
         tyre_model (TyreModel): The tyre model.
     """
 
+    print_name: str
     unloaded_radius: float
     tyre_model: TyreModel
 

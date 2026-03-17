@@ -37,23 +37,24 @@ logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
 track_sheet = "FS AutoX Germany 2012.xlsx"
 track_data = load_track_from_spreadsheet(track_sheet)
 mesh = MeshGenerator(resolution=0.1).generate_mesh(track_data)
-# mesh.plot_map()
 
 vehicle = load_vehicle("USM23 Baseline.json")
+print(vehicle)
 simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
 
-start_time = time.time()
+# start_time = time.time()
 results = simulate(vehicle, mesh, simulation_settings)
+print(f"Total time: {results.total_time:.3f}s")
 
-# plot_apexes(results)
+plot_apexes(results)
 
 # competition_settings = CompetitionSettings(
 #     autocross_track="FS AutoX Germany 2012.xlsx"
 # )
 # competition = Competition(simulation_settings, competition_settings)
-sweep_settings = SweepSettings(
-    parameter=LiftCoefficient, start_value=3, end_value=6, number_of_steps=10
-)
+# sweep_settings = SweepSettings(
+#     parameter=LiftCoefficient, start_value=3, end_value=6, number_of_steps=10
+# )
 
 
 # results = coupling(vehicle, competition, sweep_settings, DragCoefficient)
