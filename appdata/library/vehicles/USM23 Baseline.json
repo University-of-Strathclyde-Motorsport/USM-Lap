@@ -41,7 +41,8 @@
         "rear_unsprung_mass": {
             "mass": 9,
             "centre_of_gravity_height": 0.2
-        }
+        },
+        "equivalent_drivetrain_inertia": 5
     },
     "powertrain": {
         "accumulator": {

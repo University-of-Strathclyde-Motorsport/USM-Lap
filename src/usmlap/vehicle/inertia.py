@@ -46,3 +46,4 @@ class Inertia(Subsystem):
     yaw_inertia: Annotated[PositiveFloat, Unit("kg.m^2")]
     front_unsprung_mass: UnsprungMass
     rear_unsprung_mass: UnsprungMass
+    equivalent_drivetrain_inertia: Annotated[PositiveFloat, Unit("kg")]

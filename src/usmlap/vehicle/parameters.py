@@ -8,10 +8,11 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import ClassVar, Optional
 
+from .powertrain.accumulator import Cell
 from .vehicle import Vehicle
 
 
-class Parameter(ABC):
+class Parameter[T](ABC):
     """
     An abstract class representing a vehicle parameter.
     """
@@ -21,20 +22,20 @@ class Parameter(ABC):
     unit: ClassVar[Optional[str]] = None
 
     def __init_subclass__(
-        cls: type[Parameter], parameter_name: str, unit: Optional[str] = None
+        cls: type[Parameter], name: str, unit: Optional[str] = None
     ) -> None:
         super().__init_subclass__()
-        cls._REGISTRY[parameter_name] = cls
-        cls.name = parameter_name
+        cls._REGISTRY[name] = cls
+        cls.name = name
         cls.unit = unit
 
     @classmethod
-    def get_parameter(cls, parameter_name: str) -> Parameter:
+    def get_parameter(cls, name: str) -> Parameter:
         """
         Get a parameter from its name.
 
         Args:
-            parameter_name (str): The name of the parameter.
+            name (str): The name of the parameter.
 
         Raises:
             KeyError: If no parameter with the given name exists.
@@ -43,10 +44,10 @@ class Parameter(ABC):
             parameter (type[Parameter]): A parameter object.
         """
         try:
-            return cls._REGISTRY[parameter_name]()
+            return cls._REGISTRY[name]()
         except KeyError:
             error_message = (
-                f"Parameter '{parameter_name}' not found. "
+                f"Parameter '{name}' not found. "
                 f"Available parameters: {list(cls._REGISTRY.keys())}"
             )
             raise KeyError(error_message)
@@ -70,7 +71,7 @@ class Parameter(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_value(vehicle: Vehicle) -> float:
+    def get_value(vehicle: Vehicle) -> T:
         """
         Get the value of a vehicle parameter.
 
@@ -78,19 +79,19 @@ class Parameter(ABC):
             vehicle (Vehicle): A vehicle object.
 
         Returns:
-            value (float): The value of the corresponding parameter.
+            value (T): The value of the corresponding parameter.
         """
         ...
 
     @staticmethod
     @abstractmethod
-    def set_value(vehicle: Vehicle, value: float) -> None:
+    def set_value(vehicle: Vehicle, value: T) -> None:
         """
         Set the value of a vehicle parameter.
 
         Args:
             vehicle (Vehicle): A vehicle object.
-            value (float): The value to set the parameter to.
+            value (T): The value to set the parameter to.
 
         Returns:
             vehicle (Vehicle): The modified vehicle object.
@@ -117,19 +118,8 @@ def get_new_vehicle(
     return new_vehicle
 
 
-class CurbMass(Parameter, parameter_name="Curb Mass", unit="kg"):
-    """The mass of the vehicle without the driver."""
-
-    @staticmethod
-    def get_value(vehicle: Vehicle) -> float:
-        return vehicle.inertia.curb_mass
-
-    @staticmethod
-    def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.inertia.curb_mass = value
-
-
-class LiftCoefficient(Parameter, parameter_name="Lift Coefficient"):
+# Aerodynamics
+class LiftCoefficient(Parameter[float], name="Lift Coefficient"):
     """The lift coefficient of the aero package."""
 
     @staticmethod
@@ -141,7 +131,7 @@ class LiftCoefficient(Parameter, parameter_name="Lift Coefficient"):
         vehicle.aero.aero_model.lift_coefficient = value
 
 
-class DragCoefficient(Parameter, parameter_name="Drag Coefficient"):
+class DragCoefficient(Parameter[float], name="Drag Coefficient"):
     """The drag coefficient of the aero package."""
 
     @staticmethod
@@ -153,7 +143,58 @@ class DragCoefficient(Parameter, parameter_name="Drag Coefficient"):
         vehicle.aero.aero_model.drag_coefficient = value
 
 
-class FinalDriveRatio(Parameter, parameter_name="Final Drive Ratio"):
+class FrontalArea(Parameter[float], name="Frontal Area", unit="m^2"):
+    """The frontal area of the aerodynamic package."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.aero.frontal_area
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.aero.frontal_area = value
+
+
+# Driver
+class DriverMass(Parameter[float], name="Driver Mass", unit="kg"):
+    """The mass of the driver."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.driver.mass
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.driver.mass = value
+
+
+# Inertia
+class CurbMass(Parameter[float], name="Curb Mass", unit="kg"):
+    """The mass of the vehicle without the driver."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.inertia.curb_mass
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.inertia.curb_mass = value
+
+
+class DrivetrainInertia(Parameter[float], name="Drivetrain Inertia", unit="kg"):
+    """Equivalent mass of the drivetrain inertia, measured at the wheel."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.inertia.equivalent_drivetrain_inertia
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.inertia.equivalent_drivetrain_inertia = value
+
+
+# Transmission
+class FinalDriveRatio(Parameter[float], name="Final Drive Ratio"):
     """The final drive ratio of the transmission."""
 
     @staticmethod
@@ -165,9 +206,47 @@ class FinalDriveRatio(Parameter, parameter_name="Final Drive Ratio"):
         vehicle.transmission.final_drive_ratio = value
 
 
-class DischargeCurrentLimit(
-    Parameter, parameter_name="Discharge Current Limit"
-):
+# Accumulator
+
+
+class AccumulatorCell(Parameter[Cell], name="Cell"):
+    """The cell of the accumulator."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> Cell:
+        return vehicle.powertrain.accumulator.cell
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: Cell) -> None:
+        vehicle.powertrain.accumulator.cell = value
+
+
+class CellsInSeries(Parameter[int], name="Cells in Series"):
+    """The number of cells in series in the accumulator."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> int:
+        return vehicle.powertrain.accumulator.cells_in_series
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: int) -> None:
+        vehicle.powertrain.accumulator.cells_in_series = value
+
+
+class CellsInParallel(Parameter[int], name="Cells in Parallel"):
+    """The number of cells in parallel in the accumulator."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> int:
+        return vehicle.powertrain.accumulator.cells_in_parallel
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: int) -> None:
+        vehicle.powertrain.accumulator.cells_in_parallel = value
+
+
+# Powertrain
+class DischargeCurrentLimit(Parameter[float], name="Discharge Current Limit"):
     """The discharge current limit of the powertrain."""
 
     @staticmethod

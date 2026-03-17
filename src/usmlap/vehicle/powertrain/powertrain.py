@@ -108,16 +108,14 @@ class RWDPowertrain(Powertrain):
         maximum_speed = self.get_maximum_motor_speed(state_of_charge)
         maximum_torque = self.motor.get_torque(discharge_current)
 
-        if motor_speed < knee_speed:
-            return maximum_torque
+        if motor_speed <= knee_speed:
+            ratio = 1
         elif motor_speed >= maximum_speed:
-            return 0
+            ratio = 0
         else:
-            return (
-                maximum_torque
-                * (maximum_speed - motor_speed)
-                / (maximum_speed - knee_speed)
-            )
+            ratio = (maximum_speed - motor_speed) / (maximum_speed - knee_speed)
+
+        return maximum_torque * ratio
 
     def get_motor_power(
         self, state_of_charge: float, motor_speed: float

@@ -21,17 +21,17 @@ class CouplingResults(object):
     The results of a coupling analysis.
 
     Attributes:
-        sweep_parameter (Parameter):
+        sweep_parameter (type[Parameter[float]]):
             The parameter being swept.
-        coupled_parameter (Parameter):
+        coupled_parameter (type[Parameter[float]]):
             The parameter being evaluated.
         data (dict[float, float]):
             A dictionary containing swept parameter values
             and the corresponding sensitivities of the coupled parameter.
     """
 
-    sweep_parameter: type[Parameter]
-    coupled_parameter: type[Parameter]
+    sweep_parameter: type[Parameter[float]]
+    coupled_parameter: type[Parameter[float]]
     data: dict[float, float] = field(default_factory=lambda: {})
 
     def plot(self) -> None:
@@ -49,7 +49,7 @@ def coupling(
     baseline_vehicle: Vehicle,
     competition: Competition,
     sweep_settings: SweepSettings,
-    coupled_parameter: type[Parameter],
+    coupled_parameter: type[Parameter[float]],
 ) -> CouplingResults:
     """
     Carry out a coupling analysis between two parameters.
@@ -59,7 +59,7 @@ def coupling(
             The vehicle to simulate.
         sweep_settings (SweepSettings):
             Settings for sweeping the first parameter.
-        coupled_parameter (type[Parameter]):
+        coupled_parameter (type[Parameter[float]]):
             The parameter to evaluate the sensitivity of.
 
     Returns:

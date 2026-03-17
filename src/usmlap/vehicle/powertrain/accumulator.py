@@ -63,10 +63,6 @@ class Cell(Component, library="cells.json"):
             self._voltage_lookup_values,
         )
         return voltage
-        # return (
-        #     self.charge_voltage * state_of_charge
-        #     + self.discharge_voltage * (1 - state_of_charge)
-        # )
 
 
 class Accumulator(Subsystem):

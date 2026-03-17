@@ -22,13 +22,13 @@ class SweepSettings(object):
     Settings for a 1D sweep of a parameter.
 
     Attributes:
-        parameter (type[Parameter]): The parameter to sweep.
+        parameter (type[Parameter[float]]): The parameter to sweep.
         start_value (float): The start value of the sweep.
         end_value (float): The end value of the sweep.
         number_of_steps (int): The number of steps in the sweep.
     """
 
-    parameter: type[Parameter]
+    parameter: type[Parameter[float]]
     start_value: float
     end_value: float
     number_of_steps: int
@@ -64,13 +64,13 @@ class SweepResults(object):
     The results of a 1D sweep of a parameter.
 
     Attributes:
-        parameter (Parameter): The parameter being swept.
+        parameter (type[Parameter[float]]): The parameter being swept.
         data (dict[float, float]):
             A dictionary containing parameter values
             and the corresponding points scored.
     """
 
-    parameter: type[Parameter]
+    parameter: type[Parameter[float]]
     data: dict[float, float] = field(default_factory=lambda: {})
 
     def plot(self) -> None:
