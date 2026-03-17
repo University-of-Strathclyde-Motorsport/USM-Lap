@@ -18,6 +18,7 @@ def plot_apexes(solution: Solution) -> None:
     """
 
     position = Position.get_values(solution)
+    curvature = [node.track_node.curvature for node in solution]
     velocity = Velocity.get_values(solution)
     maximum_velocity = MaximumVelocity.get_values(solution)
 
@@ -27,19 +28,36 @@ def plot_apexes(solution: Solution) -> None:
     apex_velocity = Velocity.get_values(apex_solution)
     apex_position = Position.get_values(apex_solution)
 
-    fig, ax = plt.subplots()
-    fig.suptitle("Solution")
+    fig, (ax_curvature, ax_apex) = plt.subplots(nrows=2, height_ratios=[1, 2])
 
-    ax.plot(position, maximum_velocity, color="lightblue")
-    ax.plot(position, velocity, color="blue")
-    ax.scatter(apex_position, apex_velocity, color="red")
+    ax_curvature.plot(position, curvature, color="#003366", zorder=2)
+    ax_curvature.axhline(0, color="black", linewidth=1, zorder=1)
+
+    ax_apex.plot(
+        position, maximum_velocity, color="#69C2CD", label="Maximum velocity"
+    )
+    ax_apex.plot(position, velocity, color="#003366", label="Velocity solution")
+    ax_apex.scatter(
+        apex_position, apex_velocity, color="#FF6454", label="Apexes"
+    )
 
     for i in range(len(apex_position)):
         plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))
 
-    ax.set_xlabel(Position.get_label())
-    ax.set_ylabel(Velocity.get_label())
-    ax.set_title("Maximum Velocity")
-    ax.grid()
+    ax_curvature.set_xlim(min(position), max(position))
+    a, b = ax_curvature.get_ylim()
+    c = max(abs(a), abs(b))
+    ax_curvature.set_ylim(-c, c)
+    ax_apex.set_xlim(min(position), max(position))
 
+    ax_curvature.set_xlabel(Position.get_label())
+    ax_curvature.set_ylabel("Curvature (1/m)")
+    ax_apex.set_xlabel(Position.get_label())
+    ax_apex.set_ylabel(Velocity.get_label())
+    fig.suptitle("Velocity Profile")
+
+    ax_curvature.grid()
+    ax_apex.grid()
+    ax_apex.legend()
+    plt.tight_layout()
     plt.show()
