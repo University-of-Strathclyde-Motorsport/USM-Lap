@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motor_controllers",
+  "title": "Motor Controllers",
+  "description": "Motor controllers for a vehicle",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the motor controller",
+      "type": "string"
+    },
+    "resistance": {
+      "description": "Internal resistance of the motor controller, in ohms",
+      "type": "number",
+      "minimum": 0
+    },
+    "efficiency": {
+      "description": "Nominal efficiency of the motor controller",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": ["print_name", "resistance", "efficiency"],
+  "additionalProperties": false
+}

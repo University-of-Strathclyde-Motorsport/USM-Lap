@@ -4,5 +4,73 @@
     "python.analysis.extraPaths": [
         "./src/usmlap"
     ],
-    "mermaidExportPro.autoExport": false
+    "mermaidExportPro.autoExport": false,
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/components/accumulators/*"
+            ],
+            "url": "./schema/accumulators.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/aero_packages/*"
+            ],
+            "url": "./schema/aero_packages.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/brake_calipers/*"
+            ],
+            "url": "./schema/brake_calipers.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/brake_discs/*"
+            ],
+            "url": "./schema/brake_discs.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/brake_pads/*"
+            ],
+            "url": "./schema/brake_pads.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/cells/*"
+            ],
+            "url": "./schema/cells.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/drivers/*"
+            ],
+            "url": "./schema/drivers.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/master_cylinders/*"
+            ],
+            "url": "./schema/master_cylinders.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/motor_controllers/*"
+            ],
+            "url": "./schema/motor_controllers.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/motors/*"
+            ],
+            "url": "./schema/motors.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/components/tyres/*"
+            ],
+            "url": "./schema/tyres.schema.json"
+        }
+    ]
 }

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "brake_calipers",
+  "title": "Brake Calipers",
+  "description": "Brake calipers for a vehicle.",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the caliper",
+      "type": "string"
+    },
+    "piston_count": {
+      "description": "The number of pistons on the caliper",
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "piston_diameter": {
+      "description": "The diameter of the piston, in metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": ["print_name", "piston_count", "piston_diameter"],
+  "additionalProperties": false
+}

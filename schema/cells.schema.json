@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cells",
+  "title": "Cells",
+  "description": "Cells for the accumulator",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the cell",
+      "type": "string"
+    },
+    "capacity": {
+      "description": "Capacity of the cell, in joules",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "nominal_voltage": {
+      "description": "Nominal voltage of the cell, in volts",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "charge_voltage": {
+      "description": "Voltage of the fully charged cell, in volts",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "discharge_voltage": {
+      "description": "Voltage of the fully discharged cell, in volts",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "voltage_lookup": {
+      "description": "Lookup table for cell voltage as a function of state of charge",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "state_of_charge": {
+            "description": "Reference state of charge",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "voltage": {
+            "description": "Voltage at reference state of charge",
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": ["state_of_charge", "voltage"],
+        "additionalProperties": false
+      },
+      "minItems": 2
+    },
+    "discharge_current": {
+      "description": "Maximum continuous discharge current, in amps",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "resistance": {
+      "description": "Nominal internal resistance of the cell, in ohms",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "datasheet_url": {
+      "description": "URL to the datasheet of the cell",
+      "type": "string"
+    }
+  },
+  "required": [
+    "print_name",
+    "capacity",
+    "nominal_voltage",
+    "charge_voltage",
+    "discharge_voltage",
+    "discharge_current",
+    "resistance"
+  ],
+  "additionalProperties": false
+}

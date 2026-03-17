@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "motors",
+  "title": "Motors",
+  "description": "Electric motors",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name for the motor",
+      "type": "string"
+    },
+    "electrical_resistance": {
+      "description": "Internal resistance of the motor, in ohms",
+      "type": "number",
+      "minimum": 0
+    },
+    "peak_torque": {
+      "description": "Peak deliverable torque, in Newton-metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "continuous_torque": {
+      "description": "Continuously deliverable torque, in Newton-metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "peak_current": {
+      "description": "Current draw for peak torque, in amps",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "continuous_current": {
+      "description": "Current draw for continuous torque, in amps",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "maximum_rpm": {
+      "description": "Maximum rotational speed of the motor, in rpm",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "rated_voltage": {
+      "description": "Rated voltage of the motor, in volts",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "datasheet_url": {
+      "description": "URL to motor datasheet",
+      "type": "string"
+    }
+  },
+  "required": [
+    "print_name",
+    "electrical_resistance",
+    "peak_torque",
+    "continuous_torque",
+    "peak_current",
+    "continuous_current",
+    "maximum_rpm",
+    "rated_voltage"
+  ],
+  "additionalProperties": false
+}

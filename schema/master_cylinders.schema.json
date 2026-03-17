@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "master_cylinders",
+  "title": "Master Cylinders",
+  "description": "Master Cylinders for the brakes",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the master cylinder",
+      "type": "string"
+    },
+    "piston_diameter": {
+      "description": "Diameter of the piston, in metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "colour": {
+      "description": "Colour of the master cylinder",
+      "type": "string"
+    }
+  },
+  "required": ["print_name", "piston_diameter", "colour"],
+  "additionalProperties": false
+}

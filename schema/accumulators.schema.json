@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "accumulators",
+  "title": "Accumulators",
+  "description": "Accumulator of an electric car",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the accumulator",
+      "type": "string"
+    },
+    "cell": {
+      "description": "Electrical cell. Must be the name of a json file in the cells library",
+      "type": "string"
+    },
+    "cells_in_parallel": {
+      "description": "Number of cells connected in parallel",
+      "type": "integer",
+      "exclusiveMinimum": 0
+    },
+    "cells_in_series": {
+      "description": "Number of cells connected in series",
+      "type": "integer",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": ["print_name", "cell", "cells_in_parallel", "cells_in_series"],
+  "additionalProperties": false
+}

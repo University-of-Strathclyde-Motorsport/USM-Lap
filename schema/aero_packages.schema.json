@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aero_packages",
+  "title": "Aero Packages",
+  "description": "Aerodynamic package of a vehicle",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the aerodynamic package",
+      "type": "string"
+    },
+    "frontal_area": {
+      "description": "The frontal area of the aerodynamic package",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "lift_coefficient": {
+      "description": "The lift coefficient of the aerodynamic package",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "drag_coefficient": {
+      "description": "The drag coefficient of the aerodynamic package",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "mass": {
+      "description": "The mass of the aerodynamic package",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": [
+    "print_name",
+    "frontal_area",
+    "lift_coefficient",
+    "drag_coefficient"
+  ],
+  "additionalProperties": false
+}

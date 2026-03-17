@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "brake_pads",
+  "title": "Brake Pads",
+  "description": "Brake pads for a vehicle",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name for the brake pad",
+      "type": "string"
+    },
+    "height": {
+      "description": "Height of the brake pad, in metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "coefficient_of_friction": {
+      "description": "Coefficient of friction of the brake pad",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

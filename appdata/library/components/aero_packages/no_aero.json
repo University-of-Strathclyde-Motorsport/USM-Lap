@@ -1,0 +1,6 @@
+{
+  "print_name": "No aero package",
+  "frontal_area": 1.002,
+  "lift_coefficient": 0.2,
+  "drag_coefficient": 0.7
+}

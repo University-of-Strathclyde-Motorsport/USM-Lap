@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "brake_discs",
+  "title": "Brake Discs",
+  "description": "Brake discs for a vehicle.",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the disc",
+      "type": "string"
+    },
+    "outer_diameter": {
+      "description": "The outer diameter of the disc, in metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": ["print_name", "outer_diameter"],
+  "additionalProperties": false
+}

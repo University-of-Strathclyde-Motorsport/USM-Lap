@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "drivers",
+  "title": "Drivers",
+  "description": "Driver information",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Print name of the driver",
+      "type": "string"
+    },
+    "mass": {
+      "description": "Mass of the driver, in kilograms",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "height": {
+      "description": "Height of the driver, in metres",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": ["print_name", "mass", "height"],
+  "additionalProperties": false
+}
