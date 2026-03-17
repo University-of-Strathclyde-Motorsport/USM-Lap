@@ -4,7 +4,11 @@ import math
 
 import pytest
 
-from usmlap.vehicle.powertrain.accumulator import Accumulator, Cell
+from usmlap.vehicle.powertrain.accumulator import (
+    Accumulator,
+    Cell,
+    CellVoltageLookup,
+)
 from usmlap.vehicle.powertrain.motor import Motor
 from usmlap.vehicle.powertrain.motor_controller import MotorController
 from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
@@ -13,11 +17,14 @@ from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
 @pytest.fixture
 def cell() -> Cell:
     return Cell(
-        name="Test Cell",
+        print_name="Test Cell",
         capacity=40000,
         nominal_voltage=3.6,
-        charge_voltage=4.2,
-        discharge_voltage=2.5,
+        voltage_lookup=[
+            CellVoltageLookup(state_of_charge=1, voltage=4.2),
+            CellVoltageLookup(state_of_charge=0.5, voltage=3.5),
+            CellVoltageLookup(state_of_charge=0, voltage=2.5),
+        ],
         discharge_current=30,
         resistance=0.017,
         datasheet_url="test_url",
@@ -37,7 +44,7 @@ def accumulator(cell: Cell) -> Accumulator:
 @pytest.fixture
 def motor() -> Motor:
     return Motor(
-        name="Test Motor",
+        print_name="Test Motor",
         electrical_resistance=0.2,
         peak_torque=250,
         continuous_torque=100,
@@ -52,7 +59,7 @@ def motor() -> Motor:
 @pytest.fixture
 def motor_controller() -> MotorController:
     return MotorController(
-        name="Test Motor Controller", resistance=0.2, efficiency=0.8
+        print_name="Test Motor Controller", resistance=0.2, efficiency=0.8
     )
 
 

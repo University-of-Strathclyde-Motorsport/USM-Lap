@@ -26,8 +26,6 @@ class Cell(Component, library="cells"):
         print_name (str): Printable name of the cell.
         capacity (float): Capacity of the cell.
         nominal_voltage (float): Nominal voltage of the cell.
-        charge_voltage (float): Maximum voltage of the fully charged cell.
-        discharge_voltage (float): Minimum voltage of the fully discharged cell.
         discharge_current (float): Maximum continuous discharge current.
         resistance (float): Internal resistance of the cell.
             Note that this is an approximation, and will be updated later.
@@ -37,10 +35,7 @@ class Cell(Component, library="cells"):
     print_name: str
     capacity: float
     nominal_voltage: float
-    charge_voltage: float
-    discharge_voltage: float
     voltage_lookup: list[CellVoltageLookup]
-    # voltage_lookup: list[tuple[float, float]]
     discharge_current: float
     resistance: float
     datasheet_url: str

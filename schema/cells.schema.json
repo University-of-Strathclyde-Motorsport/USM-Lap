@@ -19,16 +19,6 @@
       "type": "number",
       "exclusiveMinimum": 0
     },
-    "charge_voltage": {
-      "description": "Voltage of the fully charged cell, in volts",
-      "type": "number",
-      "exclusiveMinimum": 0
-    },
-    "discharge_voltage": {
-      "description": "Voltage of the fully discharged cell, in volts",
-      "type": "number",
-      "exclusiveMinimum": 0
-    },
     "voltage_lookup": {
       "description": "Lookup table for cell voltage as a function of state of charge",
       "type": "array",
@@ -71,8 +61,6 @@
     "print_name",
     "capacity",
     "nominal_voltage",
-    "charge_voltage",
-    "discharge_voltage",
     "discharge_current",
     "resistance"
   ],

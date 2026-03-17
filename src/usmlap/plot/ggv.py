@@ -22,7 +22,7 @@ def plot_velocity_acceleration(solution: Solution) -> None:
     velocity = Velocity.get_values(solution)
     longitudinal = LongitudinalAcceleration.get_values(solution)
 
-    ax.scatter(velocity, longitudinal)
+    ax.scatter(velocity, longitudinal, color="#003366", alpha=0.5)
 
     ax.set_xlabel(Velocity.get_label())
     ax.set_ylabel(LongitudinalAcceleration.get_label())
