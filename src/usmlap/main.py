@@ -51,9 +51,9 @@ results = simulate(vehicle, mesh, simulation_settings)
 #     autocross_track="FS AutoX Germany 2012.xlsx"
 # )
 # competition = Competition(simulation_settings, competition_settings)
-# sweep_settings = SweepSettings(
-#     parameter=LiftCoefficient, start_value=3, end_value=6, number_of_steps=10
-# )
+sweep_settings = SweepSettings(
+    parameter=LiftCoefficient, start_value=3, end_value=6, number_of_steps=10
+)
 
 
 # results = coupling(vehicle, competition, sweep_settings, DragCoefficient)

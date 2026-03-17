@@ -93,7 +93,7 @@ class Mesh(object):
             yield node
 
     @property
-    def node_count(self) -> float:
+    def node_count(self) -> int:
         return len(self.nodes)
 
     @property
