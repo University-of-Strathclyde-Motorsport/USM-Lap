@@ -11,7 +11,7 @@ import numpy as np
 from rich import progress
 
 from usmlap.competition.competition import Competition
-from usmlap.competition.points.points import calculate_points
+from usmlap.simulation.simulation import SimulationSettings
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -84,6 +84,7 @@ class SweepResults(object):
 
 def sweep_1d(
     baseline_vehicle: Vehicle,
+    simulation_settings: SimulationSettings,
     competition: Competition,
     sweep_settings: SweepSettings,
 ) -> SweepResults:
@@ -92,6 +93,7 @@ def sweep_1d(
 
     Args:
         baseline_vehicle (Vehicle): The vehicle to simulate.
+        simulation_settings (SimulationSettings): Settings for the simulation.
         competition (Competition): The competition to simulate.
         sweep_settings (SweepSettings): Settings for the sweep.
 
@@ -109,8 +111,7 @@ def sweep_1d(
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
-        results = competition.simulate(vehicle)
-        points = calculate_points(results)
-        sweep_results.data[value] = points.total
+        _, points = competition.simulate(vehicle, simulation_settings)
+        sweep_results.data[value] = sum(points.values())
 
     return sweep_results

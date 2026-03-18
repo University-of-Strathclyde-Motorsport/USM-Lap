@@ -5,7 +5,7 @@ This modules models the motor controller of a vehicle.
 from ..common import Component
 
 
-class MotorController(Component, library="motor_controllers"):
+class MotorController(Component, library="components/motor_controllers"):
     """
     A motor controller.
 

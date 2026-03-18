@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "competition",
+  "title": "Competition",
+  "description": "Best times set by other teams at competition",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the competition",
+      "type": "string"
+    },
+    "acceleration_t_min": {
+      "description": "Fastest acceleration time, in seconds",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "skidpad_t_min": {
+      "description": "Fastest skidpad time, in seconds",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "autocross_t_min": {
+      "description": "Fastest autocross time, in seconds",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "endurance_t_min": {
+      "description": "Fastest endurance time, in seconds",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "efficiency_ef_min": {
+      "description": "Lowest efficiency factor, in J.s^2",
+      "type": "number",
+      "exclusiveMinimum": 0
+    }
+  },
+  "required": [
+    "print_name",
+    "acceleration_t_min",
+    "skidpad_t_min",
+    "autocross_t_min",
+    "endurance_t_min"
+  ],
+  "additionalProperties": false
+}

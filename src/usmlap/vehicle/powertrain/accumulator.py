@@ -18,7 +18,7 @@ class CellVoltageLookup(object):
     voltage: float
 
 
-class Cell(Component, library="cells"):
+class Cell(Component, library="components/cells"):
     """
     An electrochemical cell.
 
@@ -72,7 +72,7 @@ class Cell(Component, library="cells"):
         return voltage
 
 
-class Accumulator(Component, library="accumulators"):
+class Accumulator(Component, library="components/accumulators"):
     """
     An electric accumulator.
 

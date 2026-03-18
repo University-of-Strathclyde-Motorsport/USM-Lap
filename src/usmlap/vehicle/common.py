@@ -139,7 +139,7 @@ class Component(ABC, Subsystem):
             library_path (Path): Path to the component library.
         """
 
-        library_path = Path("appdata/library/components/") / cls._library
+        library_path = Path("appdata/library/") / cls._library
         if not library_path.is_dir():
             raise LibraryNotFoundError(component=cls, path=library_path)
 

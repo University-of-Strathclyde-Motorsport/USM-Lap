@@ -8,7 +8,7 @@ from functools import cached_property
 from ..common import Component
 
 
-class Motor(Component, library="motors"):
+class Motor(Component, library="components/motors"):
     """
     An electric motor.
 

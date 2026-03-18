@@ -167,7 +167,7 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
 TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
 
 
-class Tyre(Component, library="tyres"):
+class Tyre(Component, library="components/tyres"):
     """
     A racing tyre.
 

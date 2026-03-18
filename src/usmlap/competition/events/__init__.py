@@ -2,15 +2,7 @@
 Package containing code for simulating different events at Formula Student.
 """
 
-from .acceleration import Acceleration
-from .autocross import Autocross
-from .endurance import Endurance
-from .event import EventInterface
-from .skidpad import Skidpad
-
-EVENTS: dict[str, type[EventInterface]] = {
-    "acceleration": Acceleration,
-    "skidpad": Skidpad,
-    "autocross": Autocross,
-    "endurance": Endurance,
-}
+from .acceleration import Acceleration as Acceleration
+from .autocross import Autocross as Autocross
+from .endurance import Endurance as Endurance
+from .skidpad import Skidpad as Skidpad

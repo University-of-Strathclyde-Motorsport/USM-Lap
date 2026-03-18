@@ -76,7 +76,7 @@ class ConstantAero(AeroModelInterface, type="constant"):
 AeroModel = Annotated[ConstantAero, Field(discriminator="model_type")]
 
 
-class AeroPackage(Component, library="aero_packages"):
+class AeroPackage(Component, library="components/aero_packages"):
     """
     The aerodynamic package of a vehicle.
 

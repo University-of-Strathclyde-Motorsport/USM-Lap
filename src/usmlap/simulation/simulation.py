@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
 from usmlap.track.mesh import Mesh
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -13,7 +14,6 @@ from .environment import Environment
 from .model.point_mass import PointMassVehicleModel
 from .model.vehicle_model import VehicleModelInterface
 from .solution import Solution, create_new_solution
-from .solver.quasi_steady_state import QuasiSteadyStateSolver
 from .solver.solver_interface import SolverInterface
 
 MAXIMUM_TRANSIENT_ITERATIONS = 100
@@ -33,7 +33,7 @@ class SimulationSettings(object):
 
     environment: Environment = field(default_factory=Environment)
     vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel
-    solver: type[SolverInterface] = QuasiSteadyStateSolver
+    solver: type[SolverInterface] = QuasiTransientSolver
 
 
 def simulate(

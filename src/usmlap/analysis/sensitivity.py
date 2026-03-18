@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from rich.progress import Progress
 
 from usmlap.competition.competition import Competition
-from usmlap.competition.points.points import calculate_points
+from usmlap.simulation.simulation import SimulationSettings
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -16,13 +16,17 @@ TASK_DESCRIPTION = "Evaluating sensitivity..."
 
 
 def points_sensitivity(
-    vehicle: Vehicle, competition: Competition, parameter: type[Parameter]
+    vehicle: Vehicle,
+    settings: SimulationSettings,
+    competition: Competition,
+    parameter: type[Parameter],
 ) -> float:
     """
     Evaluate the points sensitivity of a vehicle parameter.
 
     Args:
         vehicle (Vehicle): The baseline vehicle to simulate.
+        settings (SimulationSettings): Settings for the simulation.
         competition (Competition): The competition to simulate.
         parameter (Parameter): The parameter to analyse the sensitivity of.
 
@@ -30,7 +34,7 @@ def points_sensitivity(
         sensitivity (float): The points sensitivity of the parameter,
             measured in points per unit.
     """
-    analysis = SensitivityAnalysis(vehicle, competition, parameter)
+    analysis = SensitivityAnalysis(vehicle, settings, competition, parameter)
     sensitivity = analysis.get_sensitivity()
     return sensitivity
 
@@ -42,6 +46,7 @@ class SensitivityAnalysis(object):
     """
 
     baseline_vehicle: Vehicle
+    settings: SimulationSettings
     competition: Competition
     parameter: type[Parameter]
 
@@ -76,9 +81,8 @@ class SensitivityAnalysis(object):
                 progress.update(
                     task, description=f"{TASK_DESCRIPTION} ({i + 1}/2)"
                 )
-                results = self.competition.simulate(vehicle=vehicle)
-                points = calculate_points(results=results)
-                total_points[direction] = points.total
+                _, points = self.competition.simulate(vehicle, self.settings)
+                total_points[direction] = sum(points.values())
                 progress.advance(task)
 
         points_delta = total_points["increased"] - total_points["decreased"]

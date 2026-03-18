@@ -5,7 +5,7 @@ This module models the driver of the vehicle.
 from .common import Component
 
 
-class Driver(Component, library="drivers"):
+class Driver(Component, library="components/drivers"):
     """
     The driver of the vehicle.
 

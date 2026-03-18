@@ -2,7 +2,7 @@
 This module contains code for simulating a Formula Student competition.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass, field
 
 from rich.progress import Progress
 
@@ -10,10 +10,45 @@ from usmlap.simulation.simulation import SimulationSettings
 from usmlap.simulation.solution import Solution
 from usmlap.vehicle.vehicle import Vehicle
 
-from . import events
+from .events.acceleration import Acceleration
+from .events.autocross import Autocross
+from .events.endurance import Endurance
 from .events.event import EventInterface
-from .results import CompetitionResults
-from .settings import CompetitionSettings
+from .events.skidpad import Skidpad
+from .points import CompetitionData
+
+DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.xlsx"
+DEFAULT_COMPETITION_DATASET = "FSUK 2025"
+
+
+@dataclass
+class CompetitionSettings(object):
+    """
+    Settings for simulating a Formula Student competition.
+
+    Attributes:
+        autocross_track (str): Track to use for autocross and endurance events.
+        simulate_acceleration (bool): Whether to simulate the acceleration event.
+        simulate_skidpad (bool): Whether to simulate the skidpad event.
+        simulate_autocross (bool): Whether to simulate the autocross event.
+        simulate_endurance (bool): Whether to simulate the endurance event.
+    """
+
+    autocross_track: str = DEFAULT_AUTOCROSS_TRACK
+    simulate_acceleration: bool = True
+    simulate_skidpad: bool = True
+    simulate_autocross: bool = True
+    simulate_endurance: bool = True
+    dataset: InitVar[str] = field(default=DEFAULT_COMPETITION_DATASET)
+    competition_data: CompetitionData = field(init=False)
+
+    def __post_init__(self, dataset: str) -> None:
+        self.competition_data = CompetitionData.from_library(dataset)
+
+
+type CompetitionResults = dict[str, Solution]
+
+type CompetitionPoints = dict[str, float]
 
 
 @dataclass
@@ -22,47 +57,63 @@ class Competition(object):
     Class for simulating a Formula Student competition.
 
     Attributes:
-        simulation_settings (SimulationSettings):
-            Settings for the simulation.
-        competition_settings (CompetitionSettings):
-            Settings for the competition.
+        settings: Settings for the competition.
+        events: List of events to simulate.
     """
 
-    simulation_settings: SimulationSettings
-    competition_settings: CompetitionSettings
-    acceleration: events.Acceleration = field(init=False)
-    skidpad: events.Skidpad = field(init=False)
-    autocross: events.Autocross = field(init=False)
-    endurance: events.Endurance = field(init=False)
-
-    @property
-    def events(self) -> list[EventInterface]:
-        return [self.acceleration, self.skidpad, self.autocross, self.endurance]
+    settings: CompetitionSettings
+    events: list[EventInterface] = field(init=False, default_factory=list)
 
     def __post_init__(self) -> None:
-        self.acceleration = self.create_event(events.Acceleration)
-        self.skidpad = self.create_event(events.Skidpad)
-        self.autocross = self.create_event(events.Autocross)
-        self.endurance = self.create_event(events.Endurance)
+        self._create_events()
 
-    def create_event[T: EventInterface](self, event: type[T]) -> T:
-        return event(
-            simulation_settings=self.simulation_settings,
-            competition_settings=self.competition_settings,
-        )
+    def _add_event(self, event: EventInterface) -> None:
+        self.events.append(event)
 
-    def simulate(self, vehicle: Vehicle) -> CompetitionResults:
+    def _create_events(self) -> None:
+        """
+        Create competition events.
+        """
+
+        with Progress(transient=True) as progress:
+            task = progress.add_task("Setting up events...")
+            if self.settings.simulate_acceleration:
+                progress.update(task, description="Setting up Acceleration...")
+                acceleration = Acceleration()
+                self._add_event(acceleration)
+
+            if self.settings.simulate_skidpad:
+                progress.update(task, description="Setting up Skidpad...")
+                skidpad = Skidpad()
+                self._add_event(skidpad)
+
+            if self.settings.simulate_autocross:
+                progress.update(task, description="Setting up Autocross...")
+                autocross = Autocross(track_file=self.settings.autocross_track)
+                self._add_event(autocross)
+
+            if self.settings.simulate_endurance:
+                progress.update(task, description="Setting up Endurance...")
+                endurance = Endurance(track_file=self.settings.autocross_track)
+                self._add_event(endurance)
+
+    def simulate(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> tuple[CompetitionResults, CompetitionPoints]:
         """
         Simulate a Formula Student competition.
 
         Args:
             vehicle (Vehicle): The vehicle to simulate.
+            settings (SimulationSettings): Settings for the simulation.
 
         Returns:
             results (CompetitionResults): The results of the competition.
+            points (CompetitionPoints): The points scored in the competition.
         """
 
-        solutions: dict[str, Solution] = {}
+        results: CompetitionResults = {}
+        points: CompetitionPoints = {}
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
@@ -73,13 +124,15 @@ class Competition(object):
                 progress.update(
                     task, description=f"Simulating {event.label}..."
                 )
-                event_solution = event.simulate(vehicle)
-                solutions[event.label] = event_solution
+
+                event_solution = event.simulate(vehicle, settings)
+                event_points = event.calculate_points(
+                    event_solution, self.settings.competition_data
+                )
+
+                points.update(event_points)
+                results[event.label] = event_solution
+
                 progress.advance(task)
 
-        return CompetitionResults(
-            acceleration=solutions["acceleration"],
-            skidpad=solutions["skidpad"],
-            autocross=solutions["autocross"],
-            endurance=solutions["endurance"],
-        )
+        return results, points

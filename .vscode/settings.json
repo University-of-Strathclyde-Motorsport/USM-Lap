@@ -77,6 +77,12 @@
                 "/library/vehicles/*"
             ],
             "url": "./schema/vehicles.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/library/competition/*"
+            ],
+            "url": "./schema/competition.schema.json"
         }
     ]
 }

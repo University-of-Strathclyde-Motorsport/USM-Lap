@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from rich import progress
 
 from usmlap.competition.competition import Competition
+from usmlap.simulation.simulation import SimulationSettings
 from usmlap.vehicle.parameters import Parameter
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -47,6 +48,7 @@ class CouplingResults(object):
 
 def coupling(
     baseline_vehicle: Vehicle,
+    simulation_settings: SimulationSettings,
     competition: Competition,
     sweep_settings: SweepSettings,
     coupled_parameter: type[Parameter[float]],
@@ -57,6 +59,10 @@ def coupling(
     Args:
         baseline_vehicle (Vehicle):
             The vehicle to simulate.
+        simulation_settings (SimulationSettings):
+            Settings for the simulation.
+        competition (Competition):
+            The competition to use for analysis.
         sweep_settings (SweepSettings):
             Settings for sweeping the first parameter.
         coupled_parameter (type[Parameter[float]]):
@@ -78,6 +84,7 @@ def coupling(
     ):
         sensitivity = points_sensitivity(
             vehicle=vehicle,
+            settings=simulation_settings,
             competition=competition,
             parameter=coupled_parameter,
         )

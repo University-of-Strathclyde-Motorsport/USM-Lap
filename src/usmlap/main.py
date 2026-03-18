@@ -8,7 +8,6 @@ import time
 from usmlap.analysis.coupling import coupling
 from usmlap.analysis.sweep_1d import SweepSettings
 from usmlap.competition.competition import Competition
-from usmlap.competition.settings import CompetitionSettings
 from usmlap.plot.apex import plot_apexes
 from usmlap.simulation.simulation import SimulationSettings, simulate
 from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver

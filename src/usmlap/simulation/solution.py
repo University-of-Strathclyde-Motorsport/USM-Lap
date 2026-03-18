@@ -194,6 +194,12 @@ class Solution(object):
         for node in self.nodes:
             yield node
 
+    def __str__(self) -> str:
+        return f"Total time: {self.total_time:.3f}s"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
     @property
     def total_time(self) -> float:
         return sum(node.time for node in self)
@@ -201,6 +207,10 @@ class Solution(object):
     @property
     def total_length(self) -> float:
         return sum(node.length for node in self)
+
+    @property
+    def total_energy_used(self) -> float:
+        return sum(node.energy_used for node in self)
 
     @property
     def average_velocity(self) -> float:

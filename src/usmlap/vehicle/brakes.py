@@ -13,7 +13,7 @@ from usmlap.utils.datatypes import FrontRear, Percentage
 from .common import Component, Subsystem
 
 
-class MasterCylinder(Component, library="master_cylinders"):
+class MasterCylinder(Component, library="components/master_cylinders"):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
 
@@ -33,7 +33,7 @@ class MasterCylinder(Component, library="master_cylinders"):
         return geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeCaliper(Component, library="brake_calipers"):
+class BrakeCaliper(Component, library="components/brake_calipers"):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
 
@@ -53,7 +53,7 @@ class BrakeCaliper(Component, library="brake_calipers"):
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeDisc(Component, library="brake_discs"):
+class BrakeDisc(Component, library="components/brake_discs"):
     """
     The brake disc attached to the wheel.
 
@@ -66,7 +66,7 @@ class BrakeDisc(Component, library="brake_discs"):
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
-class BrakePad(Component, library="brake_pads"):
+class BrakePad(Component, library="components/brake_pads"):
     """
     The brake pad attached to the caliper.
 
