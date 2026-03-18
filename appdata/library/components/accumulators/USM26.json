@@ -1,6 +1,6 @@
 {
   "print_name": "USM26 Accumulator",
-  "cell": "molicel_P30b.json",
+  "cell": "molicel_P30b",
   "cells_in_parallel": 6,
   "cells_in_series": 112
 }

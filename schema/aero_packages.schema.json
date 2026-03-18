@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
   "$id": "aero_packages",
   "title": "Aero Packages",
   "description": "Aerodynamic package of a vehicle",
@@ -13,6 +13,28 @@
       "description": "The frontal area of the aerodynamic package",
       "type": "number",
       "exclusiveMinimum": 0
+    },
+    "aero_model": {
+      "description": "Model of the aerodynamic package",
+      "type": "object",
+      "properties": {
+        "model_type": {
+          "description": "Type of aerodynamic model described",
+          "enum": ["constant"]
+        },
+        "lift_coefficient": {
+          "description": "The lift coefficient of the aerodynamic package",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "drag_coefficient": {
+          "description": "The drag coefficient of the aerodynamic package",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["model_type", "lift_coefficient", "drag_coefficient"],
+      "additionalProperties": false
     },
     "lift_coefficient": {
       "description": "The lift coefficient of the aerodynamic package",
@@ -30,11 +52,6 @@
       "exclusiveMinimum": 0
     }
   },
-  "required": [
-    "print_name",
-    "frontal_area",
-    "lift_coefficient",
-    "drag_coefficient"
-  ],
+  "required": ["print_name", "frontal_area", "aero_model"],
   "additionalProperties": false
 }

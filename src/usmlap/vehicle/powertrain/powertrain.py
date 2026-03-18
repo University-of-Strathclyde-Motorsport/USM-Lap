@@ -32,13 +32,36 @@ class RWDPowertrain(Powertrain):
         accumulator (Accumulator): The accumulator storing energy.
         motor (Motor): The electric motor.
         motor_controller (MotorController): The motor controller.
+        soc_current_derate_point (float):
+            State of charge at which to begin derating current.
         discharge_current_limit (float): Scaling factor for the current limit.
     """
 
     accumulator: Accumulator
     motor: Motor
     motor_controller: MotorController
+    soc_current_derate_point: float
     discharge_current_limit: float = 1
+
+    def get_discharge_current(self, state_of_charge: float) -> float:
+        """
+        Get the available discharge current at a given state of charge.
+
+        Above the derate point, the maximum discharge current is available.
+        Below the derate point, the current is scaled linearly to zero.
+
+        Args:
+            state_of_charge (float): State of charge, between 0 and 1.
+
+        Returns:
+            current (float): Available discharge current.
+        """
+        if state_of_charge >= self.soc_current_derate_point:
+            scalar = 1
+        else:
+            scalar = state_of_charge / self.soc_current_derate_point
+
+        return self.accumulator.maximum_discharge_current * scalar
 
     def get_voltage_drop(self, current: float) -> float:
         """
@@ -102,7 +125,7 @@ class RWDPowertrain(Powertrain):
     def get_motor_torque(
         self, state_of_charge: float, motor_speed: float
     ) -> float:
-        max_current = self.accumulator.get_discharge_current(state_of_charge)
+        max_current = self.get_discharge_current(state_of_charge)
         discharge_current = max_current * self.discharge_current_limit
         knee_speed = self.get_knee_speed(state_of_charge, discharge_current)
         maximum_speed = self.get_maximum_motor_speed(state_of_charge)

@@ -58,11 +58,7 @@ def brake_line(
 @pytest.fixture
 def brakes(brake_line: BrakeLine) -> Brakes:  # noqa S1720
     return Brakes(
-        front=brake_line,
-        rear=brake_line,
-        pedal_ratio=0.5,
-        front_brake_bias=0.5,
-        regen_torque=0.1,
+        front=brake_line, rear=brake_line, pedal_ratio=3, front_brake_bias=0.5
     )
 
 

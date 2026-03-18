@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
   "$id": "tyres",
   "title": "Tyres",
   "description": "Tyres for a vehicle",

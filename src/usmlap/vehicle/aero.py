@@ -11,7 +11,7 @@ from typing import Annotated, Literal
 from annotated_types import Unit
 from pydantic import BaseModel, Field
 
-from .common import AbstractSubsystem, Subsystem
+from .common import AbstractSubsystem, Component
 
 
 class AeroAttitude(BaseModel):
@@ -76,7 +76,7 @@ class ConstantAero(AeroModelInterface, type="constant"):
 AeroModel = Annotated[ConstantAero, Field(discriminator="model_type")]
 
 
-class AeroPackage(Subsystem):
+class AeroPackage(Component, library="aero_packages"):
     """
     The aerodynamic package of a vehicle.
 

@@ -1,17 +1,10 @@
 {
   "metadata": {
-    "name": "USM23 Baseline",
+    "print_name": "USM23 Baseline",
     "year": 2023
   },
   "driver": "acceleration",
-  "aero": {
-    "frontal_area": 1.002,
-    "aero_model": {
-      "model_type": "constant",
-      "lift_coefficient": 4.2,
-      "drag_coefficient": 1.5
-    }
-  },
+  "aero": "USM26",
   "brakes": {
     "front": {
       "cylinder": "CP7855-94",
@@ -26,13 +19,11 @@
       "pad": "default"
     },
     "pedal_ratio": 3.6,
-    "front_brake_bias": 0.681,
-    "regen_torque": 40
+    "front_brake_bias": 0.681
   },
   "inertia": {
     "curb_mass": 225,
     "front_mass_distribution": 0.5,
-    "centre_of_gravity_height": 0.3,
     "yaw_inertia": 75,
     "front_unsprung_mass": {
       "mass": 9,
@@ -45,14 +36,10 @@
     "equivalent_drivetrain_inertia": 5
   },
   "powertrain": {
-    "accumulator": {
-      "cell": "molicel_P30b",
-      "cells_in_parallel": 6,
-      "cells_in_series": 112,
-      "soc_current_derate_point": 0.3
-    },
+    "accumulator": "USM26",
     "motor": "EMRAX_228",
-    "motor_controller": "BAMOCAR"
+    "motor_controller": "BAMOCAR",
+    "soc_current_derate_point": 0.3
   },
   "steering": {
     "steering_ratio": 5,

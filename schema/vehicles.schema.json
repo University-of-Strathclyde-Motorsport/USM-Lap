@@ -1,0 +1,328 @@
+{
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
+  "$id": "vehicles",
+  "title": "Vehicles",
+  "description": "Vehicle definition for laptime simulation",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "description": "Metadata for the vehicle",
+      "type": "object",
+      "properties": {
+        "print_name": {
+          "description": "Printable name of the vehicle",
+          "type": "string"
+        },
+        "year": {
+          "description": "Year the vehicle was manufactured",
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": {
+          "description": "Description of the vehicle",
+          "type": "string"
+        }
+      },
+      "required": ["print_name", "year"],
+      "additionalProperties": false
+    },
+    "driver": {
+      "description": "Driver for the vehicle. Should be the name of a json file in the drivers library",
+      "type": "string"
+    },
+    "aero": {
+      "description": "Aerodynamic package of the vehicle. Should be the name of a json file in the aero_packages library",
+      "type": "string"
+    },
+    "brakes": {
+      "description": "Brake system of the vehicle",
+      "type": "object",
+      "properties": {
+        "front": {
+          "description": "Front brake line",
+          "$ref": "#/$defs/brake_line"
+        },
+        "rear": {
+          "description": "Rear brake line",
+          "$ref": "#/$defs/brake_line"
+        },
+        "pedal_ratio": {
+          "description": "Ratio of brake pedal motion to cylinder motion",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "front_brake_bias": {
+          "description": "Proportion of pedal force applied to the front brake line",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["front", "rear", "pedal_ratio", "front_brake_bias"],
+      "additionalProperties": false
+    },
+    "inertia": {
+      "description": "Inertia properties of the vehicle",
+      "type": "object",
+      "properties": {
+        "curb_mass": {
+          "description": "Total mass of the vehicle without the driver, in kilograms",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "front_mass_distribution": {
+          "description": "Proportion of mass on the front of the vehicle",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "yaw_inertia": {
+          "description": "Yaw inertia of the vehicle, in kg.m^2",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "front_unsprung_mass": {
+          "description": "Unsprung mass of a front wheel",
+          "$ref": "#/$defs/unsprung_mass"
+        },
+        "rear_unsprung_mass": {
+          "description": "Unsprung mass of a rear wheel",
+          "$ref": "#/$defs/unsprung_mass"
+        },
+        "equivalent_drivetrain_inertia": {
+          "description": "Equivalent mass of the drivetrain rotational inertia, measured at the wheel, in kilograms",
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "curb_mass",
+        "front_mass_distribution",
+        "yaw_inertia",
+        "front_unsprung_mass",
+        "rear_unsprung_mass",
+        "equivalent_drivetrain_inertia"
+      ],
+      "additionalProperties": false
+    },
+    "powertrain": {
+      "description": "Electric powertrain of the vehicle",
+      "$ref": "#/$defs/powertrain"
+    },
+    "steering": {
+      "description": "Steering system of the vehicle",
+      "$ref": "#/$defs/steering"
+    },
+    "suspension": {
+      "description": "Suspension system of the vehicle",
+      "$ref": "#/$defs/suspension"
+    },
+    "transmission": {
+      "description": "Transmission of the vehicle",
+      "properties": {
+        "final_drive_ratio": {
+          "description": "Final drive ratio of the transmission",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["final_drive_ratio"],
+      "additionalProperties": false
+    },
+    "tyres": {
+      "description": "Tyres of the vehicle",
+      "properties": {
+        "front": { "$ref": "#/$defs/tyre" },
+        "rear": { "$ref": "#/$defs/tyre" }
+      },
+      "required": ["front", "rear"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "metadata",
+    "driver",
+    "aero",
+    "brakes",
+    "inertia",
+    "powertrain",
+    "steering",
+    "suspension",
+    "transmission",
+    "tyres"
+  ],
+  "additionalProperties": false,
+
+  "$defs": {
+    "brake_line": {
+      "type": "object",
+      "properties": {
+        "cylinder": {
+          "description": "Cylinder of the brake line. Should be the name of a json file in the master_cylinders library",
+          "type": "string"
+        },
+        "caliper": {
+          "description": "Caliper of the brake line. Should be the name of a json file in the brake_calipers library",
+          "type": "string"
+        },
+        "disc": {
+          "description": "Disc of the brake line. Should be the name of a json file in the brake_discs library",
+          "type": "string"
+        },
+        "pad": {
+          "description": "Pad of the brake line. Should be the name of a json file in the brake_pads library",
+          "type": "string"
+        }
+      },
+      "required": ["cylinder", "caliper", "disc", "pad"],
+      "additionalProperties": false
+    },
+
+    "unsprung_mass": {
+      "type": "object",
+      "properties": {
+        "mass": {
+          "description": "Unsprung mass, in kilograms",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "centre_of_gravity_height": {
+          "description": "Centre of gravity height, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["mass", "centre_of_gravity_height"],
+      "additionalProperties": false
+    },
+
+    "powertrain": {
+      "type": "object",
+      "properties": {
+        "accumulator": {
+          "description": "The accumulator of the vehicle. Should be the name of a json file in the accumulators library",
+          "type": "string"
+        },
+        "motor": {
+          "description": "The motor of the vehicle. Should be the name of a json file in the motors library",
+          "type": "string"
+        },
+        "motor_controller": {
+          "description": "The motor controller of the vehicle. Should be the name of a json file in the motor_controllers library",
+          "type": "string"
+        },
+        "soc_current_derate_point": {
+          "description": "The state of charge at which to begin derating current",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "accumulator",
+        "motor",
+        "motor_controller",
+        "soc_current_derate_point"
+      ],
+      "additionalProperties": false
+    },
+
+    "steering": {
+      "type": "object",
+      "properties": {
+        "steering_ratio": {
+          "description": "The ratio of steering wheel angle to wheel angle",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "steering_wheel_radius": {
+          "description": "The radius of the steering wheel, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["steering_ratio", "steering_wheel_radius"],
+      "additionalProperties": false
+    },
+
+    "suspension": {
+      "type": "object",
+      "properties": {
+        "wheelbase": {
+          "description": "The wheelbase of the vhicle, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "centre_of_gravity_height": {
+          "description": "Height of the centre of gravity above the ground plane, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "front": {
+          "description": "Front axle suspension",
+          "$ref": "#/$defs/suspension_axle"
+        },
+        "rear": {
+          "description": "Rear axle suspension",
+          "$ref": "#/$defs/suspension_axle"
+        }
+      },
+      "required": ["wheelbase", "centre_of_gravity_height", "front", "rear"],
+      "additionalProperties": false
+    },
+
+    "suspension_axle": {
+      "type": "object",
+      "properties": {
+        "suspension_type": {
+          "description": "Geometry of suspension",
+          "enum": ["decoupled"]
+        },
+        "track_width": {
+          "description": "The width of the track, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "roll_centre_height": {
+          "description": "Height of the roll centre, in metres",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "heave_motion_ratio": {
+          "description": "Motion ratio of the heave spring",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "heave_spring_rate": {
+          "description": "Spring rate of the heave spring, in N/m",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "roll_motion_ratio": {
+          "description": "Motion ratio of the roll spring",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "roll_spring_rate": {
+          "description": "Spring rate of the roll spring, in N/m",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "suspension_type",
+        "track_width",
+        "roll_centre_height",
+        "heave_motion_ratio",
+        "heave_spring_rate",
+        "roll_motion_ratio",
+        "roll_spring_rate"
+      ],
+      "additionalProperties": false
+    },
+
+    "tyre": {
+      "description": "Should be the name of a json file in the tyres library",
+      "type": "string"
+    }
+  }
+}

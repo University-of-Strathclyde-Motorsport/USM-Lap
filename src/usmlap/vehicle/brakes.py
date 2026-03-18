@@ -165,14 +165,12 @@ class Brakes(Subsystem):
         front_brake_bias (float):
             Proportion of force applied to the front master cylinder
             (value between 0 and 1).
-        regen_torque (float): Maximum regenerative braking torque.
     """
 
     front: BrakeLine
     rear: BrakeLine
     pedal_ratio: PositiveFloat
     front_brake_bias: Percentage
-    regen_torque: Annotated[PositiveFloat, Unit("Nm")]
 
     @property
     def brake_bias(self) -> FrontRear[float]:

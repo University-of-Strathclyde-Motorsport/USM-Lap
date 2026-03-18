@@ -34,10 +34,10 @@ def cell() -> Cell:
 @pytest.fixture
 def accumulator(cell: Cell) -> Accumulator:
     return Accumulator(
+        print_name="Test Accumulator",
         cell=cell,
         cells_in_parallel=5,
         cells_in_series=100,
-        soc_current_derate_point=0.3,
     )
 
 
@@ -68,5 +68,8 @@ def powertrain(
     accumulator: Accumulator, motor: Motor, motor_controller: MotorController
 ) -> RWDPowertrain:
     return RWDPowertrain(
-        accumulator=accumulator, motor=motor, motor_controller=motor_controller
+        accumulator=accumulator,
+        motor=motor,
+        motor_controller=motor_controller,
+        soc_current_derate_point=0.3,
     )

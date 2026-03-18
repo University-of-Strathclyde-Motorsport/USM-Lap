@@ -37,19 +37,19 @@ class ComponentNotFoundError(KeyError):
     Args:
         component (str): The name of the component.
         library (str): The name of the library.
-        available_components (list[str]): A list of available components.
+        available (list[str]): A list of available components.
     """
 
     def __init__(
-        self, component: str, library: str, available_components: list[str]
+        self, component: str, library: str, available: list[str]
     ) -> None:
         super().__init__(
             f"Component '{component}' not found in {library} library. "
-            f"Available components: {available_components}"
+            f"Available components: {available}"
         )
         self.component = component
         self.library = library
-        self.available_components = available_components
+        self.available = available
 
 
 class Subsystem(BaseModel):
@@ -240,6 +240,16 @@ class Component(ABC, Subsystem):
         this is looked up in the corresponding component library
         and expanded into a dictionary
         containing the component data.
+
+        Args:
+            data (Any): The data to expand.
+
+        Returns:
+            expanded_data (Any): The expanded data.
+
+        Raises:
+            ComponentNotFoundError:
+                No suitable component cannot be found in the library.
         """
         if isinstance(data, str):
             data = cls.get_component(data)

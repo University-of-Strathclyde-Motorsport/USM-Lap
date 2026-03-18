@@ -8,69 +8,75 @@
     "json.schemas": [
         {
             "fileMatch": [
-                "/components/accumulators/*"
+                "/library/components/accumulators/*"
             ],
             "url": "./schema/accumulators.schema.json"
         },
         {
             "fileMatch": [
-                "/components/aero_packages/*"
+                "/library/components/aero_packages/*"
             ],
             "url": "./schema/aero_packages.schema.json"
         },
         {
             "fileMatch": [
-                "/components/brake_calipers/*"
+                "/library/components/brake_calipers/*"
             ],
             "url": "./schema/brake_calipers.schema.json"
         },
         {
             "fileMatch": [
-                "/components/brake_discs/*"
+                "/library/components/brake_discs/*"
             ],
             "url": "./schema/brake_discs.schema.json"
         },
         {
             "fileMatch": [
-                "/components/brake_pads/*"
+                "/library/components/brake_pads/*"
             ],
             "url": "./schema/brake_pads.schema.json"
         },
         {
             "fileMatch": [
-                "/components/cells/*"
+                "/library/components/cells/*"
             ],
             "url": "./schema/cells.schema.json"
         },
         {
             "fileMatch": [
-                "/components/drivers/*"
+                "/library/components/drivers/*"
             ],
             "url": "./schema/drivers.schema.json"
         },
         {
             "fileMatch": [
-                "/components/master_cylinders/*"
+                "/library/components/master_cylinders/*"
             ],
             "url": "./schema/master_cylinders.schema.json"
         },
         {
             "fileMatch": [
-                "/components/motor_controllers/*"
+                "/library/components/motor_controllers/*"
             ],
             "url": "./schema/motor_controllers.schema.json"
         },
         {
             "fileMatch": [
-                "/components/motors/*"
+                "/library/components/motors/*"
             ],
             "url": "./schema/motors.schema.json"
         },
         {
             "fileMatch": [
-                "/components/tyres/*"
+                "/library/components/tyres/*"
             ],
             "url": "./schema/tyres.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/library/vehicles/*"
+            ],
+            "url": "./schema/vehicles.schema.json"
         }
     ]
 }

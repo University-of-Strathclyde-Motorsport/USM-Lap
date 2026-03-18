@@ -1,6 +1,9 @@
 {
   "print_name": "USM24",
   "frontal_area": 1.002,
-  "lift_coefficient": 4.9,
-  "drag_coefficient": 1.8
+  "aero_model": {
+    "model_type": "constant",
+    "lift_coefficient": 4.9,
+    "drag_coefficient": 1.8
+  }
 }

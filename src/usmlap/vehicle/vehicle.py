@@ -26,12 +26,12 @@ class Metadata(Subsystem):
     Metadata for a vehicle.
 
     Attributes:
-        name (str): The name of the vehicle.
+        print_name (str): The name of the vehicle.
         year (int): The year the vehicle was built.
         description (str): A description of the vehicle (default = "").
     """
 
-    name: str
+    print_name: str
     year: int
     description: str = ""
 
