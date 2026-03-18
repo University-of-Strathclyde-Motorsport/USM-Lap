@@ -15,4 +15,3 @@ vehicle = load_vehicle(VEHICLE_FILE)
 simulation_settings = SimulationSettings()
 
 _, points = competition.simulate(vehicle, simulation_settings)
-print(points)
