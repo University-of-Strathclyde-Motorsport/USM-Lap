@@ -3,9 +3,9 @@
   "unloaded_radius": 0.20574,
   "tyre_model": {
     "model_type": "linear",
-    "mu_x_peak": 1.8,
+    "mu_x_peak": 1.6,
     "mu_x_load_sensitivity": 0.0002,
-    "mu_y_peak": 1.8,
+    "mu_y_peak": 1.6,
     "mu_y_load_sensitivity": 0.0002,
     "slip_stiffness": 250,
     "cornering_stiffness": 250

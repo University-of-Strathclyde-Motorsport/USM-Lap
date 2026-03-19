@@ -21,6 +21,7 @@ def plot_apexes(solution: Solution) -> None:
     curvature = [node.track_node.curvature for node in solution]
     velocity = Velocity.get_values(solution)
     maximum_velocity = MaximumVelocity.get_values(solution)
+    sector_boundary_positions = solution.get_sector_boundary_positions()
 
     apex_indices = solution.get_sorted_apex_indices()
     apex_solution = solution.get_subset(apex_indices)
@@ -32,6 +33,11 @@ def plot_apexes(solution: Solution) -> None:
 
     ax_curvature.plot(position, curvature, color="#003366", zorder=2)
     ax_curvature.axhline(0, color="black", linewidth=1, zorder=1)
+
+    for sector_boundary in sector_boundary_positions:
+        ax_curvature.axvline(
+            sector_boundary, color="black", linewidth=1, linestyle="dashed"
+        )
 
     ax_apex.plot(
         position, maximum_velocity, color="#69C2CD", label="Maximum velocity"

@@ -87,6 +87,7 @@ class Mesh(object):
     ) -> None:
         self.nodes = nodes
         self.configuration = configuration
+        self.calculate_positions()
 
     def __iter__(self) -> Generator[TrackNode]:
         for node in self.nodes:
@@ -103,6 +104,12 @@ class Mesh(object):
     @property
     def resolution(self) -> float:
         return self.track_length / self.node_count
+
+    def calculate_positions(self) -> None:
+        position = 0
+        for node in self:
+            node.position = position
+            position += node.length
 
     def get_repeating_mesh(self, number_of_laps: int) -> Mesh:
         """

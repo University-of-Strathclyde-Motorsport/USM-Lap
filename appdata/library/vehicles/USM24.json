@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "print_name": "USM24",
+    "year": 2026
+  },
+  "driver": "acceleration",
+  "aero": "USM24",
+  "brakes": {
+    "front": {
+      "cylinder": "CP7855-94",
+      "caliper": "front_caliper",
+      "disc": "default",
+      "pad": "default"
+    },
+    "rear": {
+      "cylinder": "CP7855-96",
+      "caliper": "rear_caliper",
+      "disc": "default",
+      "pad": "default"
+    },
+    "pedal_ratio": 3.6,
+    "front_brake_bias": 0.5
+  },
+  "inertia": {
+    "curb_mass": 230,
+    "front_mass_distribution": 0.5,
+    "yaw_inertia": 75,
+    "front_unsprung_mass": {
+      "mass": 9,
+      "centre_of_gravity_height": 0.2
+    },
+    "rear_unsprung_mass": {
+      "mass": 9,
+      "centre_of_gravity_height": 0.2
+    },
+    "equivalent_drivetrain_inertia": 5
+  },
+  "powertrain": {
+    "accumulator": "USM26",
+    "motor": "EMRAX_228",
+    "motor_controller": "BAMOCAR",
+    "soc_current_derate_point": 0.3
+  },
+  "steering": {
+    "steering_ratio": 5,
+    "steering_wheel_radius": 0.2
+  },
+  "suspension": {
+    "wheelbase": 1.535,
+    "centre_of_gravity_height": 0.3,
+    "front": {
+      "suspension_type": "decoupled",
+      "track_width": 1.18,
+      "roll_centre_height": 0.04,
+      "heave_motion_ratio": 0.95,
+      "heave_spring_rate": 87560,
+      "roll_motion_ratio": 1.5,
+      "roll_spring_rate": 87560
+    },
+    "rear": {
+      "suspension_type": "decoupled",
+      "track_width": 1.2,
+      "roll_centre_height": 0.06,
+      "heave_motion_ratio": 0.95,
+      "heave_spring_rate": 96320,
+      "roll_motion_ratio": 1.2,
+      "roll_spring_rate": 39400
+    }
+  },
+  "transmission": {
+    "final_drive_ratio": 3.2
+  },
+  "tyres": {
+    "front": "hoozier_16x7.5-10_R20",
+    "rear": "hoozier_16x7.5-10_R20"
+  }
+}

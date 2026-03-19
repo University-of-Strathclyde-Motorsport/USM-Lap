@@ -81,7 +81,7 @@ class SensitivityAnalysis(object):
                 progress.update(
                     task, description=f"{TASK_DESCRIPTION} ({i + 1}/2)"
                 )
-                _, points = self.competition.simulate(vehicle, self.settings)
+                points = self.competition.simulate(vehicle, self.settings)
                 total_points[direction] = sum(points.values())
                 progress.advance(task)
 

@@ -64,6 +64,10 @@ class SolutionNode(object):
         return self.track_node.length
 
     @property
+    def sector(self) -> int:
+        return self.track_node.sector
+
+    @property
     def initial_velocity(self) -> float:
         return self._initial_velocity
 
@@ -221,6 +225,34 @@ class Solution(object):
     ) -> None:
         for node in self.nodes:
             node.evaluate_vehicle_state(vehicle_model)
+
+    def get_sector_time(self, sector: int) -> float:
+        """
+        Get the time for a given sector.
+
+        Args:
+            sector (int): The sector to get the time for.
+
+        Returns:
+            sector_time (float): The sum of times for the nodes in the sector.
+        """
+        return sum([node.time for node in self if node.sector == sector])
+
+    def get_sector_boundary_positions(self) -> list[float]:
+        """
+        Get a list of positions where the sector changes.
+
+        Returns:
+            sector_boundary_positions (list[float]): List of positions.
+        """
+        sector = self.nodes[0].track_node.sector
+        positions: list[float] = []
+        for node in self.nodes:
+            if node.track_node.sector is not sector:
+                positions.append(node.track_node.position)
+            sector = node.track_node.sector
+
+        return positions
 
     def get_apex_indices(self) -> list[int]:
         """

@@ -18,7 +18,7 @@ from .events.skidpad import Skidpad
 from .points import CompetitionData, CompetitionPoints
 
 DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.xlsx"
-DEFAULT_COMPETITION_DATASET = "FSUK 2025"
+DEFAULT_COMPETITION_DATASET = "FSG 2025"
 
 
 @dataclass

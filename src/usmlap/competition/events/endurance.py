@@ -44,8 +44,8 @@ class Endurance(EventInterface, label="endurance"):
 
     def __post_init__(self, track_file: str) -> None:
         track_data = load_track_from_spreadsheet(track_file)
-        self.track_mesh = MeshGenerator(self.mesh_resolution).generate_mesh(
-            track_data
+        self.track_mesh = _generate_endurance_mesh(
+            track_data, self.mesh_resolution
         )
 
     def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
@@ -66,7 +66,8 @@ class Endurance(EventInterface, label="endurance"):
             t_team, t_min, ENDURANCE_COEFFICIENTS
         )[1]
 
-        ef_team = solution.total_energy_used * (solution.total_time**2)
+        energy_used_kwh = solution.total_energy_used / 3.6e6
+        ef_team = energy_used_kwh * (solution.total_time**2)
         ef_min = self.competition_data.efficiency_ef_min
         efficiency_points = calculate_points(
             ef_team, ef_min, EFFICIENCY_COEFFICIENTS
