@@ -73,7 +73,6 @@ class Skidpad(EventInterface, label="skidpad"):
         left_time = solution.get_sector_time(SkidpadSector.LEFT_TIMED)
         t_team = (right_time + left_time) / 2
         t_min = self.competition_data.skidpad_t_min
-        print(f"t_team: {t_team} s, t_min: {t_min} s")
         points = calculate_points(t_team, t_min, SKIDPAD_COEFFICIENTS)[1]
         return {"skidpad": points}
 

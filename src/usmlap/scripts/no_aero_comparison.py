@@ -13,10 +13,13 @@ from usmlap.vehicle.vehicle import load_vehicle
 competition_settings = CompetitionSettings()
 competition = Competition(competition_settings)
 
-vehicle_files = ["USM26 No Aero.json", "USM24.json", "USM25.json", "USM26.json"]
+vehicle_files = [
+    "USM26 No Aero.json",
+    "USM26 with USM24 Aero.json",
+    "USM26 with USM25 Aero.json",
+    "USM26.json",
+]
 vehicles = [load_vehicle(file) for file in vehicle_files]
-# no_aero = load_vehicle("USM26 No Aero.json")
-# baseline = load_vehicle("USM26.json")
 
 simulation_settings = SimulationSettings(solver=QuasiSteadyStateSolver)
 
@@ -26,4 +29,4 @@ results = compare_vehicles(
     competition=competition,
 )
 
-plot_competition_bar_chart(results)
+plot_competition_bar_chart(results, title="Comparison of Aerodynamic Packages")

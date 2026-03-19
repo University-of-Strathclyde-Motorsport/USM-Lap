@@ -3,6 +3,7 @@ This submodule contains functions for plotting comparisons between vehicles.
 """
 
 from itertools import cycle
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,22 +33,29 @@ def _transform_data(input_data: list[CompetitionPoints]) -> PointsData:
     return transformed_data
 
 
-def plot_competition_bar_chart(comparison_results: ComparisonResults) -> None:
+def plot_competition_bar_chart(
+    comparison_results: ComparisonResults,
+    title: str = "Comparison Results",
+    padding: Optional[float] = None,
+) -> None:
     """
     Plot a bar chart of points for a list of vehicles.
 
     Args:
         comparison_results (ComparisonResults): Comparison results to plot.
+        title (str): Title for the plot.
+        padding (Optional[float]): If specified, add padding
+            to the left and right of the plot (default = None).
+            Recommended value of 0.7.
     """
 
     points_data = comparison_results.get_points()
     plot_data = _transform_data(points_data)
     vehicle_count = len(points_data)
     vehicle_labels = comparison_results.get_vehicle_labels()
-    print(vehicle_labels)
     colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
-    _, ax = plt.subplots()
+    fig, ax = plt.subplots()
 
     bottom = np.zeros(vehicle_count)
     for event, points in plot_data.items():
@@ -63,15 +71,22 @@ def plot_competition_bar_chart(comparison_results: ComparisonResults) -> None:
         )
         bottom += points
 
-    # Add some space to the left and right of the plot
-    xlim_low, xlim_high = ax.get_xlim()
-    ax.set_xlim(xlim_low - 0.7, xlim_high + 0.7)
+    if padding:
+        # Add some space to the left and right of the plot
+        xlim_low, xlim_high = ax.get_xlim()
+        ax.set_xlim(xlim_low - padding, xlim_high + padding)
 
     ax.yaxis.set_major_locator(MultipleLocator(100))
     ax.yaxis.set_minor_locator(MultipleLocator(20))
     ax.grid(which="both", axis="y", zorder=0)
     ax.grid(which="minor", axis="y", alpha=0.3)
 
-    ax.legend(loc="upper right")
+    ax.set_ylabel("Points")
+    ax.set_title(title)
+
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+
     plt.tight_layout
     plt.show()
