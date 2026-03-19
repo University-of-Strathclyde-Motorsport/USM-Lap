@@ -14,4 +14,4 @@ competition = Competition(competition_settings)
 vehicle = load_vehicle(VEHICLE_FILE)
 simulation_settings = SimulationSettings()
 
-_, points = competition.simulate(vehicle, simulation_settings)
+points = competition.simulate(vehicle, simulation_settings)

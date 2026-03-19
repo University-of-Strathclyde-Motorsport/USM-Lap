@@ -111,7 +111,7 @@ def sweep_1d(
         logging.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
-        _, points = competition.simulate(vehicle, simulation_settings)
+        points = competition.simulate(vehicle, simulation_settings)
         sweep_results.data[value] = sum(points.values())
 
     return sweep_results

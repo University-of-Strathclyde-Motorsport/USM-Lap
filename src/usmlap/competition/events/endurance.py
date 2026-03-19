@@ -2,10 +2,17 @@
 This module defines the endurance and efficiency events at Formula Student.
 """
 
+from dataclasses import InitVar, dataclass, field
 from math import ceil
+from typing import Optional
 
-from usmlap.simulation.solution import Solution
+from usmlap.simulation.environment import Environment
+from usmlap.simulation.model.point_mass import PointMassVehicleModel
+from usmlap.simulation.model.vehicle_model import VehicleModelInterface
+from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
 from usmlap.track.mesh import Mesh, MeshGenerator
+from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
 from usmlap.vehicle.parameters import DischargeCurrentLimit, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -13,43 +20,80 @@ from ..points import (
     EFFICIENCY_COEFFICIENTS,
     ENDURANCE_COEFFICIENTS,
     CompetitionData,
+    CompetitionPoints,
     calculate_points,
 )
 from .event import EventInterface
 
 ENDURANCE_TRACK_LENGTH = 22000
+DEFAULT_VEHICLE_MODEL = PointMassVehicleModel
+DEFAULT_MESH_RESOLUTION = 1
 
 
+@dataclass
 class Endurance(EventInterface, label="endurance"):
     """
     Endurance and efficiency events at Formula Student.
     """
 
-    def __init__(self, track_file: str) -> None:
-        super().__init__(track_file)
+    competition_data: CompetitionData
+    track_file: InitVar[str]
+    vehicle_model: type[VehicleModelInterface] = DEFAULT_VEHICLE_MODEL
+    mesh_resolution: float = DEFAULT_MESH_RESOLUTION
+    track_mesh: Mesh = field(init=False)
 
-    def generate_mesh(self) -> Mesh:
-        """
-        Overwrite mesh generation to repeat the track for the endurance event.
-        """
-        base_mesh = MeshGenerator(resolution=1).generate_mesh(self.track_data)
-        number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / base_mesh.track_length)
-        endurance_mesh = base_mesh.get_repeating_mesh(number_of_laps)
-        return endurance_mesh
+    def __post_init__(self, track_file: str) -> None:
+        track_data = load_track_from_spreadsheet(track_file)
+        self.track_mesh = MeshGenerator(self.mesh_resolution).generate_mesh(
+            track_data
+        )
 
-    def modify_vehicle_for_event(self, vehicle: Vehicle) -> Vehicle:
-        return get_new_vehicle(vehicle, DischargeCurrentLimit, 0.3)
+    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
 
-    def calculate_points(
-        self, solution: Solution, competition_data: CompetitionData
-    ) -> dict[str, float]:
+        vehicle = _modify_vehicle_for_event(vehicle)
+
+        simulation_settings = SimulationSettings(
+            environment=Environment(),
+            vehicle_model=self.vehicle_model,
+            solver=QuasiTransientSolver,
+        )
+
+        solution = simulate(vehicle, self.track_mesh, simulation_settings)
 
         t_team = solution.total_time
-        t_min = competition_data.endurance_t_min
-        endurance = calculate_points(t_team, t_min, ENDURANCE_COEFFICIENTS)
+        t_min = self.competition_data.endurance_t_min
+        endurance_points = calculate_points(
+            t_team, t_min, ENDURANCE_COEFFICIENTS
+        )[1]
 
         ef_team = solution.total_energy_used * (solution.total_time**2)
-        ef_min = competition_data.efficiency_ef_min
-        efficiency = calculate_points(ef_team, ef_min, EFFICIENCY_COEFFICIENTS)
+        ef_min = self.competition_data.efficiency_ef_min
+        efficiency_points = calculate_points(
+            ef_team, ef_min, EFFICIENCY_COEFFICIENTS
+        )[1]
 
-        return {endurance[0]: endurance[1], efficiency[0]: efficiency[1]}
+        return {"endurance": endurance_points, "efficiency": efficiency_points}
+
+
+def _generate_endurance_mesh(
+    track_data: TrackData,
+    resolution: float,
+    number_of_laps: Optional[int] = None,
+) -> Mesh:
+    """
+    Generate a mesh for the endurance event.
+    """
+    base_mesh = MeshGenerator(resolution).generate_mesh(track_data)
+
+    if not number_of_laps:
+        number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / base_mesh.track_length)
+
+    endurance_mesh = base_mesh.get_repeating_mesh(number_of_laps)
+    return endurance_mesh
+
+
+def _modify_vehicle_for_event(vehicle: Vehicle) -> Vehicle:
+    """
+    Modify a vehicle for the endurance event by updating parameters.
+    """
+    return get_new_vehicle(vehicle, DischargeCurrentLimit, 0.3)

@@ -46,7 +46,7 @@ def plot_event_points(comparison_results: ComparisonResults) -> None:
     colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
     _, ax = plt.subplots()
-    ax.grid(axis="y", zorder=0)
+    ax.grid(which="both", axis="y", zorder=0)
 
     bottom = np.zeros(vehicle_count)
     for label, points in plot_data.items():

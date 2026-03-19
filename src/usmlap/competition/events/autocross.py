@@ -2,30 +2,58 @@
 This module defines the autocross event at Formula Student.
 """
 
-from usmlap.simulation.solution import Solution
-from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
+from dataclasses import InitVar, dataclass, field
 
-from ..points import AUTOCROSS_COEFFICIENTS, CompetitionData, calculate_points
+from usmlap.simulation.environment import Environment
+from usmlap.simulation.model.point_mass import PointMassVehicleModel
+from usmlap.simulation.model.vehicle_model import VehicleModelInterface
+from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
+from usmlap.track.mesh import Mesh, MeshGenerator
+from usmlap.track.track_data import load_track_from_spreadsheet
+from usmlap.vehicle.vehicle import Vehicle
+
+from ..points import (
+    AUTOCROSS_COEFFICIENTS,
+    CompetitionData,
+    CompetitionPoints,
+    calculate_points,
+)
 from .event import EventInterface
 
+DEFAULT_VEHICLE_MODEL = PointMassVehicleModel
+DEFAULT_MESH_RESOLUTION = 1
 
+
+@dataclass
 class Autocross(EventInterface, label="autocross"):
     """
     Autocross event at Formula Student.
     """
 
-    def __init__(self, track_file: str) -> None:
-        super().__init__(track_file)
+    competition_data: CompetitionData
+    track_file: InitVar[str]
+    vehicle_model: type[VehicleModelInterface] = DEFAULT_VEHICLE_MODEL
+    mesh_resolution: float = DEFAULT_MESH_RESOLUTION
+    track_mesh: Mesh = field(init=False)
 
-    def load_track(self, track_file: str) -> TrackData:
+    def __post_init__(self, track_file: str) -> None:
         track_data = load_track_from_spreadsheet(track_file)
-        return track_data
+        self.track_mesh = MeshGenerator(self.mesh_resolution).generate_mesh(
+            track_data
+        )
 
-    def calculate_points(
-        self, solution: Solution, competition_data: CompetitionData
-    ) -> dict[str, float]:
+    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
+
+        simulation_settings = SimulationSettings(
+            environment=Environment(),
+            vehicle_model=self.vehicle_model,
+            solver=QuasiTransientSolver,
+        )
+
+        solution = simulate(vehicle, self.track_mesh, simulation_settings)
 
         t_team = solution.total_time
-        t_min = competition_data.autocross_t_min
-        label, points = calculate_points(t_team, t_min, AUTOCROSS_COEFFICIENTS)
-        return {label: points}
+        t_min = self.competition_data.autocross_t_min
+        points = calculate_points(t_team, t_min, AUTOCROSS_COEFFICIENTS)[1]
+        return {"autocross": points}

@@ -77,7 +77,7 @@ def compare_vehicles(
     results = ComparisonResults()
 
     for vehicle in vehicles:
-        _, points = competition.simulate(vehicle, simulation_settings)
+        points = competition.simulate(vehicle, simulation_settings)
         results.add_result(vehicle, points)
 
     return results

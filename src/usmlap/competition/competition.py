@@ -15,7 +15,7 @@ from .events.autocross import Autocross
 from .events.endurance import Endurance
 from .events.event import EventInterface
 from .events.skidpad import Skidpad
-from .points import CompetitionData
+from .points import CompetitionData, CompetitionPoints
 
 DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.xlsx"
 DEFAULT_COMPETITION_DATASET = "FSUK 2025"
@@ -48,8 +48,6 @@ class CompetitionSettings(object):
 
 type CompetitionResults = dict[str, Solution]
 
-type CompetitionPoints = dict[str, float]
-
 
 @dataclass
 class Competition(object):
@@ -79,27 +77,37 @@ class Competition(object):
             task = progress.add_task("Setting up events...")
             if self.settings.simulate_acceleration:
                 progress.update(task, description="Setting up Acceleration...")
-                acceleration = Acceleration()
+                acceleration = Acceleration(
+                    competition_data=self.settings.competition_data
+                )
                 self._add_event(acceleration)
 
             if self.settings.simulate_skidpad:
                 progress.update(task, description="Setting up Skidpad...")
-                skidpad = Skidpad()
+                skidpad = Skidpad(
+                    competition_data=self.settings.competition_data
+                )
                 self._add_event(skidpad)
 
             if self.settings.simulate_autocross:
                 progress.update(task, description="Setting up Autocross...")
-                autocross = Autocross(track_file=self.settings.autocross_track)
+                autocross = Autocross(
+                    track_file=self.settings.autocross_track,
+                    competition_data=self.settings.competition_data,
+                )
                 self._add_event(autocross)
 
             if self.settings.simulate_endurance:
                 progress.update(task, description="Setting up Endurance...")
-                endurance = Endurance(track_file=self.settings.autocross_track)
+                endurance = Endurance(
+                    track_file=self.settings.autocross_track,
+                    competition_data=self.settings.competition_data,
+                )
                 self._add_event(endurance)
 
     def simulate(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> tuple[CompetitionResults, CompetitionPoints]:
+    ) -> CompetitionPoints:
         """
         Simulate a Formula Student competition.
 
@@ -108,12 +116,11 @@ class Competition(object):
             settings (SimulationSettings): Settings for the simulation.
 
         Returns:
-            results (CompetitionResults): The results of the competition.
-            points (CompetitionPoints): The points scored in the competition.
+            competition_points (CompetitionPoints):
+                Dictionary of points scored in all simulated events.
         """
 
-        results: CompetitionResults = {}
-        points: CompetitionPoints = {}
+        competition_points: CompetitionPoints = {}
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
@@ -125,14 +132,9 @@ class Competition(object):
                     task, description=f"Simulating {event.label}..."
                 )
 
-                event_solution = event.simulate(vehicle, settings)
-                event_points = event.calculate_points(
-                    event_solution, self.settings.competition_data
-                )
-
-                points.update(event_points)
-                results[event.label] = event_solution
+                event_points = event.simulate_event(vehicle)
+                competition_points.update(event_points)
 
                 progress.advance(task)
 
-        return results, points
+        return competition_points

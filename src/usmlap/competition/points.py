@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 from usmlap.vehicle.common import Component
 
+type CompetitionPoints = dict[str, float]
+
 
 class CompetitionData(Component, library="competition"):
     """
