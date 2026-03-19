@@ -10,7 +10,7 @@ from usmlap.simulation.simulation import SimulationSettings
 from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.vehicle.vehicle import load_vehicle
 
-competition_settings = CompetitionSettings()
+competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
 competition = Competition(competition_settings)
 
 vehicle_files = [

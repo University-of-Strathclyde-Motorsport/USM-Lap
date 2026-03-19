@@ -1,0 +1,8 @@
+{
+  "print_name": "FSG 2025 Hybrid",
+  "acceleration_t_min": 4.324,
+  "skidpad_t_min": 4.555,
+  "autocross_t_min": 72.719,
+  "endurance_t_min": 1361.13,
+  "efficiency_ef_min": 9623270
+}
