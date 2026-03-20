@@ -4,12 +4,12 @@ This module contains functions for plotting GG and GGV scatter plots.
 
 import matplotlib.pyplot as plt
 
+from usmlap.simulation import Solution
 from usmlap.simulation.channels.library import (
     LateralAcceleration,
     LongitudinalAcceleration,
     Velocity,
 )
-from usmlap.simulation.solution import Solution
 
 
 def plot_velocity_acceleration(solution: Solution) -> None:

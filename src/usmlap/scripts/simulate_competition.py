@@ -2,9 +2,9 @@
 Script for simulating a Formula Student competition.
 """
 
-from usmlap.competition.competition import Competition, CompetitionSettings
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.vehicle.vehicle import load_vehicle
+from usmlap.competition import Competition, CompetitionSettings
+from usmlap.simulation import SimulationSettings
+from usmlap.vehicle import load_vehicle
 
 VEHICLE_FILE = "USM23 Baseline.json"
 

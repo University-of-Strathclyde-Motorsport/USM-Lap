@@ -6,12 +6,15 @@ from dataclasses import InitVar, dataclass, field
 from math import ceil
 from typing import Optional
 
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solution import Solution
-from usmlap.track.mesh import Mesh, MeshGenerator
-from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
-from usmlap.vehicle.parameters import DischargeCurrentLimit, get_new_vehicle
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.simulation import SimulationSettings, Solution, simulate
+from usmlap.track import (
+    Mesh,
+    MeshGenerator,
+    TrackData,
+    load_track_from_spreadsheet,
+)
+from usmlap.vehicle import Vehicle, get_new_vehicle
+from usmlap.vehicle.parameters import DischargeCurrentLimit
 
 from ..points import (
     EFFICIENCY_COEFFICIENTS,

@@ -7,7 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from usmlap.utils.datatypes import FourCorner
-from usmlap.vehicle.tyre.tyre_model import TyreAttitude
+from usmlap.vehicle.tyre import TyreAttitude
 
 
 @dataclass

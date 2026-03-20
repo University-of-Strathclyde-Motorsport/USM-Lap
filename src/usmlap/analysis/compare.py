@@ -4,9 +4,9 @@ This module contains code for comparing two or more distinct vehicles.
 
 from typing import Generator
 
-from usmlap.competition.competition import Competition, CompetitionPoints
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.competition import Competition, CompetitionPoints
+from usmlap.simulation import SimulationSettings
+from usmlap.vehicle import Vehicle
 
 
 class ComparisonResults(object):

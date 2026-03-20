@@ -7,10 +7,9 @@ from dataclasses import dataclass, field
 import matplotlib.pyplot as plt
 from rich import progress
 
-from usmlap.competition.competition import Competition
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.vehicle.parameters import Parameter
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.competition import Competition
+from usmlap.simulation import SimulationSettings
+from usmlap.vehicle import Parameter, Vehicle
 
 from .sensitivity import points_sensitivity
 from .sweep_1d import SweepSettings

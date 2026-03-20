@@ -5,9 +5,9 @@ This module defines the point mass vehicle model.
 import logging
 
 from usmlap.simulation.vehicle_state import StateVariables
-from usmlap.track.mesh import TrackNode
+from usmlap.track import TrackNode
 from usmlap.utils.datatypes import FourCorner
-from usmlap.vehicle.tyre.tyre_model import TyreAttitude
+from usmlap.vehicle.tyre import TyreAttitude
 
 from .vehicle_model import VehicleModelInterface
 
@@ -40,6 +40,7 @@ class PointMassVehicleModel(VehicleModelInterface):
     def get_lateral_traction(
         self, attitudes: FourCorner[TyreAttitude], required_fx: float
     ) -> FourCorner[float]:
+        required_fx = required_fx / self.lambdas.longitudinal_grip
         front_tyre = self.vehicle.tyres.front.tyre_model.calculate_lateral_force
         rear_tyre = self.vehicle.tyres.rear.tyre_model.calculate_lateral_force
         try:
@@ -59,13 +60,14 @@ class PointMassVehicleModel(VehicleModelInterface):
     def get_longitudinal_traction(
         self, attitudes: FourCorner[TyreAttitude], required_fy: float
     ) -> FourCorner[float]:
+        required_fy = required_fy / self.lambdas.lateral_grip
         front_tyre = (
             self.vehicle.tyres.front.tyre_model.calculate_longitudinal_force
         )
         rear_tyre = (
             self.vehicle.tyres.rear.tyre_model.calculate_longitudinal_force
         )
-        fy_per_tyre = abs(required_fy / 4) / self.lambdas.lateral_grip
+        fy_per_tyre = abs(required_fy / 4)
         try:
             return FourCorner(
                 (

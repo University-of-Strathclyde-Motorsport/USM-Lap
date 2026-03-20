@@ -5,16 +5,14 @@ Main entry point for the program.
 import logging
 import time
 
-from usmlap.analysis.coupling import coupling
-from usmlap.analysis.sweep_1d import SweepSettings
-from usmlap.competition.competition import Competition
-from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
-from usmlap.track.mesh import MeshGenerator
-from usmlap.track.track_data import load_track_from_spreadsheet
+from usmlap.analysis import SweepSettings, coupling
+from usmlap.competition import Competition
+from usmlap.plot import plot_apexes
+from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.track import MeshGenerator, load_track_from_spreadsheet
+from usmlap.vehicle import load_vehicle
 from usmlap.vehicle.parameters import DragCoefficient, LiftCoefficient
-from usmlap.vehicle.vehicle import load_vehicle
 
 CHANNELS = [
     "Velocity",

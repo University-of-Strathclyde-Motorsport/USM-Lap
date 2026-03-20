@@ -6,9 +6,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
-from usmlap.track.mesh import Mesh
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.track import Mesh
+from usmlap.vehicle import Vehicle
 
 from .environment import Environment
 from .lambda_coefficients import LambdaCoefficients

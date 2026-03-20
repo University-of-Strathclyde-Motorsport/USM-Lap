@@ -7,13 +7,11 @@ from copy import copy
 from dataclasses import dataclass, field
 from enum import IntEnum
 
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solution import Solution
-from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
+from usmlap.simulation import SimulationSettings, Solution, simulate
+from usmlap.simulation.solver import QuasiSteadyStateSolver
 from usmlap.simulation.vehicle_state import StateVariables
-from usmlap.track.mesh import Mesh, TrackNode
-from usmlap.track.track_data import Configuration
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.track import Configuration, Mesh, TrackNode
+from usmlap.vehicle import Vehicle
 
 from ..points import (
     SKIDPAD_COEFFICIENTS,

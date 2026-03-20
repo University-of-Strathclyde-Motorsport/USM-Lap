@@ -4,14 +4,14 @@ import math
 
 import pytest
 
-from usmlap.vehicle.powertrain.accumulator import (
+from usmlap.vehicle.powertrain import (
     Accumulator,
     Cell,
-    CellVoltageLookup,
+    Motor,
+    MotorController,
+    RWDPowertrain,
 )
-from usmlap.vehicle.powertrain.motor import Motor
-from usmlap.vehicle.powertrain.motor_controller import MotorController
-from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
+from usmlap.vehicle.powertrain.accumulator import CellVoltageLookup
 
 
 @pytest.fixture

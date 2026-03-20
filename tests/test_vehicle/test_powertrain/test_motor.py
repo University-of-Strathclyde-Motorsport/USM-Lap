@@ -2,7 +2,7 @@
 
 import pytest
 
-from usmlap.vehicle.powertrain.motor import Motor
+from usmlap.vehicle.powertrain import Motor
 
 
 def test_maximum_speed(motor: Motor) -> None:

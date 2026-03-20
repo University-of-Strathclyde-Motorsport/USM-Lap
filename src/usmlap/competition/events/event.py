@@ -6,9 +6,8 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.simulation.solution import Solution
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.simulation import SimulationSettings, Solution
+from usmlap.vehicle import Vehicle
 
 from ..points import CompetitionData, CompetitionPoints
 

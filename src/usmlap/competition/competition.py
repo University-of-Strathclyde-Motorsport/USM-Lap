@@ -6,9 +6,8 @@ from dataclasses import InitVar, dataclass, field
 
 from rich.progress import Progress
 
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.simulation.solution import Solution
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.simulation import SimulationSettings, Solution
+from usmlap.vehicle import Vehicle
 
 from .events.acceleration import Acceleration
 from .events.autocross import Autocross
@@ -75,6 +74,7 @@ class Competition(object):
 
         with Progress(transient=True) as progress:
             task = progress.add_task("Setting up events...")
+
             if self.settings.simulate_acceleration:
                 progress.update(task, description="Setting up Acceleration...")
                 acceleration = Acceleration()

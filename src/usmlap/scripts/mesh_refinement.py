@@ -12,11 +12,10 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 
 from usmlap.plot.utils import combined_legend
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
-from usmlap.track.mesh import MeshGenerator
-from usmlap.track.track_data import load_track_from_spreadsheet
-from usmlap.vehicle.vehicle import load_vehicle
+from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.track import MeshGenerator, load_track_from_spreadsheet
+from usmlap.vehicle import load_vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 TRACK_SHEET = "FS AutoX Germany 2012.xlsx"

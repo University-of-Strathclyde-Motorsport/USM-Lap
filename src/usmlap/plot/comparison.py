@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator
 
-from usmlap.analysis.compare import ComparisonResults
-from usmlap.competition.competition import CompetitionPoints
+from usmlap.analysis import ComparisonResults
+from usmlap.competition import CompetitionPoints
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 

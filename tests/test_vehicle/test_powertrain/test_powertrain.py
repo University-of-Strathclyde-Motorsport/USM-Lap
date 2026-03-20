@@ -2,7 +2,7 @@
 
 import pytest
 
-from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
+from usmlap.vehicle.powertrain import RWDPowertrain
 
 
 def test_voltage_drop(powertrain: RWDPowertrain) -> None:

@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from ..simulation.channels import Channel, get_channel
 from ..simulation.channels.library import Position, Time
 from ..simulation.solution import Solution
-from .common import show_after_plotting
 
 X_AXIS_OPTIONS = Literal["Position", "Time"]
 X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
@@ -18,7 +17,6 @@ X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
 }
 
 
-@show_after_plotting
 def plot_channels(
     solutions: list[Solution],
     channels: list[str],
@@ -51,3 +49,6 @@ def plot_channels(
             axs[i].plot(x_data, y_data)
             axs[i].set_ylabel(channel.get_label())
             axs[i].grid()
+
+    plt.tight_layout()
+    plt.show()

@@ -3,11 +3,11 @@ This script compares the performance of the vehicle
 with and without the aerodynamic package.
 """
 
-from usmlap.analysis.compare import compare_vehicles
-from usmlap.competition.competition import Competition, CompetitionSettings
-from usmlap.plot.comparison import plot_competition_bar_chart
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.vehicle.vehicle import load_vehicle
+from usmlap.analysis import compare_vehicles
+from usmlap.competition import Competition, CompetitionSettings
+from usmlap.plot import plot_competition_bar_chart
+from usmlap.simulation import SimulationSettings
+from usmlap.vehicle import load_vehicle
 
 competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
 competition = Competition(competition_settings)

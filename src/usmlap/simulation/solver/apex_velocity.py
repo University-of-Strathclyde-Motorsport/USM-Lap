@@ -7,9 +7,9 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.simulation.model.vehicle_model import VehicleModelInterface
+from usmlap.simulation.model import VehicleModelInterface
 from usmlap.simulation.vehicle_state import StateVariables
-from usmlap.track.mesh import TrackNode
+from usmlap.track import TrackNode
 
 from .solver_interface import MaximumIterationsExceededError
 

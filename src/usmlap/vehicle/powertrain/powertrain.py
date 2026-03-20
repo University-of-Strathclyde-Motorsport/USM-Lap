@@ -16,7 +16,7 @@ from .motor import Motor
 from .motor_controller import MotorController
 
 
-class Powertrain(ABC, Subsystem):
+class PowertrainInterface(ABC, Subsystem):
     """
     Abstract base class for powertrain models.
     """
@@ -24,7 +24,7 @@ class Powertrain(ABC, Subsystem):
     ...
 
 
-class RWDPowertrain(Powertrain):
+class RWDPowertrain(PowertrainInterface):
     """
     Implements a single motor, rear wheel drive electric powertrain.
 

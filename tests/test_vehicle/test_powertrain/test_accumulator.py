@@ -2,7 +2,7 @@
 
 import pytest
 
-from usmlap.vehicle.powertrain.accumulator import Accumulator, Cell
+from usmlap.vehicle.powertrain import Accumulator, Cell
 
 
 def test_cell_voltage(cell: Cell) -> None:

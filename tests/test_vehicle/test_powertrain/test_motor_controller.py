@@ -2,7 +2,7 @@
 
 import pytest
 
-from usmlap.vehicle.powertrain.motor_controller import MotorController
+from usmlap.vehicle.powertrain import MotorController
 
 
 @pytest.fixture

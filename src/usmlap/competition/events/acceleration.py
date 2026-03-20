@@ -5,12 +5,10 @@ This module defines the acceleration event at Formula Student.
 from copy import copy
 from dataclasses import dataclass
 
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solution import Solution
-from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
-from usmlap.track.mesh import Mesh, MeshGenerator
-from usmlap.track.track_data import load_track_from_spreadsheet
-from usmlap.vehicle.vehicle import Vehicle
+from usmlap.simulation import SimulationSettings, Solution, simulate
+from usmlap.simulation.solver import QuasiSteadyStateSolver
+from usmlap.track import Mesh, MeshGenerator, load_track_from_spreadsheet
+from usmlap.vehicle import Vehicle
 
 from ..points import (
     ACCELERATION_COEFFICIENTS,

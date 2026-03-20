@@ -2,12 +2,11 @@
 This script displays a velocity profile from a simulation.
 """
 
-from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
-from usmlap.track.mesh import MeshGenerator
-from usmlap.track.track_data import load_track_from_spreadsheet
-from usmlap.vehicle.vehicle import load_vehicle
+from usmlap.plot import plot_apexes
+from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.track import MeshGenerator, load_track_from_spreadsheet
+from usmlap.vehicle import load_vehicle
 
 TRACK_SHEET = "FS AutoX Germany 2012.xlsx"
 VEHICLE_FILE = "USM23 Baseline.json"

@@ -2,11 +2,10 @@
 This script simulates the skidpad event.
 """
 
-from usmlap.competition.events.skidpad import Skidpad
-from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.lambda_coefficients import LambdaCoefficients
-from usmlap.simulation.simulation import SimulationSettings
-from usmlap.vehicle.vehicle import load_vehicle
+from usmlap.competition.events import Skidpad
+from usmlap.plot import plot_apexes
+from usmlap.simulation import LambdaCoefficients, SimulationSettings
+from usmlap.vehicle import load_vehicle
 
 skidpad = Skidpad()
 
