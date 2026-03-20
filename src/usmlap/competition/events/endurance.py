@@ -6,11 +6,8 @@ from dataclasses import InitVar, dataclass, field
 from math import ceil
 from typing import Optional
 
-from usmlap.simulation.environment import Environment
-from usmlap.simulation.model.point_mass import PointMassVehicleModel
-from usmlap.simulation.model.vehicle_model import VehicleModelInterface
 from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
+from usmlap.simulation.solution import Solution
 from usmlap.track.mesh import Mesh, MeshGenerator
 from usmlap.track.track_data import TrackData, load_track_from_spreadsheet
 from usmlap.vehicle.parameters import DischargeCurrentLimit, get_new_vehicle
@@ -26,7 +23,6 @@ from ..points import (
 from .event import EventInterface
 
 ENDURANCE_TRACK_LENGTH = 22000
-DEFAULT_VEHICLE_MODEL = PointMassVehicleModel
 DEFAULT_MESH_RESOLUTION = 1
 
 
@@ -36,9 +32,7 @@ class Endurance(EventInterface, label="endurance"):
     Endurance and efficiency events at Formula Student.
     """
 
-    competition_data: CompetitionData
     track_file: InitVar[str]
-    vehicle_model: type[VehicleModelInterface] = DEFAULT_VEHICLE_MODEL
     mesh_resolution: float = DEFAULT_MESH_RESOLUTION
     track_mesh: Mesh = field(init=False)
 
@@ -48,27 +42,26 @@ class Endurance(EventInterface, label="endurance"):
             track_data, self.mesh_resolution
         )
 
-    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
-
+    def simulate_event(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> Solution:
         vehicle = _modify_vehicle_for_event(vehicle)
+        solution = simulate(vehicle, self.track_mesh, settings)
+        return solution
 
-        simulation_settings = SimulationSettings(
-            environment=Environment(),
-            vehicle_model=self.vehicle_model,
-            solver=QuasiTransientSolver,
-        )
-
-        solution = simulate(vehicle, self.track_mesh, simulation_settings)
+    def calculate_points(
+        self, solution: Solution, data: CompetitionData
+    ) -> CompetitionPoints:
 
         t_team = solution.total_time
-        t_min = self.competition_data.endurance_t_min
+        t_min = data.endurance_t_min
         endurance_points = calculate_points(
             t_team, t_min, ENDURANCE_COEFFICIENTS
         )[1]
 
         energy_used_kwh = solution.total_energy_used / 3.6e6
         ef_team = energy_used_kwh * (solution.total_time**2)
-        ef_min = self.competition_data.efficiency_ef_min
+        ef_min = data.efficiency_ef_min
         efficiency_points = calculate_points(
             ef_team, ef_min, EFFICIENCY_COEFFICIENTS
         )[1]

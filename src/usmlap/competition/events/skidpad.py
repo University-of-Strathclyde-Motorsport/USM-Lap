@@ -7,10 +7,8 @@ from copy import copy
 from dataclasses import dataclass, field
 from enum import IntEnum
 
-from usmlap.simulation.environment import Environment
-from usmlap.simulation.model.point_mass import PointMassVehicleModel
-from usmlap.simulation.model.vehicle_model import VehicleModelInterface
 from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.solution import Solution
 from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track.mesh import Mesh, TrackNode
@@ -49,8 +47,6 @@ class Skidpad(EventInterface, label="skidpad"):
     Skidpad event at Formula Student.
     """
 
-    competition_data: CompetitionData
-    vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel
     mesh_resolution: float = DEFAULT_MESH_RESOLUTION
     track_mesh: Mesh = field(init=False)
     vehicle_state_variables: StateVariables = field(init=False)
@@ -59,20 +55,21 @@ class Skidpad(EventInterface, label="skidpad"):
         self.track_mesh = _get_skidpad_mesh(self.mesh_resolution)
         self.vehicle_state_variables = StateVariables()
 
-    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
+    def simulate_event(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> Solution:
+        settings = copy(settings)
+        settings.solver = QuasiSteadyStateSolver
+        solution = simulate(vehicle, self.track_mesh, settings)
+        return solution
 
-        simulation_settings = SimulationSettings(
-            environment=Environment(),
-            vehicle_model=self.vehicle_model,
-            solver=QuasiSteadyStateSolver,
-        )
-
-        solution = simulate(vehicle, self.track_mesh, simulation_settings)
-
+    def calculate_points(
+        self, solution: Solution, data: CompetitionData
+    ) -> CompetitionPoints:
         right_time = solution.get_sector_time(SkidpadSector.RIGHT_TIMED)
         left_time = solution.get_sector_time(SkidpadSector.LEFT_TIMED)
         t_team = (right_time + left_time) / 2
-        t_min = self.competition_data.skidpad_t_min
+        t_min = data.skidpad_t_min
         points = calculate_points(t_team, t_min, SKIDPAD_COEFFICIENTS)[1]
         return {"skidpad": points}
 

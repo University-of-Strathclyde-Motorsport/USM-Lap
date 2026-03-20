@@ -6,9 +6,11 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
+from usmlap.simulation.simulation import SimulationSettings
+from usmlap.simulation.solution import Solution
 from usmlap.vehicle.vehicle import Vehicle
 
-from ..points import CompetitionPoints
+from ..points import CompetitionData, CompetitionPoints
 
 
 class EventInterface(ABC):
@@ -24,4 +26,11 @@ class EventInterface(ABC):
         cls.label = label
 
     @abstractmethod
-    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints: ...
+    def simulate_event(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> Solution: ...
+
+    @abstractmethod
+    def calculate_points(
+        self, solution: Solution, data: CompetitionData
+    ) -> CompetitionPoints: ...

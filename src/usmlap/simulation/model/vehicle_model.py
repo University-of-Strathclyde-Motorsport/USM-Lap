@@ -3,6 +3,7 @@ This module defines the interface for vehicle models.
 """
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 from usmlap.simulation.environment import Environment
 from usmlap.simulation.vehicle_state import FullVehicleState, StateVariables
@@ -12,7 +13,10 @@ from usmlap.vehicle.aero import AeroAttitude
 from usmlap.vehicle.tyre.tyre_model import TyreAttitude
 from usmlap.vehicle.vehicle import Vehicle
 
+from ..lambda_coefficients import LambdaCoefficients
 
+
+@dataclass
 class VehicleModelInterface(ABC):
     """
     Abstract base class for vehicle models.
@@ -20,10 +24,7 @@ class VehicleModelInterface(ABC):
 
     vehicle: Vehicle
     environment: Environment
-
-    def __init__(self, vehicle: Vehicle, environment: Environment) -> None:
-        self.vehicle = vehicle
-        self.environment = environment
+    lambdas: LambdaCoefficients
 
     def resolve_vehicle_state(
         self, state_variables: StateVariables, node: TrackNode, velocity: float

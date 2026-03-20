@@ -7,7 +7,6 @@ from usmlap.analysis.compare import compare_vehicles
 from usmlap.competition.competition import Competition, CompetitionSettings
 from usmlap.plot.comparison import plot_competition_bar_chart
 from usmlap.simulation.simulation import SimulationSettings
-from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.vehicle.vehicle import load_vehicle
 
 competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
@@ -21,7 +20,7 @@ vehicle_files = [
 ]
 vehicles = [load_vehicle(file) for file in vehicle_files]
 
-simulation_settings = SimulationSettings(solver=QuasiSteadyStateSolver)
+simulation_settings = SimulationSettings()
 
 results = compare_vehicles(
     vehicles=vehicles,

@@ -65,7 +65,7 @@ class PointMassVehicleModel(VehicleModelInterface):
         rear_tyre = (
             self.vehicle.tyres.rear.tyre_model.calculate_longitudinal_force
         )
-        fy_per_tyre = abs(required_fy / 4)
+        fy_per_tyre = abs(required_fy / 4) / self.lambdas.lateral_grip
         try:
             return FourCorner(
                 (
@@ -87,8 +87,8 @@ class PointMassVehicleModel(VehicleModelInterface):
         traction_limit = (
             vehicle_state.longitudinal_traction.rear_left
             + vehicle_state.longitudinal_traction.rear_right
-        )
-        motor_limit = vehicle_state.motor_force
+        ) * self.lambdas.longitudinal_grip
+        motor_limit = vehicle_state.motor_force * self.lambdas.motor_torque
         drive_limit = min(motor_limit, traction_limit)
         net_fx = drive_limit - vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass
@@ -99,6 +99,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         vehicle_state = self.resolve_vehicle_state(
             state_variables, node, velocity
         )
-        traction_limit = sum(vehicle_state.longitudinal_traction)
+        traction_limit = (
+            sum(vehicle_state.longitudinal_traction)
+            * self.lambdas.longitudinal_grip
+        )
         net_fx = traction_limit + vehicle_state.resistive_fx
         return net_fx / self.vehicle.equivalent_mass

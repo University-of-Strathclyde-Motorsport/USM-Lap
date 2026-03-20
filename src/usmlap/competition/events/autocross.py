@@ -4,11 +4,8 @@ This module defines the autocross event at Formula Student.
 
 from dataclasses import InitVar, dataclass, field
 
-from usmlap.simulation.environment import Environment
-from usmlap.simulation.model.point_mass import PointMassVehicleModel
-from usmlap.simulation.model.vehicle_model import VehicleModelInterface
 from usmlap.simulation.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver.quasi_transient import QuasiTransientSolver
+from usmlap.simulation.solution import Solution
 from usmlap.track.mesh import Mesh, MeshGenerator
 from usmlap.track.track_data import load_track_from_spreadsheet
 from usmlap.vehicle.vehicle import Vehicle
@@ -21,7 +18,6 @@ from ..points import (
 )
 from .event import EventInterface
 
-DEFAULT_VEHICLE_MODEL = PointMassVehicleModel
 DEFAULT_MESH_RESOLUTION = 1
 
 
@@ -31,9 +27,7 @@ class Autocross(EventInterface, label="autocross"):
     Autocross event at Formula Student.
     """
 
-    competition_data: CompetitionData
     track_file: InitVar[str]
-    vehicle_model: type[VehicleModelInterface] = DEFAULT_VEHICLE_MODEL
     mesh_resolution: float = DEFAULT_MESH_RESOLUTION
     track_mesh: Mesh = field(init=False)
 
@@ -43,17 +37,16 @@ class Autocross(EventInterface, label="autocross"):
             track_data
         )
 
-    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
+    def simulate_event(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> Solution:
+        solution = simulate(vehicle, self.track_mesh, settings)
+        return solution
 
-        simulation_settings = SimulationSettings(
-            environment=Environment(),
-            vehicle_model=self.vehicle_model,
-            solver=QuasiTransientSolver,
-        )
-
-        solution = simulate(vehicle, self.track_mesh, simulation_settings)
-
+    def calculate_points(
+        self, solution: Solution, data: CompetitionData
+    ) -> CompetitionPoints:
         t_team = solution.total_time
-        t_min = self.competition_data.autocross_t_min
+        t_min = data.autocross_t_min
         points = calculate_points(t_team, t_min, AUTOCROSS_COEFFICIENTS)[1]
         return {"autocross": points}

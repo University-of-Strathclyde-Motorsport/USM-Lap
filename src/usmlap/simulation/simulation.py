@@ -11,6 +11,7 @@ from usmlap.track.mesh import Mesh
 from usmlap.vehicle.vehicle import Vehicle
 
 from .environment import Environment
+from .lambda_coefficients import LambdaCoefficients
 from .model.point_mass import PointMassVehicleModel
 from .model.vehicle_model import VehicleModelInterface
 from .solution import Solution, create_new_solution
@@ -25,7 +26,6 @@ class SimulationSettings(object):
     Settings for a simulation.
 
     Attributes:
-        track (Mesh): The track to simulate.
         environment (Environment): Environmental variables for the simulation.
         vehicle_model (VehicleModelInterface): The vehicle model to use.
         solver (SolverInterface): The solver to use.
@@ -34,6 +34,7 @@ class SimulationSettings(object):
     environment: Environment = field(default_factory=Environment)
     vehicle_model: type[VehicleModelInterface] = PointMassVehicleModel
     solver: type[SolverInterface] = QuasiTransientSolver
+    lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
 
 
 def simulate(
@@ -47,7 +48,9 @@ def simulate(
         settings (SimulationSettings): Settings for the simulation.
     """
     vehicle_model = settings.vehicle_model(
-        vehicle=vehicle, environment=settings.environment
+        vehicle=vehicle,
+        environment=settings.environment,
+        lambdas=settings.lambdas,
     )
     solver = settings.solver()
     solution = create_new_solution(track_mesh, vehicle_model)

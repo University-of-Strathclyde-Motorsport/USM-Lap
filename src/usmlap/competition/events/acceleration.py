@@ -2,12 +2,11 @@
 This module defines the acceleration event at Formula Student.
 """
 
+from copy import copy
 from dataclasses import dataclass
 
-from usmlap.simulation.environment import Environment
-from usmlap.simulation.model.point_mass import PointMassVehicleModel
-from usmlap.simulation.model.vehicle_model import VehicleModelInterface
 from usmlap.simulation.simulation import SimulationSettings, simulate
+from usmlap.simulation.solution import Solution
 from usmlap.simulation.solver.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.track.mesh import Mesh, MeshGenerator
 from usmlap.track.track_data import load_track_from_spreadsheet
@@ -23,7 +22,6 @@ from .event import EventInterface
 
 ACCELERATION_TRACK = "Acceleration.xlsx"
 DEFAULT_MESH_RESOLUTION = 0.1
-DEFAULT_VEHICLE_MODEL = PointMassVehicleModel
 
 
 @dataclass
@@ -32,25 +30,24 @@ class Acceleration(EventInterface, label="acceleration"):
     Acceleration event at Formula Student.
     """
 
-    competition_data: CompetitionData
-    vehicle_model: type[VehicleModelInterface] = DEFAULT_VEHICLE_MODEL
     mesh_resolution: float = DEFAULT_MESH_RESOLUTION
 
     def __post_init__(self) -> None:
         self.track_mesh = _get_acceleration_mesh(self.mesh_resolution)
 
-    def simulate_event(self, vehicle: Vehicle) -> CompetitionPoints:
+    def simulate_event(
+        self, vehicle: Vehicle, settings: SimulationSettings
+    ) -> Solution:
+        settings = copy(settings)
+        settings.solver = QuasiSteadyStateSolver
+        solution = simulate(vehicle, self.track_mesh, settings)
+        return solution
 
-        simulation_settings = SimulationSettings(
-            environment=Environment(),
-            vehicle_model=self.vehicle_model,
-            solver=QuasiSteadyStateSolver,
-        )
-
-        solution = simulate(vehicle, self.track_mesh, simulation_settings)
-
+    def calculate_points(
+        self, solution: Solution, data: CompetitionData
+    ) -> CompetitionPoints:
         t_team = solution.total_time
-        t_min = self.competition_data.acceleration_t_min
+        t_min = data.acceleration_t_min
         points = calculate_points(t_team, t_min, ACCELERATION_COEFFICIENTS)[1]
         return {"acceleration": points}
 

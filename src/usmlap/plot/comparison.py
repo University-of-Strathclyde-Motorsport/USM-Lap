@@ -90,3 +90,82 @@ def plot_competition_bar_chart(
 
     plt.tight_layout
     plt.show()
+
+
+def _transform_dictionary(
+    data: dict[str, CompetitionPoints],
+) -> tuple[int, PointsData]:
+    events = sorted(set().union(*(d.keys() for d in data.values())))
+    event_count = len(events)
+    transformed: PointsData = {}
+    for event in events:
+        transformed[event] = np.array([d.get(event, 0) for d in data.values()])
+    return event_count, transformed
+
+
+def plot_points_bar_chart(
+    data: dict[str, CompetitionPoints],
+    title: str = "",
+    y_label: str = "Points",
+    width: float = 0.7,
+) -> None:
+    """
+    Plot a bar chart of points for a list of simulations.
+
+    Args:
+        data (dict[str, CompetitionPoints]):
+            Dictionary of bar chart labels and corresponding points data.
+        title (str): Title for the plot (default = "").
+        y_label (str): Label for the y-axis (default = "Points").
+        width (float): Overall width of the bars (default = 0.7).
+    """
+
+    simulation_labels = data.keys()
+    simulation_count = len(simulation_labels)
+    bar_count, points_data = _transform_dictionary(data)
+
+    x = np.arange(simulation_count)
+    bar_width = width / bar_count
+    label_position = x + (bar_width * (bar_count - 1) / 2)
+    multiplier = 0
+    colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
+
+    _, ax = plt.subplots()
+
+    for event, points in points_data.items():
+        offset = bar_width * multiplier
+        rects = ax.bar(
+            x + offset,
+            points,
+            bar_width,
+            label=event,
+            color=next(colours),
+            zorder=4,
+        )
+        ax.bar_label(rects, fmt="%.1f", padding=3, zorder=4)
+        multiplier += 1
+
+    total_points = [sum(points.values()) for points in data.values()]
+    total_bars = ax.bar(
+        label_position,
+        total_points,
+        width=width,
+        label="total",
+        color="#BBBBBB",
+        zorder=3,
+    )
+    ax.bar_label(total_bars, fmt="%.1f", padding=3, zorder=3)
+
+    ax.grid(which="both", axis="y", zorder=0)
+    ax.grid(which="minor", axis="y", alpha=0.3)
+
+    ax.set_xticks(label_position, simulation_labels)
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
+
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+
+    plt.tight_layout
+    plt.show()

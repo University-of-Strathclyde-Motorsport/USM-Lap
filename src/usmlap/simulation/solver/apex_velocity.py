@@ -69,7 +69,10 @@ def solve_apex_velocity(
             state_variables, node, velocity_estimate
         )
         required_fy = abs(vehicle_state.required_fy)
-        available_fy = vehicle_state.total_lateral_traction
+        available_fy = (
+            vehicle_state.total_lateral_traction
+            * vehicle_model.lambdas.lateral_grip
+        )
         fy_error = available_fy - required_fy
 
         if abs(fy_error) < precision:

@@ -9,6 +9,22 @@ from usmlap.vehicle.common import Component
 type CompetitionPoints = dict[str, float]
 
 
+def points_delta(
+    points: CompetitionPoints, baseline: CompetitionPoints
+) -> CompetitionPoints:
+    """
+    Calculate the difference between two sets of points.
+
+    Args:
+        points (CompetitionPoints): Points scored in the event.
+        baseline (CompetitionPoints): Baseline points to compare to.
+
+    Returns:
+        delta (CompetitionPoints): `points` - `baseline`.
+    """
+    return {event: points[event] - baseline[event] for event in points}
+
+
 class CompetitionData(Component, library="competition"):
     """
     Data from a Formula Student competition.

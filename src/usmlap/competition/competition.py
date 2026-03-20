@@ -77,32 +77,22 @@ class Competition(object):
             task = progress.add_task("Setting up events...")
             if self.settings.simulate_acceleration:
                 progress.update(task, description="Setting up Acceleration...")
-                acceleration = Acceleration(
-                    competition_data=self.settings.competition_data
-                )
+                acceleration = Acceleration()
                 self._add_event(acceleration)
 
             if self.settings.simulate_skidpad:
                 progress.update(task, description="Setting up Skidpad...")
-                skidpad = Skidpad(
-                    competition_data=self.settings.competition_data
-                )
+                skidpad = Skidpad()
                 self._add_event(skidpad)
 
             if self.settings.simulate_autocross:
                 progress.update(task, description="Setting up Autocross...")
-                autocross = Autocross(
-                    track_file=self.settings.autocross_track,
-                    competition_data=self.settings.competition_data,
-                )
+                autocross = Autocross(track_file=self.settings.autocross_track)
                 self._add_event(autocross)
 
             if self.settings.simulate_endurance:
                 progress.update(task, description="Setting up Endurance...")
-                endurance = Endurance(
-                    track_file=self.settings.autocross_track,
-                    competition_data=self.settings.competition_data,
-                )
+                endurance = Endurance(track_file=self.settings.autocross_track)
                 self._add_event(endurance)
 
     def simulate(
@@ -121,6 +111,7 @@ class Competition(object):
         """
 
         competition_points: CompetitionPoints = {}
+        data = self.settings.competition_data
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
@@ -132,7 +123,8 @@ class Competition(object):
                     task, description=f"Simulating {event.label}..."
                 )
 
-                event_points = event.simulate_event(vehicle)
+                event_solution = event.simulate_event(vehicle, settings)
+                event_points = event.calculate_points(event_solution, data)
                 competition_points.update(event_points)
 
                 progress.advance(task)
