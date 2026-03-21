@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from usmlap.plot.utils import combined_legend
 from usmlap.simulation import SimulationSettings, simulate
 from usmlap.simulation.solver import QuasiTransientSolver
-from usmlap.track import MeshGenerator, load_track_from_spreadsheet
+from usmlap.track import generate_mesh, load_track_from_spreadsheet
 from usmlap.vehicle import load_vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
@@ -50,7 +50,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
 
     for resolution in RESOLUTIONS:
         mesh_start_time = time.time()
-        mesh = MeshGenerator(resolution=resolution).generate_mesh(track_data)
+        mesh = generate_mesh(track_data, resolution)
         mesh_time = time.time() - mesh_start_time
 
         simulation_start_time = time.time()

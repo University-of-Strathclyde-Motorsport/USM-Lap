@@ -8,8 +8,8 @@ from math import ceil
 from usmlap.simulation import SimulationSettings, Solution, simulate
 from usmlap.track import (
     Mesh,
-    MeshGenerator,
     TrackData,
+    generate_mesh,
     load_track_from_spreadsheet,
 )
 from usmlap.vehicle import Vehicle, get_new_vehicle
@@ -76,7 +76,7 @@ class Endurance(EventInterface, label="endurance"):
         Returns:
             mesh (Mesh): A mesh of the track.
         """
-        base_mesh = MeshGenerator(resolution).generate_mesh(self.track_data)
+        base_mesh = generate_mesh(self.track_data, resolution)
 
         number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / base_mesh.track_length)
 

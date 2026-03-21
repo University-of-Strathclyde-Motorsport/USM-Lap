@@ -5,7 +5,7 @@ This module defines the acceleration event at Formula Student.
 from dataclasses import dataclass
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.track import Mesh, MeshGenerator, load_track_from_spreadsheet
+from usmlap.track import Mesh, generate_mesh, load_track_from_spreadsheet
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -52,4 +52,4 @@ class Acceleration(EventInterface, label="acceleration"):
         Returns:
             mesh (Mesh): A mesh of the track.
         """
-        return MeshGenerator(resolution).generate_mesh(self.track_data)
+        return generate_mesh(self.track_data, resolution)

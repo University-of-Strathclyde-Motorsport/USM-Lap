@@ -12,7 +12,7 @@ from usmlap.plot import plot_points_bar_chart
 from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import load_vehicle
 
-QUALITY = QualityPresets.DRAFT
+QUALITY = QualityPresets.HIGH_QUALITY
 
 competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
 competition = Competition(competition_settings)

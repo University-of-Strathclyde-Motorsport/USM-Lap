@@ -4,6 +4,8 @@ This module defines settings for a simulation.
 
 from dataclasses import dataclass, field
 
+from usmlap.track.mesh_generation import Resolution
+
 from .environment import Environment
 from .lambda_coefficients import LambdaCoefficients
 from .model import PointMassVehicleModel as PointMass
@@ -26,7 +28,7 @@ class SimulationSettings(object):
     """
 
     environment: Environment = field(default_factory=Environment)
-    mesh_resolution: float = 0.1
+    mesh_resolution: Resolution = Resolution(0.1)
     vehicle_model: type[VehicleModelInterface] = PointMass
     solver: type[SolverInterface] = QT
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
@@ -43,11 +45,11 @@ class QualityPresets(object):
     """
 
     DRAFT: SimulationSettings = SimulationSettings(
-        mesh_resolution=2, vehicle_model=PointMass, solver=QSS
+        mesh_resolution=Resolution(2), vehicle_model=PointMass, solver=QSS
     )
     FAST: SimulationSettings = SimulationSettings(
-        mesh_resolution=0.5, vehicle_model=PointMass, solver=QT
+        mesh_resolution=Resolution(0.5), vehicle_model=PointMass, solver=QT
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
-        mesh_resolution=0.1, vehicle_model=PointMass, solver=QT
+        mesh_resolution=Resolution(0.1), vehicle_model=PointMass, solver=QT
     )
