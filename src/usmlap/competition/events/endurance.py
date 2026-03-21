@@ -35,6 +35,7 @@ class Endurance(EventInterface, label="endurance"):
 
     track_file: InitVar[str]
     track_data: TrackData = field(init=False)
+    simulate_efficiency: bool = True
 
     def __post_init__(self, track_file: str) -> None:
         self.track_data = load_track_from_spreadsheet(track_file)
@@ -56,15 +57,18 @@ class Endurance(EventInterface, label="endurance"):
         endurance_points = calculate_points(
             t_team, t_min, ENDURANCE_COEFFICIENTS
         )[1]
+        points = {"endurance": endurance_points}
 
-        energy_used_kwh = solution.total_energy_used / 3.6e6
-        ef_team = energy_used_kwh * (solution.total_time**2)
-        ef_min = data.efficiency_ef_min
-        efficiency_points = calculate_points(
-            ef_team, ef_min, EFFICIENCY_COEFFICIENTS
-        )[1]
+        if self.simulate_efficiency:
+            energy_used_kwh = solution.total_energy_used / 3.6e6
+            ef_team = energy_used_kwh * (solution.total_time**2)
+            ef_min = data.efficiency_ef_min
+            efficiency_points = calculate_points(
+                ef_team, ef_min, EFFICIENCY_COEFFICIENTS
+            )[1]
+            points["efficiency"] = efficiency_points
 
-        return {"endurance": endurance_points, "efficiency": efficiency_points}
+        return points
 
     def _generate_mesh(self, resolution: float) -> Mesh:
         """

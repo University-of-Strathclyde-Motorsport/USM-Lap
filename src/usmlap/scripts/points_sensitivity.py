@@ -14,12 +14,12 @@ PARAMETER = FinalDriveRatio
 START_VALUE = 1.5
 END_VALUE = 3.5
 NUMBER_OF_STEPS = 10
-QUALITY = QualityPresets.HIGH_QUALITY
+QUALITY = QualityPresets.FAST
 
 vehicle = load_vehicle(BASELINE_VEHICLE)
 
 competition_settings = CompetitionSettings(
-    dataset="FSG 2025 Hybrid", mesh_resolution=1
+    dataset="FSG 2025 Hybrid", simulate_efficiency=False
 )
 competition = Competition(competition_settings)
 
