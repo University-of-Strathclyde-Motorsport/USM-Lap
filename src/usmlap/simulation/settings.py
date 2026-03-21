@@ -34,7 +34,12 @@ class SimulationSettings(object):
 
 class QualityPresets(object):
     """
-    Simulation setting QualityPresets.
+    Simulation setting quality presets.
+
+    Attributes:
+        DRAFT: Solves very quickly, but accuracy is low.
+        FAST: Solves quickly, with decent accuracy.
+        HIGH_QUALITY: Solves slowly, with high accuracy.
     """
 
     DRAFT: SimulationSettings = SimulationSettings(
