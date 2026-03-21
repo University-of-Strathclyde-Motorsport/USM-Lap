@@ -2,19 +2,13 @@
 This script evaluates the impact of changing the lambda coefficients.
 """
 
-from usmlap.competition import (
-    Competition,
-    CompetitionPoints,
-    CompetitionSettings,
-    points_delta,
-)
+from usmlap.competition import Competition, CompetitionPoints, points_delta
 from usmlap.plot import plot_points_bar_chart
 from usmlap.simulation import LambdaCoefficients, SimulationSettings
 from usmlap.simulation.solver import QuasiSteadyStateSolver as QSS
 from usmlap.vehicle import load_vehicle
 
-competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
-competition = Competition(competition_settings)
+competition = Competition()
 
 vehicle_file = "USM26.json"
 vehicle = load_vehicle(vehicle_file)

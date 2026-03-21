@@ -1,9 +1,9 @@
 """
-This script runs a points sensitivity analysis of a vehicle parameter.
+This script runs a one-dimensional sweep of a vehicle parameter.
 """
 
 from usmlap.analysis import SweepSettings, sweep_1d
-from usmlap.competition import Competition, CompetitionSettings
+from usmlap.competition import Competition
 from usmlap.plot import plot_points_sensitivity
 from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import load_vehicle
@@ -18,10 +18,7 @@ QUALITY = QualityPresets.FAST
 
 vehicle = load_vehicle(BASELINE_VEHICLE)
 
-competition_settings = CompetitionSettings(
-    dataset="FSG 2025 Hybrid", simulate_efficiency=False
-)
-competition = Competition(competition_settings)
+competition = Competition(simulate_efficiency=False)
 
 sweep_settings = SweepSettings(
     PARAMETER, START_VALUE, END_VALUE, NUMBER_OF_STEPS

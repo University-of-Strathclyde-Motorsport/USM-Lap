@@ -17,35 +17,7 @@ from .events.skidpad import Skidpad
 from .points import CompetitionData, CompetitionPoints
 
 DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.xlsx"
-DEFAULT_COMPETITION_DATASET = "FSG 2025"
-
-
-@dataclass
-class CompetitionSettings(object):
-    """
-    Settings for simulating a Formula Student competition.
-
-    Attributes:
-        autocross_track (str): Track to use for autocross and endurance events.
-        simulate_acceleration (bool): Whether to simulate the acceleration event.
-        simulate_skidpad (bool): Whether to simulate the skidpad event.
-        simulate_autocross (bool): Whether to simulate the autocross event.
-        simulate_endurance (bool): Whether to simulate the endurance event.
-        simulate_efficiency (bool): Whether to simulate the efficiency event.
-        dataset (str): Dataset to use for points calculation.
-    """
-
-    autocross_track: str = DEFAULT_AUTOCROSS_TRACK
-    simulate_acceleration: bool = True
-    simulate_skidpad: bool = True
-    simulate_autocross: bool = True
-    simulate_endurance: bool = True
-    simulate_efficiency: bool = True
-    dataset: InitVar[str] = field(default=DEFAULT_COMPETITION_DATASET)
-    competition_data: CompetitionData = field(init=False)
-
-    def __post_init__(self, dataset: str) -> None:
-        self.competition_data = CompetitionData.from_library(dataset)
+DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
 
 
 type CompetitionResults = dict[str, Solution]
@@ -57,14 +29,29 @@ class Competition(object):
     Class for simulating a Formula Student competition.
 
     Attributes:
-        settings: Settings for the competition.
+        autocross_track (str): Track to use for autocross and endurance events.
+        simulate_acceleration (bool): Whether to simulate the acceleration event.
+        simulate_skidpad (bool): Whether to simulate the skidpad event.
+        simulate_autocross (bool): Whether to simulate the autocross event.
+        simulate_endurance (bool): Whether to simulate the endurance event.
+        simulate_efficiency (bool): Whether to simulate the efficiency event.
+        dataset (str): Dataset to use for points calculation.
+        competition_data (CompetitionData): Data loaded from `dataset`.
         events: List of events to simulate.
     """
 
-    settings: CompetitionSettings
+    autocross_track: str = DEFAULT_AUTOCROSS_TRACK
+    simulate_acceleration: bool = True
+    simulate_skidpad: bool = True
+    simulate_autocross: bool = True
+    simulate_endurance: bool = True
+    simulate_efficiency: bool = True
+    dataset: InitVar[str] = field(default=DEFAULT_COMPETITION_DATASET)
+    competition_data: CompetitionData = field(init=False)
     events: list[EventInterface] = field(init=False, default_factory=list)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self, dataset: str) -> None:
+        self.competition_data = CompetitionData.from_library(dataset)
         self._create_events()
 
     def _add_event(self, event: EventInterface) -> None:
@@ -78,26 +65,26 @@ class Competition(object):
         with Progress(transient=True) as progress:
             task = progress.add_task("Setting up events...")
 
-            if self.settings.simulate_acceleration:
+            if self.simulate_acceleration:
                 progress.update(task, description="Setting up Acceleration...")
                 acceleration = Acceleration()
                 self._add_event(acceleration)
 
-            if self.settings.simulate_skidpad:
+            if self.simulate_skidpad:
                 progress.update(task, description="Setting up Skidpad...")
                 skidpad = Skidpad()
                 self._add_event(skidpad)
 
-            if self.settings.simulate_autocross:
+            if self.simulate_autocross:
                 progress.update(task, description="Setting up Autocross...")
-                autocross = Autocross(track_file=self.settings.autocross_track)
+                autocross = Autocross(track_file=self.autocross_track)
                 self._add_event(autocross)
 
-            if self.settings.simulate_endurance:
+            if self.simulate_endurance:
                 progress.update(task, description="Setting up Endurance...")
                 endurance = Endurance(
-                    track_file=self.settings.autocross_track,
-                    simulate_efficiency=self.settings.simulate_efficiency,
+                    track_file=self.autocross_track,
+                    simulate_efficiency=self.simulate_efficiency,
                 )
                 self._add_event(endurance)
 
@@ -117,7 +104,7 @@ class Competition(object):
         """
 
         competition_points: CompetitionPoints = {}
-        data = self.settings.competition_data
+        data = self.competition_data
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
