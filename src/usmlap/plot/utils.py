@@ -1,5 +1,5 @@
 """
-Utility functions for matplotlib.
+This module contains utility functions for matplotlib.
 """
 
 from matplotlib.axes import Axes

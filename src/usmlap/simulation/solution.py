@@ -11,7 +11,7 @@ from typing import Generator, Optional
 
 from usmlap.track import Mesh, TrackNode
 
-from .model.vehicle_model import VehicleModelInterface
+from .model import VehicleModelInterface
 from .vehicle_state import FullVehicleState, StateVariables
 
 

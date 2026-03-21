@@ -1,5 +1,5 @@
 """
-This submodule contains functions shared throughout the graph module.
+This module contains functions shared throughout the plot package.
 """
 
 from functools import wraps

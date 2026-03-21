@@ -1,5 +1,5 @@
 """
-This submodule contains functions for plotting comparisons between vehicles.
+This module contains functions for plotting comparisons between vehicles.
 """
 
 from itertools import cycle
@@ -55,7 +55,7 @@ def plot_competition_bar_chart(
     vehicle_labels = comparison_results.get_vehicle_labels()
     colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
 
     bottom = np.zeros(vehicle_count)
     for event, points in plot_data.items():
@@ -92,15 +92,21 @@ def plot_competition_bar_chart(
     plt.show()
 
 
-def _transform_dictionary(
-    data: dict[str, CompetitionPoints],
-) -> tuple[int, PointsData]:
+def _transform_dictionary(data: dict[str, CompetitionPoints]) -> PointsData:
+    """
+    Transform points data into a suitable form for plotting.
+
+    Args:
+        data (dict[str, CompetitionPoints]): Input points data.
+
+    Returns:
+        transformed (PointsData): Transformed points data.
+    """
     events = sorted(set().union(*(d.keys() for d in data.values())))
-    event_count = len(events)
     transformed: PointsData = {}
     for event in events:
         transformed[event] = np.array([d.get(event, 0) for d in data.values()])
-    return event_count, transformed
+    return transformed
 
 
 def plot_points_bar_chart(
@@ -122,11 +128,12 @@ def plot_points_bar_chart(
 
     simulation_labels = data.keys()
     simulation_count = len(simulation_labels)
-    bar_count, points_data = _transform_dictionary(data)
+    points_data = _transform_dictionary(data)
+    event_count = len(points_data.keys())
 
     x = np.arange(simulation_count)
-    bar_width = width / bar_count
-    label_position = x + (bar_width * (bar_count - 1) / 2)
+    bar_width = width / event_count
+    label_position = x + (bar_width * (event_count - 1) / 2)
     multiplier = 0
     colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 

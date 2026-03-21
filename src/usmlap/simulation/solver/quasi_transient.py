@@ -6,8 +6,7 @@ import logging
 
 from rich.progress import Progress
 
-from usmlap.simulation import Solution
-
+from ..solution import Solution
 from .quasi_steady_state import QuasiSteadyStateSolver
 from .solver_interface import MaximumIterationsExceededError, SolverInterface
 

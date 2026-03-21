@@ -1,0 +1,9 @@
+{
+  "print_name": "USM25 with USM26 ST",
+  "frontal_area": 1.002,
+  "aero_model": {
+    "model_type": "constant",
+    "lift_coefficient": 5.01,
+    "drag_coefficient": 1.596
+  }
+}

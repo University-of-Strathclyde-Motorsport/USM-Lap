@@ -6,7 +6,7 @@ from typing import Literal
 
 import matplotlib.pyplot as plt
 
-from ..simulation.channels import Channel, get_channel
+from ..simulation.channels import Channel
 from ..simulation.channels.library import Position, Time
 from ..simulation.solution import Solution
 
@@ -18,8 +18,8 @@ X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
 
 
 def plot_channels(
-    solutions: list[Solution],
-    channels: list[str],
+    solutions: dict[str, Solution],
+    channels: list[type[Channel]],
     x_axis: X_AXIS_OPTIONS = "Position",
 ) -> None:
     """
@@ -37,18 +37,18 @@ def plot_channels(
     x_channel = X_AXIS_CHANNELS[x_axis]
     axs[-1].set_xlabel(x_channel.get_label())
 
-    y_channels = [get_channel(channel_name) for channel_name in channels]
-    for i, channel in enumerate(y_channels):
+    for i, channel in enumerate(channels):
         axs[i].set_ylabel(channel.get_label())
         axs[i].grid()
 
-    for solution in solutions:
+    for label, solution in solutions.items():
         x_data = x_channel.get_values(solution)
-        for i, channel in enumerate(y_channels):
+        for i, channel in enumerate(channels):
             y_data: list[float] = channel.get_values(solution)
-            axs[i].plot(x_data, y_data)
+            axs[i].plot(x_data, y_data, label=label)
             axs[i].set_ylabel(channel.get_label())
             axs[i].grid()
 
+    plt.legend()
     plt.tight_layout()
     plt.show()

@@ -3,29 +3,33 @@ This script compares the performance of the vehicle
 with and without the aerodynamic package.
 """
 
-from usmlap.analysis import compare_vehicles
-from usmlap.competition import Competition, CompetitionSettings
-from usmlap.plot import plot_competition_bar_chart
-from usmlap.simulation import SimulationSettings
+from usmlap.competition import (
+    Competition,
+    CompetitionPoints,
+    CompetitionSettings,
+)
+from usmlap.plot import plot_points_bar_chart
+from usmlap.simulation.settings import Presets
 from usmlap.vehicle import load_vehicle
 
 competition_settings = CompetitionSettings(dataset="FSG 2025 Hybrid")
 competition = Competition(competition_settings)
 
-vehicle_files = [
-    "USM26 No Aero.json",
-    "USM26 with USM24 Aero.json",
-    "USM26 with USM25 Aero.json",
-    "USM26.json",
-]
-vehicles = [load_vehicle(file) for file in vehicle_files]
+vehicle_files: dict[str, str] = {
+    "USM25 Baseline": "USM26 with USM25 Aero.json",
+    "USM26 Side Tunnels": "USM26 Side Tunnel.json",
+}
+# vehicle_files: dict[str, str] = {
+#     "USM26 No Aero": "USM26 No Aero.json",
+#     "USM24": "USM26 with USM24 Aero.json",
+#     "USM25": "USM26 with USM25 Aero.json",
+#     "USM26": "USM26.json",
+# }
 
-simulation_settings = SimulationSettings()
+results: dict[str, CompetitionPoints] = {}
+for label, vehicle_file in vehicle_files.items():
+    vehicle = load_vehicle(vehicle_file)
+    points = competition.simulate(vehicle, Presets.QUALITY)
+    results[label] = points
 
-results = compare_vehicles(
-    vehicles=vehicles,
-    simulation_settings=simulation_settings,
-    competition=competition,
-)
-
-plot_competition_bar_chart(results, title="Comparison of Aerodynamic Packages")
+plot_points_bar_chart(results, title="Comparison of New Side Tunnels")

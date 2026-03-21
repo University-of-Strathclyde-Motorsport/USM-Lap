@@ -3,14 +3,13 @@ This module contains code for carrying out a 1D sweep of a parameter.
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Generator
 
-import matplotlib.pyplot as plt
 import numpy as np
 from rich import progress
 
-from usmlap.competition import Competition
+from usmlap.competition import Competition, CompetitionPoints
 from usmlap.simulation import SimulationSettings
 from usmlap.vehicle import Parameter, Vehicle, get_new_vehicle
 
@@ -57,28 +56,30 @@ class SweepSettings(object):
             yield (value, vehicle)
 
 
-@dataclass
-class SweepResults(object):
-    """
-    The results of a 1D sweep of a parameter.
+# @dataclass
+# class SweepResults(object):
+#     """
+#     The results of a 1D sweep of a parameter.
 
-    Attributes:
-        parameter (type[Parameter[float]]): The parameter being swept.
-        data (dict[float, float]):
-            A dictionary containing parameter values
-            and the corresponding points scored.
-    """
+#     Attributes:
+#         parameter (type[Parameter[float]]): The parameter being swept.
+#         data (dict[float, float]):
+#             A dictionary containing parameter values
+#             and the corresponding points scored.
+#     """
 
-    parameter: type[Parameter[float]]
-    data: dict[float, float] = field(default_factory=lambda: {})
+#     parameter: type[Parameter[float]]
+#     data: dict[float, float] = field(default_factory=lambda: {})
 
-    def plot(self) -> None:
-        plt.plot(list(self.data.keys()), list(self.data.values()))
-        plt.title(f"Points Sensitivity - {self.parameter.name}")
-        plt.xlabel(self.parameter.get_name_with_unit())
-        plt.ylabel("Points")
-        plt.grid()
-        plt.show()
+#     def plot(self) -> None:
+#         plt.plot(list(self.data.keys()), list(self.data.values()))
+#         plt.title(f"Points Sensitivity - {self.parameter.name}")
+#         plt.xlabel(self.parameter.get_name_with_unit())
+#         plt.ylabel("Points")
+#         plt.grid()
+#         plt.show()
+
+type SweepResults = dict[float, CompetitionPoints]
 
 
 def sweep_1d(
@@ -99,7 +100,7 @@ def sweep_1d(
     Returns:
         sweep_results (SweepResults): The results of the sweep.
     """
-    sweep_results = SweepResults(parameter=sweep_settings.parameter)
+    sweep_results: SweepResults = {}
 
     for value, vehicle in progress.track(
         sweep_settings.get_vehicles(baseline_vehicle),
@@ -111,6 +112,6 @@ def sweep_1d(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
         points = competition.simulate(vehicle, simulation_settings)
-        sweep_results.data[value] = sum(points.values())
+        sweep_results[value] = points
 
     return sweep_results

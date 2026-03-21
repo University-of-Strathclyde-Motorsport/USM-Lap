@@ -7,10 +7,10 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.simulation.model import VehicleModelInterface
-from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track import TrackNode
 
+from ..model import VehicleModelInterface
+from ..vehicle_state import StateVariables
 from .solver_interface import MaximumIterationsExceededError
 
 PRECISION = 1e-2

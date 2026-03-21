@@ -4,7 +4,7 @@ This module defines the interface for simulation solvers.
 
 from abc import ABC, abstractmethod
 
-from usmlap.simulation import Solution
+from ..solution import Solution
 
 
 class SolverError(Exception):
