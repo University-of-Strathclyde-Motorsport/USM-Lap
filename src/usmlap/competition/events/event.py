@@ -7,6 +7,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from usmlap.simulation import SimulationSettings, Solution
+from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
 from ..points import CompetitionData, CompetitionPoints
@@ -22,7 +23,16 @@ class EventInterface(ABC):
 
     def __init_subclass__(cls: type[EventInterface], label: str) -> None:
         super().__init_subclass__()
+        cls._meshes: dict[float, Mesh] = {}
         cls.label = label
+
+    def get_mesh(self, resolution: float) -> Mesh:
+        if resolution not in self._meshes:
+            self._meshes[resolution] = self._generate_mesh(resolution)
+        return self._meshes[resolution]
+
+    @abstractmethod
+    def _generate_mesh(self, resolution: float) -> Mesh: ...
 
     @abstractmethod
     def simulate_event(

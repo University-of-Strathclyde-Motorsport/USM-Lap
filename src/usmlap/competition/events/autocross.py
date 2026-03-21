@@ -5,7 +5,12 @@ This module defines the autocross event at Formula Student.
 from dataclasses import InitVar, dataclass, field
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.track import Mesh, MeshGenerator, load_track_from_spreadsheet
+from usmlap.track import (
+    Mesh,
+    MeshGenerator,
+    TrackData,
+    load_track_from_spreadsheet,
+)
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -16,8 +21,6 @@ from ..points import (
 )
 from .event import EventInterface
 
-DEFAULT_MESH_RESOLUTION = 1
-
 
 @dataclass
 class Autocross(EventInterface, label="autocross"):
@@ -26,19 +29,16 @@ class Autocross(EventInterface, label="autocross"):
     """
 
     track_file: InitVar[str]
-    mesh_resolution: float = DEFAULT_MESH_RESOLUTION
-    track_mesh: Mesh = field(init=False)
+    track_data: TrackData = field(init=False)
 
     def __post_init__(self, track_file: str) -> None:
-        track_data = load_track_from_spreadsheet(track_file)
-        self.track_mesh = MeshGenerator(self.mesh_resolution).generate_mesh(
-            track_data
-        )
+        self.track_data = load_track_from_spreadsheet(track_file)
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
     ) -> Solution:
-        solution = simulate(vehicle, self.track_mesh, settings)
+        mesh = self.get_mesh(settings.mesh_resolution)
+        solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
@@ -48,3 +48,16 @@ class Autocross(EventInterface, label="autocross"):
         t_min = data.autocross_t_min
         points = calculate_points(t_team, t_min, AUTOCROSS_COEFFICIENTS)[1]
         return {"autocross": points}
+
+    def _generate_mesh(self, resolution: float) -> Mesh:
+        """
+        Generate a track mesh for the autocross event.
+
+        Args:
+            resolution (float): The resolution of the mesh.
+
+        Returns:
+            mesh (Mesh): A mesh of the track.
+        """
+
+        return MeshGenerator(resolution).generate_mesh(self.track_data)

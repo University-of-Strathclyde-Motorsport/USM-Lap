@@ -4,7 +4,6 @@ This module defines the endurance and efficiency events at Formula Student.
 
 from dataclasses import InitVar, dataclass, field
 from math import ceil
-from typing import Optional
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
 from usmlap.track import (
@@ -26,7 +25,6 @@ from ..points import (
 from .event import EventInterface
 
 ENDURANCE_TRACK_LENGTH = 22000
-DEFAULT_MESH_RESOLUTION = 1
 
 
 @dataclass
@@ -36,20 +34,17 @@ class Endurance(EventInterface, label="endurance"):
     """
 
     track_file: InitVar[str]
-    mesh_resolution: float = DEFAULT_MESH_RESOLUTION
-    track_mesh: Mesh = field(init=False)
+    track_data: TrackData = field(init=False)
 
     def __post_init__(self, track_file: str) -> None:
-        track_data = load_track_from_spreadsheet(track_file)
-        self.track_mesh = _generate_endurance_mesh(
-            track_data, self.mesh_resolution
-        )
+        self.track_data = load_track_from_spreadsheet(track_file)
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
     ) -> Solution:
+        mesh = self.get_mesh(settings.mesh_resolution)
         vehicle = _modify_vehicle_for_event(vehicle)
-        solution = simulate(vehicle, self.track_mesh, settings)
+        solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
@@ -71,22 +66,22 @@ class Endurance(EventInterface, label="endurance"):
 
         return {"endurance": endurance_points, "efficiency": efficiency_points}
 
+    def _generate_mesh(self, resolution: float) -> Mesh:
+        """
+        Generate a track mesh for the endurance event.
 
-def _generate_endurance_mesh(
-    track_data: TrackData,
-    resolution: float,
-    number_of_laps: Optional[int] = None,
-) -> Mesh:
-    """
-    Generate a mesh for the endurance event.
-    """
-    base_mesh = MeshGenerator(resolution).generate_mesh(track_data)
+        Args:
+            resolution (float): The resolution of the mesh.
 
-    if not number_of_laps:
+        Returns:
+            mesh (Mesh): A mesh of the track.
+        """
+        base_mesh = MeshGenerator(resolution).generate_mesh(self.track_data)
+
         number_of_laps = ceil(ENDURANCE_TRACK_LENGTH / base_mesh.track_length)
 
-    endurance_mesh = base_mesh.get_repeating_mesh(number_of_laps)
-    return endurance_mesh
+        endurance_mesh = base_mesh.get_repeating_mesh(number_of_laps)
+        return endurance_mesh
 
 
 def _modify_vehicle_for_event(vehicle: Vehicle) -> Vehicle:

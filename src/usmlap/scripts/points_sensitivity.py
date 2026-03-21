@@ -5,7 +5,7 @@ This script runs a points sensitivity analysis of a vehicle parameter.
 from usmlap.analysis import SweepSettings, sweep_1d
 from usmlap.competition import Competition, CompetitionSettings
 from usmlap.plot import plot_points_sensitivity
-from usmlap.simulation.settings import Presets
+from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import load_vehicle
 from usmlap.vehicle.parameters import FinalDriveRatio
 
@@ -14,7 +14,7 @@ PARAMETER = FinalDriveRatio
 START_VALUE = 1.5
 END_VALUE = 3.5
 NUMBER_OF_STEPS = 10
-QUALITY = Presets.QUALITY
+QUALITY = QualityPresets.HIGH_QUALITY
 
 vehicle = load_vehicle(BASELINE_VEHICLE)
 

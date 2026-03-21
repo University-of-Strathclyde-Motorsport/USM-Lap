@@ -38,7 +38,6 @@ class CompetitionSettings(object):
     simulate_skidpad: bool = True
     simulate_autocross: bool = True
     simulate_endurance: bool = True
-    mesh_resolution: float = 1
     dataset: InitVar[str] = field(default=DEFAULT_COMPETITION_DATASET)
     competition_data: CompetitionData = field(init=False)
 
@@ -78,30 +77,22 @@ class Competition(object):
 
             if self.settings.simulate_acceleration:
                 progress.update(task, description="Setting up Acceleration...")
-                acceleration = Acceleration(
-                    mesh_resolution=self.settings.mesh_resolution
-                )
+                acceleration = Acceleration()
                 self._add_event(acceleration)
 
             if self.settings.simulate_skidpad:
                 progress.update(task, description="Setting up Skidpad...")
-                skidpad = Skidpad(mesh_resolution=self.settings.mesh_resolution)
+                skidpad = Skidpad()
                 self._add_event(skidpad)
 
             if self.settings.simulate_autocross:
                 progress.update(task, description="Setting up Autocross...")
-                autocross = Autocross(
-                    track_file=self.settings.autocross_track,
-                    mesh_resolution=self.settings.mesh_resolution,
-                )
+                autocross = Autocross(track_file=self.settings.autocross_track)
                 self._add_event(autocross)
 
             if self.settings.simulate_endurance:
                 progress.update(task, description="Setting up Endurance...")
-                endurance = Endurance(
-                    track_file=self.settings.autocross_track,
-                    mesh_resolution=self.settings.mesh_resolution,
-                )
+                endurance = Endurance(track_file=self.settings.autocross_track)
                 self._add_event(endurance)
 
     def simulate(

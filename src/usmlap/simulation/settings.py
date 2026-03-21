@@ -26,15 +26,23 @@ class SimulationSettings(object):
     """
 
     environment: Environment = field(default_factory=Environment)
+    mesh_resolution: float = 0.1
     vehicle_model: type[VehicleModelInterface] = PointMass
     solver: type[SolverInterface] = QT
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
 
 
-class Presets(object):
+class QualityPresets(object):
     """
-    Simulation setting presets.
+    Simulation setting QualityPresets.
     """
 
-    DRAFT = SimulationSettings(vehicle_model=PointMass, solver=QSS)
-    QUALITY = SimulationSettings(vehicle_model=PointMass, solver=QT)
+    DRAFT: SimulationSettings = SimulationSettings(
+        mesh_resolution=2, vehicle_model=PointMass, solver=QSS
+    )
+    FAST: SimulationSettings = SimulationSettings(
+        mesh_resolution=0.5, vehicle_model=PointMass, solver=QT
+    )
+    HIGH_QUALITY: SimulationSettings = SimulationSettings(
+        mesh_resolution=0.1, vehicle_model=PointMass, solver=QT
+    )

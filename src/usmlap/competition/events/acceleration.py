@@ -2,11 +2,9 @@
 This module defines the acceleration event at Formula Student.
 """
 
-from copy import copy
 from dataclasses import dataclass
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.simulation.solver import QuasiSteadyStateSolver
 from usmlap.track import Mesh, MeshGenerator, load_track_from_spreadsheet
 from usmlap.vehicle import Vehicle
 
@@ -19,7 +17,6 @@ from ..points import (
 from .event import EventInterface
 
 ACCELERATION_TRACK = "Acceleration.xlsx"
-DEFAULT_MESH_RESOLUTION = 0.1
 
 
 @dataclass
@@ -28,17 +25,13 @@ class Acceleration(EventInterface, label="acceleration"):
     Acceleration event at Formula Student.
     """
 
-    mesh_resolution: float = DEFAULT_MESH_RESOLUTION
-
-    def __post_init__(self) -> None:
-        self.track_mesh = _get_acceleration_mesh(self.mesh_resolution)
+    track_data = load_track_from_spreadsheet(ACCELERATION_TRACK)
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
     ) -> Solution:
-        settings = copy(settings)
-        settings.solver = QuasiSteadyStateSolver
-        solution = simulate(vehicle, self.track_mesh, settings)
+        mesh = self.get_mesh(settings.mesh_resolution)
+        solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
@@ -49,14 +42,14 @@ class Acceleration(EventInterface, label="acceleration"):
         points = calculate_points(t_team, t_min, ACCELERATION_COEFFICIENTS)[1]
         return {"acceleration": points}
 
+    def _generate_mesh(self, resolution: float) -> Mesh:
+        """
+        Generate a track mesh for the acceleration event.
 
-def _get_acceleration_mesh(resolution: float) -> Mesh:
-    """
-    Generate a mesh for the acceleration event.
+        Args:
+            resolution (float): The resolution of the mesh.
 
-    Returns:
-        mesh (Mesh): A mesh of the track.
-    """
-    track_data = load_track_from_spreadsheet(ACCELERATION_TRACK)
-    mesh = MeshGenerator(resolution=resolution).generate_mesh(track_data)
-    return mesh
+        Returns:
+            mesh (Mesh): A mesh of the track.
+        """
+        return MeshGenerator(resolution).generate_mesh(self.track_data)
