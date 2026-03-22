@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import ClassVar, Optional
+from typing import Any, ClassVar, Optional
 
 from .powertrain.accumulator import Cell
 from .vehicle import Vehicle
@@ -17,20 +17,28 @@ class Parameter[T](ABC):
     An abstract class representing a vehicle parameter.
     """
 
-    _REGISTRY: ClassVar[dict[str, type[Parameter]]] = {}
+    _REGISTRY: ClassVar[dict[str, type[Parameter[Any]]]] = {}
     name: ClassVar[str]
     unit: ClassVar[Optional[str]] = None
+    uncertainty: ClassVar[float] = 0
+    implemented: ClassVar[bool] = True
 
     def __init_subclass__(
-        cls: type[Parameter], name: str, unit: Optional[str] = None
+        cls: type[Parameter[T]],
+        name: str,
+        unit: Optional[str] = None,
+        uncertainty: float = 0,
+        implemented: bool = True,
     ) -> None:
         super().__init_subclass__()
         cls._REGISTRY[name] = cls
         cls.name = name
         cls.unit = unit
+        cls.uncertainty = uncertainty
+        cls.implemented = implemented
 
     @classmethod
-    def get_parameter(cls, name: str) -> Parameter:
+    def get_parameter(cls, name: str) -> type[Parameter[T]]:
         """
         Get a parameter from its name.
 
@@ -44,7 +52,7 @@ class Parameter[T](ABC):
             parameter (type[Parameter]): A parameter object.
         """
         try:
-            return cls._REGISTRY[name]()
+            return cls._REGISTRY[name]
         except KeyError:
             error_message = (
                 f"Parameter '{name}' not found. "
@@ -53,14 +61,14 @@ class Parameter[T](ABC):
             raise KeyError(error_message)
 
     @classmethod
-    def list_parameters(cls) -> list[str]:
+    def list_all_parameters(cls) -> list[type[Parameter[T]]]:
         """
         Get a list of available parameters.
 
         Returns:
-            parameters (list[str]): Available parameter names.
+            parameters (list[type[Parameters]]): Available parameters.
         """
-        return list(cls._REGISTRY.keys())
+        return list(cls._REGISTRY.values())
 
     @classmethod
     def get_name_with_unit(cls) -> str:
@@ -68,6 +76,13 @@ class Parameter[T](ABC):
             return f"{cls.name} ({cls.unit})"
         else:
             return f"{cls.name} (-)"
+
+    @classmethod
+    def append_unit(cls, value: str) -> str:
+        if cls.unit:
+            return f"{value} {cls.unit}"
+        else:
+            return value
 
     @staticmethod
     @abstractmethod
@@ -98,9 +113,12 @@ class Parameter[T](ABC):
         """
         ...
 
+    def __str__(self) -> str:
+        return f"Test({super().get_type()})"
+
 
 def get_new_vehicle(
-    baseline: Vehicle, parameter: type[Parameter], value: float
+    baseline: Vehicle, parameter: type[Parameter[Any]], value: float
 ) -> Vehicle:
     """
     Generate a new vehicle with a modified parameter value.
@@ -118,8 +136,20 @@ def get_new_vehicle(
     return new_vehicle
 
 
+def list_all_parameters() -> list[type[Parameter[Any]]]:
+    """
+    Get a list of available parameters.
+
+    Returns:
+        parameters (list[type[Parameters]]): Available parameters.
+    """
+    return list(Parameter.list_all_parameters())
+
+
 # Aerodynamics
-class LiftCoefficient(Parameter[float], name="Lift Coefficient"):
+class LiftCoefficient(
+    Parameter[float], name="Lift Coefficient", uncertainty=0.2
+):
     """The lift coefficient of the aero package."""
 
     @staticmethod
@@ -131,7 +161,9 @@ class LiftCoefficient(Parameter[float], name="Lift Coefficient"):
         vehicle.aero.aero_model.lift_coefficient = value
 
 
-class DragCoefficient(Parameter[float], name="Drag Coefficient"):
+class DragCoefficient(
+    Parameter[float], name="Drag Coefficient", uncertainty=0.1
+):
     """The drag coefficient of the aero package."""
 
     @staticmethod
@@ -143,7 +175,9 @@ class DragCoefficient(Parameter[float], name="Drag Coefficient"):
         vehicle.aero.aero_model.drag_coefficient = value
 
 
-class FrontalArea(Parameter[float], name="Frontal Area", unit="m^2"):
+class FrontalArea(
+    Parameter[float], name="Frontal Area", unit="m^2", uncertainty=0.001
+):
     """The frontal area of the aerodynamic package."""
 
     @staticmethod
@@ -156,7 +190,9 @@ class FrontalArea(Parameter[float], name="Frontal Area", unit="m^2"):
 
 
 # Driver
-class DriverMass(Parameter[float], name="Driver Mass", unit="kg"):
+class DriverMass(
+    Parameter[float], name="Driver Mass", unit="kg", uncertainty=5
+):
     """The mass of the driver."""
 
     @staticmethod
@@ -169,7 +205,7 @@ class DriverMass(Parameter[float], name="Driver Mass", unit="kg"):
 
 
 # Inertia
-class CurbMass(Parameter[float], name="Curb Mass", unit="kg"):
+class CurbMass(Parameter[float], name="Curb Mass", unit="kg", uncertainty=10):
     """The mass of the vehicle without the driver."""
 
     @staticmethod
@@ -181,7 +217,13 @@ class CurbMass(Parameter[float], name="Curb Mass", unit="kg"):
         vehicle.inertia.curb_mass = value
 
 
-class DrivetrainInertia(Parameter[float], name="Drivetrain Inertia", unit="kg"):
+class DrivetrainInertia(
+    Parameter[float],
+    name="Drivetrain Inertia",
+    unit="kg",
+    uncertainty=1,
+    implemented=False,
+):
     """Equivalent mass of the drivetrain inertia, measured at the wheel."""
 
     @staticmethod
@@ -206,9 +248,50 @@ class FinalDriveRatio(Parameter[float], name="Final Drive Ratio"):
         vehicle.transmission.final_drive_ratio = value
 
 
+# Cell
+class CellCapacity(
+    Parameter[float], name="Cell Capacity", unit="J", uncertainty=2000
+):
+    """The capacity of the cell."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.accumulator.cell.capacity
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.accumulator.cell.capacity = value
+
+
+class CellDischargeCurrent(
+    Parameter[float], name="Cell Discharge Current", unit="A", uncertainty=3
+):
+    """The maximum discharge current of the cell."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.accumulator.cell.discharge_current
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.accumulator.cell.discharge_current = value
+
+
+class CellResistance(
+    Parameter[float], name="Cell Resistance", unit="Ω", uncertainty=0.005
+):
+    """The internal resistance of the cell."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.accumulator.cell.resistance
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.accumulator.cell.resistance = value
+
+
 # Accumulator
-
-
 class AccumulatorCell(Parameter[Cell], name="Cell"):
     """The cell of the accumulator."""
 
@@ -243,6 +326,99 @@ class CellsInParallel(Parameter[int], name="Cells in Parallel"):
     @staticmethod
     def set_value(vehicle: Vehicle, value: int) -> None:
         vehicle.powertrain.accumulator.cells_in_parallel = value
+
+
+# Motor
+class MotorResistance(
+    Parameter[float],
+    name="Motor Resistance",
+    unit="Ω",
+    uncertainty=0.2,
+    implemented=False,
+):
+    """Internal resistance of the motor."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor.electrical_resistance
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor.electrical_resistance = value
+
+
+class PeakTorque(
+    Parameter[float], name="Peak Torque", unit="Nm", uncertainty=10
+):
+    """Peak torque available from the motor."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor.peak_torque
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor.peak_torque = value
+
+
+class MotorPeakCurrent(
+    Parameter[float], name="Motor Peak Current", unit="A", uncertainty=10
+):
+    """Current required to deliver the peak torque."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor.peak_current
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor.peak_current = value
+
+
+class MaximumRPM(
+    Parameter[float], name="Maximum RPM", unit="rpm", uncertainty=200
+):
+    """Maximum RPM of the motor."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor.maximum_rpm
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor.maximum_rpm = value
+
+
+class MotorRatedVoltage(
+    Parameter[float], name="Motor Rated Voltage", unit="V", uncertainty=20
+):
+    """Rated voltage of the motor."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor.rated_voltage
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor.rated_voltage = value
+
+
+# Motor Controller
+class MotorControllerResistance(
+    Parameter[float],
+    name="Motor Controller Resistance",
+    unit="Ω",
+    uncertainty=0.05,
+):
+    """The resistance of the motor controller."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.motor_controller.resistance
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.motor_controller.resistance = value
 
 
 # Powertrain

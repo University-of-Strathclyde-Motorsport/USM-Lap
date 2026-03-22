@@ -81,11 +81,12 @@ def coupling(
         transient=True,
         total=sweep_settings.number_of_steps,
     ):
-        sensitivity = points_sensitivity(
+        sensitivity, _ = points_sensitivity(
             vehicle=vehicle,
             settings=simulation_settings,
             competition=competition,
             parameter=coupled_parameter,
+            normalise=True,
         )
         coupling_results.data[value] = sensitivity
     return coupling_results
