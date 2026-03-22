@@ -176,7 +176,7 @@ class DragCoefficient(
 
 
 class FrontalArea(
-    Parameter[float], name="Frontal Area", unit="m^2", uncertainty=0.001
+    Parameter[float], name="Frontal Area", unit="m²", uncertainty=0.001
 ):
     """The frontal area of the aerodynamic package."""
 
@@ -205,7 +205,7 @@ class DriverMass(
 
 
 # Inertia
-class CurbMass(Parameter[float], name="Curb Mass", unit="kg", uncertainty=10):
+class CurbMass(Parameter[float], name="Curb Mass", unit="kg", uncertainty=2):
     """The mass of the vehicle without the driver."""
 
     @staticmethod
@@ -289,6 +289,20 @@ class CellResistance(
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
         vehicle.powertrain.accumulator.cell.resistance = value
+
+
+class CellVoltageOffset(
+    Parameter[float], name="Cell Voltage Offset", unit="V", uncertainty=0.1
+):
+    """The voltage offset of the cell."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.accumulator.cell.voltage_offset
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.accumulator.cell.voltage_offset = value
 
 
 # Accumulator
@@ -376,7 +390,7 @@ class MotorPeakCurrent(
 
 
 class MaximumRPM(
-    Parameter[float], name="Maximum RPM", unit="rpm", uncertainty=200
+    Parameter[float], name="Maximum Motor RPM", unit="rpm", uncertainty=200
 ):
     """Maximum RPM of the motor."""
 
@@ -390,7 +404,7 @@ class MaximumRPM(
 
 
 class MotorRatedVoltage(
-    Parameter[float], name="Motor Rated Voltage", unit="V", uncertainty=20
+    Parameter[float], name="Motor Rated Voltage", unit="V", uncertainty=10
 ):
     """Rated voltage of the motor."""
 
@@ -432,3 +446,160 @@ class DischargeCurrentLimit(Parameter[float], name="Discharge Current Limit"):
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
         vehicle.powertrain.discharge_current_limit = value
+
+
+# Tyre
+class FrontTyreRadius(
+    Parameter[float],
+    name="Front Tyre Radius",
+    unit="m",
+    uncertainty=0.005,
+    implemented=False,
+):
+    """The radius of the tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.front.unloaded_radius
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.front.unloaded_radius = value
+
+
+class RearTyreRadius(
+    Parameter[float], name="Rear Tyre Radius", unit="m", uncertainty=0.005
+):
+    """The radius of the tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.rear.unloaded_radius
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.rear.unloaded_radius = value
+
+
+class FrontTyreLongGripPeak(
+    Parameter[float], name="Front Tyre Peak Long. Grip", uncertainty=0.1
+):
+    """The peak longitudinal grip of the front tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.front.tyre_model.mu_x_peak
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.front.tyre_model.mu_x_peak = value
+
+
+class FrontTyreLongGripSens(
+    Parameter[float],
+    name="Front Tyre Long. Grip Load Sens.",
+    unit="N⁻¹",
+    uncertainty=0.0001,
+):
+    """The load sensitivity of the longitudinal grip of the front tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.front.tyre_model.mu_x_load_sensitivity
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.front.tyre_model.mu_x_load_sensitivity = value
+
+
+class FrontTyreLatGripPeak(
+    Parameter[float], name="Front Tyre Peak Lat. Grip", uncertainty=0.1
+):
+    """The peak lateral grip of the front tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.front.tyre_model.mu_y_peak
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.front.tyre_model.mu_y_peak = value
+
+
+class FrontTyreLatGripSens(
+    Parameter[float],
+    name="Front Tyre Lat. Grip Load Sens.",
+    unit="N⁻¹",
+    uncertainty=0.0001,
+):
+    """The load sensitivity of the lateral grip of the front tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.front.tyre_model.mu_y_load_sensitivity
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.front.tyre_model.mu_y_load_sensitivity = value
+
+
+class RearTyreLongGripPeak(
+    Parameter[float], name="Rear Tyre Peak Long. Grip", uncertainty=0.1
+):
+    """The peak longitudinal grip of the rear tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.rear.tyre_model.mu_x_peak
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.rear.tyre_model.mu_x_peak = value
+
+
+class RearTyreLongGripSens(
+    Parameter[float],
+    name="Rear Tyre Long. Grip Load Sens.",
+    unit="N⁻¹",
+    uncertainty=0.0001,
+):
+    """The load sensitivity of the longitudinal grip of the rear tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.rear.tyre_model.mu_x_load_sensitivity
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.rear.tyre_model.mu_x_load_sensitivity = value
+
+
+class RearTyreLatGripPeak(
+    Parameter[float], name="Rear Tyre Peak Lat. Grip", uncertainty=0.1
+):
+    """The peak lateral grip of the rear tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.rear.tyre_model.mu_y_peak
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.rear.tyre_model.mu_y_peak = value
+
+
+class RearTyreLatGripSens(
+    Parameter[float],
+    name="Rear Tyre Lat. Grip Load Sens.",
+    unit="N⁻¹",
+    uncertainty=0.0001,
+):
+    """The load sensitivity of the lateral grip of the rear tyre."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.tyres.rear.tyre_model.mu_y_load_sensitivity
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.tyres.rear.tyre_model.mu_y_load_sensitivity = value

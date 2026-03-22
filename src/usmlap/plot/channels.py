@@ -21,14 +21,16 @@ def plot_channels(
     solutions: dict[str, Solution],
     channels: list[type[Channel]],
     x_axis: X_AXIS_OPTIONS = "Position",
+    show_legend: bool = True,
 ) -> None:
     """
     Plot traces of the specified data channels.
 
     Args:
-        solutions (list[Solution]): The solution to plot.
+        solutions (dict[str, Solution]): A dict of labels and solutions to plot.
         channels (list[str]): The names of the data channels to plot.
-        x_axis (Literal["Position", "Time"]): The function to plot on the x-axis
+        x_axis (Literal["Position", "Time"]): The channel to plot on the x-axis.
+        show_legend (bool): Whether to show a legend.
     """
 
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
@@ -40,15 +42,17 @@ def plot_channels(
     for i, channel in enumerate(channels):
         axs[i].set_ylabel(channel.get_label())
         axs[i].grid()
+        x_data = x_channel.get_values(solutions[list(solutions.keys())[0]])
+        axs[i].set_xlim(min(x_data), max(x_data))
 
     for label, solution in solutions.items():
         x_data = x_channel.get_values(solution)
         for i, channel in enumerate(channels):
             y_data: list[float] = channel.get_values(solution)
             axs[i].plot(x_data, y_data, label=label)
-            axs[i].set_ylabel(channel.get_label())
-            axs[i].grid()
 
-    plt.legend()
+    if show_legend:
+        plt.legend()
+
     plt.tight_layout()
     plt.show()

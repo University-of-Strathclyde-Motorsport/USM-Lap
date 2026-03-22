@@ -2,14 +2,53 @@
 This module plots the relative magnitudes of a list of points sensitivities.
 """
 
-from typing import Optional
+from dataclasses import dataclass
+from functools import total_ordering
+from typing import Any, Optional
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
 
+@total_ordering
+@dataclass
+class PointsSensitivityData(object):
+    """
+    Dataclass for storing points sensitivity data.
+
+    Attributes:
+        label (str): Label for the bar.
+    """
+
+    label: str
+    value: float
+    bar_text: str = ""
+
+    @property
+    def abs_value(self) -> float:
+        return abs(self.value)
+
+    @property
+    def bar_label(self) -> str:
+        return f"{self.value:+.2f}"
+
+    @property
+    def bar_colour(self) -> str:
+        return get_bar_colour(self.value)
+
+    def __eq__(self, other: Any) -> bool:  # noqa: S6542
+        if not isinstance(other, PointsSensitivityData):
+            return NotImplemented
+        return abs(self.value) == abs(other.value)
+
+    def __lt__(self, other: Any) -> bool:  # noqa: S6542
+        if not isinstance(other, PointsSensitivityData):
+            return NotImplemented
+        return abs(self.value) < abs(other.value)
+
+
 def plot_points_sensitivities(
-    data: dict[str, float],
+    data: list[PointsSensitivityData],
     title: str = "Points Sensitivities",
     x_label: Optional[str] = None,
 ) -> None:
@@ -21,19 +60,22 @@ def plot_points_sensitivities(
         title (str): Title for the plot (default = "Points Sensitivities").
         x_label (Optional[str]): Label for the x-axis (default = None).
     """
-    sorted_keys = sorted(data, key=lambda x: abs(data[x]), reverse=True)
-    sorted_data = {key: data[key] for key in sorted_keys}
+    data = sorted(data, reverse=True)
+    print(data)
 
     _, ax = plt.subplots()
 
-    labels = list(sorted_data.keys())
-    sensitivities = list(sorted_data.values())
-    absolute_sensitivities = [abs(sensitivity) for sensitivity in sensitivities]
-    bar_labels = [f"{sensitivity:+.2f}" for sensitivity in sensitivities]
-    bar_colours = [get_bar_colour(sensitivity) for sensitivity in sensitivities]
+    labels = [sensitivity.label for sensitivity in data]
+    sensitivities = [sensitivity.abs_value for sensitivity in data]
+    bar_labels = [sensitivity.bar_label for sensitivity in data]
+    bar_text = [sensitivity.bar_text for sensitivity in data]
+    bar_colours = [sensitivity.bar_colour for sensitivity in data]
 
-    bars = ax.bar(labels, absolute_sensitivities, color=bar_colours, zorder=3)
+    bars = ax.bar(labels, sensitivities, color=bar_colours, zorder=3)
     ax.bar_label(bars, labels=bar_labels, padding=3, zorder=3)
+    ax.bar_label(
+        bars, labels=bar_text, label_type="center", color="white", zorder=3
+    )
 
     ax.grid(which="both", axis="y", zorder=0)
     ax.grid(which="minor", axis="y", alpha=0.3)
@@ -59,6 +101,19 @@ def get_bar_colour(sensitivity: float) -> str:
         return "#003366"
     else:
         return "#FF6454"
+
+
+def get_bar_text_colour(sensitivity: float) -> str:
+    """
+    Get the text colour for a sensitivity.
+
+    If the sensitivity is positive, the text is white.
+    If the sensitivity is negative, the text is black.
+    """
+    if sensitivity > 0:
+        return "white"
+    else:
+        return "black"
 
 
 def create_legend(ax: plt.Axes) -> None:

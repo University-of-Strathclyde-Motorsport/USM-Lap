@@ -30,6 +30,8 @@ class Cell(Component, library="components/cells"):
         resistance (float): Internal resistance of the cell.
             Note that this is an approximation, and will be updated later.
         datasheet_url (str): URL to the datasheet of the cell.
+        voltage_offset (float): Add or subtract a constant voltage
+            to the cell voltage (default = 0).
     """
 
     print_name: str
@@ -39,6 +41,7 @@ class Cell(Component, library="components/cells"):
     discharge_current: float
     resistance: float
     datasheet_url: str
+    voltage_offset: float = 0
 
     @cached_property
     def _soc_lookup_values(self) -> list[float]:
@@ -69,7 +72,7 @@ class Cell(Component, library="components/cells"):
             self._soc_lookup_values,
             self._voltage_lookup_values,
         )
-        return voltage
+        return voltage + self.voltage_offset
 
 
 class Accumulator(Component, library="components/accumulators"):
