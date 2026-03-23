@@ -43,5 +43,7 @@ for parameter in progress.track(parameters, "Evaluating parameters..."):
     sensitivities.append(datapoint)
 
 plot_points_sensitivities(
-    sensitivities, title="Model Sensitivity to Parameter Uncertainties"
+    sensitivities,
+    title="Model Sensitivity to Parameter Uncertainties",
+    max_results=15,
 )

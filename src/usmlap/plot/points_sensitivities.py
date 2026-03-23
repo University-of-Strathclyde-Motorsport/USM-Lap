@@ -51,6 +51,7 @@ def plot_points_sensitivities(
     data: list[PointsSensitivityData],
     title: str = "Points Sensitivities",
     x_label: Optional[str] = None,
+    max_results: Optional[int] = None,
 ) -> None:
     """
     This function plots the relative magnitudes of a list of points sensitivities.
@@ -59,9 +60,12 @@ def plot_points_sensitivities(
         data (dict[str, float]): Bar labels and corresponding sensitivities.
         title (str): Title for the plot (default = "Points Sensitivities").
         x_label (Optional[str]): Label for the x-axis (default = None).
+        max_results (Optional[int]): Maximum number of bars to plot.
+            If None, plot all results (default = None).
     """
     data = sorted(data, reverse=True)
-    print(data)
+    if max_results is not None:
+        data = data[:max_results]
 
     _, ax = plt.subplots()
 
@@ -120,7 +124,10 @@ def create_legend(ax: plt.Axes) -> None:
     """
     Add a legend to the plot, denoting colours for positive and negative bars.
     """
-    colours = {"positive": "#003366", "negative": "#FF6454"}
+    colours = {
+        "positive correlation": "#003366",
+        "negative correlation": "#FF6454",
+    }
     labels = list(colours.keys())
     handles = [Rectangle((0, 0), 1, 1, color=colours[lab]) for lab in labels]
 
