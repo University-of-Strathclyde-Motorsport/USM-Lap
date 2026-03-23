@@ -2,6 +2,7 @@
 This module contains functions for plotting traces of channels.
 """
 
+from itertools import cycle
 from typing import Literal
 
 import matplotlib.pyplot as plt
@@ -34,25 +35,28 @@ def plot_channels(
     """
 
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
-    fig.suptitle("Solution")
 
     x_channel = X_AXIS_CHANNELS[x_axis]
     axs[-1].set_xlabel(x_channel.get_label())
+    colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
     for i, channel in enumerate(channels):
         axs[i].set_ylabel(channel.get_label())
         axs[i].grid()
-        x_data = x_channel.get_values(solutions[list(solutions.keys())[0]])
-        axs[i].set_xlim(min(x_data), max(x_data))
+
+    x_data = x_channel.get_values(solutions[list(solutions.keys())[0]])
+    axs[-1].set_xlim(min(x_data), max(x_data))
 
     for label, solution in solutions.items():
         x_data = x_channel.get_values(solution)
+        colour = next(colours)
         for i, channel in enumerate(channels):
             y_data: list[float] = channel.get_values(solution)
-            axs[i].plot(x_data, y_data, label=label)
+            axs[i].plot(x_data, y_data, label=label, color=colour)
 
     if show_legend:
         plt.legend()
 
+    axs[0].set_title("Solution")
     plt.tight_layout()
     plt.show()

@@ -84,5 +84,8 @@
             ],
             "url": "./schema/competition.schema.json"
         }
+    ],
+    "cSpell.words": [
+        "usmlap"
     ]
 }

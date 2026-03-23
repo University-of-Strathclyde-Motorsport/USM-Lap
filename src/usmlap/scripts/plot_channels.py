@@ -6,8 +6,9 @@ from usmlap.competition.events import Autocross
 from usmlap.plot import plot_channels
 from usmlap.simulation.channels.channel import Channel
 from usmlap.simulation.channels.library import (
+    Curvature,
+    Downforce,
     MotorPower,
-    MotorTorque,
     StateOfCharge,
     Velocity,
 )
@@ -19,8 +20,9 @@ TRACK_FILE = "FS AutoX Germany 2012.xlsx"
 SETTINGS = QualityPresets.FAST
 
 CHANNELS: list[type[Channel]] = [
+    Curvature,
     Velocity,
-    MotorTorque,
+    Downforce,
     MotorPower,
     StateOfCharge,
 ]
