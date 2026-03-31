@@ -8,10 +8,20 @@ from typing import Any
 
 import numpy as np
 
-from usmlap.utils.array import diff
+from usmlap.utils.array import interp_previous
 
 from .mesh import Mesh, TrackNode
-from .track_data import Configuration, TrackData
+from .track_data import (
+    BankingData,
+    Configuration,
+    ElevationData,
+    GripFactorData,
+    SectorData,
+    ShapeData,
+    TrackData,
+)
+
+type NDArray = np.ndarray[tuple[Any, ...], np.dtype[np.float64]]
 
 
 class Resolution(float):
@@ -27,8 +37,117 @@ class Resolution(float):
         return super().__new__(cls, value)
 
 
+def _interpolate_curvature(
+    data: list[ShapeData], sample_position: NDArray, smooth: bool = True
+) -> NDArray:
+    """
+    Interpolate the curvature of the track at a series of positions.
+
+    Args:
+        data (list[ShapeData]): Shape data for the track.
+        sample_position (NDArray): The positions to interpolate at.
+        smooth (Optional[bool]): Whether to smooth the curvature
+            (default = `True`).
+            If `True`, uses `np.interp` to interpolate the curvature.
+            If `False`, uses `interp_previous` to interpolate the curvature
+    Returns:
+        curvature (NDArray): The interpolated curvature.
+    """
+    curvature = np.array([node.curvature for node in data])
+    position = np.cumsum([node.length for node in data])
+    if smooth:
+        interpolated = np.interp(sample_position, position, curvature)
+    else:
+        interpolated = np.array(
+            interp_previous(
+                sample_position.tolist(), position.tolist(), curvature.tolist()
+            )
+        )
+    return interpolated
+
+
+def _interpolate_elevation(
+    data: list[ElevationData], sample_position: NDArray
+) -> NDArray:
+    """
+    Interpolate the elevation of the track at a series of positions.
+
+    Args:
+        data (list[ElevationData]): Elevation data for the track.
+        sample_position (NDArray): The positions to interpolate at.
+
+    Returns:
+        elevation (NDArray): The interpolated elevation.
+    """
+    if not data:
+        return np.full(len(sample_position), ElevationData.default())
+    elevation = np.array([node.elevation for node in data])
+    position = np.array([node.position for node in data])
+    return np.interp(sample_position, position, elevation)
+
+
+def _interpolate_banking(
+    data: list[BankingData], sample_position: NDArray
+) -> NDArray:
+    """
+    Interpolate the banking of the track at a series of positions.
+
+    Args:
+        data (list[BankingData]): Banking data for the track.
+        sample_position (NDArray): The positions to interpolate at.
+
+    Returns:
+        banking (NDArray): The interpolated banking.
+    """
+    if not data:
+        return np.full(len(sample_position), BankingData.default())
+    banking = np.array([node.angle for node in data])
+    position = np.array([node.position for node in data])
+    return np.interp(sample_position, position, banking)
+
+
+def _interpolate_grip_factor(
+    data: list[GripFactorData], sample_position: NDArray
+) -> NDArray:
+    """
+    Interpolate the grip factor of the track at a series of positions.
+
+    Args:
+        data (list[GripFactorData]): Grip factor data for the track.
+        sample_position (NDArray): The positions to interpolate at.
+
+    Returns:
+        grip_factor (NDArray): The interpolated grip factor.
+    """
+    if not data:
+        return np.full(len(sample_position), GripFactorData.default())
+    grip_factor = np.array([node.grip_factor for node in data])
+    position = np.array([node.position for node in data])
+    return np.interp(sample_position, position, grip_factor)
+
+
+def _interpolate_sector(
+    data: list[SectorData], sample_position: list[float]
+) -> list[str]:
+    """
+    Interpolate the sector of the track at a series of positions.
+
+    Args:
+        data (list[SectorData]): Sector data for the track.
+        sample_position (list[float]): The positions to interpolate at.
+
+    Returns:
+        sector (list[str]): The interpolated sector.
+    """
+    if not data:
+        return [SectorData.default()] * len(sample_position)
+    label = [node.label for node in data]
+    start_position = [node.start_position for node in data]
+    return interp_previous(sample_position, start_position, label)
+
+
 def generate_mesh(
-    track_data: TrackData, resolution: float | Resolution
+    track_data: TrackData, resolution: float | Resolution, smooth: bool = True
 ) -> Mesh:
     """
     Generate a track mesh from track data.
@@ -36,12 +155,13 @@ def generate_mesh(
     Args:
         track_data (TrackData): The track data object.
         resolution (Resolution): The resolution of the mesh, in metres.
+        smooth (bool): Whether to smooth the curvature data (default = `True`).
 
     Returns:
         mesh (Mesh): A mesh of the track.
     """
-    resolution = Resolution(resolution)
-    return _MeshGenerator(resolution).generate_mesh(track_data)
+    mesh_generator = _MeshGenerator(Resolution(resolution), smooth)
+    return mesh_generator.generate_mesh(track_data)
 
 
 @dataclass
@@ -51,9 +171,11 @@ class _MeshGenerator(object):
 
     Attributes:
         resolution (Resolution): The target length of a node, in metres.
+        smooth (bool): Whether to smooth the curvature data (default = `True`).
     """
 
     resolution: Resolution
+    smooth: bool = True
 
     def generate_mesh(self, track_data: TrackData) -> Mesh:
         """
@@ -65,13 +187,15 @@ class _MeshGenerator(object):
         Returns:
             mesh (Mesh): A mesh of the track.
         """
-        track_length = track_data.shape.total_length
+        track_length = track_data.total_length
         node_count = round(track_length / self.resolution)
         spacing = track_length / (node_count - 1)
         position = np.arange(0, track_length, spacing)
 
         length = np.diff(np.append(position, track_length))
-        curvature = np.array(track_data.shape.interpolate_curvature(position))
+        curvature = _interpolate_curvature(
+            track_data.shape, position, smooth=self.smooth
+        )
         fractional_position = position / track_length
 
         if track_data.configuration == Configuration.CLOSED:
@@ -81,10 +205,10 @@ class _MeshGenerator(object):
 
         # TODO: Implement code for closing the track
 
-        elevation = track_data.elevation.interpolate(position)
-        banking = track_data.banking.interpolate(position)
-        grip_factor = track_data.grip_factor.interpolate(position)
-        sector = track_data.sector.interpolate(position)
+        elevation = _interpolate_elevation(track_data.elevation, position)
+        banking = _interpolate_banking(track_data.banking, position)
+        grip_factor = _interpolate_grip_factor(track_data.grip_factor, position)
+        sector = _interpolate_sector(track_data.sectors, position)
         inclination = self._calculate_inclination(position, elevation)
 
         nodes = [
@@ -108,10 +232,10 @@ class _MeshGenerator(object):
 
     @staticmethod
     def _calculate_inclination(
-        position: list[float], elevation: list[float]
+        position: np.ndarray, elevation: np.ndarray
     ) -> list[float]:
-        diff_position = diff(position)
-        diff_elevation = diff(elevation)
+        diff_position = np.diff(position)
+        diff_elevation = np.diff(elevation)
         inclination_position = [
             position[i] + diff_position[i] / 2
             for i in range(len(diff_position))

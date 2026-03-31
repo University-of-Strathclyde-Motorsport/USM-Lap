@@ -1,0 +1,7 @@
+{
+  "print_name": "FSAE Acceleration",
+  "configuration": "open",
+  "event": "acceleration",
+  "shape": [{ "length": 75, "curvature": 0 }],
+  "sectors": [{ "start_position": 0, "label": "Acceleration", "timed": true }]
+}

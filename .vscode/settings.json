@@ -83,6 +83,12 @@
                 "/library/competition/*"
             ],
             "url": "./schema/competition.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/library/tracks/**"
+            ],
+            "url": "./schema/track.schema.json"
         }
     ],
     "cSpell.words": [

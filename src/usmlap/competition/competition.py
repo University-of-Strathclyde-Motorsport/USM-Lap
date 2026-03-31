@@ -16,7 +16,7 @@ from .events.event import EventInterface
 from .events.skidpad import Skidpad
 from .points import CompetitionData, CompetitionPoints
 
-DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.xlsx"
+DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012.json"
 DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
 
 

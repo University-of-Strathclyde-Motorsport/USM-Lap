@@ -1,0 +1,19 @@
+{
+  "print_name": "FSAE Skidpad",
+  "configuration": "open",
+  "event": "skidpad",
+  "shape": [
+    { "length": 5, "curvature": 0 },
+    { "length": 57.334, "curvature": -0.10959 },
+    { "length": 57.334, "curvature": -0.10959 },
+    { "length": 57.334, "curvature": 0.10959 },
+    { "length": 57.334, "curvature": 0.10959 }
+  ],
+  "sectors": [
+    { "start_position": 0, "label": "Runup", "timed": false },
+    { "start_position": 5, "label": "Right Circle 1", "timed": false },
+    { "start_position": 62.334, "label": "Right Circle 2", "timed": true },
+    { "start_position": 119.668, "label": "Left Circle 1", "timed": false },
+    { "start_position": 177.002, "label": "Left Circle 2", "timed": true }
+  ]
+}

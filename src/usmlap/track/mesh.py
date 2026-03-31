@@ -36,7 +36,7 @@ class TrackNode(BaseModel):
     inclination: float = Field(gt=-math.pi / 2, lt=math.pi / 2, default=0)
     banking: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
     grip_factor: float = Field(gt=0, default=1)
-    sector: int = Field(gt=0, default=1)
+    sector: str = Field(default="Sector 1")
     start_coordinate: tuple[float, float] = Field(default=(0, 0))
     end_coordinate: tuple[float, float] = Field(default=(0, 0))
 

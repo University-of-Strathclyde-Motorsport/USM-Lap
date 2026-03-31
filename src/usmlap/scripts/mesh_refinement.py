@@ -14,11 +14,11 @@ import matplotlib.pyplot as plt
 from usmlap.plot.utils import combined_legend
 from usmlap.simulation import SimulationSettings, simulate
 from usmlap.simulation.solver import QuasiTransientSolver
-from usmlap.track import generate_mesh, load_track_from_spreadsheet
+from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import load_vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
-TRACK_SHEET = "FS AutoX Germany 2012.xlsx"
+TRACK_SHEET = "FS AutoX Germany 2012.json"
 VEHICLE = "USM23 Baseline.json"
 SOLVER = QuasiTransientSolver
 
@@ -42,7 +42,7 @@ class MeshRefinementResult(object):
 def mesh_refinement() -> list[MeshRefinementResult]:
     """Run a mesh refinement simulation."""
 
-    track_data = load_track_from_spreadsheet(TRACK_SHEET)
+    track_data = TrackData.from_json(TRACK_SHEET)
     vehicle = load_vehicle(VEHICLE)
     simulation_settings = SimulationSettings(solver=SOLVER)
 

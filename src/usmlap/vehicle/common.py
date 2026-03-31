@@ -84,7 +84,7 @@ class Subsystem(BaseModel):
         Returns:
             json_string (str): The JSON string representation of the subsystem.
         """
-        return self.model_dump_json(indent=4)
+        return self.model_dump_json(indent=2)
 
 
 class AbstractSubsystem(Subsystem):

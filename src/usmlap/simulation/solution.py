@@ -64,7 +64,7 @@ class SolutionNode(object):
         return self.track_node.length
 
     @property
-    def sector(self) -> int:
+    def sector(self) -> str:
         return self.track_node.sector
 
     @property
@@ -226,7 +226,7 @@ class Solution(object):
         for node in self.nodes:
             node.evaluate_vehicle_state(vehicle_model)
 
-    def get_sector_time(self, sector: int) -> float:
+    def get_sector_time(self, sector: str) -> float:
         """
         Get the time for a given sector.
 

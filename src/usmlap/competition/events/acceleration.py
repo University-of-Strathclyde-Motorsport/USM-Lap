@@ -5,7 +5,7 @@ This module defines the acceleration event at Formula Student.
 from dataclasses import dataclass
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.track import Mesh, generate_mesh, load_track_from_spreadsheet
+from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -16,7 +16,7 @@ from ..points import (
 )
 from .event import EventInterface
 
-ACCELERATION_TRACK = "Acceleration.xlsx"
+ACCELERATION_TRACK = "FSAE Acceleration.json"
 
 
 @dataclass
@@ -25,7 +25,7 @@ class Acceleration(EventInterface, label="acceleration"):
     Acceleration event at Formula Student.
     """
 
-    track_data = load_track_from_spreadsheet(ACCELERATION_TRACK)
+    track_data = TrackData.from_json(ACCELERATION_TRACK)
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings

@@ -6,12 +6,7 @@ from dataclasses import InitVar, dataclass, field
 from math import ceil
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.track import (
-    Mesh,
-    TrackData,
-    generate_mesh,
-    load_track_from_spreadsheet,
-)
+from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle, get_new_vehicle
 from usmlap.vehicle.parameters import DischargeCurrentLimit
 
@@ -38,7 +33,7 @@ class Endurance(EventInterface, label="endurance"):
     simulate_efficiency: bool = True
 
     def __post_init__(self, track_file: str) -> None:
-        self.track_data = load_track_from_spreadsheet(track_file)
+        self.track_data = TrackData.from_json(track_file)
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings

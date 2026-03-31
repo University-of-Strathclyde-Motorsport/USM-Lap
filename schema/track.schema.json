@@ -1,0 +1,166 @@
+{
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
+  "$id": "track",
+  "title": "Track Data",
+  "description": "Track data for laptime simulation",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the track",
+      "type": "string"
+    },
+    "country": {
+      "description": "Country the track is located in",
+      "type": "string"
+    },
+    "city": {
+      "description": "City the track is located in",
+      "type": "string"
+    },
+    "configuration": {
+      "description": "Configuration of the track (open or closed)",
+      "enum": ["open", "closed"]
+    },
+    "event": {
+      "description": "Formula Student event which the track is suitable for",
+      "enum": ["acceleration", "skidpad", "autocross"]
+    },
+    "shape": {
+      "description": "Sections defining the shape of the track",
+      "type": "array",
+      "items": {
+        "description": "A track section",
+        "$ref": "#/$defs/shape_data"
+      },
+      "minItems": 1
+    },
+    "elevation": {
+      "description": "Elevation data for the track",
+      "type": "array",
+      "items": {
+        "description": "An elevation data point",
+        "$ref": "#/$defs/elevation_data"
+      }
+    },
+    "banking": {
+      "description": "Banking data for the track",
+      "type": "array",
+      "items": {
+        "description": "A banking data point",
+        "$ref": "#/$defs/banking_data"
+      }
+    },
+    "grip_factor": {
+      "description": "Grip factor data for the track",
+      "type": "array",
+      "items": {
+        "description": "A grip factor data point",
+        "$ref": "#/$defs/grip_factor_data"
+      }
+    },
+    "sectors": {
+      "description": "Sector data for the track",
+      "type": "array",
+      "items": {
+        "description": "A sector of the track",
+        "$ref": "#/$defs/sector_data"
+      }
+    }
+  },
+  "required": ["print_name", "configuration"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "shape_data": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "description": "Length of the track section [m]",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "curvature": {
+          "description": "Curvature of the track section [1/m]. Left is positive, right is negative",
+          "type": "number"
+        }
+      },
+      "required": ["length", "curvature"],
+      "additionalProperties": false
+    },
+
+    "elevation_data": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "description": "Position where the elevation was recorded [m]",
+          "type": "number",
+          "minimum": 0
+        },
+        "elevation": {
+          "description": "The elevation of the track at this position [m]",
+          "type": "number"
+        }
+      },
+      "required": ["position"],
+      "additionalProperties": false
+    },
+
+    "banking_data": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "description": "Position where the banking was recorded [m]",
+          "type": "number",
+          "minimum": 0
+        },
+        "angle": {
+          "description": "The banking angle of the track at this position [°]",
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        }
+      },
+      "required": ["position"],
+      "additionalProperties": false
+    },
+
+    "grip_factor_data": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "description": "Position where the grip factor was recorded [m]",
+          "type": "number",
+          "minimum": 0
+        },
+        "grip_factor": {
+          "description": "The grip factor of the track at this position [-]",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["position"],
+      "additionalProperties": false
+    },
+
+    "sector_data": {
+      "type": "object",
+      "properties": {
+        "start_position": {
+          "description": "Start position of the sector [m]",
+          "type": "number",
+          "minimum": 0
+        },
+        "label": {
+          "description": "Optional label for the sector",
+          "type": "string"
+        },
+        "timed": {
+          "description": "Whether the sector should be timed",
+          "type": "boolean"
+        }
+      },
+      "required": ["start_position"],
+      "additionalProperties": false
+    }
+  }
+}
