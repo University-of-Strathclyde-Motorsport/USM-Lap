@@ -9,11 +9,14 @@ from pydantic import PositiveFloat, PositiveInt
 
 from usmlap.utils import geometry, proportion
 from usmlap.utils.datatypes import FrontRear, Percentage
+from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
-from .common import Component, Subsystem
+from .common import Subsystem
 
 
-class MasterCylinder(Component, library="components/master_cylinders"):
+class MasterCylinder(
+    HasLibrary, path=LIBRARY_ROOT / "components" / "master_cylinders"
+):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
 
@@ -33,7 +36,9 @@ class MasterCylinder(Component, library="components/master_cylinders"):
         return geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeCaliper(Component, library="components/brake_calipers"):
+class BrakeCaliper(
+    HasLibrary, path=LIBRARY_ROOT / "components" / "brake_calipers"
+):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
 
@@ -53,7 +58,7 @@ class BrakeCaliper(Component, library="components/brake_calipers"):
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeDisc(Component, library="components/brake_discs"):
+class BrakeDisc(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_discs"):
     """
     The brake disc attached to the wheel.
 
@@ -66,7 +71,7 @@ class BrakeDisc(Component, library="components/brake_discs"):
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
-class BrakePad(Component, library="components/brake_pads"):
+class BrakePad(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_pads"):
     """
     The brake pad attached to the caliper.
 

@@ -2,10 +2,12 @@
 This modules models the motor controller of a vehicle.
 """
 
-from ..common import Component
+from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
 
-class MotorController(Component, library="components/motor_controllers"):
+class MotorController(
+    HasLibrary, path=LIBRARY_ROOT / "components" / "motor_controllers"
+):
     """
     A motor controller.
 

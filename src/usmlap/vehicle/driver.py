@@ -2,10 +2,10 @@
 This module models the driver of the vehicle.
 """
 
-from .common import Component
+from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
 
-class Driver(Component, library="components/drivers"):
+class Driver(HasLibrary, path=LIBRARY_ROOT / "drivers"):
     """
     The driver of the vehicle.
 

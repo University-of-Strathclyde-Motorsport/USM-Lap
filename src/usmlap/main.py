@@ -4,11 +4,7 @@ Main entry point for the program.
 
 import logging
 
-from usmlap.plot import plot_apexes
-from usmlap.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver import QuasiTransientSolver
-from usmlap.track import TrackData, generate_mesh
-from usmlap.vehicle import load_vehicle
+from usmlap.vehicle.powertrain import Accumulator, Cell
 
 CHANNELS = [
     "Velocity",
@@ -26,15 +22,20 @@ logging.basicConfig(
 )
 logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
 
-track_sheet = "FS AutoX Germany 2012.json"
-track_data = TrackData.from_json(track_sheet)
-mesh = generate_mesh(track_data, 0.1)
+items = Cell.list_items()
+print(items)
 
-vehicle = load_vehicle("USM23 Baseline.json")
-print(vehicle)
-simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
+print(Cell.item_exists("Test Cell"))
 
-results = simulate(vehicle, mesh, simulation_settings)
-print(f"Total time: {results.total_time:.3f}s")
+cell = Cell.get_item("molicel_P30b")
+print(cell)
 
-plot_apexes(results)
+accus = Accumulator.list_items()
+print(accus)
+
+cell_library = Cell.library()
+for key, value in cell_library.items():
+    print(f"{key}: {value}")
+
+accumulator_library = Accumulator.library()
+print(accumulator_library)

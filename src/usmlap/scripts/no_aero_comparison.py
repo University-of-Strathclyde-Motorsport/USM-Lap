@@ -8,7 +8,7 @@ from usmlap.plot import plot_points_bar_chart
 from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import load_vehicle
 
-QUALITY = QualityPresets.HIGH_QUALITY
+QUALITY = QualityPresets.DRAFT
 
 competition = Competition()
 

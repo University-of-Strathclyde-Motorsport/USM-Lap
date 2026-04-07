@@ -7,7 +7,7 @@ from functools import cached_property
 
 import numpy as np
 
-from ..common import Component
+from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
 
 @dataclass
@@ -18,7 +18,7 @@ class CellVoltageLookup(object):
     voltage: float
 
 
-class Cell(Component, library="components/cells"):
+class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
     """
     An electrochemical cell.
 
@@ -75,7 +75,9 @@ class Cell(Component, library="components/cells"):
         return voltage + self.voltage_offset
 
 
-class Accumulator(Component, library="components/accumulators"):
+class Accumulator(
+    HasLibrary, path=LIBRARY_ROOT / "components" / "accumulators"
+):
     """
     An electric accumulator.
 

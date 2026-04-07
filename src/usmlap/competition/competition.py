@@ -51,7 +51,7 @@ class Competition(object):
     events: list[EventInterface] = field(init=False, default_factory=list)
 
     def __post_init__(self, dataset: str) -> None:
-        self.competition_data = CompetitionData.from_library(dataset)
+        self.competition_data = CompetitionData.get_item(dataset)
         self._create_events()
 
     def _add_event(self, event: EventInterface) -> None:

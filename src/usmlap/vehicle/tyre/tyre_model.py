@@ -10,7 +10,9 @@ from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 from pydantic.dataclasses import dataclass
 
-from ..common import AbstractSubsystem, Component, Subsystem
+from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+
+from ..common import AbstractSubsystem, Subsystem
 
 
 @dataclass
@@ -167,7 +169,7 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
 TyreModel = Annotated[LinearTyreModel, Field(discriminator="model_type")]
 
 
-class Tyre(Component, library="components/tyres"):
+class Tyre(HasLibrary, path=LIBRARY_ROOT / "components" / "tyres"):
     """
     A racing tyre.
 
