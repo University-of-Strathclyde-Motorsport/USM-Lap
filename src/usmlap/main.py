@@ -32,10 +32,3 @@ print(cell)
 
 accus = Accumulator.list_items()
 print(accus)
-
-cell_library = Cell.library()
-for key, value in cell_library.items():
-    print(f"{key}: {value}")
-
-accumulator_library = Accumulator.library()
-print(accumulator_library)

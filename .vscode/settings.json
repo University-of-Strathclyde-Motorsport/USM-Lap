@@ -8,85 +8,85 @@
     "json.schemas": [
         {
             "fileMatch": [
-                "/library/components/accumulators/*"
+                "/data/components/accumulators/*"
             ],
             "url": "./schema/accumulators.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/aero_packages/*"
+                "/data/components/aero_packages/*"
             ],
             "url": "./schema/aero_packages.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/brake_calipers/*"
+                "/data/components/brake_calipers/*"
             ],
             "url": "./schema/brake_calipers.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/brake_discs/*"
+                "/data/components/brake_discs/*"
             ],
             "url": "./schema/brake_discs.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/brake_pads/*"
+                "/data/components/brake_pads/*"
             ],
             "url": "./schema/brake_pads.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/cells/*"
+                "/data/components/cells/*"
             ],
             "url": "./schema/cells.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/drivers/*"
+                "/data/drivers/*"
             ],
             "url": "./schema/drivers.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/master_cylinders/*"
+                "/data/components/master_cylinders/*"
             ],
             "url": "./schema/master_cylinders.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/motor_controllers/*"
+                "/data/components/motor_controllers/*"
             ],
             "url": "./schema/motor_controllers.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/motors/*"
+                "/data/components/motors/*"
             ],
             "url": "./schema/motors.schema.json"
         },
         {
             "fileMatch": [
-                "/library/components/tyres/*"
+                "/data/components/tyres/*"
             ],
             "url": "./schema/tyres.schema.json"
         },
         {
             "fileMatch": [
-                "/library/vehicles/*"
+                "/data/vehicles/*"
             ],
             "url": "./schema/vehicles.schema.json"
         },
         {
             "fileMatch": [
-                "/library/competition/*"
+                "/data/competition/*"
             ],
             "url": "./schema/competition.schema.json"
         },
         {
             "fileMatch": [
-                "/library/tracks/**"
+                "/data/tracks/**"
             ],
             "url": "./schema/track.schema.json"
         }
