@@ -3,8 +3,12 @@ This module models the full vehicle.
 """
 
 import os
+from typing import Literal
+
+import numpy as np
 
 from usmlap import filepath
+from usmlap.utils.datatypes import FrontRear
 
 from .aero import AeroPackage
 from .brakes import Brakes
@@ -19,6 +23,9 @@ from .tyre.tyre_model import Tyres
 
 VEHICLE_LIBRARY = filepath.LIBRARY_ROOT / "vehicles"
 AVAILABLE_VEHICLES = os.listdir(VEHICLE_LIBRARY)
+
+
+# type FrontRear = np.ndarray[tuple[Literal[1], Literal[2]], np.dtype[np.float64]]
 
 
 class Metadata(Subsystem):
@@ -82,6 +89,38 @@ class Vehicle(Subsystem):
         final_drive_ratio = self.transmission.final_drive_ratio
         tyre_radius = self.tyres.rear.unloaded_radius
         return final_drive_ratio / tyre_radius
+
+    @property
+    def mass_distribution(self) -> FrontRear[float]:
+        front_mass = self.inertia.front_mass_distribution
+        return FrontRear(front=front_mass, rear=1 - front_mass)
+
+    @property
+    def aero_distribution(self) -> FrontRear[float]:
+        front_aero = self.aero.front_aero_distribution
+        return FrontRear(front=front_aero, rear=1 - front_aero)
+
+    @property
+    def _long_lt_coefficient(self) -> float:
+        """Longitudinal load transfer coefficient."""
+        return (
+            self.total_mass
+            * self.suspension.centre_of_gravity_height
+            / self.suspension.wheelbase
+        )
+
+    def long_load_transfer(self, acceleration: float) -> float:
+        """
+        Calculate the longitudinal load transfer.
+
+        Args:
+            acceleration (float): The acceleration of the vehicle.
+
+        Returns:
+            load_transfer (float): The longitudinal load transfer.
+                Positive for load transfer to the front.
+        """
+        return -acceleration * self._long_lt_coefficient
 
     def motor_torque_to_drive_force(self, motor_torque: float) -> float:
         return motor_torque * self._overall_motor_scaling

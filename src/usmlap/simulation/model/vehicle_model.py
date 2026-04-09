@@ -26,106 +26,180 @@ class VehicleModelInterface(ABC):
     environment: Environment
     lambdas: LambdaCoefficients
 
-    def resolve_vehicle_state(
+    @abstractmethod
+    def lateral_traction_limit(
         self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> FullVehicleState:
+    ) -> float: ...
+
+    @abstractmethod
+    def traction_limited_acceleration(
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
         """
-        Calculate the full state of the vehicle at a node.
+        The maximum possible acceleration of the vehicle,
+        with tyre traction as a limiting factor.
 
         Args:
             state_variables (StateVariables): The vehicle's state variables.
             node (TrackNode): The track node to evaluate.
+            velocity (float): The vehicle's velocity.
 
         Returns:
-            vehicle_state (FullVehicleState): The full state of the vehicle,
-                including forces, torques, and energy.
+            acceleration (float): Maximum possible acceleration of the vehicle.
         """
-        vehicle = self.vehicle
+        ...
 
-        weight = vehicle.total_mass * self.environment.gravity
-        centripetal_force = vehicle.total_mass * velocity**2 * node.curvature
+    @abstractmethod
+    def traction_limited_braking(
+        self, state_variables: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+        """
+        The maximum possible deceleration of the vehicle,
+        with tyre traction as a limiting factor.
 
-        aero_attitude = AeroAttitude(
+        Args:
+            state_variables (StateVariables): The vehicle's state variables.
+            node (TrackNode): The track node to evaluate.
+            velocity (float): The vehicle's velocity.
+
+        Returns:
+            deceleration (float): Maximum possible deceleration of the vehicle.
+                Should be a negative number.
+        """
+        ...
+
+    def weight(self) -> float:
+        return self.vehicle.total_mass * self.environment.gravity
+
+    def centripetal_force(self, node: TrackNode, velocity: float) -> float:
+        return self.vehicle.total_mass * velocity**2 * node.curvature
+
+    def aero_attitude(self, velocity: float) -> AeroAttitude:
+        return AeroAttitude(
             velocity=velocity, air_density=self.environment.air_density
         )
-        downforce = self.vehicle.aero.get_downforce(aero_attitude)
-        drag = self.vehicle.aero.get_drag(aero_attitude)
 
-        resistive_fx = drag + node.z_to_x(weight)
-        required_fy = node.y_to_y(centripetal_force) + node.z_to_y(weight)
-        normal_force = (
-            node.z_to_z(weight) + node.y_to_z(centripetal_force) + downforce
-        )
+    def drag(self, velocity: float) -> float:
+        aero_attitude = self.aero_attitude(velocity)
+        return self.vehicle.aero.get_drag(aero_attitude)
 
-        normal_loads = self.get_normal_loads(normal_force)
-        tyre_attitudes = self.get_tyre_attitudes(normal_loads)
-        lateral_traction = self.get_lateral_traction(
-            tyre_attitudes, resistive_fx
-        )
-        longitudinal_traction = self.get_longitudinal_traction(
-            tyre_attitudes, required_fy
-        )
+    def downforce(self, velocity: float) -> float:
+        aero_attitude = self.aero_attitude(velocity)
+        return self.vehicle.aero.get_downforce(aero_attitude)
 
-        motor_speed = vehicle.velocity_to_motor_speed(velocity)
-        motor_torque = vehicle.powertrain.get_motor_torque(
-            state_of_charge=state_variables.state_of_charge,
-            motor_speed=motor_speed,
-        )
-        motor_power = motor_speed * motor_torque
-        accumulator_power = vehicle.powertrain.motor_to_accumulator_power(
-            motor_power
-        )
-        motor_force = vehicle.motor_torque_to_drive_force(motor_torque)
+    def resistive_fx(self, node: TrackNode, velocity: float) -> float:
+        weight = self.weight()
+        drag = self.drag(velocity)
+        return drag + node.z_to_x(weight)
 
-        return FullVehicleState(
-            weight=weight,
-            centripetal_force=centripetal_force,
-            downforce=downforce,
-            drag=drag,
-            resistive_fx=resistive_fx,
-            required_fy=required_fy,
-            normal_force=normal_force,
-            normal_loads=normal_loads,
-            tyre_attitudes=tyre_attitudes,
-            lateral_traction=lateral_traction,
-            longitudinal_traction=longitudinal_traction,
-            motor_speed=motor_speed,
-            motor_torque=motor_torque,
-            motor_power=motor_power,
-            accumulator_power=accumulator_power,
-            motor_force=motor_force,
-        )
+    def required_fy(self, node: TrackNode, velocity: float) -> float:
+        weight = self.weight()
+        centripetal_force = self.centripetal_force(node, velocity)
+        return node.y_to_y(centripetal_force) + node.z_to_y(weight)
 
-    @abstractmethod
-    def calculate_acceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        pass
+    # def resolve_vehicle_state(
+    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
+    # ) -> FullVehicleState:
+    #     """
+    #     Calculate the full state of the vehicle at a node.
 
-    @abstractmethod
-    def calculate_deceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        pass
+    #     Args:
+    #         state_variables (StateVariables): The vehicle's state variables.
+    #         node (TrackNode): The track node to evaluate.
 
-    @abstractmethod
-    def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
-        pass
+    #     Returns:
+    #         vehicle_state (FullVehicleState): The full state of the vehicle,
+    #             including forces, torques, and energy.
+    #     """
 
-    @abstractmethod
-    def get_tyre_attitudes(
-        self, normal_loads: FourCorner[float]
-    ) -> FourCorner[TyreAttitude]:
-        pass
+    #     ####
+    #     vehicle = self.vehicle
 
-    @abstractmethod
-    def get_lateral_traction(
-        self, attitudes: FourCorner[TyreAttitude], required_fx: float
-    ) -> FourCorner[float]:
-        pass
+    #     weight = vehicle.total_mass * self.environment.gravity
+    #     centripetal_force = vehicle.total_mass * velocity**2 * node.curvature
 
-    @abstractmethod
-    def get_longitudinal_traction(
-        self, attitudes: FourCorner[TyreAttitude], required_fy: float
-    ) -> FourCorner[float]:
-        pass
+    #     aero_attitude = AeroAttitude(
+    #         velocity=velocity, air_density=self.environment.air_density
+    #     )
+    #     downforce = self.vehicle.aero.get_downforce(aero_attitude)
+    #     drag = self.vehicle.aero.get_drag(aero_attitude)
+    #     ###
+
+    #     resistive_fx = drag + node.z_to_x(weight)
+    #     required_fy = node.y_to_y(centripetal_force) + node.z_to_y(weight)
+    #     normal_force = (
+    #         node.z_to_z(weight) + node.y_to_z(centripetal_force) + downforce
+    #     )
+
+    #     normal_loads = self.get_normal_loads(normal_force)
+    #     tyre_attitudes = self.get_tyre_attitudes(normal_loads)
+    #     lateral_traction = self.get_lateral_traction(
+    #         tyre_attitudes, resistive_fx
+    #     )
+    #     longitudinal_traction = self.get_longitudinal_traction(
+    #         tyre_attitudes, required_fy
+    #     )
+
+    #     motor_speed = vehicle.velocity_to_motor_speed(velocity)
+    #     motor_torque = vehicle.powertrain.get_motor_torque(
+    #         state_of_charge=state_variables.state_of_charge,
+    #         motor_speed=motor_speed,
+    #     )
+    #     motor_power = motor_speed * motor_torque
+    #     accumulator_power = vehicle.powertrain.motor_to_accumulator_power(
+    #         motor_power
+    #     )
+    #     motor_force = vehicle.motor_torque_to_drive_force(motor_torque)
+
+    #     return FullVehicleState(
+    #         weight=weight,
+    #         centripetal_force=centripetal_force,
+    #         downforce=downforce,
+    #         drag=drag,
+    #         resistive_fx=resistive_fx,
+    #         required_fy=required_fy,
+    #         normal_force=normal_force,
+    #         normal_loads=normal_loads,
+    #         tyre_attitudes=tyre_attitudes,
+    #         lateral_traction=lateral_traction,
+    #         longitudinal_traction=longitudinal_traction,
+    #         motor_speed=motor_speed,
+    #         motor_torque=motor_torque,
+    #         motor_power=motor_power,
+    #         accumulator_power=accumulator_power,
+    #         motor_force=motor_force,
+    #     )
+
+    # @abstractmethod
+    # def calculate_acceleration(
+    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
+    # ) -> float:
+    #     pass
+
+    # @abstractmethod
+    # def calculate_deceleration(
+    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
+    # ) -> float:
+    #     pass
+
+    # @abstractmethod
+    # def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
+    #     pass
+
+    # @abstractmethod
+    # def get_tyre_attitudes(
+    #     self, normal_loads: FourCorner[float]
+    # ) -> FourCorner[TyreAttitude]:
+    #     pass
+
+    # @abstractmethod
+    # def get_lateral_traction(
+    #     self, attitudes: FourCorner[TyreAttitude], required_fx: float
+    # ) -> FourCorner[float]:
+    #     pass
+
+    # @abstractmethod
+    # def get_longitudinal_traction(
+    #     self, attitudes: FourCorner[TyreAttitude], required_fy: float
+    # ) -> FourCorner[float]:
+    #     pass

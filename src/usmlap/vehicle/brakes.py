@@ -180,12 +180,13 @@ class Brakes(Subsystem):
     @property
     def brake_bias(self) -> FrontRear[float]:
         """Tuple of brake biases for the front and rear wheels."""
-        return FrontRear(proportion.with_complement(self.front_brake_bias))
+        front_bias = self.front_brake_bias
+        return FrontRear(front=front_bias, rear=1 - front_bias)
 
     @property
     def brake_lines(self) -> FrontRear[BrakeLine]:
         """Tuple of front and rear brake lines."""
-        return FrontRear((self.front, self.rear))
+        return FrontRear(front=self.front, rear=self.rear)
 
     def _get_front_brake_balance(self) -> float:
         front_multiplier = self.front.force_to_torque(1)
@@ -204,9 +205,7 @@ class Brakes(Subsystem):
                 Force applied to the master cylinders.
         """
         total_force = pedal_force * self.pedal_ratio
-        front_force = total_force * self.brake_bias.front
-        rear_force = total_force * self.brake_bias.rear
-        return FrontRear((front_force, rear_force))
+        return self.brake_bias * total_force
 
     def pedal_force_to_wheel_torque(
         self, pedal_force: float
@@ -218,8 +217,8 @@ class Brakes(Subsystem):
         rear_torque = self.brake_lines.rear.force_to_torque(
             cylinder_forces.rear
         )
-        return FrontRear((front_torque, rear_torque))
+        return FrontRear(front=front_torque, rear=rear_torque)
 
     def get_overall_brake_balance(self) -> FrontRear[float]:
         torques = self.pedal_force_to_wheel_torque(1)
-        return FrontRear(proportion.normalise(torques))
+        return torques * (1 / sum(torques))

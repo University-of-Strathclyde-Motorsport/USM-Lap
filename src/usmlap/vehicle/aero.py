@@ -86,10 +86,13 @@ class AeroPackage(
 
     Attributes:
         frontal_area (float): The frontal area of the vehicle.
+        front_aero_distribution (float): The proportion of downforce
+            acting on the front axle.
         aero_model (AeroModel): The aerodynamic model to use.
     """
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
+    front_aero_distribution: Annotated[float, Field(ge=0, le=1)]
     aero_model: AeroModel
 
     def get_downforce(self, attitude: AeroAttitude) -> float:

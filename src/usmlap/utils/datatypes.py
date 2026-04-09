@@ -2,15 +2,17 @@
 This module defines custom datatypes used throughout the project.
 """
 
+from __future__ import annotations
+
 import math
 from dataclasses import dataclass
-from typing import Annotated
+from typing import Annotated, Any, NamedTuple
 
 import numpy as np
 from pydantic import BaseModel, Field
 
 
-class FrontRear[T](tuple[T, T]):
+class FrontRear[T](NamedTuple):
     """
     Represents a property with a front and rear value.
 
@@ -21,16 +23,27 @@ class FrontRear[T](tuple[T, T]):
         rear (T): Value for the rear axle.
     """
 
-    @property
-    def front(self) -> T:
-        return self[0]
-
-    @property
-    def rear(self) -> T:
-        return self[1]
+    front: T
+    rear: T
 
     def __str__(self) -> str:
         return f"front: {self.front}, rear: {self.rear}"
+
+    def __add__(self, other: Any) -> FrontRear[T]:
+        if isinstance(other, FrontRear):
+            return FrontRear(*(a + b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return FrontRear(*(a + other for a in self))
+        else:
+            return NotImplemented
+
+    def __mul__(self, other: Any) -> FrontRear[T]:
+        if isinstance(other, FrontRear):
+            return FrontRear(*(a * b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return FrontRear(*(a * other for a in self))
+        else:
+            return NotImplemented
 
 
 class FourCorner[T](tuple[T, T, T, T]):

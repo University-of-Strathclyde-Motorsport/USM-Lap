@@ -8,6 +8,9 @@ from math import sqrt
 from rich import progress
 from scipy.signal import find_peaks
 
+from usmlap.simulation.errors import InsufficientTractionError
+from usmlap.simulation.solver.acceleration import solve_acceleration
+
 from ..model import VehicleModelInterface
 from ..solution import Solution, SolutionNode
 from ..vehicle_state import StateVariables
@@ -44,20 +47,20 @@ class QuasiSteadyStateSolver(SolverInterface):
             if solution.nodes[apex].is_apex():
                 solution = propagate_forward(solution, start_index=apex)
 
-        logger.info("Solving backward propagation...")
-        for apex in progress.track(
-            solution.get_sorted_apex_indices(),
-            description="Solving backward propagation...",
-            transient=True,
-        ):
-            if solution.nodes[apex].is_apex():
-                solution = propagate_backward(solution, start_index=apex)
+        # logger.info("Solving backward propagation...")
+        # for apex in progress.track(
+        #     solution.get_sorted_apex_indices(),
+        #     description="Solving backward propagation...",
+        #     transient=True,
+        # ):
+        #     if solution.nodes[apex].is_apex():
+        #         solution = propagate_backward(solution, start_index=apex)
 
-        logger.info("Resolving full vehicle state...")
-        solution.evaluate_full_vehicle_state(solution.vehicle_model)
+        # logger.info("Resolving full vehicle state...")
+        # solution.evaluate_full_vehicle_state(solution.vehicle_model)
 
         logger.info("Recalculating state variables...")
-        solution = recalculate_state_variables(solution)
+        # solution = recalculate_state_variables(solution)
 
         return solution
 
@@ -198,22 +201,28 @@ def traction_limit_velocity(
         node_solution (SolutionNode): The node solution.
 
     Returns:
-        traction_limited_velocity (float): The traction limited velocity.
+        velocity (float): The traction limited velocity.
     """
     try:
-        traction_limited_acceleration = vehicle_model.calculate_acceleration(
-            node=node_solution.track_node,
+        acceleration = solve_acceleration(
+            vehicle_model=vehicle_model,
             state_variables=node_solution.state_variables,
-            velocity=node_solution.initial_velocity,
-        )
-        traction_limited_velocity = calculate_next_velocity(
+            node=node_solution.track_node,
             initial_velocity=node_solution.initial_velocity,
-            acceleration=traction_limited_acceleration,
-            displacement=node_solution.track_node.length,
         )
-        return traction_limited_velocity
-    except ValueError:
-        return node_solution.initial_velocity  # TODO
+    except InsufficientTractionError as E:
+        print(
+            f"Acceleration: insufficient traction ({node_solution.initial_velocity=}, {node_solution.track_node.curvature=})"
+        )
+        print(E)
+        return node_solution.initial_velocity  # TODO: this should never occur
+
+    velocity = calculate_next_velocity(
+        initial_velocity=node_solution.initial_velocity,
+        acceleration=acceleration,
+        displacement=node_solution.track_node.length,
+    )
+    return velocity
 
 
 def traction_limit_velocity_braking(
@@ -230,18 +239,20 @@ def traction_limit_velocity_braking(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        traction_limited_deceleration = vehicle_model.calculate_deceleration(
-            node=node_solution.track_node,
+        traction_limited_deceleration = vehicle_model.traction_limited_braking(
             state_variables=node_solution.state_variables,
+            node=node_solution.track_node,
             velocity=node_solution.final_velocity,
         )
+
         traction_limited_velocity = calculate_previous_velocity(
             final_velocity=node_solution.final_velocity,
             deceleration=traction_limited_deceleration,
             displacement=node_solution.track_node.length,
         )
         return traction_limited_velocity
-    except ValueError:
+    except InsufficientTractionError:
+        # print("Braking: insufficient traction")
         return node_solution.final_velocity  # TODO
 
 

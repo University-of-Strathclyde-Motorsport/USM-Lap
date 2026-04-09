@@ -4,7 +4,10 @@ This script displays a velocity profile from a simulation.
 
 from usmlap.plot import plot_apexes
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.simulation.solver import (
+    QuasiSteadyStateSolver,
+    QuasiTransientSolver,
+)
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import load_vehicle
 
@@ -16,9 +19,9 @@ def main() -> None:
     """Main function."""
 
     track_data = TrackData.from_json(TRACK_SHEET)
-    mesh = generate_mesh(track_data, 0.1)
+    mesh = generate_mesh(track_data, 2)
     vehicle = load_vehicle(VEHICLE_FILE)
-    simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
+    simulation_settings = SimulationSettings(solver=QuasiSteadyStateSolver)
 
     results = simulate(vehicle, mesh, simulation_settings)
     plot_apexes(results)

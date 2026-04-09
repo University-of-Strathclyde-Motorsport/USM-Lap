@@ -91,6 +91,9 @@ class SolutionNode(object):
 
     @property
     def time(self) -> float:
+        if self.average_velocity == 0:
+            return 0
+            # TODO: SERIOUS
         return self.length / self.average_velocity
 
     @property
@@ -128,9 +131,10 @@ class SolutionNode(object):
         Args:
             vehicle_model (VehicleModelInterface): The vehicle model to use.
         """
-        self.vehicle_state = vehicle_model.resolve_vehicle_state(
-            self.state_variables, self.track_node, self.average_velocity
-        )
+        # self.vehicle_state = FullVehicleState()
+        # self.vehicle_state = vehicle_model.resolve_vehicle_state(
+        #     self.state_variables, self.track_node, self.average_velocity
+        # )
 
     def set_initial_velocity(self, velocity: float) -> None:
         """
