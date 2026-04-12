@@ -44,6 +44,33 @@ class PointMassVehicleModel(VehicleModelInterface):
 
         return 2 * (front_traction + rear_traction)
 
+    def traction_limited_acceleration(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+
+        required_fy = self.required_fy(node, velocity)
+
+        weight = self.weight()
+        centripetal_force = self.centripetal_force(node, velocity)
+        downforce = self.downforce(velocity)
+        normal_force = (
+            node.z_to_z(weight) + node.y_to_z(centripetal_force) + downforce
+        )
+
+        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+
+        front_tyre = self.vehicle.tyres.front.tyre_model
+        front_fy = 2 * front_tyre.calculate_lateral_force(tyre_attitude)
+
+        rear_fy = max(required_fy - front_fy, 0)
+        rear_tyre = self.vehicle.tyres.rear.tyre_model
+        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+            tyre_attitude, required_fy=rear_fy / 2
+        )
+
+        net_force = rear_traction - self.resistive_fx(node, velocity)
+        return net_force / self.vehicle.equivalent_mass
+
     #########################################################
     # Marked for death
 
@@ -105,20 +132,20 @@ class PointMassVehicleModel(VehicleModelInterface):
         except ValueError:
             return FourCorner((0, 0, 0, 0))
 
-    def calculate_acceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        vehicle_state = self.resolve_vehicle_state(
-            state_variables, node, velocity
-        )
-        traction_limit = (
-            vehicle_state.longitudinal_traction.rear_left
-            + vehicle_state.longitudinal_traction.rear_right
-        ) * self.lambdas.longitudinal_grip
-        motor_limit = vehicle_state.motor_force * self.lambdas.motor_torque
-        drive_limit = min(motor_limit, traction_limit)
-        net_fx = drive_limit - vehicle_state.resistive_fx
-        return net_fx / self.vehicle.equivalent_mass
+    # def calculate_acceleration(
+    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
+    # ) -> float:
+    #     vehicle_state = self.resolve_vehicle_state(
+    #         state_variables, node, velocity
+    #     )
+    #     traction_limit = (
+    #         vehicle_state.longitudinal_traction.rear_left
+    #         + vehicle_state.longitudinal_traction.rear_right
+    #     ) * self.lambdas.longitudinal_grip
+    #     motor_limit = vehicle_state.motor_force * self.lambdas.motor_torque
+    #     drive_limit = min(motor_limit, traction_limit)
+    #     net_fx = drive_limit - vehicle_state.resistive_fx
+    #     return net_fx / self.vehicle.equivalent_mass
 
     def calculate_deceleration(
         self, state_variables: StateVariables, node: TrackNode, velocity: float

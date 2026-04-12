@@ -14,6 +14,7 @@ from usmlap.vehicle.aero import AeroAttitude
 from usmlap.vehicle.tyre import TyreAttitude
 
 from ..lambda_coefficients import LambdaCoefficients
+from .powertrain import PowertrainModelInterface, SingleMotorPowertrain
 
 
 @dataclass
@@ -25,6 +26,7 @@ class VehicleModelInterface(ABC):
     vehicle: Vehicle
     environment: Environment
     lambdas: LambdaCoefficients
+    powertrain: PowertrainModelInterface = SingleMotorPowertrain()
 
     def weight(self) -> float:
         return self.vehicle.total_mass * self.environment.gravity
@@ -59,6 +61,31 @@ class VehicleModelInterface(ABC):
     def lateral_traction_limit(
         self, state: StateVariables, node: TrackNode, velocity: float
     ) -> float: ...
+
+    @abstractmethod
+    def traction_limited_acceleration(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float: ...
+
+    def power_limited_acceleration(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+
+        drive_force = self.powertrain.drive_force(self.vehicle, state, velocity)
+        resistive_force = self.resistive_fx(node, velocity)
+        net_force = drive_force - resistive_force
+        return net_force / self.vehicle.equivalent_mass
+
+    def calculate_acceleration(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+        traction_limited_acceleration = self.traction_limited_acceleration(
+            state, node, velocity
+        )
+        power_limited_acceleration = self.power_limited_acceleration(
+            state, node, velocity
+        )
+        return min(traction_limited_acceleration, power_limited_acceleration)
 
     ###############################################
     # Time is running out
@@ -133,11 +160,11 @@ class VehicleModelInterface(ABC):
             motor_force=motor_force,
         )
 
-    @abstractmethod
-    def calculate_acceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        pass
+    # @abstractmethod
+    # def calculate_acceleration(
+    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
+    # ) -> float:
+    #     pass
 
     @abstractmethod
     def calculate_deceleration(

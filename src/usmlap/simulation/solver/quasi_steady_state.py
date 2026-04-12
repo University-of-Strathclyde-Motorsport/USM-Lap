@@ -201,14 +201,14 @@ def traction_limit_velocity(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        traction_limited_acceleration = vehicle_model.calculate_acceleration(
+        acceleration = vehicle_model.calculate_acceleration(
             node=node_solution.track_node,
-            state_variables=node_solution.state_variables,
+            state=node_solution.state_variables,
             velocity=node_solution.initial_velocity,
         )
         traction_limited_velocity = calculate_next_velocity(
             initial_velocity=node_solution.initial_velocity,
-            acceleration=traction_limited_acceleration,
+            acceleration=acceleration,
             displacement=node_solution.track_node.length,
         )
         return traction_limited_velocity
