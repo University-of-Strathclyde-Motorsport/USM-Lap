@@ -100,7 +100,7 @@ def find_apexes(solution: Solution) -> list[int]:
     Apexes are the indices at which the maximum velocity is a local minimum.
 
     Args:
-        solution (Solution): The solution to analyze.
+        solution (Solution): The solution to analyse.
 
     Returns:
         apexes (list[int]): The indices of the apexes.

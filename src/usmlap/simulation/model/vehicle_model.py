@@ -26,6 +26,43 @@ class VehicleModelInterface(ABC):
     environment: Environment
     lambdas: LambdaCoefficients
 
+    def weight(self) -> float:
+        return self.vehicle.total_mass * self.environment.gravity
+
+    def centripetal_force(self, node: TrackNode, velocity: float) -> float:
+        return self.vehicle.total_mass * node.curvature * velocity**2
+
+    def aero_attitude(self, velocity: float) -> AeroAttitude:
+        return AeroAttitude(
+            velocity=velocity, air_density=self.environment.air_density
+        )
+
+    def downforce(self, velocity: float) -> float:
+        aero_attitude = self.aero_attitude(velocity)
+        return self.vehicle.aero.get_downforce(aero_attitude)
+
+    def drag(self, velocity: float) -> float:
+        aero_attitude = self.aero_attitude(velocity)
+        return self.vehicle.aero.get_drag(aero_attitude)
+
+    def resistive_fx(self, node: TrackNode, velocity: float) -> float:
+        weight = self.weight()
+        drag = self.drag(velocity)
+        return drag + node.z_to_x(weight)
+
+    def required_fy(self, node: TrackNode, velocity: float) -> float:
+        weight = self.weight()
+        centripetal_force = self.centripetal_force(node, velocity)
+        return node.y_to_y(centripetal_force) - node.z_to_y(weight)
+
+    @abstractmethod
+    def lateral_traction_limit(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float: ...
+
+    ###############################################
+    # Time is running out
+
     def resolve_vehicle_state(
         self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> FullVehicleState:

@@ -65,14 +65,10 @@ def solve_apex_velocity(
         velocity_estimate = maximum_velocity
 
     for _ in range(1, maximum_iterations + 1):
-        vehicle_state = vehicle_model.resolve_vehicle_state(
-            state_variables, node, velocity_estimate
+        available_fy = vehicle_model.lateral_traction_limit(
+            state=state_variables, node=node, velocity=velocity_estimate
         )
-        required_fy = abs(vehicle_state.required_fy)
-        available_fy = (
-            vehicle_state.total_lateral_traction
-            * vehicle_model.lambdas.lateral_grip
-        )
+        required_fy = abs(vehicle_model.required_fy(node, velocity_estimate))
         fy_error = available_fy - required_fy
 
         if abs(fy_error) < precision:

@@ -22,6 +22,31 @@ class PointMassVehicleModel(VehicleModelInterface):
     Point mass vehicle model.
     """
 
+    def lateral_traction_limit(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+        resistive_fx = self.resistive_fx(node, velocity)
+
+        weight = self.weight()
+        centripetal_force = self.centripetal_force(node, velocity)
+        downforce = self.downforce(velocity)
+        normal_force = (
+            node.z_to_z(weight) + node.y_to_z(centripetal_force) + downforce
+        )
+
+        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+
+        front_tyre = self.vehicle.tyres.front.tyre_model.calculate_lateral_force
+        front_traction = front_tyre(tyre_attitude, required_fx=0)
+
+        rear_tyre = self.vehicle.tyres.rear.tyre_model.calculate_lateral_force
+        rear_traction = rear_tyre(tyre_attitude, required_fx=resistive_fx / 2)
+
+        return 2 * (front_traction + rear_traction)
+
+    #########################################################
+    # Marked for death
+
     def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
         normal_load = normal_force / 4
         return FourCorner((normal_load, normal_load, normal_load, normal_load))
