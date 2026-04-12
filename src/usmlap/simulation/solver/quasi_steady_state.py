@@ -3,17 +3,15 @@ This module implements a quasi-steady-state solver.
 """
 
 import logging
-from math import sqrt
 
 from rich import progress
 from scipy.signal import find_peaks
 
-from usmlap.simulation.solver.acceleration import calculate_next_velocity
-
-from ..model import VehicleModelInterface
-from ..solution import Solution, SolutionNode
+from ..solution import Solution
 from ..vehicle_state import StateVariables
+from .acceleration import calculate_next_velocity
 from .apex_velocity import solve_apex_velocity
+from .braking import calculate_initial_velocity
 from .solver_interface import SolverInterface
 
 logger = logging.getLogger(__name__)
@@ -32,10 +30,10 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution.nodes[0].anchor_initial_velocity(0)
 
         logger.info("Solving maximum velocities...")
-        solution = solve_maximum_velocities(solution)
+        solution = _solve_maximum_velocities(solution)
 
         logger.info("Finding apexes...")
-        solution.set_apexes(find_apexes(solution))
+        solution.set_apexes(_find_apexes(solution))
 
         logger.info("Solving forward propagation...")
         for apex in progress.track(
@@ -44,7 +42,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             transient=True,
         ):
             if solution.nodes[apex].is_apex():
-                solution = propagate_forward(solution, start_index=apex)
+                solution = _propagate_forward(solution, start_index=apex)
 
         logger.info("Solving backward propagation...")
         for apex in progress.track(
@@ -53,18 +51,18 @@ class QuasiSteadyStateSolver(SolverInterface):
             transient=True,
         ):
             if solution.nodes[apex].is_apex():
-                solution = propagate_backward(solution, start_index=apex)
+                solution = _propagate_backward(solution, start_index=apex)
 
         logger.info("Resolving full vehicle state...")
         solution.evaluate_full_vehicle_state(solution.vehicle_model)
 
         logger.info("Recalculating state variables...")
-        solution = recalculate_state_variables(solution)
+        solution = _recalculate_state_variables(solution)
 
         return solution
 
 
-def solve_maximum_velocities(solution: Solution) -> Solution:
+def _solve_maximum_velocities(solution: Solution) -> Solution:
     """
     Calculate the theoretical maximum velocity at each node.
 
@@ -95,7 +93,7 @@ def solve_maximum_velocities(solution: Solution) -> Solution:
     return solution
 
 
-def find_apexes(solution: Solution) -> list[int]:
+def _find_apexes(solution: Solution) -> list[int]:
     """
     Identify the apexes of a solution.
 
@@ -114,7 +112,7 @@ def find_apexes(solution: Solution) -> list[int]:
     return list(apex_indices)
 
 
-def propagate_forward(solution: Solution, start_index: int) -> Solution:
+def _propagate_forward(solution: Solution, start_index: int) -> Solution:
     """
     Propagate the solution forward.
 
@@ -155,7 +153,7 @@ def propagate_forward(solution: Solution, start_index: int) -> Solution:
     return solution
 
 
-def propagate_backward(solution: Solution, start_index: int) -> Solution:
+def _propagate_backward(solution: Solution, start_index: int) -> Solution:
     """
     Propagate the solution backwards.
 
@@ -179,12 +177,14 @@ def propagate_backward(solution: Solution, start_index: int) -> Solution:
         if node.previous.is_apex():
             node.previous.remove_apex()
 
-        traction_limit_velocity = traction_limit_velocity_braking(
-            solution.vehicle_model, node
+        potential_velocity = calculate_initial_velocity(
+            vehicle_model=solution.vehicle_model,
+            state=node.state_variables,
+            node=node.track_node,
+            final_velocity=node.final_velocity,
         )
-        initial_velocity = min(
-            traction_limit_velocity, node.previous.final_velocity
-        )
+
+        initial_velocity = min(potential_velocity, node.previous.final_velocity)
 
         node.set_initial_velocity(initial_velocity)
         node.previous.set_final_velocity(initial_velocity)
@@ -193,46 +193,7 @@ def propagate_backward(solution: Solution, start_index: int) -> Solution:
     return solution
 
 
-def traction_limit_velocity_braking(
-    vehicle_model: VehicleModelInterface, node_solution: SolutionNode
-) -> float:
-    """
-    Calculate the traction limited velocity at a node when braking.
-
-    Args:
-        vehicle_model (VehicleModelInterface): The vehicle model.
-        node_solution (SolutionNode): The node solution.
-
-    Returns:
-        traction_limited_velocity (float): The traction limited velocity.
-    """
-    try:
-        traction_limited_deceleration = vehicle_model.traction_limited_braking(
-            node=node_solution.track_node,
-            state=node_solution.state_variables,
-            velocity=node_solution.final_velocity,
-        )
-        traction_limited_velocity = calculate_previous_velocity(
-            final_velocity=node_solution.final_velocity,
-            deceleration=traction_limited_deceleration,
-            displacement=node_solution.track_node.length,
-        )
-        return traction_limited_velocity
-    except ValueError:
-        return node_solution.final_velocity  # TODO
-
-
-def calculate_previous_velocity(
-    final_velocity: float, deceleration: float, displacement: float
-) -> float:
-    term = final_velocity**2 + 2 * deceleration * displacement
-    if term <= 0:
-        return 0
-    else:
-        return sqrt(term)
-
-
-def recalculate_state_variables(solution: Solution) -> Solution:
+def _recalculate_state_variables(solution: Solution) -> Solution:
     """
     Recalculate the state variables of the vehicle.
 

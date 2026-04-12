@@ -154,7 +154,6 @@ class VehicleModelInterface(ABC):
             motor_force=motor_force,
         )
 
-
     @abstractmethod
     def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
         pass
