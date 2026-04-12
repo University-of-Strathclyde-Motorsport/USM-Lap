@@ -67,6 +67,11 @@ class VehicleModelInterface(ABC):
         self, state: StateVariables, node: TrackNode, velocity: float
     ) -> float: ...
 
+    @abstractmethod
+    def traction_limited_braking(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float: ...
+
     def power_limited_acceleration(
         self, state: StateVariables, node: TrackNode, velocity: float
     ) -> float:
@@ -149,11 +154,6 @@ class VehicleModelInterface(ABC):
             motor_force=motor_force,
         )
 
-    @abstractmethod
-    def calculate_deceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        pass
 
     @abstractmethod
     def get_normal_loads(self, normal_force: float) -> FourCorner[float]:

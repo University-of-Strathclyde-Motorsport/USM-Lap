@@ -71,6 +71,37 @@ class PointMassVehicleModel(VehicleModelInterface):
         net_force = rear_traction - self.resistive_fx(node, velocity)
         return net_force / self.vehicle.equivalent_mass
 
+    def traction_limited_braking(
+        self, state: StateVariables, node: TrackNode, velocity: float
+    ) -> float:
+
+        resistive_fx = self.resistive_fx(node, velocity)
+
+        required_fy = self.required_fy(node, velocity)
+        fy_per_tyre = required_fy / 4
+
+        weight = self.weight()
+        centripetal_force = self.centripetal_force(node, velocity)
+        downforce = self.downforce(velocity)
+        normal_force = (
+            node.z_to_z(weight) + node.y_to_z(centripetal_force) + downforce
+        )
+
+        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+
+        front_tyre = self.vehicle.tyres.front.tyre_model
+        front_traction = 2 * front_tyre.calculate_longitudinal_force(
+            tyre_attitude, required_fy=fy_per_tyre
+        )
+
+        rear_tyre = self.vehicle.tyres.rear.tyre_model
+        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+            tyre_attitude, required_fy=fy_per_tyre
+        )
+
+        net_fx = front_traction + rear_traction + resistive_fx
+        return net_fx / self.vehicle.equivalent_mass
+
     #########################################################
     # Marked for death
 
@@ -131,16 +162,3 @@ class PointMassVehicleModel(VehicleModelInterface):
             )
         except ValueError:
             return FourCorner((0, 0, 0, 0))
-
-    def calculate_deceleration(
-        self, state_variables: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        vehicle_state = self.resolve_vehicle_state(
-            state_variables, node, velocity
-        )
-        traction_limit = (
-            sum(vehicle_state.longitudinal_traction)
-            * self.lambdas.longitudinal_grip
-        )
-        net_fx = traction_limit + vehicle_state.resistive_fx
-        return net_fx / self.vehicle.equivalent_mass

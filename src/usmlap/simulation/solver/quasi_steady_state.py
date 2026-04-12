@@ -207,9 +207,9 @@ def traction_limit_velocity_braking(
         traction_limited_velocity (float): The traction limited velocity.
     """
     try:
-        traction_limited_deceleration = vehicle_model.calculate_deceleration(
+        traction_limited_deceleration = vehicle_model.traction_limited_braking(
             node=node_solution.track_node,
-            state_variables=node_solution.state_variables,
+            state=node_solution.state_variables,
             velocity=node_solution.final_velocity,
         )
         traction_limited_velocity = calculate_previous_velocity(
