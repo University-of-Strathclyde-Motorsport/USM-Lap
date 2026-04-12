@@ -76,17 +76,6 @@ class VehicleModelInterface(ABC):
         net_force = drive_force - resistive_force
         return net_force / self.vehicle.equivalent_mass
 
-    def calculate_acceleration(
-        self, state: StateVariables, node: TrackNode, velocity: float
-    ) -> float:
-        traction_limited_acceleration = self.traction_limited_acceleration(
-            state, node, velocity
-        )
-        power_limited_acceleration = self.power_limited_acceleration(
-            state, node, velocity
-        )
-        return min(traction_limited_acceleration, power_limited_acceleration)
-
     ###############################################
     # Time is running out
 
@@ -159,12 +148,6 @@ class VehicleModelInterface(ABC):
             accumulator_power=accumulator_power,
             motor_force=motor_force,
         )
-
-    # @abstractmethod
-    # def calculate_acceleration(
-    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
-    # ) -> float:
-    #     pass
 
     @abstractmethod
     def calculate_deceleration(

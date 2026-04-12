@@ -8,6 +8,8 @@ from math import sqrt
 from rich import progress
 from scipy.signal import find_peaks
 
+from usmlap.simulation.solver.acceleration import calculate_next_velocity
+
 from ..model import VehicleModelInterface
 from ..solution import Solution, SolutionNode
 from ..vehicle_state import StateVariables
@@ -129,10 +131,14 @@ def propagate_forward(solution: Solution, start_index: int) -> Solution:
     solution.nodes[start_index].set_initial_velocity(maximum_velocity)
 
     for node in solution.nodes[start_index:]:
-        traction_limited_velocity = traction_limit_velocity(
-            solution.vehicle_model, node
+        potential_velocity = calculate_next_velocity(
+            vehicle_model=solution.vehicle_model,
+            state=node.state_variables,
+            node=node.track_node,
+            initial_velocity=node.initial_velocity,
         )
-        final_velocity = min(traction_limited_velocity, node.maximum_velocity)
+
+        final_velocity = min(potential_velocity, node.maximum_velocity)
 
         node.set_final_velocity(final_velocity)
         if node.next is None:
@@ -187,35 +193,6 @@ def propagate_backward(solution: Solution, start_index: int) -> Solution:
     return solution
 
 
-def traction_limit_velocity(
-    vehicle_model: VehicleModelInterface, node_solution: SolutionNode
-) -> float:
-    """
-    Calculate the traction limited velocity at a node when accelerating.
-
-    Args:
-        vehicle_model (VehicleModelInterface): The vehicle model.
-        node_solution (SolutionNode): The node solution.
-
-    Returns:
-        traction_limited_velocity (float): The traction limited velocity.
-    """
-    try:
-        acceleration = vehicle_model.calculate_acceleration(
-            node=node_solution.track_node,
-            state=node_solution.state_variables,
-            velocity=node_solution.initial_velocity,
-        )
-        traction_limited_velocity = calculate_next_velocity(
-            initial_velocity=node_solution.initial_velocity,
-            acceleration=acceleration,
-            displacement=node_solution.track_node.length,
-        )
-        return traction_limited_velocity
-    except ValueError:
-        return node_solution.initial_velocity  # TODO
-
-
 def traction_limit_velocity_braking(
     vehicle_model: VehicleModelInterface, node_solution: SolutionNode
 ) -> float:
@@ -243,12 +220,6 @@ def traction_limit_velocity_braking(
         return traction_limited_velocity
     except ValueError:
         return node_solution.final_velocity  # TODO
-
-
-def calculate_next_velocity(
-    initial_velocity: float, acceleration: float, displacement: float
-) -> float:
-    return sqrt(initial_velocity**2 + 2 * acceleration * displacement)
 
 
 def calculate_previous_velocity(

@@ -132,21 +132,6 @@ class PointMassVehicleModel(VehicleModelInterface):
         except ValueError:
             return FourCorner((0, 0, 0, 0))
 
-    # def calculate_acceleration(
-    #     self, state_variables: StateVariables, node: TrackNode, velocity: float
-    # ) -> float:
-    #     vehicle_state = self.resolve_vehicle_state(
-    #         state_variables, node, velocity
-    #     )
-    #     traction_limit = (
-    #         vehicle_state.longitudinal_traction.rear_left
-    #         + vehicle_state.longitudinal_traction.rear_right
-    #     ) * self.lambdas.longitudinal_grip
-    #     motor_limit = vehicle_state.motor_force * self.lambdas.motor_torque
-    #     drive_limit = min(motor_limit, traction_limit)
-    #     net_fx = drive_limit - vehicle_state.resistive_fx
-    #     return net_fx / self.vehicle.equivalent_mass
-
     def calculate_deceleration(
         self, state_variables: StateVariables, node: TrackNode, velocity: float
     ) -> float:
