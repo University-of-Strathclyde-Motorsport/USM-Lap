@@ -19,6 +19,9 @@ TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
 
 
+UNKNOWN_LOCATION = "Unknown"
+
+
 class SectionType(IntEnum):
     """
     Enum representing the type of section of track.
@@ -265,7 +268,7 @@ class TrackData(BaseModel):
         elif self.country:
             location = self.country
         else:
-            location = "Unknown"
+            location = UNKNOWN_LOCATION
         return location
 
     def generate_sector_labels(self) -> None:

@@ -2,13 +2,13 @@
 This module contains functions for plotting points sensitivities.
 """
 
-from itertools import cycle
-
 import matplotlib.pyplot as plt
 import numpy as np
 
 from usmlap.competition import CompetitionPoints
 from usmlap.vehicle import Parameter
+
+from .style import COLOURMAP, USM_BLUE
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 
@@ -44,21 +44,18 @@ def plot_points_sensitivity(
 
     parameter_values = list(data.keys())
     event_data = _transform_dictionary(list(data.values()))
-    colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
     fig, (ax_total, ax_event) = plt.subplots(nrows=2, sharex=True)
 
     total_points = [sum(d.values()) for d in data.values()]
-    ax_total.plot(
-        parameter_values, total_points, label="total", color="#003366"
-    )
+    ax_total.plot(parameter_values, total_points, label="total", color=USM_BLUE)
 
     for event in event_data:
         ax_event.plot(
             parameter_values,
             event_data[event],
             label=event,
-            color=next(colours),
+            color=next(COLOURMAP),
         )
 
     for ax in [ax_total, ax_event]:

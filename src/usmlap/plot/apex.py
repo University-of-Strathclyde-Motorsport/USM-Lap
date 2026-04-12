@@ -11,6 +11,8 @@ from usmlap.simulation.channels.library import (
     Velocity,
 )
 
+from .style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
+
 
 def plot_apexes(solution: Solution) -> None:
     """
@@ -31,7 +33,7 @@ def plot_apexes(solution: Solution) -> None:
 
     fig, (ax_curvature, ax_apex) = plt.subplots(nrows=2, height_ratios=[1, 2])
 
-    ax_curvature.plot(position, curvature, color="#003366", zorder=2)
+    ax_curvature.plot(position, curvature, color=USM_BLUE, zorder=2)
     ax_curvature.axhline(0, color="black", linewidth=1, zorder=1)
 
     for sector_boundary in sector_boundary_positions:
@@ -40,12 +42,13 @@ def plot_apexes(solution: Solution) -> None:
         )
 
     ax_apex.plot(
-        position, maximum_velocity, color="#69C2CD", label="Maximum velocity"
+        position,
+        maximum_velocity,
+        color=USM_LIGHT_BLUE,
+        label="Maximum velocity",
     )
-    ax_apex.plot(position, velocity, color="#003366", label="Velocity solution")
-    ax_apex.scatter(
-        apex_position, apex_velocity, color="#FF6454", label="Apexes"
-    )
+    ax_apex.plot(position, velocity, color=USM_BLUE, label="Velocity solution")
+    ax_apex.scatter(apex_position, apex_velocity, color=USM_RED, label="Apexes")
 
     for i in range(len(apex_position)):
         plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))

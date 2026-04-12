@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 
+from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.utils import combined_legend
 from usmlap.simulation import SimulationSettings, simulate
 from usmlap.simulation.solver import QuasiTransientSolver
@@ -50,7 +51,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
 
     for resolution in RESOLUTIONS:
         mesh_start_time = time.time()
-        mesh = generate_mesh(track_data, resolution)
+        mesh = generate_mesh(track_data, resolution=resolution)
         mesh_time = time.time() - mesh_start_time
 
         simulation_start_time = time.time()
@@ -96,13 +97,13 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
     ax_nodes.set_xticklabels(node_counts)
     ax_nodes.set_xlim(max(resolutions), min(resolutions))
 
-    ax_laptime.plot(resolutions, laptimes, color="#003366", label="Laptime")
+    ax_laptime.plot(resolutions, laptimes, color=USM_BLUE, label="Laptime")
 
     ax_comptime.stackplot(
         resolutions,
         mesh_times,
         simulation_times,
-        colors=["#69C2CD", "#FD9055"],
+        colors=[USM_LIGHT_BLUE, USM_ORANGE],
         labels=["Mesh Generation", "Simulation"],
     )
 

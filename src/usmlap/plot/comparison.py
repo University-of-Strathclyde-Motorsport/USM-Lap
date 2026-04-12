@@ -2,7 +2,6 @@
 This module contains functions for plotting comparisons between vehicles.
 """
 
-from itertools import cycle
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -11,6 +10,8 @@ from matplotlib.ticker import MultipleLocator
 
 from usmlap.analysis import ComparisonResults
 from usmlap.competition import CompetitionPoints
+
+from .style import COLOURMAP
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 
@@ -53,7 +54,6 @@ def plot_competition_bar_chart(
     plot_data = _transform_data(points_data)
     vehicle_count = len(points_data)
     vehicle_labels = comparison_results.get_vehicle_labels()
-    colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
     _, ax = plt.subplots()
 
@@ -62,7 +62,7 @@ def plot_competition_bar_chart(
         ax.bar(
             vehicle_labels,
             points,
-            color=next(colours),
+            color=next(COLOURMAP),
             width=0.7,
             label=event,
             tick_label=vehicle_labels,
@@ -135,7 +135,6 @@ def plot_points_bar_chart(
     bar_width = width / event_count
     label_position = x + (bar_width * (event_count - 1) / 2)
     multiplier = 0
-    colours = cycle(["#003366", "#69C2CD", "#F5E075", "#FD9055", "#FF6454"])
 
     _, ax = plt.subplots()
 
@@ -146,7 +145,7 @@ def plot_points_bar_chart(
             points,
             bar_width,
             label=event,
-            color=next(colours),
+            color=next(COLOURMAP),
             zorder=4,
         )
         ax.bar_label(rects, fmt="%.1f", padding=3, zorder=4)

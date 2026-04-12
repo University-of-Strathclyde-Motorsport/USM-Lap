@@ -9,6 +9,8 @@ from typing import Any, Optional
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
+from usmlap.plot.style import USM_BLUE, USM_RED
+
 
 @total_ordering
 @dataclass
@@ -102,9 +104,9 @@ def get_bar_colour(sensitivity: float) -> str:
     If the sensitivity is negative, the bar is red.
     """
     if sensitivity > 0:
-        return "#003366"
+        return USM_BLUE
     else:
-        return "#FF6454"
+        return USM_RED
 
 
 def get_bar_text_colour(sensitivity: float) -> str:
@@ -125,8 +127,8 @@ def create_legend(ax: plt.Axes) -> None:
     Add a legend to the plot, denoting colours for positive and negative bars.
     """
     colours = {
-        "positive correlation": "#003366",
-        "negative correlation": "#FF6454",
+        "positive correlation": USM_BLUE,
+        "negative correlation": USM_RED,
     }
     labels = list(colours.keys())
     handles = [Rectangle((0, 0), 1, 1, color=colours[lab]) for lab in labels]

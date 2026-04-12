@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import copy
 import math
+from dataclasses import dataclass
 from typing import Generator
 
 import matplotlib.pyplot as plt
@@ -39,6 +40,7 @@ class TrackNode(BaseModel):
     sector: str = Field(default="Sector 1")
     start_coordinate: tuple[float, float] = Field(default=(0, 0))
     end_coordinate: tuple[float, float] = Field(default=(0, 0))
+    heading_angle: float = Field(default=0)
 
     @property
     def radius(self) -> float:
@@ -47,6 +49,13 @@ class TrackNode(BaseModel):
     @property
     def swept_angle(self) -> float:
         return self.length * self.curvature
+
+    @property
+    def chord_length(self) -> float:
+        if self.curvature == 0:
+            return self.length
+        else:
+            return 2 * self.radius * math.sin(self.swept_angle / 2)
 
     def y_to_y(self, value: float) -> float:
         return value * math.cos(self.banking)
@@ -64,6 +73,7 @@ class TrackNode(BaseModel):
         return value * math.cos(self.banking) * math.cos(self.inclination)
 
 
+@dataclass
 class Mesh(object):
     """
     A mesh of a track.
@@ -72,16 +82,17 @@ class Mesh(object):
         nodes (list[Node]): A list of nodes making up the track.
         configuration (Configuration): The configuration of the track
             (OPEN or CLOSED).
+        track_name (str): The name of the track.
     """
 
     nodes: list[TrackNode]
     configuration: Configuration
+    track_name: str
+    location: str
+    initial_heading: float
+    initial_coordinates: tuple[float, float]
 
-    def __init__(
-        self, nodes: list[TrackNode], configuration: Configuration
-    ) -> None:
-        self.nodes = nodes
-        self.configuration = configuration
+    def __post_init__(self) -> None:
         self.calculate_positions()
 
     def __iter__(self) -> Generator[TrackNode]:
@@ -127,7 +138,14 @@ class Mesh(object):
             node.position = position
             position += node.length
 
-        return Mesh(nodes=new_nodes, configuration=self.configuration)
+        return Mesh(
+            nodes=new_nodes,
+            configuration=self.configuration,
+            track_name=self.track_name,
+            location=self.location,
+            initial_heading=self.initial_heading,
+            initial_coordinates=self.initial_coordinates,
+        )
 
     def plot_traces(self) -> None:
         position = [node.position for node in self]
@@ -154,23 +172,4 @@ class Mesh(object):
             axs[i].set_ylabel(label)
             axs[i].grid()
             i += 1
-        plt.show()
-
-    def plot_map(self) -> None:
-        coordinates = [node.start_coordinate for node in self]
-        coordinates.append(self.nodes[-1].end_coordinate)
-        x, y = zip(*coordinates)
-
-        _, ax = plt.subplots()
-        ax.set_title("Track Map")
-
-        ax.plot(x, y)
-        ax.plot([0, 0], [-10, 10], color="red")
-        ax.annotate(
-            "",
-            xytext=(0, 0),
-            xy=(50, 0),
-            arrowprops={"arrowstyle": "->", "color": "red"},
-        )
-        ax.grid()
         plt.show()

@@ -12,3 +12,4 @@ from .points_sensitivities import (
     plot_points_sensitivities as plot_points_sensitivities,
 )
 from .sensitivity import plot_points_sensitivity as plot_points_sensitivity
+from .track_map import plot_map as plot_map

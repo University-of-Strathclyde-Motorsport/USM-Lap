@@ -16,7 +16,7 @@ def main() -> None:
     """Main function."""
 
     track_data = TrackData.from_json(TRACK_SHEET)
-    mesh = generate_mesh(track_data, 0.1)
+    mesh = generate_mesh(track_data, resolution=0.1)
     vehicle = load_vehicle(VEHICLE_FILE)
     simulation_settings = SimulationSettings(solver=QuasiTransientSolver)
 
