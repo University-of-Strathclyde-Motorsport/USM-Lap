@@ -7,7 +7,7 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.model import Context, VehicleModelInterface
+from usmlap.model import NodeContext, VehicleModelInterface
 
 from .solver_interface import MaximumIterationsExceededError
 
@@ -17,7 +17,7 @@ MAXIMUM_ITERATIONS = 100
 
 def solve_apex_velocity(
     vehicle_model: VehicleModelInterface,
-    ctx: Context,
+    ctx: NodeContext,
     velocity_estimate: Optional[float] = None,
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
@@ -31,7 +31,7 @@ def solve_apex_velocity(
     Args:
         vehicle_model (VehicleModelInterface):
             The vehicle model to use.
-        ctx (Context): The simulation context.
+        ctx (NodeContext): The simulation context.
         velocity_estimate (Optional[float]):
             The initial velocity estimate, used to speed up calculation.
             If unspecified, defaults to the maximum velocity of the vehicle.

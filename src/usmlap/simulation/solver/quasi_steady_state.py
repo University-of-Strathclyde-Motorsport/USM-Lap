@@ -55,7 +55,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         logger.info("Resolving full vehicle state...")
         for node in solution.nodes:
-            ctx = self.get_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.state_variables)
             node.vehicle_state = self.vehicle_model.resolve_vehicle_state(
                 ctx, node.average_velocity
             )
@@ -85,7 +85,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             description="Solving maximum velocities...",
             transient=True,
         ):
-            ctx = self.get_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.state_variables)
             velocity = solve_apex_velocity(
                 vehicle_model=self.vehicle_model,
                 ctx=ctx,
@@ -114,7 +114,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution.nodes[start_index].set_initial_velocity(maximum_velocity)
 
         for node in solution.nodes[start_index:]:
-            ctx = self.get_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.state_variables)
             potential_velocity = calculate_next_velocity(
                 model=solution.vehicle_model,
                 ctx=ctx,
@@ -163,7 +163,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             if node.previous.is_apex():
                 node.previous.remove_apex()
 
-            ctx = self.get_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.state_variables)
 
             potential_velocity = calculate_initial_velocity(
                 vehicle_model=solution.vehicle_model,
@@ -193,7 +193,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         """
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
-            updated_soc = self.vehicle.powertrain.update_state_of_charge(
+            updated_soc = self.global_context.vehicle.powertrain.update_state_of_charge(
                 state_of_charge=previous_node.state_variables.state_of_charge,
                 energy_used=previous_node.energy_used,
             )

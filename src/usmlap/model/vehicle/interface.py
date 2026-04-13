@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from usmlap.vehicle.aero import AeroAttitude
 
-from ..context import Context
+from ..context import NodeContext
 from ..powertrain import PowertrainModelInterface, SingleMotorRWD
 from ..vehicle_state import FullVehicleState
 
@@ -21,33 +21,33 @@ class VehicleModelInterface(ABC):
     powertrain: PowertrainModelInterface = SingleMotorRWD()
 
     @staticmethod
-    def weight(ctx: Context) -> float:
+    def weight(ctx: NodeContext) -> float:
         return ctx.vehicle.total_mass * ctx.environment.gravity
 
     @staticmethod
-    def centripetal_force(ctx: Context, velocity: float) -> float:
+    def centripetal_force(ctx: NodeContext, velocity: float) -> float:
         return ctx.vehicle.total_mass * ctx.node.curvature * velocity**2
 
     @staticmethod
-    def aero_attitude(ctx: Context, velocity: float) -> AeroAttitude:
+    def aero_attitude(ctx: NodeContext, velocity: float) -> AeroAttitude:
         return AeroAttitude(
             velocity=velocity, air_density=ctx.environment.air_density
         )
 
-    def required_fy(self, ctx: Context, velocity: float) -> float:
+    def required_fy(self, ctx: NodeContext, velocity: float) -> float:
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, velocity)
         return ctx.node.y_to_y(centripetal_force) - ctx.node.z_to_y(weight)
 
     def resistive_forces(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> tuple[float, float]:
         """
         Get the total resistive forces acting on the vehicle.
         Returns a tuple of body and aerodynamic forces.
 
         Args:
-            ctx (Context): The simulation context.
+            ctx (NodeContext): The simulation context.
             velocity (float): The vehicle's velocity.
 
         Returns:
@@ -65,14 +65,14 @@ class VehicleModelInterface(ABC):
         return body_force, aero_force
 
     def normal_forces(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> tuple[float, float]:
         """
         Get the total normal forces acting on the tyres.
         Returns a tuple of body and aerodynamic forces.
 
         Args:
-            ctx (Context): The simulation context.
+            ctx (NodeContext): The simulation context.
             velocity (float): The vehicle's velocity.
 
         Returns:
@@ -95,21 +95,21 @@ class VehicleModelInterface(ABC):
 
     @abstractmethod
     def lateral_traction_limit(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float: ...
 
     @abstractmethod
     def traction_limited_acceleration(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float: ...
 
     @abstractmethod
     def traction_limited_braking(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float: ...
 
     def power_limited_acceleration(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float:
 
         drive_force = self.powertrain.drive_force(ctx, velocity)
@@ -121,13 +121,13 @@ class VehicleModelInterface(ABC):
     # Time is running out
 
     def resolve_vehicle_state(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> FullVehicleState:
         """
         Calculate the full state of the vehicle at a node.
 
         Args:
-            ctx (Context): The simulation context.
+            ctx (NodeContext): The simulation context.
             velocity (float): The vehicle's velocity.
 
         Returns:
@@ -207,7 +207,7 @@ class VehicleModelInterface(ABC):
     # @abstractmethod
     # def get_lateral_traction(
     #     self,
-    #     ctx: Context,
+    #     ctx: NodeContext,
     #     attitudes: FourCorner[TyreAttitude],
     #     required_fx: float,
     # ) -> FourCorner[float]:
@@ -216,7 +216,7 @@ class VehicleModelInterface(ABC):
     # @abstractmethod
     # def get_longitudinal_traction(
     #     self,
-    #     ctx: Context,
+    #     ctx: NodeContext,
     #     attitudes: FourCorner[TyreAttitude],
     #     required_fy: float,
     # ) -> FourCorner[float]:

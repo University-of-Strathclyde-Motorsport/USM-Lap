@@ -2,7 +2,8 @@
 This package contains mathematical models for vehicle simulation.
 """
 
-from .context import Context as Context
+from .context import GlobalContext as GlobalContext
+from .context import NodeContext as NodeContext
 from .environment import Environment as Environment
 from .lambda_coefficients import LambdaCoefficients as LambdaCoefficients
 from .powertrain import PowertrainModelInterface as PowertrainModelInterface

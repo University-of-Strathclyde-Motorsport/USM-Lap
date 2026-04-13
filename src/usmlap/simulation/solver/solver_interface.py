@@ -6,14 +6,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from usmlap.model import (
-    Context,
-    Environment,
-    LambdaCoefficients,
+    GlobalContext,
+    NodeContext,
     StateVariables,
     VehicleModelInterface,
 )
 from usmlap.track import TrackNode
-from usmlap.vehicle import Vehicle
 
 from ..solution import Solution
 
@@ -40,18 +38,12 @@ class SolverInterface(ABC):
     """
 
     vehicle_model: VehicleModelInterface
-    vehicle: Vehicle
-    environment: Environment
-    lambdas: LambdaCoefficients
+    global_context: GlobalContext
 
     @abstractmethod
     def solve(self, previous_solution: Solution) -> Solution: ...
 
-    def get_context(self, node: TrackNode, state: StateVariables) -> Context:
-        return Context(
-            environment=self.environment,
-            vehicle=self.vehicle,
-            state=state,
-            node=node,
-            lambdas=self.lambdas,
-        )
+    def local_context(
+        self, node: TrackNode, state: StateVariables
+    ) -> NodeContext:
+        return self.global_context.get_local_context(node, state)

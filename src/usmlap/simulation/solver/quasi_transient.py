@@ -55,12 +55,7 @@ class QuasiTransientSolver(SolverInterface):
         Returns:
             solution (Solution): The next iteration of the solution.
         """
-        solver = QuasiSteadyStateSolver(
-            vehicle_model=self.vehicle_model,
-            vehicle=self.vehicle,
-            environment=self.environment,
-            lambdas=self.lambdas,
-        )
+        solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
         return solution
 

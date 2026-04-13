@@ -2,11 +2,11 @@
 This module defines the bicycle vehicle model.
 """
 
-from usmlap.model import Context
-from usmlap.model.errors import MaximumIterationsExceededError
 from usmlap.utils.datatypes import FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 
+from ..context import NodeContext
+from ..errors import MaximumIterationsExceededError
 from .interface import VehicleModelInterface
 
 PRECISION = 1e-3
@@ -18,7 +18,9 @@ class Bicycle(VehicleModelInterface):
     Bicycle vehicle model.
     """
 
-    def lateral_traction_limit(self, ctx: Context, velocity: float) -> float:
+    def lateral_traction_limit(
+        self, ctx: NodeContext, velocity: float
+    ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         normal_force = self._get_normal_force(ctx, velocity, ax=0)
 
@@ -35,7 +37,7 @@ class Bicycle(VehicleModelInterface):
         return front_traction + rear_traction
 
     def traction_limited_acceleration(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
@@ -63,7 +65,9 @@ class Bicycle(VehicleModelInterface):
 
         raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
-    def traction_limited_braking(self, ctx: Context, velocity: float) -> float:
+    def traction_limited_braking(
+        self, ctx: NodeContext, velocity: float
+    ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
         axs: list[float] = [0]
@@ -92,7 +96,7 @@ class Bicycle(VehicleModelInterface):
         raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
     def _get_normal_force(
-        self, ctx: Context, velocity: float, ax: float
+        self, ctx: NodeContext, velocity: float, ax: float
     ) -> FrontRear[float]:
         body_fx, aero_fx = self.resistive_forces(ctx, velocity)
         inertial_fx = ctx.vehicle.total_mass * ax
@@ -106,14 +110,14 @@ class Bicycle(VehicleModelInterface):
         return normal_force + inertial_lt + aero_lt
 
     def _split_normal_force(
-        self, ctx: Context, inertial: float, aero: float
+        self, ctx: NodeContext, inertial: float, aero: float
     ) -> FrontRear[float]:
         split_inertial = ctx.vehicle.mass_distribution * inertial
         split_aero = ctx.vehicle.aero_distribution * aero
         return split_inertial + split_aero
 
     def _inertial_load_transfer(
-        self, ctx: Context, inertial_fx: float
+        self, ctx: NodeContext, inertial_fx: float
     ) -> FrontRear[float]:
         cog_height = ctx.vehicle.suspension.centre_of_gravity_height
         wheelbase = ctx.vehicle.suspension.wheelbase
@@ -121,7 +125,7 @@ class Bicycle(VehicleModelInterface):
         return FrontRear(-lt, lt)
 
     def _aero_load_transfer(
-        self, ctx: Context, aero_fx: float
+        self, ctx: NodeContext, aero_fx: float
     ) -> FrontRear[float]:
         cop_height = ctx.vehicle.aero.centre_of_pressure_height
         wheelbase = ctx.vehicle.suspension.wheelbase

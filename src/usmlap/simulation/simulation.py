@@ -22,11 +22,8 @@ def simulate(
         settings (SimulationSettings): Settings for the simulation.
     """
     vehicle_model = settings.vehicle_model()
-    solver = settings.solver(
-        vehicle_model=settings.vehicle_model(),
-        vehicle=vehicle,
-        environment=settings.environment,
-        lambdas=settings.lambdas,
-    )
+    global_context = settings.get_global_context(vehicle)
+    solver = settings.solver(vehicle_model, global_context)
+
     solution = create_new_solution(track_mesh, vehicle_model)
     return solver.solve(solution)

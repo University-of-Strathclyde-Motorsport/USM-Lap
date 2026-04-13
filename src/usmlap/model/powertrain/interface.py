@@ -4,7 +4,7 @@ This module defines a common interface for powertrain models.
 
 from abc import ABC, abstractmethod
 
-from ..context import Context
+from ..context import NodeContext
 
 
 class PowertrainModelInterface(ABC):
@@ -13,4 +13,4 @@ class PowertrainModelInterface(ABC):
     """
 
     @abstractmethod
-    def drive_force(self, ctx: Context, velocity: float) -> float: ...
+    def drive_force(self, ctx: NodeContext, velocity: float) -> float: ...

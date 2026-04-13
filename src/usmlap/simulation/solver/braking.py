@@ -5,11 +5,13 @@ which calculates the maximum possible braking at a node.
 
 import math
 
-from usmlap.model import Context, VehicleModelInterface
+from usmlap.model import NodeContext, VehicleModelInterface
 
 
 def calculate_initial_velocity(
-    vehicle_model: VehicleModelInterface, ctx: Context, final_velocity: float
+    vehicle_model: VehicleModelInterface,
+    ctx: NodeContext,
+    final_velocity: float,
 ) -> float:
     """
     Calculate the velocity at the start of a node,

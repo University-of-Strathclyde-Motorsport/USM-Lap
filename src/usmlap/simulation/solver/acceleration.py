@@ -5,11 +5,11 @@ which calculates the maximum possible acceleration at a node.
 
 import math
 
-from usmlap.model import Context, VehicleModelInterface
+from usmlap.model import NodeContext, VehicleModelInterface
 
 
 def calculate_next_velocity(
-    model: VehicleModelInterface, ctx: Context, initial_velocity: float
+    model: VehicleModelInterface, ctx: NodeContext, initial_velocity: float
 ) -> float:
     """
     Calculate the velocity at the end of a node,

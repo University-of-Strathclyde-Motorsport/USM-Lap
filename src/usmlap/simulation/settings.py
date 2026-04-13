@@ -4,16 +4,22 @@ This module defines settings for a simulation.
 
 from dataclasses import dataclass, field
 
-from usmlap.model import Environment, LambdaCoefficients, VehicleModelInterface
+from usmlap.model import (
+    Environment,
+    GlobalContext,
+    LambdaCoefficients,
+    VehicleModelInterface,
+)
 from usmlap.model.vehicle import PointMass
 from usmlap.track.mesh_generation import Resolution
+from usmlap.vehicle import Vehicle
 
 from .solver import QuasiSteadyStateSolver as QSS
 from .solver import QuasiTransientSolver as QT
 from .solver import SolverInterface
 
 
-@dataclass
+@dataclass(frozen=True)
 class SimulationSettings(object):
     """
     Settings for a simulation.
@@ -30,6 +36,11 @@ class SimulationSettings(object):
     vehicle_model: type[VehicleModelInterface] = PointMass
     solver: type[SolverInterface] = QT
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
+
+    def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
+        return GlobalContext(
+            environment=self.environment, lambdas=self.lambdas, vehicle=vehicle
+        )
 
 
 class QualityPresets(object):

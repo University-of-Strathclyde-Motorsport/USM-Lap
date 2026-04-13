@@ -4,10 +4,10 @@ This module defines the point mass vehicle model.
 
 import logging
 
-from usmlap.model import Context
 from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.tyre import TyreAttitude
 
+from ..context import NodeContext
 from .interface import VehicleModelInterface
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,9 @@ class PointMass(VehicleModelInterface):
     Point mass vehicle model.
     """
 
-    def lateral_traction_limit(self, ctx: Context, velocity: float) -> float:
+    def lateral_traction_limit(
+        self, ctx: NodeContext, velocity: float
+    ) -> float:
 
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         normal_force = self._get_normal_force(ctx, velocity)
@@ -37,7 +39,7 @@ class PointMass(VehicleModelInterface):
         return 2 * (front_traction + rear_traction)
 
     def traction_limited_acceleration(
-        self, ctx: Context, velocity: float
+        self, ctx: NodeContext, velocity: float
     ) -> float:
 
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
@@ -58,7 +60,9 @@ class PointMass(VehicleModelInterface):
         net_force = rear_traction - resistive_fx
         return net_force / ctx.vehicle.equivalent_mass
 
-    def traction_limited_braking(self, ctx: Context, velocity: float) -> float:
+    def traction_limited_braking(
+        self, ctx: NodeContext, velocity: float
+    ) -> float:
 
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
@@ -79,7 +83,7 @@ class PointMass(VehicleModelInterface):
         net_fx = front_traction + rear_traction + resistive_fx
         return net_fx / ctx.vehicle.equivalent_mass
 
-    def _get_normal_force(self, ctx: Context, velocity: float) -> float:
+    def _get_normal_force(self, ctx: NodeContext, velocity: float) -> float:
         return sum(self.normal_forces(ctx, velocity))
 
     #########################################################
@@ -102,7 +106,7 @@ class PointMass(VehicleModelInterface):
 
     def get_lateral_traction(
         self,
-        ctx: Context,
+        ctx: NodeContext,
         attitudes: FourCorner[TyreAttitude],
         required_fx: float,
     ) -> FourCorner[float]:
@@ -124,7 +128,7 @@ class PointMass(VehicleModelInterface):
 
     def get_longitudinal_traction(
         self,
-        ctx: Context,
+        ctx: NodeContext,
         attitudes: FourCorner[TyreAttitude],
         required_fy: float,
     ) -> FourCorner[float]:
