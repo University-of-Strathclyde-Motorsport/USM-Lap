@@ -2,9 +2,9 @@
 This script displays a velocity profile from a simulation.
 """
 
+from usmlap.model.vehicle import Bicycle
 from usmlap.plot import plot_apexes
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.simulation.model.bicycle import BicycleVehicleModel
 from usmlap.simulation.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
@@ -12,7 +12,7 @@ from usmlap.vehicle import Vehicle
 TRACK_SHEET = "FS AutoX Germany 2012"
 VEHICLE_FILE = "USM23 Baseline"
 SOLVER = QuasiTransientSolver
-VEHICLE_MODEL = BicycleVehicleModel
+VEHICLE_MODEL = Bicycle
 
 
 def main() -> None:

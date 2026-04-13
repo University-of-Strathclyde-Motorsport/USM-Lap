@@ -34,7 +34,7 @@ def plot_channels(
         show_legend (bool): Whether to show a legend.
     """
 
-    fig, axs = plt.subplots(nrows=len(channels), sharex=True)
+    _, axs = plt.subplots(nrows=len(channels), sharex=True)
     if len(channels) == 1:
         axs = [axs]
 

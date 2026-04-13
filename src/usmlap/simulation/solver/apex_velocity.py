@@ -7,9 +7,8 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.simulation.model.context import Context
+from usmlap.model import Context, VehicleModelInterface
 
-from ..model import VehicleModelInterface
 from .solver_interface import MaximumIterationsExceededError
 
 PRECISION = 1e-2

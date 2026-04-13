@@ -5,8 +5,7 @@ which calculates the maximum possible acceleration at a node.
 
 import math
 
-from usmlap.simulation.model import VehicleModelInterface
-from usmlap.simulation.model.context import Context
+from usmlap.model import Context, VehicleModelInterface
 
 
 def calculate_next_velocity(

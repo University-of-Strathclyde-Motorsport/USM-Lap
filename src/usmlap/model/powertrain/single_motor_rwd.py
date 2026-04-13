@@ -1,22 +1,12 @@
 """
-This module defines the powertrain model.
+This module defines a single-motor, rear-wheel drive powertrain.
 """
 
-from abc import ABC, abstractmethod
-
-from .context import Context
-
-
-class PowertrainModelInterface(ABC):
-    """
-    Abstract base class for powertrain models.
-    """
-
-    @abstractmethod
-    def drive_force(self, ctx: Context, velocity: float) -> float: ...
+from ..context import Context
+from .interface import PowertrainModelInterface
 
 
-class SingleMotorPowertrain(PowertrainModelInterface):
+class SingleMotorRWD(PowertrainModelInterface):
     """
     Powertrain model for a single-motor vehicle.
     """

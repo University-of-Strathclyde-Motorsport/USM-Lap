@@ -1,15 +1,15 @@
 """
-This module defines the interface for vehicle models.
+This module defines a common interface for vehicle models.
 """
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from usmlap.simulation.vehicle_state import FullVehicleState
 from usmlap.vehicle.aero import AeroAttitude
 
-from .context import Context
-from .powertrain import PowertrainModelInterface, SingleMotorPowertrain
+from ..context import Context
+from ..powertrain import PowertrainModelInterface, SingleMotorRWD
+from ..vehicle_state import FullVehicleState
 
 
 @dataclass
@@ -18,7 +18,7 @@ class VehicleModelInterface(ABC):
     Abstract base class for vehicle models.
     """
 
-    powertrain: PowertrainModelInterface = SingleMotorPowertrain()
+    powertrain: PowertrainModelInterface = SingleMotorRWD()
 
     @staticmethod
     def weight(ctx: Context) -> float:

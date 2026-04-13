@@ -5,10 +5,13 @@ This module defines the interface for simulation solvers.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from usmlap.simulation import Environment, LambdaCoefficients
-from usmlap.simulation.model import VehicleModelInterface
-from usmlap.simulation.model.context import Context
-from usmlap.simulation.vehicle_state import StateVariables
+from usmlap.model import (
+    Context,
+    Environment,
+    LambdaCoefficients,
+    StateVariables,
+    VehicleModelInterface,
+)
 from usmlap.track import TrackNode
 from usmlap.vehicle import Vehicle
 

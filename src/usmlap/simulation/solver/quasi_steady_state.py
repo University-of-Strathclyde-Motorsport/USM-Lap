@@ -7,8 +7,9 @@ import logging
 from rich import progress
 from scipy.signal import find_peaks
 
+from usmlap.model import StateVariables
+
 from ..solution import Solution
-from ..vehicle_state import StateVariables
 from .acceleration import calculate_next_velocity
 from .apex_velocity import solve_apex_velocity
 from .braking import calculate_initial_velocity

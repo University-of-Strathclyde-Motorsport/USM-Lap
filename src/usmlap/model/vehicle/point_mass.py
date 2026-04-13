@@ -4,11 +4,11 @@ This module defines the point mass vehicle model.
 
 import logging
 
+from usmlap.model import Context
 from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.tyre import TyreAttitude
 
-from .context import Context
-from .vehicle_model import VehicleModelInterface
+from .interface import VehicleModelInterface
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100
 
 
-class PointMassVehicleModel(VehicleModelInterface):
+class PointMass(VehicleModelInterface):
     """
     Point mass vehicle model.
     """

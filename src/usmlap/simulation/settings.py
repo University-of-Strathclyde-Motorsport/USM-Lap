@@ -4,12 +4,10 @@ This module defines settings for a simulation.
 
 from dataclasses import dataclass, field
 
+from usmlap.model import Environment, LambdaCoefficients, VehicleModelInterface
+from usmlap.model.vehicle import PointMass
 from usmlap.track.mesh_generation import Resolution
 
-from .environment import Environment
-from .lambda_coefficients import LambdaCoefficients
-from .model import PointMassVehicleModel as PointMass
-from .model import VehicleModelInterface
 from .solver import QuasiSteadyStateSolver as QSS
 from .solver import QuasiTransientSolver as QT
 from .solver import SolverInterface

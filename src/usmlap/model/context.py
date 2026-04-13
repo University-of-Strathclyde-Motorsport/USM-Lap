@@ -5,10 +5,12 @@ which stores all the information required by vehicle models.
 
 from dataclasses import dataclass
 
-from usmlap.simulation import Environment, LambdaCoefficients
-from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track import TrackNode
 from usmlap.vehicle import Vehicle
+
+from .environment import Environment
+from .lambda_coefficients import LambdaCoefficients
+from .vehicle_state import StateVariables
 
 
 @dataclass

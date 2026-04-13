@@ -2,13 +2,14 @@
 This module models the environment in which the vehicle is simulated.
 """
 
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 GRAVITY = 9.81
 AIR_DENSITY = 1.225
 
 
-class Environment(BaseModel):
+@dataclass
+class Environment(object):
     """
     Environmental variables for the simulation.
 

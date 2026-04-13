@@ -606,7 +606,7 @@ class "Parameter" as src.usmlap.vehicle.parameters.Parameter {
   list_parameters() -> list[str]
   {abstract}set_value(vehicle: Vehicle, value: float) -> None
 }
-class "PointMassVehicleModel" as src.usmlap.simulation.model.point_mass.PointMassVehicleModel {
+class "PointMass" as src.usmlap.simulation.model.point_mass.PointMass {
   calculate_acceleration(state_variables: StateVariables, node: Node) -> float
   calculate_deceleration(state_variables: StateVariables, node: Node) -> float
   lateral_vehicle_model(node: Node) -> StateVariables
@@ -997,7 +997,7 @@ class "_TIRReader" as src.usmlap.vehicle.tyre.tir._TIRReader {
   data : dict[str, dict[str, str]]
   read(filepath: str) -> dict[str, dict[str, str]]
 }
-src.usmlap.simulation.model.point_mass.PointMassVehicleModel --|> src.usmlap.simulation.model.vehicle_model.VehicleModelInterface
+src.usmlap.simulation.model.point_mass.PointMass --|> src.usmlap.simulation.model.vehicle_model.VehicleModelInterface
 src.usmlap.simulation.points.points_functions.FSUKPointsFunctions --|> src.usmlap.simulation.points.points_functions.PointsFunctions
 src.usmlap.simulation.solver.quasi_steady_state.QuasiSteadyStateSolver --|> src.usmlap.simulation.solver.solver_interface.SolverInterface
 src.usmlap.track.track_data.BankingData --|> src.usmlap.track.track_data.LocationData

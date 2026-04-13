@@ -2,18 +2,18 @@
 This module defines the bicycle vehicle model.
 """
 
+from usmlap.model import Context
+from usmlap.model.errors import MaximumIterationsExceededError
 from usmlap.utils.datatypes import FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 
-from .context import Context
-from .errors import MaximumIterationsExceededError
-from .vehicle_model import VehicleModelInterface
+from .interface import VehicleModelInterface
 
 PRECISION = 1e-3
 MAXIMUM_ITERATIONS = 100
 
 
-class BicycleVehicleModel(VehicleModelInterface):
+class Bicycle(VehicleModelInterface):
     """
     Bicycle vehicle model.
     """
