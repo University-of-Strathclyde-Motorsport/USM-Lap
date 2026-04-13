@@ -6,9 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from usmlap.simulation.vehicle_state import FullVehicleState
-from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.aero import AeroAttitude
-from usmlap.vehicle.tyre import TyreAttitude
 
 from .context import Context
 from .powertrain import PowertrainModelInterface, SingleMotorPowertrain
@@ -36,23 +34,64 @@ class VehicleModelInterface(ABC):
             velocity=velocity, air_density=ctx.environment.air_density
         )
 
-    def downforce(self, ctx: Context, velocity: float) -> float:
-        aero_attitude = self.aero_attitude(ctx, velocity)
-        return ctx.vehicle.aero.get_downforce(aero_attitude)
-
-    def drag(self, ctx: Context, velocity: float) -> float:
-        aero_attitude = self.aero_attitude(ctx, velocity)
-        return ctx.vehicle.aero.get_drag(aero_attitude)
-
-    def resistive_fx(self, ctx: Context, velocity: float) -> float:
-        weight = self.weight(ctx)
-        drag = self.drag(ctx, velocity)
-        return drag + ctx.node.z_to_x(weight)
-
     def required_fy(self, ctx: Context, velocity: float) -> float:
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, velocity)
         return ctx.node.y_to_y(centripetal_force) - ctx.node.z_to_y(weight)
+
+    def resistive_forces(
+        self, ctx: Context, velocity: float
+    ) -> tuple[float, float]:
+        """
+        Get the total resistive forces acting on the vehicle.
+        Returns a tuple of body and aerodynamic forces.
+
+        Args:
+            ctx (Context): The simulation context.
+            velocity (float): The vehicle's velocity.
+
+        Returns:
+            body_force (float):
+                The resistive force acting through the centre of mass.
+            aero_force (float):
+                The resistive force acting through the centre of pressure.
+        """
+        weight = self.weight(ctx)
+        body_force = ctx.node.z_to_x(weight)
+
+        aero_attitude = self.aero_attitude(ctx, velocity)
+        aero_force = ctx.vehicle.aero.get_drag(aero_attitude)
+
+        return body_force, aero_force
+
+    def normal_forces(
+        self, ctx: Context, velocity: float
+    ) -> tuple[float, float]:
+        """
+        Get the total normal forces acting on the tyres.
+        Returns a tuple of body and aerodynamic forces.
+
+        Args:
+            ctx (Context): The simulation context.
+            velocity (float): The vehicle's velocity.
+
+        Returns:
+            body_force (float):
+                The normal force acting through the centre of mass.
+            aero_force (float):
+                The normal force acting through the centre of pressure.
+        """
+
+        weight = self.weight(ctx)
+        centripetal_force = self.centripetal_force(ctx, velocity)
+        body_force = ctx.node.z_to_z(weight) + ctx.node.y_to_z(
+            centripetal_force
+        )
+
+        aero_attitude = self.aero_attitude(ctx, velocity)
+        aero_force = ctx.vehicle.aero.get_downforce(aero_attitude)
+
+        return body_force, aero_force
 
     @abstractmethod
     def lateral_traction_limit(
@@ -74,8 +113,8 @@ class VehicleModelInterface(ABC):
     ) -> float:
 
         drive_force = self.powertrain.drive_force(ctx, velocity)
-        resistive_force = self.resistive_fx(ctx, velocity)
-        net_force = drive_force - resistive_force
+        resistive_fx = sum(self.resistive_forces(ctx, velocity))
+        net_force = drive_force - resistive_fx
         return net_force / ctx.vehicle.equivalent_mass
 
     ###############################################
@@ -117,14 +156,14 @@ class VehicleModelInterface(ABC):
             + downforce
         )
 
-        normal_loads = self.get_normal_loads(normal_force)
-        tyre_attitudes = self.get_tyre_attitudes(normal_loads)
-        lateral_traction = self.get_lateral_traction(
-            ctx, tyre_attitudes, resistive_fx
-        )
-        longitudinal_traction = self.get_longitudinal_traction(
-            ctx, tyre_attitudes, required_fy
-        )
+        # normal_loads = self.get_normal_loads(normal_force)
+        # tyre_attitudes = self.get_tyre_attitudes(normal_loads)
+        # lateral_traction = self.get_lateral_traction(
+        #     ctx, tyre_attitudes, resistive_fx
+        # )
+        # longitudinal_traction = self.get_longitudinal_traction(
+        #     ctx, tyre_attitudes, required_fy
+        # )
 
         motor_speed = ctx.vehicle.velocity_to_motor_speed(velocity)
         motor_torque = ctx.vehicle.powertrain.get_motor_torque(
@@ -144,10 +183,10 @@ class VehicleModelInterface(ABC):
             resistive_fx=resistive_fx,
             required_fy=required_fy,
             normal_force=normal_force,
-            normal_loads=normal_loads,
-            tyre_attitudes=tyre_attitudes,
-            lateral_traction=lateral_traction,
-            longitudinal_traction=longitudinal_traction,
+            # normal_loads=normal_loads,
+            # tyre_attitudes=tyre_attitudes,
+            # lateral_traction=lateral_traction,
+            # longitudinal_traction=longitudinal_traction,
             motor_speed=motor_speed,
             motor_torque=motor_torque,
             motor_power=motor_power,
@@ -155,30 +194,30 @@ class VehicleModelInterface(ABC):
             motor_force=motor_force,
         )
 
-    @abstractmethod
-    def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
-        pass
+    # @abstractmethod
+    # def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
+    #     pass
 
-    @abstractmethod
-    def get_tyre_attitudes(
-        self, normal_loads: FourCorner[float]
-    ) -> FourCorner[TyreAttitude]:
-        pass
+    # @abstractmethod
+    # def get_tyre_attitudes(
+    #     self, normal_loads: FourCorner[float]
+    # ) -> FourCorner[TyreAttitude]:
+    #     pass
 
-    @abstractmethod
-    def get_lateral_traction(
-        self,
-        ctx: Context,
-        attitudes: FourCorner[TyreAttitude],
-        required_fx: float,
-    ) -> FourCorner[float]:
-        pass
+    # @abstractmethod
+    # def get_lateral_traction(
+    #     self,
+    #     ctx: Context,
+    #     attitudes: FourCorner[TyreAttitude],
+    #     required_fx: float,
+    # ) -> FourCorner[float]:
+    #     pass
 
-    @abstractmethod
-    def get_longitudinal_traction(
-        self,
-        ctx: Context,
-        attitudes: FourCorner[TyreAttitude],
-        required_fy: float,
-    ) -> FourCorner[float]:
-        pass
+    # @abstractmethod
+    # def get_longitudinal_traction(
+    #     self,
+    #     ctx: Context,
+    #     attitudes: FourCorner[TyreAttitude],
+    #     required_fy: float,
+    # ) -> FourCorner[float]:
+    #     pass

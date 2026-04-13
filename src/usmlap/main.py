@@ -4,6 +4,7 @@ Main entry point for the program.
 
 import logging
 
+from usmlap.utils.datatypes import FrontRear
 from usmlap.vehicle.powertrain import Accumulator, Cell
 
 CHANNELS = [
@@ -22,13 +23,19 @@ logging.basicConfig(
 )
 logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
 
-items = Cell.list_items()
-print(items)
+a = FrontRear(700, 700)
+print(a)
+print(sum(a))
+print(a.normalise())
 
-print(Cell.item_exists("Test Cell"))
 
-cell = Cell.get_item("molicel_P30b")
-print(cell)
+# items = Cell.list_items()
+# print(items)
 
-accus = Accumulator.list_items()
-print(accus)
+# print(Cell.item_exists("Test Cell"))
+
+# cell = Cell.get_item("molicel_P30b")
+# print(cell)
+
+# accus = Accumulator.list_items()
+# print(accus)

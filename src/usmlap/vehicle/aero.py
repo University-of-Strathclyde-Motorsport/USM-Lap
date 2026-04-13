@@ -90,6 +90,8 @@ class AeroPackage(
     """
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
+    front_aero_distribution: Annotated[float, Field(ge=0, le=1), Unit("%")]
+    centre_of_pressure_height: Annotated[float, Field(ge=0), Unit("m")]
     aero_model: AeroModel
 
     def get_downforce(self, attitude: AeroAttitude) -> float:

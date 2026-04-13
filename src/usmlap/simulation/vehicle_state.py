@@ -44,19 +44,19 @@ class FullVehicleState(object):
     resistive_fx: float
     required_fy: float
     normal_force: float
-    normal_loads: FourCorner[float]
-    tyre_attitudes: FourCorner[TyreAttitude]
-    lateral_traction: FourCorner[float]
-    longitudinal_traction: FourCorner[float]
+    # normal_loads: FourCorner[float]
+    # tyre_attitudes: FourCorner[TyreAttitude]
+    # lateral_traction: FourCorner[float]
+    # longitudinal_traction: FourCorner[float]
     motor_speed: float
     motor_torque: float
     motor_power: float
     accumulator_power: float
     motor_force: float
 
-    @property
-    def total_lateral_traction(self) -> float:
-        return sum(self.lateral_traction)
+    # @property
+    # def total_lateral_traction(self) -> float:
+    #     return sum(self.lateral_traction)
 
     @staticmethod
     def get_empty() -> FullVehicleState:
@@ -68,17 +68,17 @@ class FullVehicleState(object):
             resistive_fx=0,
             required_fy=0,
             normal_force=0,
-            normal_loads=FourCorner((0, 0, 0, 0)),
-            tyre_attitudes=FourCorner(
-                (
-                    TyreAttitude(normal_load=0),
-                    TyreAttitude(normal_load=0),
-                    TyreAttitude(normal_load=0),
-                    TyreAttitude(normal_load=0),
-                )
-            ),
-            lateral_traction=FourCorner((0, 0, 0, 0)),
-            longitudinal_traction=FourCorner((0, 0, 0, 0)),
+            # normal_loads=FourCorner((0, 0, 0, 0)),
+            # tyre_attitudes=FourCorner(
+            #     (
+            #         TyreAttitude(normal_load=0),
+            #         TyreAttitude(normal_load=0),
+            #         TyreAttitude(normal_load=0),
+            #         TyreAttitude(normal_load=0),
+            #     )
+            # ),
+            # lateral_traction=FourCorner((0, 0, 0, 0)),
+            # longitudinal_traction=FourCorner((0, 0, 0, 0)),
             motor_speed=0,
             motor_torque=0,
             motor_power=0,

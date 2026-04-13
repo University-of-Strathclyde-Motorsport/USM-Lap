@@ -8,7 +8,7 @@ from typing import Annotated
 from annotated_types import Unit
 from pydantic import PositiveFloat, PositiveInt
 
-from usmlap.utils import geometry, proportion
+from usmlap.utils import geometry
 from usmlap.utils.datatypes import FrontRear, Percentage
 from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
@@ -181,12 +181,12 @@ class Brakes(object):
     @property
     def brake_bias(self) -> FrontRear[float]:
         """Tuple of brake biases for the front and rear wheels."""
-        return FrontRear(proportion.with_complement(self.front_brake_bias))
+        return FrontRear(self.front_brake_bias, 1 - self.front_brake_bias)
 
     @property
     def brake_lines(self) -> FrontRear[BrakeLine]:
         """Tuple of front and rear brake lines."""
-        return FrontRear((self.front, self.rear))
+        return FrontRear(self.front, self.rear)
 
     def _get_front_brake_balance(self) -> float:
         front_multiplier = self.front.force_to_torque(1)
@@ -205,9 +205,7 @@ class Brakes(object):
                 Force applied to the master cylinders.
         """
         total_force = pedal_force * self.pedal_ratio
-        front_force = total_force * self.brake_bias.front
-        rear_force = total_force * self.brake_bias.rear
-        return FrontRear((front_force, rear_force))
+        return self.brake_bias * total_force
 
     def pedal_force_to_wheel_torque(
         self, pedal_force: float
@@ -219,8 +217,8 @@ class Brakes(object):
         rear_torque = self.brake_lines.rear.force_to_torque(
             cylinder_forces.rear
         )
-        return FrontRear((front_torque, rear_torque))
+        return FrontRear(front_torque, rear_torque)
 
     def get_overall_brake_balance(self) -> FrontRear[float]:
         torques = self.pedal_force_to_wheel_torque(1)
-        return FrontRear(proportion.normalise(torques))
+        return torques.normalise()

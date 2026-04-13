@@ -14,6 +14,17 @@
       "type": "number",
       "exclusiveMinimum": 0
     },
+    "front_aero_distribution": {
+      "description": "The proportion of downforce acting on the front axle",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "centre_of_pressure_height": {
+      "description": "The height of the centre of pressure above the ground",
+      "type": "number",
+      "minimum": 0
+    },
     "aero_model": {
       "description": "Model of the aerodynamic package",
       "type": "object",
@@ -52,6 +63,11 @@
       "exclusiveMinimum": 0
     }
   },
-  "required": ["print_name", "frontal_area", "aero_model"],
+  "required": [
+    "print_name",
+    "frontal_area",
+    "front_aero_distribution",
+    "aero_model"
+  ],
   "additionalProperties": false
 }

@@ -5,6 +5,7 @@ This module models the full vehicle.
 from dataclasses import dataclass
 
 from usmlap.filepath import LIBRARY_ROOT
+from usmlap.utils.datatypes import FrontRear
 from usmlap.utils.library import HasLibrary
 
 from .aero import AeroPackage
@@ -80,6 +81,16 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
         final_drive_ratio = self.transmission.final_drive_ratio
         tyre_radius = self.tyres.rear.unloaded_radius
         return final_drive_ratio / tyre_radius
+
+    @property
+    def mass_distribution(self) -> FrontRear[float]:
+        front_mass = self.inertia.front_mass_distribution
+        return FrontRear(front_mass, 1 - front_mass)
+
+    @property
+    def aero_distribution(self) -> FrontRear[float]:
+        front_aero = self.aero.front_aero_distribution
+        return FrontRear(front_aero, 1 - front_aero)
 
     def motor_torque_to_drive_force(self, motor_torque: float) -> float:
         return motor_torque * self._overall_motor_scaling

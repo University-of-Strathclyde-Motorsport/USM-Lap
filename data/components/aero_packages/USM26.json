@@ -1,6 +1,8 @@
 {
   "print_name": "USM26",
   "frontal_area": 1.002,
+  "front_aero_distribution": 0.55,
+  "centre_of_pressure_height": 0.3,
   "aero_model": {
     "model_type": "constant",
     "lift_coefficient": 4.3,

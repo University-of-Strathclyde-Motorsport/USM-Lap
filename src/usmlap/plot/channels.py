@@ -35,6 +35,8 @@ def plot_channels(
     """
 
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
+    if len(channels) == 1:
+        axs = [axs]
 
     x_channel = X_AXIS_CHANNELS[x_axis]
     axs[-1].set_xlabel(x_channel.get_label())

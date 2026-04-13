@@ -22,16 +22,9 @@ class PointMassVehicleModel(VehicleModelInterface):
     """
 
     def lateral_traction_limit(self, ctx: Context, velocity: float) -> float:
-        resistive_fx = self.resistive_fx(ctx, velocity)
 
-        weight = self.weight(ctx)
-        centripetal_force = self.centripetal_force(ctx, velocity)
-        downforce = self.downforce(ctx, velocity)
-        normal_force = (
-            ctx.node.z_to_z(weight)
-            + ctx.node.y_to_z(centripetal_force)
-            + downforce
-        )
+        resistive_fx = sum(self.resistive_forces(ctx, velocity))
+        normal_force = self._get_normal_force(ctx, velocity)
 
         tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
 
@@ -47,16 +40,9 @@ class PointMassVehicleModel(VehicleModelInterface):
         self, ctx: Context, velocity: float
     ) -> float:
 
+        resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
-
-        weight = self.weight(ctx)
-        centripetal_force = self.centripetal_force(ctx, velocity)
-        downforce = self.downforce(ctx, velocity)
-        normal_force = (
-            ctx.node.z_to_z(weight)
-            + ctx.node.y_to_z(centripetal_force)
-            + downforce
-        )
+        normal_force = self._get_normal_force(ctx, velocity)
 
         tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
 
@@ -69,39 +55,32 @@ class PointMassVehicleModel(VehicleModelInterface):
             tyre_attitude, required_fy=rear_fy / 2
         )
 
-        net_force = rear_traction - self.resistive_fx(ctx, velocity)
+        net_force = rear_traction - resistive_fx
         return net_force / ctx.vehicle.equivalent_mass
 
     def traction_limited_braking(self, ctx: Context, velocity: float) -> float:
 
-        resistive_fx = self.resistive_fx(ctx, velocity)
-
+        resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
-        fy_per_tyre = required_fy / 4
-
-        weight = self.weight(ctx)
-        centripetal_force = self.centripetal_force(ctx, velocity)
-        downforce = self.downforce(ctx, velocity)
-        normal_force = (
-            ctx.node.z_to_z(weight)
-            + ctx.node.y_to_z(centripetal_force)
-            + downforce
-        )
+        normal_force = self._get_normal_force(ctx, velocity)
 
         tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_traction = 2 * front_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=fy_per_tyre
+            tyre_attitude, required_fy=required_fy / 4
         )
 
         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
         rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=fy_per_tyre
+            tyre_attitude, required_fy=required_fy / 4
         )
 
         net_fx = front_traction + rear_traction + resistive_fx
         return net_fx / ctx.vehicle.equivalent_mass
+
+    def _get_normal_force(self, ctx: Context, velocity: float) -> float:
+        return sum(self.normal_forces(ctx, velocity))
 
     #########################################################
     # Marked for death
