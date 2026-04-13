@@ -53,9 +53,11 @@ class QuasiSteadyStateSolver(SolverInterface):
                 solution = self._propagate_backward(solution, start_index=apex)
 
         logger.info("Resolving full vehicle state...")
-        solution.evaluate_full_vehicle_state(
-            self.vehicle_model, self.vehicle, self.environment, self.lambdas
-        )
+        for node in solution.nodes:
+            ctx = self.get_context(node.track_node, node.state_variables)
+            node.vehicle_state = self.vehicle_model.resolve_vehicle_state(
+                ctx, node.average_velocity
+            )
 
         logger.info("Recalculating state variables...")
         solution = self._recalculate_state_variables(solution)

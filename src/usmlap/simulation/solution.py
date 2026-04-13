@@ -9,10 +9,7 @@ from copy import copy
 from dataclasses import dataclass, field
 from typing import Generator, Optional
 
-from usmlap.simulation import Environment, LambdaCoefficients
-from usmlap.simulation.model.context import Context
 from usmlap.track import Mesh, TrackNode
-from usmlap.vehicle import Vehicle
 
 from .model import VehicleModelInterface
 from .vehicle_state import FullVehicleState, StateVariables
@@ -122,31 +119,6 @@ class SolutionNode(object):
         logging.debug("Removing apex")
         self._apex = False
 
-    # TODO: THIS FUNCTION SHOULD NOT EXIST!!!!
-    def evaluate_vehicle_state(
-        self,
-        vehicle_model: VehicleModelInterface,
-        vehicle: Vehicle,
-        environment: Environment,
-        lambdas: LambdaCoefficients,
-    ) -> None:
-        """
-        Evaluate the full state of the vehicle at this node.
-
-        Args:
-            vehicle_model (VehicleModelInterface): The vehicle model to use.
-        """
-        ctx = Context(
-            environment=environment,
-            vehicle=vehicle,
-            node=self.track_node,
-            lambdas=lambdas,
-            state=self.state_variables,
-        )
-        self.vehicle_state = vehicle_model.resolve_vehicle_state(
-            ctx, self.average_velocity
-        )
-
     def set_initial_velocity(self, velocity: float) -> None:
         """
         Set the velocity at the start of the node.
@@ -234,19 +206,6 @@ class Solution(object):
     @property
     def average_velocity(self) -> float:
         return self.total_length / self.total_time
-
-    # TODO: THIS FUNCTION SHOULD NOT EXIST!!!!
-    def evaluate_full_vehicle_state(
-        self,
-        vehicle_model: VehicleModelInterface,
-        vehicle: Vehicle,
-        environment: Environment,
-        lambdas: LambdaCoefficients,
-    ) -> None:
-        for node in self.nodes:
-            node.evaluate_vehicle_state(
-                vehicle_model, vehicle, environment, lambdas
-            )
 
     def get_sector_time(self, sector: str) -> float:
         """
