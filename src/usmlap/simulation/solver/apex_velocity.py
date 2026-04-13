@@ -32,10 +32,7 @@ def solve_apex_velocity(
     Args:
         vehicle_model (VehicleModelInterface):
             The vehicle model to use.
-        state_variables (StateVariables):
-            The vehicle's state variables.
-        node (TrackNode):
-            The track node to solve.
+        ctx (Context): The simulation context.
         velocity_estimate (Optional[float]):
             The initial velocity estimate, used to speed up calculation.
             If unspecified, defaults to the maximum velocity of the vehicle.

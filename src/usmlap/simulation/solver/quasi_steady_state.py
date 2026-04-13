@@ -196,8 +196,8 @@ class QuasiSteadyStateSolver(SolverInterface):
                 state_of_charge=previous_node.state_variables.state_of_charge,
                 energy_used=previous_node.energy_used,
             )
-            new_state_variables = StateVariables(state_of_charge=updated_soc)
-            solution.nodes[i].state_variables = new_state_variables
+            new_state = StateVariables(state_of_charge=updated_soc)
+            solution.nodes[i].state_variables = new_state
 
         return solution
 

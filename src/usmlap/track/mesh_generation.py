@@ -325,11 +325,9 @@ def _calculate_coordinates(
     swept_angle = curvature * length
     heading = _calculate_heading_angle(length, curvature, 0)
 
-    radius = np.divide(
-        1, curvature, out=np.zeros_like(curvature), where=curvature != 0
-    )
-    chord_length = 2 * radius * np.sin(swept_angle[curvature != 0] / 2)
-    chord_length[curvature == 0] = length[curvature == 0]
+    chord_length = length
+    idx = curvature != 0
+    chord_length[idx] = (2 / curvature[idx]) * np.sin(swept_angle[idx] / 2)
 
     dx = np.cos(heading) * chord_length
     dy = np.sin(heading) * chord_length

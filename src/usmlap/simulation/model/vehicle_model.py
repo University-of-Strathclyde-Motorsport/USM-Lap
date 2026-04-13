@@ -88,8 +88,8 @@ class VehicleModelInterface(ABC):
         Calculate the full state of the vehicle at a node.
 
         Args:
-            state_variables (StateVariables): The vehicle's state variables.
-            node (TrackNode): The track node to evaluate.
+            ctx (Context): The simulation context.
+            velocity (float): The vehicle's velocity.
 
         Returns:
             vehicle_state (FullVehicleState): The full state of the vehicle,

@@ -2,10 +2,9 @@
 This module defines the skidpad event at Formula Student.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from usmlap.simulation import SimulationSettings, Solution, simulate
-from usmlap.simulation.vehicle_state import StateVariables
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
@@ -29,10 +28,6 @@ class Skidpad(EventInterface, label="skidpad"):
     """
 
     track_data = TrackData.from_json(SKIDPAD_TRACK)
-    vehicle_state_variables: StateVariables = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.vehicle_state_variables = StateVariables()
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
