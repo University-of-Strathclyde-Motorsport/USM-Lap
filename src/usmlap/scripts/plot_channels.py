@@ -13,9 +13,9 @@ from usmlap.simulation.channels.library import (
     Velocity,
 )
 from usmlap.simulation.settings import QualityPresets
-from usmlap.vehicle import load_vehicle
+from usmlap.vehicle import Vehicle
 
-VEHICLE_FILE = "USM26.json"
+VEHICLE_FILE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012.json"
 SETTINGS = QualityPresets.FAST
 
@@ -28,7 +28,7 @@ CHANNELS: list[type[Channel]] = [
 ]
 
 
-vehicle = load_vehicle(VEHICLE_FILE)
+vehicle = Vehicle.from_json(VEHICLE_FILE)
 event = Autocross(track_file=TRACK_FILE)
 
 solution = event.simulate_event(vehicle, SETTINGS)

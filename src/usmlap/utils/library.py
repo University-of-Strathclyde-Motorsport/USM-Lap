@@ -92,12 +92,12 @@ class HasLibrary(ABC, BaseModel):
         cls._files = {file.stem: file for file in cls._iter_filepaths()}
 
     @classmethod
-    def from_json(cls, filepath: Path) -> Self:
+    def from_json(cls, filepath: str | Path) -> Self:
         """
         Load and validate an object from a JSON file.
 
         Args:
-            filepath (Path): The path to the JSON file.
+            filepath (str | Path): The path to the JSON file.
 
         Returns:
             object (Self): The loaded, validated object.
@@ -106,6 +106,9 @@ class HasLibrary(ABC, BaseModel):
             FileNotFoundError: If the file is not found.
             ValidationError: If the object cannot be validated.
         """
+        if isinstance(filepath, str):
+            return cls._load_item(filepath)
+
         with open(filepath, "r") as file:
             data = file.read()
             return cls.model_validate_json(data)

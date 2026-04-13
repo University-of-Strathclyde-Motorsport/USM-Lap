@@ -4,16 +4,14 @@ This script simulates the skidpad event.
 
 from usmlap.competition.events import Skidpad
 from usmlap.plot import plot_apexes
-from usmlap.simulation import LambdaCoefficients, SimulationSettings
-from usmlap.vehicle import load_vehicle
+from usmlap.simulation import SimulationSettings
+from usmlap.vehicle import Vehicle
 
 skidpad = Skidpad()
 
-vehicle_file = "USM26.json"
-vehicle = load_vehicle(vehicle_file)
+vehicle = Vehicle.from_json("USM26")
 
-lambda_coefficients = LambdaCoefficients(lateral_grip=1.2)
-simulation_settings = SimulationSettings(lambdas=lambda_coefficients)
+simulation_settings = SimulationSettings()
 
 solution = skidpad.simulate_event(vehicle, simulation_settings)
 plot_apexes(solution)

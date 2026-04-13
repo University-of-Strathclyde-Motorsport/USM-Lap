@@ -11,14 +11,14 @@ from usmlap.competition import Competition
 from usmlap.plot import plot_points_sensitivities
 from usmlap.plot.points_sensitivities import PointsSensitivityData
 from usmlap.simulation.settings import QualityPresets
-from usmlap.vehicle import load_vehicle
+from usmlap.vehicle import Vehicle
 from usmlap.vehicle.parameters import list_all_parameters
 
-BASELINE_VEHICLE = "USM26.json"
+BASELINE_VEHICLE = "USM26"
 QUALITY = QualityPresets.DRAFT
 LIMIT_PARAMETERS = False
 
-vehicle = load_vehicle(BASELINE_VEHICLE)
+vehicle = Vehicle.from_json(BASELINE_VEHICLE)
 competition = Competition(simulate_efficiency=False)
 
 parameters = list_all_parameters()

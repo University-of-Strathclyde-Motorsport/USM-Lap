@@ -2,9 +2,8 @@
 This module models the full vehicle.
 """
 
-import os
-
-from usmlap import filepath
+from usmlap.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 from .aero import AeroPackage
 from .brakes import Brakes
@@ -16,9 +15,6 @@ from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
 from .tyre.tyre_model import Tyres
-
-VEHICLE_LIBRARY = filepath.LIBRARY_ROOT / "vehicles"
-AVAILABLE_VEHICLES = os.listdir(VEHICLE_LIBRARY)
 
 
 class Metadata(Subsystem):
@@ -36,7 +32,7 @@ class Metadata(Subsystem):
     description: str = ""
 
 
-class Vehicle(Subsystem):
+class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     """
     The full vehicle.
 
@@ -94,27 +90,3 @@ class Vehicle(Subsystem):
 
     def velocity_to_motor_speed(self, velocity: float) -> float:
         return velocity * self._overall_motor_scaling
-
-
-def load_vehicle(filename: str) -> Vehicle:
-    """
-    Load a vehicle from the library.
-
-    Args:
-        filename (str): The name of the vehicle file.
-
-    Returns:
-        vehicle (Vehicle): The loaded vehicle.
-
-    Raises:
-        FileNotFoundError: If the file does not exist.
-    """
-    try:
-        filepath = VEHICLE_LIBRARY / filename
-        return Vehicle.from_json(filepath)
-    except FileNotFoundError:
-        error_message = (
-            f"Unable to find '{filename}' in vehicle library. "
-            f"Available vehicles: {AVAILABLE_VEHICLES}"
-        )
-        raise FileNotFoundError(error_message)

@@ -5,12 +5,11 @@ This script simulates the skidpad event.
 from usmlap.competition.events import Acceleration
 from usmlap.plot import plot_apexes
 from usmlap.simulation import SimulationSettings
-from usmlap.vehicle import load_vehicle
+from usmlap.vehicle import Vehicle
 
 acceleration = Acceleration()
 
-vehicle_file = "USM26.json"
-vehicle = load_vehicle(vehicle_file)
+vehicle = Vehicle.from_json("USM26")
 
 simulation_settings = SimulationSettings()
 

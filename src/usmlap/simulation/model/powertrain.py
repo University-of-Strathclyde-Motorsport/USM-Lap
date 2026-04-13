@@ -22,7 +22,6 @@ class SingleMotorPowertrain(PowertrainModelInterface):
     """
 
     def drive_force(self, ctx: Context, velocity: float) -> float:
-
         motor_speed = ctx.vehicle.velocity_to_motor_speed(velocity)
         motor_torque = ctx.vehicle.powertrain.get_motor_torque(
             state_of_charge=ctx.state.state_of_charge, motor_speed=motor_speed

@@ -6,12 +6,11 @@ from usmlap.competition import Competition, CompetitionPoints, points_delta
 from usmlap.plot import plot_points_bar_chart
 from usmlap.simulation import LambdaCoefficients, SimulationSettings
 from usmlap.simulation.solver import QuasiSteadyStateSolver as QSS
-from usmlap.vehicle import load_vehicle
+from usmlap.vehicle import Vehicle
 
 competition = Competition()
 
-vehicle_file = "USM26.json"
-vehicle = load_vehicle(vehicle_file)
+vehicle = Vehicle.from_json("USM26")
 
 configurations: dict[str, LambdaCoefficients] = {
     "+10% Longitudinal Grip": LambdaCoefficients(longitudinal_grip=1.1),
