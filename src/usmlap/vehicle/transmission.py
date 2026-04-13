@@ -2,12 +2,13 @@
 This module models the transmission of a vehicle.
 """
 
+from dataclasses import dataclass
+
 from pydantic import PositiveFloat
 
-from .common import Subsystem
 
-
-class Transmission(Subsystem):
+@dataclass
+class Transmission(object):
     """
     The transmission of the vehicle.
 

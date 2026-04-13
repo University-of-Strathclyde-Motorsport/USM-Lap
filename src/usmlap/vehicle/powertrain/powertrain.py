@@ -5,21 +5,23 @@ This module models the electric powertrain of a vehicle.
 from __future__ import annotations
 
 from abc import ABC
+from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import numpy as np
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
-from ..common import Subsystem
 from .accumulator import Accumulator
 from .motor import Motor
 from .motor_controller import MotorController
 
 
-class PowertrainInterface(ABC, Subsystem):
+class PowertrainInterface(ABC, BaseModel):
     """
     Abstract base class for powertrain models.
     """
+
+    # TODO: Why is BaseModel inheritance required?
 
     ...
 

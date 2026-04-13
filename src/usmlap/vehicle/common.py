@@ -11,13 +11,7 @@ from pydantic import BaseModel
 type JSONDict = dict[str, Any]
 
 
-class Subsystem(BaseModel):
-    """
-    Abstract base class for vehicle subsystems.
-    """
-
-
-class AbstractSubsystem(Subsystem):
+class AbstractSubsystem(BaseModel):
     """
     Abstract base class for subsystems with different implementations.
 

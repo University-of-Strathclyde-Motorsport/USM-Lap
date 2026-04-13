@@ -2,6 +2,7 @@
 This module models the inertia of a vehicle.
 """
 
+from dataclasses import dataclass
 from typing import Annotated
 
 from annotated_types import Unit
@@ -9,10 +10,9 @@ from pydantic import PositiveFloat
 
 from usmlap.utils.datatypes import Percentage
 
-from .common import Subsystem
 
-
-class UnsprungMass(Subsystem):
+@dataclass
+class UnsprungMass(object):
     """
     Unsprung mass properties for a vehicle.
 
@@ -26,7 +26,8 @@ class UnsprungMass(Subsystem):
     centre_of_gravity_height: Annotated[PositiveFloat, Unit("m")]
 
 
-class Inertia(Subsystem):
+@dataclass
+class Inertia(object):
     """
     Inertia properties for a vehicle.
 

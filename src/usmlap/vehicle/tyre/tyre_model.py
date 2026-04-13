@@ -12,7 +12,7 @@ from pydantic.dataclasses import dataclass
 
 from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
-from ..common import AbstractSubsystem, Subsystem
+from ..common import AbstractSubsystem
 
 
 @dataclass
@@ -184,7 +184,8 @@ class Tyre(HasLibrary, path=LIBRARY_ROOT / "components" / "tyres"):
     tyre_model: TyreModel
 
 
-class Tyres(Subsystem):
+@dataclass
+class Tyres(object):
     """
     The tyres of a vehicle.
 

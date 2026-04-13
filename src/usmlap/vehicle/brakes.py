@@ -2,6 +2,7 @@
 This module models the brake system of a vehicle.
 """
 
+from dataclasses import dataclass
 from typing import Annotated
 
 from annotated_types import Unit
@@ -10,8 +11,6 @@ from pydantic import PositiveFloat, PositiveInt
 from usmlap.utils import geometry, proportion
 from usmlap.utils.datatypes import FrontRear, Percentage
 from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
-
-from .common import Subsystem
 
 
 class MasterCylinder(
@@ -87,7 +86,8 @@ class BrakePad(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_pads"):
     coefficient_of_friction: PositiveFloat
 
 
-class BrakeLine(Subsystem):
+@dataclass
+class BrakeLine(object):
     """
     An individual brake line.
 
@@ -159,7 +159,8 @@ class BrakeLine(Subsystem):
         return braking_torque / self.force_to_torque_scaling_factor
 
 
-class Brakes(Subsystem):
+@dataclass
+class Brakes(object):
     """
     The brake system of the vehicle.
 

@@ -2,12 +2,13 @@
 This module models the full vehicle.
 """
 
+from dataclasses import dataclass
+
 from usmlap.filepath import LIBRARY_ROOT
 from usmlap.utils.library import HasLibrary
 
 from .aero import AeroPackage
 from .brakes import Brakes
-from .common import Subsystem
 from .driver import Driver
 from .inertia import Inertia
 from .powertrain.powertrain import RWDPowertrain
@@ -17,7 +18,8 @@ from .transmission import Transmission
 from .tyre.tyre_model import Tyres
 
 
-class Metadata(Subsystem):
+@dataclass
+class Metadata(object):
     """
     Metadata for a vehicle.
 

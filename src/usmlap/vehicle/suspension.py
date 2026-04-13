@@ -3,12 +3,13 @@ This module models the suspension of a vehicle.
 """
 
 from abc import ABC
+from dataclasses import dataclass
 from typing import Annotated, Literal, Union
 
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 
-from .common import AbstractSubsystem, Subsystem
+from .common import AbstractSubsystem
 
 
 class SuspensionAxle(ABC, AbstractSubsystem):
@@ -51,7 +52,8 @@ SuspensionImplementation = Annotated[
 ]
 
 
-class Suspension(Subsystem):
+@dataclass
+class Suspension(object):
     """
     The suspension system of a vehicle.
 
