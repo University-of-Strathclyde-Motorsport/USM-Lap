@@ -6,15 +6,11 @@ which calculates the maximum possible acceleration at a node.
 import math
 
 from usmlap.simulation.model import VehicleModelInterface
-from usmlap.simulation.vehicle_state import StateVariables
-from usmlap.track import TrackNode
+from usmlap.simulation.model.context import Context
 
 
 def calculate_next_velocity(
-    vehicle_model: VehicleModelInterface,
-    state: StateVariables,
-    node: TrackNode,
-    initial_velocity: float,
+    model: VehicleModelInterface, ctx: Context, initial_velocity: float
 ) -> float:
     """
     Calculate the velocity at the end of a node,
@@ -30,16 +26,14 @@ def calculate_next_velocity(
         final_velocity (float): The velocity at the end of the node.
     """
     try:
-        traction_limit = vehicle_model.traction_limited_acceleration(
-            state, node, initial_velocity
+        traction_limit = model.traction_limited_acceleration(
+            ctx, initial_velocity
         )
-        power_limit = vehicle_model.power_limited_acceleration(
-            state, node, initial_velocity
-        )
+        power_limit = model.power_limited_acceleration(ctx, initial_velocity)
         acceleration = min(traction_limit, power_limit)
 
         final_velocity = math.sqrt(
-            initial_velocity**2 + 2 * acceleration * node.length
+            initial_velocity**2 + 2 * acceleration * ctx.node.length
         )
     except ValueError:  # TODO
         final_velocity = initial_velocity

@@ -20,8 +20,7 @@ class QuasiTransientSolver(SolverInterface):
     Quasi-transient solver.
     """
 
-    @staticmethod
-    def solve(previous_solution: Solution) -> Solution:
+    def solve(self, previous_solution: Solution) -> Solution:
         times: list[float] = []
         solution = previous_solution
 
@@ -34,7 +33,7 @@ class QuasiTransientSolver(SolverInterface):
                     description=f"{TASK_DESCRIPTION} ({i + 1}/?)",
                 )
 
-                solution = _solve_next_iteration(previous_solution=solution)
+                solution = self._solve_next_iteration(solution)
                 times.append(solution.total_time)
                 logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
 
@@ -44,21 +43,26 @@ class QuasiTransientSolver(SolverInterface):
 
         raise MaximumIterationsExceededError()
 
+    def _solve_next_iteration(self, previous_solution: Solution) -> Solution:
+        """
+        Calculate the next iteration of the solution.
 
-def _solve_next_iteration(previous_solution: Solution) -> Solution:
-    """
-    Calculate the next iteration of the solution.
+        This is done by calling the `QuasiSteadyStateSolver`.
 
-    This is done by calling the `QuasiSteadyStateSolver`.
+        Args:
+            previous_solution (Solution): The previous iteration of the solution.
 
-    Args:
-        previous_solution (Solution): The previous iteration of the solution.
-
-    Returns:
-        solution (Solution): The next iteration of the solution.
-    """
-    solution = QuasiSteadyStateSolver().solve(previous_solution)
-    return solution
+        Returns:
+            solution (Solution): The next iteration of the solution.
+        """
+        solver = QuasiSteadyStateSolver(
+            vehicle_model=self.vehicle_model,
+            vehicle=self.vehicle,
+            environment=self.environment,
+            lambdas=self.lambdas,
+        )
+        solution = solver.solve(previous_solution)
+        return solution
 
 
 def _convergence_achieved(times: list[float], threshold: float) -> bool:

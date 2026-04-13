@@ -21,11 +21,12 @@ def simulate(
         vehicle (Vehicle): The vehicle to simulate.
         settings (SimulationSettings): Settings for the simulation.
     """
-    vehicle_model = settings.vehicle_model(
+    vehicle_model = settings.vehicle_model()
+    solver = settings.solver(
+        vehicle_model=settings.vehicle_model(),
         vehicle=vehicle,
         environment=settings.environment,
         lambdas=settings.lambdas,
     )
-    solver = settings.solver()
     solution = create_new_solution(track_mesh, vehicle_model)
     return solver.solve(solution)

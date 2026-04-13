@@ -7,10 +7,9 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.track import TrackNode
+from usmlap.simulation.model.context import Context
 
 from ..model import VehicleModelInterface
-from ..vehicle_state import StateVariables
 from .solver_interface import MaximumIterationsExceededError
 
 PRECISION = 1e-2
@@ -19,8 +18,7 @@ MAXIMUM_ITERATIONS = 100
 
 def solve_apex_velocity(
     vehicle_model: VehicleModelInterface,
-    state_variables: StateVariables,
-    node: TrackNode,
+    ctx: Context,
     velocity_estimate: Optional[float] = None,
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
@@ -56,9 +54,9 @@ def solve_apex_velocity(
             without converging on a solution.
     """
 
-    maximum_velocity = vehicle_model.vehicle.maximum_velocity
+    maximum_velocity = ctx.vehicle.maximum_velocity
 
-    if node.curvature == 0:
+    if ctx.node.curvature == 0:
         return maximum_velocity
 
     if velocity_estimate is None:
@@ -66,9 +64,9 @@ def solve_apex_velocity(
 
     for _ in range(1, maximum_iterations + 1):
         available_fy = vehicle_model.lateral_traction_limit(
-            state=state_variables, node=node, velocity=velocity_estimate
+            ctx, velocity=velocity_estimate
         )
-        required_fy = abs(vehicle_model.required_fy(node, velocity_estimate))
+        required_fy = abs(vehicle_model.required_fy(ctx, velocity_estimate))
         fy_error = available_fy - required_fy
 
         if abs(fy_error) < precision:
@@ -77,8 +75,8 @@ def solve_apex_velocity(
         velocity_estimate = _update_velocity_estimate(
             velocity=velocity_estimate,
             fy_error=fy_error,
-            curvature=node.curvature,
-            vehicle_mass=vehicle_model.vehicle.total_mass,
+            curvature=ctx.node.curvature,
+            vehicle_mass=ctx.vehicle.total_mass,
         )
 
         if velocity_estimate >= maximum_velocity:

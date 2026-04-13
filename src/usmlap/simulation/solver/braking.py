@@ -6,15 +6,11 @@ which calculates the maximum possible braking at a node.
 import math
 
 from usmlap.simulation.model import VehicleModelInterface
-from usmlap.simulation.vehicle_state import StateVariables
-from usmlap.track import TrackNode
+from usmlap.simulation.model.context import Context
 
 
 def calculate_initial_velocity(
-    vehicle_model: VehicleModelInterface,
-    state: StateVariables,
-    node: TrackNode,
-    final_velocity: float,
+    vehicle_model: VehicleModelInterface, ctx: Context, final_velocity: float
 ) -> float:
     """
     Calculate the velocity at the start of a node,
@@ -32,11 +28,11 @@ def calculate_initial_velocity(
 
     try:
         deceleration = vehicle_model.traction_limited_braking(
-            node=node, state=state, velocity=final_velocity
+            ctx, final_velocity
         )
 
         initial_velocity = math.sqrt(
-            final_velocity**2 + 2 * deceleration * node.length
+            final_velocity**2 + 2 * deceleration * ctx.node.length
         )
 
     except ValueError:
