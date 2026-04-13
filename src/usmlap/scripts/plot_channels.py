@@ -16,7 +16,7 @@ from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 
 VEHICLE_FILE = "USM26"
-TRACK_FILE = "FS AutoX Germany 2012.json"
+TRACK_FILE = "FS AutoX Germany 2012"
 SETTINGS = QualityPresets.FAST
 
 CHANNELS: list[type[Channel]] = [

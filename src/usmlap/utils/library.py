@@ -79,7 +79,7 @@ class HasLibrary(ABC, BaseModel):
 
     _library_path: ClassVar[Path]
     _files: ClassVar[dict[str, Path]]
-    _library: dict[str, Self]
+    _library: ClassVar[dict[str, Any]]
 
     def __init_subclass__(cls: type[HasLibrary], path: Path) -> None:
         super().__init_subclass__()

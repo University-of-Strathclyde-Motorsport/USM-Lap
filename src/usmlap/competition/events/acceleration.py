@@ -16,7 +16,7 @@ from ..points import (
 )
 from .event import EventInterface
 
-ACCELERATION_TRACK = "FSAE Acceleration.json"
+ACCELERATION_TRACK = "FSAE Acceleration"
 
 
 @dataclass

@@ -10,8 +10,7 @@ from usmlap.simulation.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
-track_sheet = "FS AutoX Germany 2012.json"
-track_data = TrackData.from_json(track_sheet)
+track_data = TrackData.from_json("FS AutoX Germany 2012")
 mesh = generate_mesh(track_data, resolution=0.1)
 
 vehicle = Vehicle.from_json("USM23 Baseline")

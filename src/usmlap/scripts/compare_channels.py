@@ -12,7 +12,7 @@ from usmlap.vehicle import Vehicle, get_new_vehicle
 from usmlap.vehicle.parameters import FinalDriveRatio
 
 BASELINE_VEHICLE = "USM26"
-TRACK_FILE = "FS AutoX Germany 2012.json"
+TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
 SETTINGS = QualityPresets.HIGH_QUALITY

@@ -16,7 +16,7 @@ from ..points import (
 )
 from .event import EventInterface
 
-SKIDPAD_TRACK = "FSAE Skidpad.json"
+SKIDPAD_TRACK = "FSAE Skidpad"
 RIGHT_CIRCLE_TIMED_SECTOR = "Right Circle 2"
 LEFT_CIRCLE_TIMED_SECTOR = "Left Circle 2"
 

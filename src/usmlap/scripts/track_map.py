@@ -10,7 +10,7 @@ from usmlap.plot import plot_map
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.track import TrackData, generate_mesh
 
-TRACK_SHEET = "FS AutoX Germany 2012.json"
+TRACK_SHEET = "FS AutoX Germany 2012"
 MESH_RESOLUTION = 0.1
 
 

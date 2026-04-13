@@ -7,9 +7,7 @@ from usmlap.plot import plot_apexes
 from usmlap.simulation import SimulationSettings
 from usmlap.vehicle import Vehicle
 
-TRACK_FILE = "FS AutoX Germany 2012.json"
-
-autocross = Autocross(TRACK_FILE)
+autocross = Autocross(track_file="FS AutoX Germany 2012")
 
 vehicle = Vehicle.from_json("USM26")
 

@@ -140,7 +140,8 @@ def _interpolate_curvature(
         curvature (NDArray): The interpolated curvature.
     """
     curvature = np.array([node.curvature for node in data])
-    position = np.cumsum([node.length for node in data])
+    length = np.array([node.length for node in data])
+    position = np.cumsum(length) - (0.5 * length)
     if smooth:
         interpolated = np.interp(sample_position, position, curvature)
     else:

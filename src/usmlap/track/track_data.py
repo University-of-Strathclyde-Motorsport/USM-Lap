@@ -8,12 +8,14 @@ import math
 import os
 from enum import Enum, IntEnum
 from pathlib import Path
-from typing import Optional, Self
+from typing import Optional
 
 import pandas
 from pydantic import BaseModel, Field
 
 from usmlap import filepath
+from usmlap.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
@@ -158,7 +160,7 @@ class Direction(Enum):
         return self.name.lower().capitalize()
 
 
-class TrackData(BaseModel):
+class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
     """
     Contains information about a racetrack.
 
@@ -189,8 +191,6 @@ class TrackData(BaseModel):
     banking: list[BankingData] = Field(default_factory=list)
     grip_factor: list[GripFactorData] = Field(default_factory=list)
     sectors: list[SectorData] = Field(default_factory=list)
-    # direction: Direction = Direction.FORWARD
-    # mirror: bool = False
 
     def __post_init__(self) -> None:
         self.generate_sector_labels()
@@ -201,8 +201,6 @@ class TrackData(BaseModel):
             f"Location: {self.location}\n\n"
             f"Total length: {self.total_length} m\n"
             f"Configuration: {str(self.configuration)}\n"
-            # f"Direction: {str(self.direction)}\n"
-            # f"Mirrored: {self.mirror}\n\n"
             f"Shape data: {len(self.shape)} segments\n"
             f"Elevation: "
             f"high = {self.max_elevation} m, low = {self.min_elevation} m\n"
@@ -279,38 +277,6 @@ class TrackData(BaseModel):
     def list_sector_labels(self) -> list[str]:
         return [sector.label for sector in self.sectors]
 
-    @classmethod
-    def from_json(cls, filename: str) -> Self:
-        """
-        Load a track from a JSON file in the library.
-
-        Args:
-            filename (str): The name of the track file.
-
-        Returns:
-            track_data (TrackData): The loaded track data.
-
-        Raises:
-            FileNotFoundError: If the file does not exist.
-
-        """
-        try:
-            filepath = TRACK_LIBRARY / filename
-            with open(filepath, "r") as file:
-                data = file.read()
-
-        except FileNotFoundError:
-            error_message = (
-                f"Unable to find '{filename}' in track library. "
-                f" Available tracks: {AVAILABLE_TRACKS}"
-            )
-            raise FileNotFoundError(error_message)
-
-        return cls.model_validate_json(data)
-
-    def to_json(self) -> str:
-        return self.model_dump_json(indent=2)
-
 
 def load_track_from_spreadsheet(filename: str) -> TrackData:
     """
@@ -339,8 +305,6 @@ def load_track_from_spreadsheet(filename: str) -> TrackData:
             sectors=reader.get_sector_data(),
             event=Event.AUTOX,
             configuration=reader.get_configuration(),
-            # direction=reader.get_direction(),
-            # mirror=reader.get_mirror(),
         )
     except FileNotFoundError:
         error_message = (
@@ -489,220 +453,3 @@ def save_track_data(
 
     with open(filepath, "w") as f:
         f.write(track_data.to_json())
-
-
-# class Metadata(BaseModel):
-#     """
-#     Metadata for a track.
-
-#     Attributes:
-#         name (str): The name of the track.
-#         country (str): The country the track is located in.
-#         city (str): The city the track is located near.
-#     """
-
-#     name: str
-#     country: Optional[str] = None
-#     city: Optional[str] = None
-
-#     @property
-#     def display_name(self) -> str:
-#         """
-#         The display name for the track.
-
-#         If the track has a name, this is returned.
-#         Otherwise, "Unnamed Track" is returned.
-#         """
-#         return self.name if self.name else "Unnamed Track"
-
-#     @property
-#     def location(self) -> str:
-#         """
-#         The location of the track.
-
-#         Uses the city and/or country attributes, if present.
-#         Otherwise, an empty string is returned.
-#         """
-#         if self.city and self.country:
-#             location = f"{self.city}, {self.country}"
-#         elif self.city:
-#             location = self.city
-#         elif self.country:
-#             location = self.country
-#         else:
-#             location = ""
-#         return location
-
-#     def __str__(self) -> str:
-#         return f"{self.display_name}, {self.location}".strip(", ")
-
-
-# @dataclass
-# class ShapeData(object):
-#     """
-#     Data describing the shape of the track.
-
-#     Attributes:
-#         segments (list[Segment]): The segments making up the track.
-#         total_length (float): The total length of the track.
-#         corner_radius (float): The radius of the section of the track.
-#     """
-
-#     model_config = ConfigDict(arbitrary_types_allowed=True)
-
-#     # total_length: Annotated[float, Unit("m")]
-#     segments: list[Segment]
-
-#     @property
-#     def total_length(self) -> float:
-#         return sum(segment.length for segment in self.segments)
-
-#     @property
-#     def segment_count(self) -> float:
-#         return len(self.segments)
-
-#     def interpolate_curvature(
-#         self, position: list[float], closed_track: bool = False
-#     ) -> list[float]:
-#         lengths = [s.length for s in self.segments]
-#         end_positions = cumsum(lengths)
-#         curvature_position = [
-#             position - (0.5 * length)
-#             for position, length in zip(end_positions, lengths)
-#         ]
-#         curvature_value = [s.curvature for s in self.segments]
-#         if closed_track:
-#             curvature_position.append(end_positions[-1] + (0.5 * lengths[0]))
-#             curvature_value.append(curvature_value[0])
-#         return np.interp(position, curvature_position, curvature_value).tolist()
-
-
-# @dataclass
-# class Segment(object):
-#     """
-#     Data describing the shape of a section of track.
-
-#     Attributes:
-#         section_type (SectionType):
-#             The type of track section (STRAIGHT, LEFT, or RIGHT).
-#         length (float): The length of the track section.
-#         corner_radius (float): The radius of the section of the track.
-#     """
-
-#     model_config = ConfigDict(
-#         use_enum_values=True, arbitrary_types_allowed=True
-#     )
-
-#     section_type: SectionType
-#     length: Annotated[float, Field(gt=0), Unit("m")]
-#     corner_radius: Annotated[float, Unit("m")]
-
-#     def __post_init__(self) -> None:
-#         if self.section_type == SectionType.STRAIGHT:
-#             self.corner_radius = math.inf
-#         else:
-#             self.corner_radius = self.corner_radius * self.section_type.value
-
-#     @property
-#     def curvature(self) -> float:
-#         return 1 / self.corner_radius
-
-
-# @dataclass
-# class PositionData[T](Sequence[T], ABC):
-#     """
-#     Abstract base class for data recorded against a series of positions.
-
-#     Subclasses must implement the `interpolate` method.
-
-#     Attributes:
-#         position (list[float]): The positions of the data.
-#         value (list[T]): The values of the data at each position.
-#     """
-
-#     position: list[Annotated[float, Field(ge=0), Unit("m")]]
-#     value: list[T]
-
-#     def __post_init__(self) -> None:
-#         if len(self.position) != len(self.value):
-#             raise ValueError("position and value must have the same length")
-
-#     def __len__(self) -> int:
-#         return len(self.value)
-
-#     @overload
-#     def __getitem__(self, key: int) -> T: ...
-
-#     @overload
-#     def __getitem__(self, key: slice) -> Sequence[T]: ...
-
-#     def __getitem__(self, key: int | slice) -> Sequence[T] | T:
-#         if isinstance(key, int):
-#             return self.value[key]
-#         else:
-#             return self.__class__(self.position[key], self.value[key])
-
-#     @abstractmethod
-#     def interpolate(self, position: list[float]) -> list[T]: ...
-
-
-# class LocationData(PositionData[float]):
-#     """
-#     Base class for data recorded at a number of locations.
-#     """
-
-#     def interpolate(self, position: list[float]) -> list[float]:
-#         return np.interp(position, self.position, self.value).tolist()
-
-
-# class StartpointData[T](PositionData[T]):
-#     """
-#     Base class for data recorded with a series of startpoints.
-#     """
-
-#     def interpolate(self, position: list[float]) -> list[T]:
-#         return interp_previous(position, self.position, self.value)
-
-
-# @dataclass
-# class ElevationData(LocationData):
-#     """
-#     Data describing the elevation of the track.
-#     """
-
-#     value: list[Annotated[float, Unit("m")]]
-
-
-# @dataclass
-# class BankingData(LocationData):
-#     """
-#     Data describing the banking angle of the track.
-#     """
-
-#     value: list[
-#         Annotated[float, Field(ge=-math.pi / 2, le=math.pi / 2), Unit("rad")]
-#     ]
-
-
-# @dataclass
-# class GripFactorData(StartpointData[float]):
-#     """
-#     Data describing the grip factor of the track.
-#     """
-
-#     value: list[Annotated[float, Field(gt=0)]]
-
-
-# @dataclass
-# class SectorData(StartpointData[int]):
-#     """
-#     Data specifying sectors of the track.
-
-#     Sector data has no impact on the simulation,
-#     and is used purely for visualisation.
-#     """
-
-#     value: list[Annotated[int, Field(gt=0)]]
-
-#     def list_sectors(self) -> str:
-#         return ", ".join(str(value) for value in self.value)
