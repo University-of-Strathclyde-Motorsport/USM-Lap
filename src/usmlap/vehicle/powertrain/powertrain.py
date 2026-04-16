@@ -5,10 +5,8 @@ This module models the electric powertrain of a vehicle.
 from __future__ import annotations
 
 from abc import ABC
-from dataclasses import dataclass
+from typing import Optional
 
-import matplotlib.pyplot as plt
-import numpy as np
 from pydantic import BaseModel
 
 from .accumulator import Accumulator
@@ -97,17 +95,23 @@ class RWDPowertrain(PowertrainInterface):
         voltage_drop = self.get_voltage_drop(current)
         return accumulator_voltage - voltage_drop
 
-    def get_knee_speed(self, state_of_charge: float, current: float) -> float:
+    def get_knee_speed(
+        self, state_of_charge: float, current: Optional[float] = None
+    ) -> float:
         """
         Calculate the knee speed of the motor.
 
         Args:
             state_of_charge (float): State of charge of the accumulator.
-            current (float): Current drawn from the accumulator.
+            current (Optional[float]): Current drawn from the accumulator.
+                If not provided, the maximum discharge current is used.
 
         Returns:
             knee_speed (float): Knee speed of the motor.
         """
+        if current is None:
+            current = self.get_discharge_current(state_of_charge)
+
         motor_voltage = self.get_motor_voltage(state_of_charge, current)
         knee_speed = self.motor.get_speed(motor_voltage)
         return knee_speed
@@ -149,14 +153,6 @@ class RWDPowertrain(PowertrainInterface):
         power = motor_speed * torque
         return power
 
-    def plot_motor_curve(self, state_of_charge: float = 1) -> None:
-        motor_curve = MotorCurveGenerator().generate(
-            powertrain=self,
-            state_of_charge=state_of_charge,
-            current=self.accumulator.maximum_discharge_current,
-        )
-        motor_curve.plot()
-
     def get_powertrain_efficiency(self) -> float:
         return 0.8  # TODO: efficiency calculation
 
@@ -168,87 +164,3 @@ class RWDPowertrain(PowertrainInterface):
     ) -> float:
         state_of_charge_used = energy_used / self.accumulator.capacity
         return state_of_charge - state_of_charge_used
-
-
-@dataclass
-class MotorCurveGenerator(object):
-    """
-    Generates a motor curve for a powertrain.
-
-    Attributes:
-        resolution (int): Number of points to generate.
-    """
-
-    resolution: int = 100
-
-    def generate(
-        self, powertrain: RWDPowertrain, state_of_charge: float, current: float
-    ) -> MotorCurve:
-        """
-        Generate a motor curve for a powertrain.
-
-        Args:
-            powertrain (RWDPowertrain): Powertrain to generate the curve for.
-            state_of_charge (float): State of charge of the accumulator.
-            current (float): Current drawn from the accumulator.
-
-        Returns:
-            MotorCurve: The generated motor curve.
-        """
-        maximum_speed = powertrain.get_maximum_motor_speed(state_of_charge)
-        motor_speeds = np.linspace(0, maximum_speed, self.resolution)
-        motor_torques = np.zeros(self.resolution)
-        for i in range(self.resolution):
-            motor_torques[i] = powertrain.get_motor_torque(
-                state_of_charge, motor_speeds[i]
-            )
-        motor_powers = motor_speeds * motor_torques
-
-        return MotorCurve(
-            speed=motor_speeds.tolist(),
-            torque=motor_torques.tolist(),
-            power=motor_powers.tolist(),
-        )
-
-
-@dataclass
-class MotorCurve(object):
-    """
-    A curve of torque and power vs motor speed.
-
-    Attributes:
-        speed (list[float]): Motor speed in rad/s.
-        torque (list[float]): Corresponding torque at each motor speed.
-        power (list[float]): Corresponding power at each motor speed.
-    """
-
-    speed: list[float]
-    torque: list[float]
-    power: list[float]
-
-    @property
-    def rpm(self) -> list[float]:
-        return [speed * (30 / np.pi) for speed in self.speed]
-
-    @property
-    def power_kw(self) -> list[float]:
-        return [power / 1000 for power in self.power]
-
-    def plot(self) -> None:
-        """
-        Plot the motor curve using matplotlib.
-
-        Torque is plotted on the left axis in blue.
-        Power is plotted on the right axis in green.
-        """
-        _, ax_torque = plt.subplots()
-        ax_torque.plot(self.rpm, self.torque, color="blue")
-        ax_torque.set_title("Motor Curves")
-        ax_torque.set_xlabel("Motor Speed (RPM)")
-        ax_torque.set_ylabel("Torque (Nm)")
-        ax_torque.grid()
-
-        ax_power = ax_torque.twinx()
-        ax_power.plot(self.rpm, self.power_kw, color="green")
-        ax_power.set_ylabel("Power (kW)")
-        plt.show()

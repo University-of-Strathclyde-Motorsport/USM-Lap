@@ -8,6 +8,7 @@ from .comparison import plot_points_bar_chart as plot_points_bar_chart
 from .ggv import plot_gg as plot_gg
 from .ggv import plot_ggv as plot_ggv
 from .ggv import plot_velocity_acceleration as plot_velocity_acceleration
+from .motor import plot_motor_curve as plot_motor_curve
 from .points_sensitivities import (
     plot_points_sensitivities as plot_points_sensitivities,
 )

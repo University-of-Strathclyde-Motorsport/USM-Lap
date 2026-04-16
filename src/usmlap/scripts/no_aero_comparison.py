@@ -9,6 +9,7 @@ from usmlap.competition import (
     CompetitionSolutions,
 )
 from usmlap.plot import plot_channels, plot_points_bar_chart
+from usmlap.simulation.channels import Channel
 from usmlap.simulation.channels.library import (
     LateralAcceleration,
     LongitudinalAcceleration,
@@ -18,7 +19,11 @@ from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 
 QUALITY = QualityPresets.DRAFT
-CHANNELS = [Velocity, LongitudinalAcceleration, LateralAcceleration]
+CHANNELS: list[type[Channel]] = [
+    Velocity,
+    LongitudinalAcceleration,
+    LateralAcceleration,
+]
 
 competition = Competition()
 
