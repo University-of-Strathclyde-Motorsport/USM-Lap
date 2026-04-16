@@ -270,25 +270,25 @@ class CellDischargeCurrent(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.powertrain.accumulator.cell.discharge_current
+        return vehicle.powertrain.accumulator.cell.max_discharge_current
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.powertrain.accumulator.cell.discharge_current = value
+        vehicle.powertrain.accumulator.cell.max_discharge_current = value
 
 
-class CellResistance(
+class CellResistanceOffset(
     Parameter[float], name="Cell Resistance", unit="Ω", uncertainty=0.005
 ):
     """The internal resistance of the cell."""
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.powertrain.accumulator.cell.resistance
+        return vehicle.powertrain.accumulator.cell.resistance_offset
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.powertrain.accumulator.cell.resistance = value
+        vehicle.powertrain.accumulator.cell.resistance_offset = value
 
 
 class CellVoltageOffset(
@@ -603,3 +603,17 @@ class RearTyreLatGripSens(
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
         vehicle.tyres.rear.tyre_model.mu_y_load_sensitivity = value
+
+
+class CoolingCoefficient(
+    Parameter[float], name="Cooling Coefficient", uncertainty=5
+):
+    """The cooling coefficient of the powertrain."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> float:
+        return vehicle.powertrain.cooling_coefficient
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: float) -> None:
+        vehicle.powertrain.cooling_coefficient = value

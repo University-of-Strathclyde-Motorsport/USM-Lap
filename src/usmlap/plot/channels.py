@@ -16,6 +16,7 @@ X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
     "Position": Position,
     "Time": Time,
 }
+ROTATION_OPTIONS = Literal["vertical", "horizontal"]
 
 
 def plot_channels(
@@ -25,6 +26,7 @@ def plot_channels(
     x_axis: X_AXIS_OPTIONS = "Position",
     title: Optional[str] = None,
     show_legend: bool = True,
+    y_label_rotation: Optional[ROTATION_OPTIONS] = None,
 ) -> None:
     """
     Plot traces of the specified data channels.
@@ -36,9 +38,16 @@ def plot_channels(
             (default = `None`).
         x_axis (Literal["Position", "Time"]): The channel to plot on the x-axis.
         show_legend (bool): Whether to show a legend.
+        y_label_rotation (Optional[Literal["vertical", "horizontal"]]):
+            The rotation of the y-axis labels.
     """
+    if y_label_rotation is None:
+        if len(channels) > 4:
+            y_label_rotation = "horizontal"
+        else:
+            y_label_rotation = "vertical"
 
-    _, axs = plt.subplots(nrows=len(channels), sharex=True)
+    fig, axs = plt.subplots(nrows=len(channels), sharex=True)
     if len(channels) == 1:
         axs = [axs]
 
@@ -46,7 +55,11 @@ def plot_channels(
     axs[-1].set_xlabel(x_channel.get_label())
 
     for i, channel in enumerate(channels):
-        axs[i].set_ylabel(channel.get_label())
+        axs[i].set_ylabel(
+            channel.get_label(),
+            rotation=y_label_rotation,
+            horizontalalignment="right",
+        )
         axs[i].grid()
 
     x_data = x_channel.get_values(solutions[list(solutions.keys())[0]])
@@ -62,12 +75,13 @@ def plot_channels(
     if title is not None:
         axs[0].set_title(title)
 
-    plt.tight_layout()
-
     if show_legend:
         for ax in axs:
             box = ax.get_position()
             ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         axs[0].legend(loc="upper left", bbox_to_anchor=(1, 1))
 
+    mng = plt.get_current_fig_manager()
+    mng.resize(*mng.window.maxsize())
     plt.show()
+    plt.tight_layout()

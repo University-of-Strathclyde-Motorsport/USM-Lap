@@ -52,3 +52,13 @@ class InsufficientTractionError(ModelError):
             f"(required: {self.required:.3f}, "
             f"available: {self.available:.3f})"
         )
+
+
+@dataclass
+class OutOfChargeError(ModelError):
+    """
+    Error raised when the vehicle is out of battery.
+    """
+
+    def __str__(self) -> str:
+        return "Vehicle is out of battery."

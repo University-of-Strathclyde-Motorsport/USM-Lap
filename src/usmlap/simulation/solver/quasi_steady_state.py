@@ -7,7 +7,7 @@ import logging
 from rich import progress
 from scipy.signal import find_peaks
 
-from usmlap.model import StateVariables
+from usmlap.simulation.solver.vehicle_state import update_state_variables
 
 from ..solution import Solution
 from .acceleration import calculate_next_velocity
@@ -56,8 +56,11 @@ class QuasiSteadyStateSolver(SolverInterface):
         logger.info("Resolving full vehicle state...")
         for node in solution.nodes:
             ctx = self.local_context(node.track_node, node.state_variables)
-            node.vehicle_state = self.vehicle_model.resolve_vehicle_state(
-                ctx, node.average_velocity
+            node.vehicle_state = self.vehicle_model.evaluate_full_vehicle_state(
+                ctx,
+                velocity=node.average_velocity,
+                ax=node.longitudinal_acceleration,
+                ay=node.lateral_acceleration,
             )
 
         logger.info("Recalculating state variables...")
@@ -193,12 +196,15 @@ class QuasiSteadyStateSolver(SolverInterface):
         """
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
-            updated_soc = self.global_context.vehicle.powertrain.update_state_of_charge(
-                state_of_charge=previous_node.state_variables.state_of_charge,
-                energy_used=previous_node.energy_used,
+            ctx = self.local_context(
+                previous_node.track_node, previous_node.state_variables
             )
-            new_state = StateVariables(state_of_charge=updated_soc)
-            solution.nodes[i].state_variables = new_state
+            solution.nodes[i].state_variables = update_state_variables(
+                ctx=ctx,
+                initial_state=previous_node.state_variables,
+                dt=previous_node.time,
+                vehicle_state=previous_node.vehicle_state,  # noqa
+            )
 
         return solution
 

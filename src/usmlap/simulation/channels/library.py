@@ -244,3 +244,55 @@ class StateOfCharge(Channel, name="State of Charge", unit=Unit.UNITLESS):
         return lambda solution: [
             node.state_variables.state_of_charge for node in solution
         ]
+
+
+class CellTemperature(
+    Channel, name="Cell Temperature", unit=Unit.DEGREE_CELSIUS
+):
+    """Average temperature of the battery cells."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.state_variables.cell_temperature for node in solution
+        ]
+
+
+class AccumulatorCurrent(Channel, name="Accumulator Current", unit=Unit.AMPERE):
+    """Average current of the battery cells."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.vehicle_state.accumulator_current for node in solution
+        ]
+
+
+class HeatingPower(Channel, name="Heating Power", unit=Unit.WATT):
+    """Heating power of the accumulator."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.vehicle_state.heating_power for node in solution
+        ]
+
+
+class CoolingPower(Channel, name="Cooling Power", unit=Unit.WATT):
+    """Cooling power of the accumulator."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.vehicle_state.cooling_power for node in solution
+        ]
+
+
+class NetHeatingPower(Channel, name="Net Heating Power", unit=Unit.WATT):
+    """Net heating power of the accumulator."""
+
+    @classmethod
+    def _channel_fcn(cls) -> ChannelFcn:
+        return lambda solution: [
+            node.vehicle_state.net_heating_power for node in solution
+        ]

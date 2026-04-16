@@ -210,6 +210,11 @@
           "description": "The motor controller of the vehicle. Should be the name of a json file in the motor_controllers library",
           "type": "string"
         },
+        "cooling_coefficient": {
+          "description": "The cooling coefficient for the accumulator, in Watts per Kelvin",
+          "type": "number",
+          "minimum": 0
+        },
         "soc_current_derate_point": {
           "description": "The state of charge at which to begin derating current",
           "type": "number",
@@ -221,6 +226,7 @@
         "accumulator",
         "motor",
         "motor_controller",
+        "cooling_coefficient",
         "soc_current_derate_point"
       ],
       "additionalProperties": false

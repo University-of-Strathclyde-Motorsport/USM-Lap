@@ -5,7 +5,12 @@ This script simulates the skidpad event.
 from usmlap.competition.events import Endurance
 from usmlap.plot import plot_channels
 from usmlap.simulation.channels.library import (
-    ResultantAcceleration,
+    AccumulatorCurrent,
+    CellTemperature,
+    CoolingPower,
+    HeatingPower,
+    MotorTorque,
+    NetHeatingPower,
     StateOfCharge,
     Velocity,
 )
@@ -23,6 +28,15 @@ solution = endurance.simulate_event(vehicle, QUALITY)
 
 plot_channels(
     {"": solution},
-    [Velocity, ResultantAcceleration, StateOfCharge],
+    [
+        Velocity,
+        MotorTorque,
+        AccumulatorCurrent,
+        StateOfCharge,
+        CellTemperature,
+        HeatingPower,
+        CoolingPower,
+        NetHeatingPower,
+    ],
     show_legend=False,
 )

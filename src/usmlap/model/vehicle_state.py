@@ -6,6 +6,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from usmlap.model.environment import AMBIENT_TEMPERATURE
+from usmlap.vehicle.powertrain import CellState
+
 
 @dataclass
 class StateVariables(object):
@@ -19,6 +22,14 @@ class StateVariables(object):
     """
 
     state_of_charge: float = 1
+    cell_temperature: float = AMBIENT_TEMPERATURE
+
+    @property
+    def cell_state(self) -> CellState:
+        return CellState(
+            state_of_charge=self.state_of_charge,
+            temperature=self.cell_temperature,
+        )
 
     @staticmethod
     def get_default() -> StateVariables:
@@ -34,6 +45,9 @@ class FullVehicleState(object):
     The full state of the vehicle at a point.
     """
 
+    velocity: float
+    ax: float
+    ay: float
     weight: float
     centripetal_force: float
     downforce: float
@@ -41,44 +55,13 @@ class FullVehicleState(object):
     resistive_fx: float
     required_fy: float
     normal_force: float
-    # normal_loads: FourCorner[float]
-    # tyre_attitudes: FourCorner[TyreAttitude]
-    # lateral_traction: FourCorner[float]
-    # longitudinal_traction: FourCorner[float]
     motor_speed: float
     motor_torque: float
     motor_power: float
-    accumulator_power: float
-    motor_force: float
+    accumulator_current: float
+    heating_power: float
+    cooling_power: float
 
-    # @property
-    # def total_lateral_traction(self) -> float:
-    #     return sum(self.lateral_traction)
-
-    @staticmethod
-    def get_empty() -> FullVehicleState:
-        return FullVehicleState(
-            weight=0,
-            centripetal_force=0,
-            downforce=0,
-            drag=0,
-            resistive_fx=0,
-            required_fy=0,
-            normal_force=0,
-            # normal_loads=FourCorner((0, 0, 0, 0)),
-            # tyre_attitudes=FourCorner(
-            #     (
-            #         TyreAttitude(normal_load=0),
-            #         TyreAttitude(normal_load=0),
-            #         TyreAttitude(normal_load=0),
-            #         TyreAttitude(normal_load=0),
-            #     )
-            # ),
-            # lateral_traction=FourCorner((0, 0, 0, 0)),
-            # longitudinal_traction=FourCorner((0, 0, 0, 0)),
-            motor_speed=0,
-            motor_torque=0,
-            motor_power=0,
-            accumulator_power=0,
-            motor_force=0,
-        )
+    @property
+    def net_heating_power(self) -> float:
+        return self.heating_power - self.cooling_power

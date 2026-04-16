@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.vehicle.powertrain import RWDPowertrain
+from usmlap.vehicle.powertrain import CellState, RWDPowertrain
 
 from .style import COLOURMAP
 
@@ -30,7 +30,8 @@ def plot_motor_curve(
     fig, (ax_torque, ax_power) = plt.subplots(nrows=2, sharex=True)
 
     for soc in state_of_charge:
-        motor_curve = _generate_motor_curve(powertrain, soc, resolution)
+        cell_state = CellState(state_of_charge=soc, temperature=25)
+        motor_curve = _generate_motor_curve(powertrain, cell_state, resolution)
         rpm = [rads_to_rpm(node.speed) for node in motor_curve]
         torque = [node.torque for node in motor_curve]
         power = [node.power / 1000 for node in motor_curve]
@@ -76,15 +77,17 @@ class _MotorCurveNode(object):
 
 
 def _generate_motor_curve(
-    powertrain: RWDPowertrain, soc: float, resolution: int
+    powertrain: RWDPowertrain, cell_state: CellState, resolution: int
 ) -> list[_MotorCurveNode]:
     """
     Generate a motor curve for a powertrain.
     """
 
-    maximum_speed = powertrain.get_maximum_motor_speed(soc)
+    maximum_speed = powertrain.get_maximum_motor_speed(cell_state)
     speeds = np.linspace(0, maximum_speed, resolution).tolist()
-    torques = [powertrain.get_motor_torque(soc, speed) for speed in speeds]
+    torques = [
+        powertrain.get_motor_torque(cell_state, speed) for speed in speeds
+    ]
     return [_MotorCurveNode(speed=s, torque=t) for s, t in zip(speeds, torques)]
 
 

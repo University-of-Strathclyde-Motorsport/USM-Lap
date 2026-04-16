@@ -28,6 +28,8 @@ class Quantity(Enum):
     TORQUE = "torque"
     ENERGY = "energy"
     POWER = "power"
+    TEMPERATURE = "temperature"
+    CURRENT = "current"
 
     def __str__(self) -> str:
         return self.value
@@ -100,3 +102,5 @@ class Unit(Enum):
     KILOWATT_HOUR = ("kilowatt hour", Quantity.ENERGY, "kWh", 3.6e6)
     WATT = ("watt", Quantity.POWER, "W")
     KILOWATT = ("kilowatt", Quantity.POWER, "kW", 1e3)
+    DEGREE_CELSIUS = ("degree celsius", Quantity.TEMPERATURE, "°C")
+    AMPERE = ("ampere", Quantity.CURRENT, "A")

@@ -73,6 +73,18 @@ class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
         """
         return current * self.torque_per_amp
 
+    def get_current(self, torque: float) -> float:
+        """
+        Calculate the motor current for an input torque.
+
+        Args:
+            torque (float): Torque applied to the motor.
+
+        Returns:
+            current (float): Current output of the motor.
+        """
+        return torque / self.torque_per_amp
+
 
 def rpm_to_rads(rpm: float) -> float:
     """

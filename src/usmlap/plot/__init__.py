@@ -3,6 +3,7 @@ This package contains functions for plotting graphs of results.
 """
 
 from .apex import plot_apexes as plot_apexes
+from .cell import plot_cell_parameters as plot_cell_parameters
 from .channels import plot_channels as plot_channels
 from .comparison import plot_points_bar_chart as plot_points_bar_chart
 from .ggv import plot_gg as plot_gg

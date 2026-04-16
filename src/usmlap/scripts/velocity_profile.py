@@ -10,7 +10,7 @@ from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
 TRACK_SHEET = "FS AutoX Germany 2012"
-VEHICLE_FILE = "USM23 Baseline"
+VEHICLE_FILE = "USM26"
 SOLVER = QuasiTransientSolver
 VEHICLE_MODEL = Bicycle
 

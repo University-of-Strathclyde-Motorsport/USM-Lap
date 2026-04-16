@@ -6,8 +6,8 @@ from usmlap.competition.events import Autocross
 from usmlap.plot import plot_channels
 from usmlap.simulation.channels.channel import Channel
 from usmlap.simulation.channels.library import (
+    CellTemperature,
     Curvature,
-    Downforce,
     MotorPower,
     StateOfCharge,
     Velocity,
@@ -22,9 +22,9 @@ SETTINGS = QualityPresets.FAST
 CHANNELS: list[type[Channel]] = [
     Curvature,
     Velocity,
-    Downforce,
     MotorPower,
     StateOfCharge,
+    CellTemperature,
 ]
 
 

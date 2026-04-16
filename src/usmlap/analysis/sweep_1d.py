@@ -27,15 +27,20 @@ class SweepSettings(object):
     """
 
     parameter: type[Parameter[float]]
-    start_value: float
-    end_value: float
-    number_of_steps: int
+    values: list[float]
+    # start_value: float
+    # end_value: float
+    # number_of_steps: int
+
+    # @property
+    # def values(self) -> list[float]:
+    #     return np.linspace(
+    #         self.start_value, self.end_value, self.number_of_steps
+    #     ).tolist()
 
     @property
-    def values(self) -> list[float]:
-        return np.linspace(
-            self.start_value, self.end_value, self.number_of_steps
-        ).tolist()
+    def number_of_steps(self) -> int:
+        return len(self.values)
 
     def get_vehicles(
         self, baseline_vehicle: Vehicle

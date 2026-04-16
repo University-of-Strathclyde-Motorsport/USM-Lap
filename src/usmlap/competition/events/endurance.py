@@ -20,6 +20,7 @@ from ..points import (
 from .event import EventInterface
 
 ENDURANCE_TRACK_LENGTH = 22000
+DEFAULT_DISCHARGE_LIMIT = 0.2
 
 
 @dataclass
@@ -87,4 +88,6 @@ def _modify_vehicle_for_event(vehicle: Vehicle) -> Vehicle:
     """
     Modify a vehicle for the endurance event by updating parameters.
     """
-    return get_new_vehicle(vehicle, DischargeCurrentLimit, 0.3)
+    return get_new_vehicle(
+        vehicle, DischargeCurrentLimit, DEFAULT_DISCHARGE_LIMIT
+    )

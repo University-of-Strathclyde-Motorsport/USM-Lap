@@ -1,6 +1,7 @@
 {
   "print_name": "Sony VTC6",
   "capacity": 38880,
+  "charge_capacity": 10800,
   "nominal_voltage": 3.6,
   "voltage_lookup": [
     { "state_of_charge": 0, "voltage": 2.5 },
@@ -11,7 +12,8 @@
     { "state_of_charge": 0.96, "voltage": 3.8 },
     { "state_of_charge": 1, "voltage": 4.2 }
   ],
-  "discharge_current": 20,
+  "max_discharge_current": 20,
   "resistance": 0.0162,
+  "thermal_mass": 45,
   "datasheet_url": "https://enepaq.com/wp-content/uploads/2025/02/Sony-Murata-VTC6-Li-ion-Battery-Module-With-Temperature-Sensor-Datasheet-.pdf"
 }

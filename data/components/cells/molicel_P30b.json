@@ -1,6 +1,7 @@
 {
   "print_name": "Molicel P30b",
   "capacity": 38800,
+  "charge_capacity": 10800,
   "nominal_voltage": 3.6,
   "voltage_lookup": [
     { "state_of_charge": 0, "voltage": 2.5 },
@@ -8,7 +9,16 @@
     { "state_of_charge": 0.35, "voltage": 3.4 },
     { "state_of_charge": 1, "voltage": 4.2 }
   ],
-  "discharge_current": 30,
+  "resistance_lookup": [
+    { "temperature": 0, "resistance": 0.04 },
+    { "temperature": 10, "resistance": 0.022 },
+    { "temperature": 25, "resistance": 0.017 },
+    { "temperature": 35, "resistance": 0.013 },
+    { "temperature": 45, "resistance": 0.011 },
+    { "temperature": 60, "resistance": 0.006 }
+  ],
+  "max_discharge_current": 30,
   "resistance": 0.017,
+  "thermal_mass": 45,
   "datasheet_url": "https://www.molicel.com/wp-content/uploads/Product-Data-Sheet-of-INR-18650-P30B-80111-2.pdf"
 }

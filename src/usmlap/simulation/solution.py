@@ -51,9 +51,7 @@ class SolutionNode(object):
     state_variables: StateVariables = field(
         default_factory=StateVariables.get_default
     )
-    vehicle_state: FullVehicleState = field(
-        default_factory=FullVehicleState.get_empty
-    )
+    vehicle_state: Optional[FullVehicleState] = None
     next: Optional[SolutionNode] = None
     previous: Optional[SolutionNode] = None
 
@@ -93,7 +91,9 @@ class SolutionNode(object):
 
     @property
     def energy_used(self) -> float:
-        return self.vehicle_state.accumulator_power * self.time
+        if self.vehicle_state is None:
+            return 0
+        return self.vehicle_state.motor_power * self.time  # TODO
 
     def is_apex(self) -> bool:
         """
@@ -284,7 +284,9 @@ class Solution(object):
 
 
 def create_new_solution(
-    track_mesh: Mesh, vehicle_model: VehicleModelInterface
+    track_mesh: Mesh,
+    vehicle_model: VehicleModelInterface,
+    initial_state: StateVariables,
 ) -> Solution:
     """
     Create a new solution from a track mesh and vehicle model.
@@ -296,8 +298,25 @@ def create_new_solution(
     Returns:
         solution (Solution): A blank solution.
     """
+    estimated_states = estimate_states(track_mesh, initial_state)
     solution_nodes = [
-        SolutionNode(track_node=track_node) for track_node in track_mesh
+        SolutionNode(track_node=track_node, state_variables=estimated_state)
+        for track_node, estimated_state in zip(
+            track_mesh.nodes, estimated_states
+        )
     ]
     solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
     return solution
+
+
+def estimate_states(
+    track_mesh: Mesh, initial_state: StateVariables
+) -> list[StateVariables]:
+    """
+    Generate initial estimated state variables for a simulation.
+    """
+    node_count = track_mesh.node_count
+    initial_soc = initial_state.state_of_charge
+    soc = [initial_soc * (1 - i / node_count) for i in range(node_count)]
+    states = [StateVariables(state_of_charge=s) for s in soc]
+    return states

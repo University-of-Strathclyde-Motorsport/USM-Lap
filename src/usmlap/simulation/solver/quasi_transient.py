@@ -6,6 +6,8 @@ import logging
 
 from rich.progress import Progress
 
+from usmlap.model.errors import OutOfChargeError
+
 from ..solution import Solution
 from .quasi_steady_state import QuasiSteadyStateSolver
 from .solver_interface import MaximumIterationsExceededError, SolverInterface
@@ -33,7 +35,19 @@ class QuasiTransientSolver(SolverInterface):
                     description=f"{TASK_DESCRIPTION} ({i + 1}/?)",
                 )
 
-                solution = self._solve_next_iteration(solution)
+                while True:
+                    try:
+                        solution = self._solve_next_iteration(solution)
+                        break
+                    except OutOfChargeError:
+                        discharge_limit = self.global_context.vehicle.powertrain.discharge_current_limit
+                        new_limit = discharge_limit * 0.9
+                        logging.warning(
+                            "Insufficient charge with current limit of %.3f, reducing to %.3f",
+                            discharge_limit,
+                            new_limit,
+                        )
+                        self.global_context.vehicle.powertrain.discharge_current_limit = new_limit
                 times.append(solution.total_time)
                 logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
 

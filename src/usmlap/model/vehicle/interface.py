@@ -117,107 +117,42 @@ class VehicleModelInterface(ABC):
         net_force = drive_force - resistive_fx
         return net_force / ctx.vehicle.equivalent_mass
 
-    ###############################################
-    # Time is running out
-
-    def resolve_vehicle_state(
-        self, ctx: NodeContext, velocity: float
+    def evaluate_full_vehicle_state(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> FullVehicleState:
-        """
-        Calculate the full state of the vehicle at a node.
-
-        Args:
-            ctx (NodeContext): The simulation context.
-            velocity (float): The vehicle's velocity.
-
-        Returns:
-            vehicle_state (FullVehicleState): The full state of the vehicle,
-                including forces, torques, and energy.
-        """
-
-        weight = ctx.vehicle.total_mass * ctx.environment.gravity
-        centripetal_force = (
-            ctx.vehicle.total_mass * velocity**2 * ctx.node.curvature
+        weight = self.weight(ctx)
+        centripetal_force = self.centripetal_force(ctx, velocity)
+        body_fz, aero_fz = self.normal_forces(ctx, velocity)
+        body_fx, aero_fx = self.resistive_forces(ctx, velocity)
+        drive_force = max(
+            body_fx + aero_fx + ax * ctx.vehicle.equivalent_mass, 0
         )
-
-        aero_attitude = AeroAttitude(
-            velocity=velocity, air_density=ctx.environment.air_density
-        )
-        downforce = ctx.vehicle.aero.get_downforce(aero_attitude)
-        drag = ctx.vehicle.aero.get_drag(aero_attitude)
-
-        resistive_fx = drag + ctx.node.z_to_x(weight)
-        required_fy = ctx.node.y_to_y(centripetal_force) + ctx.node.z_to_y(
-            weight
-        )
-        normal_force = (
-            ctx.node.z_to_z(weight)
-            + ctx.node.y_to_z(centripetal_force)
-            + downforce
-        )
-
-        # normal_loads = self.get_normal_loads(normal_force)
-        # tyre_attitudes = self.get_tyre_attitudes(normal_loads)
-        # lateral_traction = self.get_lateral_traction(
-        #     ctx, tyre_attitudes, resistive_fx
-        # )
-        # longitudinal_traction = self.get_longitudinal_traction(
-        #     ctx, tyre_attitudes, required_fy
-        # )
-
         motor_speed = ctx.vehicle.velocity_to_motor_speed(velocity)
-        motor_torque = ctx.vehicle.powertrain.get_motor_torque(
-            state_of_charge=ctx.state.state_of_charge, motor_speed=motor_speed
-        )
+        motor_torque = self.powertrain.required_torque(ctx, drive_force)
         motor_power = motor_speed * motor_torque
-        accumulator_power = ctx.vehicle.powertrain.motor_to_accumulator_power(
-            motor_power
+        accu_current = self.powertrain.required_current(ctx, motor_torque)
+        heating_power = ctx.vehicle.powertrain.accumulator.heating_power(
+            ctx.state.cell_state, accu_current
         )
-        motor_force = ctx.vehicle.motor_torque_to_drive_force(motor_torque)
+        cooling_power = ctx.vehicle.powertrain.cooling_rate(
+            ctx.state.cell_temperature, ctx.environment.ambient_temperature
+        )
 
         return FullVehicleState(
+            velocity=velocity,
+            ax=ax,
+            ay=ay,
             weight=weight,
             centripetal_force=centripetal_force,
-            downforce=downforce,
-            drag=drag,
-            resistive_fx=resistive_fx,
-            required_fy=required_fy,
-            normal_force=normal_force,
-            # normal_loads=normal_loads,
-            # tyre_attitudes=tyre_attitudes,
-            # lateral_traction=lateral_traction,
-            # longitudinal_traction=longitudinal_traction,
+            downforce=aero_fz,
+            drag=aero_fx,
+            resistive_fx=(body_fx + aero_fx),
+            required_fy=self.required_fy(ctx, velocity),
+            normal_force=body_fz,
             motor_speed=motor_speed,
             motor_torque=motor_torque,
             motor_power=motor_power,
-            accumulator_power=accumulator_power,
-            motor_force=motor_force,
+            accumulator_current=accu_current,
+            heating_power=heating_power,
+            cooling_power=cooling_power,
         )
-
-    # @abstractmethod
-    # def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
-    #     pass
-
-    # @abstractmethod
-    # def get_tyre_attitudes(
-    #     self, normal_loads: FourCorner[float]
-    # ) -> FourCorner[TyreAttitude]:
-    #     pass
-
-    # @abstractmethod
-    # def get_lateral_traction(
-    #     self,
-    #     ctx: NodeContext,
-    #     attitudes: FourCorner[TyreAttitude],
-    #     required_fx: float,
-    # ) -> FourCorner[float]:
-    #     pass
-
-    # @abstractmethod
-    # def get_longitudinal_traction(
-    #     self,
-    #     ctx: NodeContext,
-    #     attitudes: FourCorner[TyreAttitude],
-    #     required_fy: float,
-    # ) -> FourCorner[float]:
-    #     pass
