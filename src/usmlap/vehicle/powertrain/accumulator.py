@@ -45,10 +45,12 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
 
     @cached_property
     def _soc_lookup_values(self) -> list[float]:
+        self.voltage_lookup.sort(key=lambda node: node.state_of_charge)
         return [node.state_of_charge for node in self.voltage_lookup]
 
     @cached_property
     def _voltage_lookup_values(self) -> list[float]:
+        self.voltage_lookup.sort(key=lambda node: node.state_of_charge)
         return [node.voltage for node in self.voltage_lookup]
 
     def get_voltage(self, state_of_charge: float) -> float:

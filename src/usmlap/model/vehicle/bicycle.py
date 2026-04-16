@@ -2,11 +2,13 @@
 This module defines the bicycle vehicle model.
 """
 
+import math
+
 from usmlap.utils.datatypes import FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 
 from ..context import NodeContext
-from ..errors import MaximumIterationsExceededError
+from ..errors import InsufficientTractionError, MaximumIterationsExceededError
 from .interface import VehicleModelInterface
 
 PRECISION = 1e-3
@@ -40,7 +42,7 @@ class Bicycle(VehicleModelInterface):
         self, ctx: NodeContext, velocity: float
     ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        required_fy = self.required_fy(ctx, velocity)
+        required_fy = abs(self.required_fy(ctx, velocity))
         axs: list[float] = [0]
 
         for _ in range(MAXIMUM_ITERATIONS):
@@ -58,10 +60,11 @@ class Bicycle(VehicleModelInterface):
             )
 
             net_force = rear_traction - resistive_fx
-            axs.append(net_force / ctx.vehicle.equivalent_mass)
+            ax = net_force / ctx.vehicle.equivalent_mass
+            if abs(ax - axs[-1]) < PRECISION:
+                return ax
 
-            if abs(axs[-1] - axs[-2]) < PRECISION:
-                return axs[-1]
+            axs.append(ax)
 
         raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
@@ -69,7 +72,7 @@ class Bicycle(VehicleModelInterface):
         self, ctx: NodeContext, velocity: float
     ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        required_fy = self.required_fy(ctx, velocity)
+        required_fy = abs(self.required_fy(ctx, velocity))
         axs: list[float] = [0]
 
         for _ in range(MAXIMUM_ITERATIONS):
@@ -77,21 +80,34 @@ class Bicycle(VehicleModelInterface):
 
             front_tyre = ctx.vehicle.tyres.front.tyre_model
             front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
-            front_traction = 2 * front_tyre.calculate_longitudinal_force(
-                front_attitude, required_fy=required_fy / 4
-            )
-
             rear_tyre = ctx.vehicle.tyres.rear.tyre_model
             rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+
+            maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
+                front_attitude
+            )
+            maximum_rear_fy = 2 * rear_tyre.calculate_lateral_force(
+                rear_attitude
+            )
+
+            front_fy, rear_fy = self._determine_fy_split(
+                FrontRear(maximum_front_fy, maximum_rear_fy), required_fy
+            )
+
+            front_traction = 2 * front_tyre.calculate_longitudinal_force(
+                front_attitude, required_fy=front_fy / 2
+            )
+
             rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-                rear_attitude, required_fy=required_fy / 4
+                rear_attitude, required_fy=rear_fy / 2
             )
 
             net_force = front_traction + rear_traction + resistive_fx
-            axs.append(net_force / ctx.vehicle.equivalent_mass)
+            ax = net_force / ctx.vehicle.equivalent_mass
+            if abs(ax - axs[-1]) < PRECISION:
+                return ax
 
-            if abs(axs[-1] - axs[-2]) < PRECISION:
-                return axs[-1]
+            axs.append(self._get_next_ax(ax, axs))
 
         raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
@@ -101,8 +117,8 @@ class Bicycle(VehicleModelInterface):
         body_fx, aero_fx = self.resistive_forces(ctx, velocity)
         inertial_fx = ctx.vehicle.total_mass * ax
 
-        inertial_fz, aero_fz = self.normal_forces(ctx, velocity)
-        normal_force = self._split_normal_force(ctx, inertial_fz, aero_fz)
+        body_fz, aero_fz = self.normal_forces(ctx, velocity)
+        normal_force = self._split_normal_force(ctx, body_fz, aero_fz)
 
         inertial_lt = self._inertial_load_transfer(ctx, body_fx + inertial_fx)
         aero_lt = self._aero_load_transfer(ctx, aero_fx)
@@ -131,3 +147,27 @@ class Bicycle(VehicleModelInterface):
         wheelbase = ctx.vehicle.suspension.wheelbase
         lt = aero_fx * (cop_height / wheelbase)
         return FrontRear(-lt, lt)
+
+    def _determine_fy_split(
+        self, maximum_fy: FrontRear[float], required_fy: float
+    ) -> FrontRear[float]:
+
+        if sum(maximum_fy) < required_fy:
+            raise InsufficientTractionError(required_fy, sum(maximum_fy))
+        elif maximum_fy.front <= required_fy / 2:
+            front_fy = maximum_fy.front
+            rear_fy = required_fy - front_fy
+        elif maximum_fy.rear <= required_fy / 2:
+            rear_fy = maximum_fy.rear
+            front_fy = required_fy - rear_fy
+        else:
+            front_fy = required_fy / 2
+            rear_fy = required_fy / 2
+
+        return FrontRear(front_fy, rear_fy)
+
+    def _get_next_ax(self, ax: float, axs: list[float]) -> float:
+        if len(axs) < 2:
+            return ax
+        factor = math.exp(-0.1 * len(axs))
+        return (factor * ax) + ((1 - factor) * axs[-1])

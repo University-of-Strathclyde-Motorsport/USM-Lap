@@ -20,13 +20,13 @@ configurations: dict[str, LambdaCoefficients] = {
 }
 
 baseline_settings = SimulationSettings(solver=QSS)
-baseline_points = competition.simulate(vehicle, baseline_settings)
+baseline_points, _ = competition.simulate(vehicle, baseline_settings)
 
 data: dict[str, CompetitionPoints] = {}
 
 for name, coefficients in configurations.items():
     simulation_settings = SimulationSettings(solver=QSS, lambdas=coefficients)
-    points = competition.simulate(vehicle, simulation_settings)
+    points, _ = competition.simulate(vehicle, simulation_settings)
     delta = points_delta(points, baseline_points)
     data[name] = delta
 

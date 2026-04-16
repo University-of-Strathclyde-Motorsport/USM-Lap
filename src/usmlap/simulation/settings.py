@@ -10,7 +10,7 @@ from usmlap.model import (
     LambdaCoefficients,
     VehicleModelInterface,
 )
-from usmlap.model.vehicle import PointMass
+from usmlap.model.vehicle import Bicycle, PointMass
 from usmlap.track.mesh_generation import Resolution
 from usmlap.vehicle import Vehicle
 
@@ -54,11 +54,11 @@ class QualityPresets(object):
     """
 
     DRAFT: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(2), vehicle_model=PointMass, solver=QSS
+        mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QSS
     )
     FAST: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(0.5), vehicle_model=PointMass, solver=QT
+        mesh_resolution=Resolution(0.5), vehicle_model=Bicycle, solver=QT
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(0.1), vehicle_model=PointMass, solver=QT
+        mesh_resolution=Resolution(0.1), vehicle_model=Bicycle, solver=QT
     )

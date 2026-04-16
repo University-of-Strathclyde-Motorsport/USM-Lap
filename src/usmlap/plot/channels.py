@@ -2,7 +2,7 @@
 This module contains functions for plotting traces of channels.
 """
 
-from typing import Literal
+from typing import Literal, Optional
 
 import matplotlib.pyplot as plt
 
@@ -21,7 +21,9 @@ X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, type[Channel]] = {
 def plot_channels(
     solutions: dict[str, Solution],
     channels: list[type[Channel]],
+    *,
     x_axis: X_AXIS_OPTIONS = "Position",
+    title: Optional[str] = None,
     show_legend: bool = True,
 ) -> None:
     """
@@ -30,6 +32,8 @@ def plot_channels(
     Args:
         solutions (dict[str, Solution]): A dict of labels and solutions to plot.
         channels (list[str]): The names of the data channels to plot.
+        title (Optional[str]): The title to display above the plot
+            (default = `None`).
         x_axis (Literal["Position", "Time"]): The channel to plot on the x-axis.
         show_legend (bool): Whether to show a legend.
     """
@@ -55,9 +59,15 @@ def plot_channels(
             y_data: list[float] = channel.get_values(solution)
             axs[i].plot(x_data, y_data, label=label, color=colour)
 
-    if show_legend:
-        plt.legend()
+    if title is not None:
+        axs[0].set_title(title)
 
-    axs[0].set_title("Solution")
     plt.tight_layout()
+
+    if show_legend:
+        for ax in axs:
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        axs[0].legend(loc="upper left", bbox_to_anchor=(1, 1))
+
     plt.show()

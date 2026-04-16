@@ -20,7 +20,7 @@ DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012"
 DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
 
 
-type CompetitionResults = dict[str, Solution]
+type CompetitionSolutions = dict[str, Solution]
 
 
 @dataclass
@@ -90,7 +90,7 @@ class Competition(object):
 
     def simulate(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> CompetitionPoints:
+    ) -> tuple[CompetitionPoints, CompetitionSolutions]:
         """
         Simulate a Formula Student competition.
 
@@ -103,6 +103,7 @@ class Competition(object):
                 Dictionary of points scored in all simulated events.
         """
 
+        competition_results: CompetitionSolutions = {}
         competition_points: CompetitionPoints = {}
         data = self.competition_data
 
@@ -117,9 +118,11 @@ class Competition(object):
                 )
 
                 event_solution = event.simulate_event(vehicle, settings)
+                competition_results[event.label] = event_solution
+
                 event_points = event.calculate_points(event_solution, data)
                 competition_points.update(event_points)
 
                 progress.advance(task)
 
-        return competition_points
+        return competition_points, competition_results

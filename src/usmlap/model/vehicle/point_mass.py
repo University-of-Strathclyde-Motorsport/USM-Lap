@@ -91,7 +91,7 @@ class PointMass(VehicleModelInterface):
 
     def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
         normal_load = normal_force / 4
-        return FourCorner((normal_load, normal_load, normal_load, normal_load))
+        return FourCorner(normal_load, normal_load, normal_load, normal_load)
 
     def get_tyre_attitudes(
         self, normal_loads: FourCorner[float]
@@ -100,9 +100,7 @@ class PointMass(VehicleModelInterface):
             TyreAttitude(normal_load=normal_load)
             for normal_load in normal_loads
         ]
-        return FourCorner(
-            (attitudes[0], attitudes[1], attitudes[2], attitudes[3])
-        )
+        return FourCorner(*attitudes)
 
     def get_lateral_traction(
         self,
@@ -114,17 +112,13 @@ class PointMass(VehicleModelInterface):
         rear_tyre = ctx.vehicle.tyres.rear.tyre_model.calculate_lateral_force
         try:
             return FourCorner(
-                (
-                    front_tyre(attitudes.front_left, required_fx=0),
-                    front_tyre(attitudes.front_right, required_fx=0),
-                    rear_tyre(attitudes.rear_left, required_fx=required_fx / 2),
-                    rear_tyre(
-                        attitudes.rear_right, required_fx=required_fx / 2
-                    ),
-                )
+                front_tyre(attitudes.front_left, required_fx=0),
+                front_tyre(attitudes.front_right, required_fx=0),
+                rear_tyre(attitudes.rear_left, required_fx=required_fx / 2),
+                rear_tyre(attitudes.rear_right, required_fx=required_fx / 2),
             )
         except ValueError:
-            return FourCorner((0, 0, 0, 0))
+            return FourCorner(0, 0, 0, 0)
 
     def get_longitudinal_traction(
         self,
@@ -141,12 +135,10 @@ class PointMass(VehicleModelInterface):
         fy_per_tyre = abs(required_fy / 4)
         try:
             return FourCorner(
-                (
-                    front_tyre(attitudes.front_left, required_fy=fy_per_tyre),
-                    front_tyre(attitudes.front_right, required_fy=fy_per_tyre),
-                    rear_tyre(attitudes.rear_left, required_fy=fy_per_tyre),
-                    rear_tyre(attitudes.rear_right, required_fy=fy_per_tyre),
-                )
+                front_tyre(attitudes.front_left, required_fy=fy_per_tyre),
+                front_tyre(attitudes.front_right, required_fy=fy_per_tyre),
+                rear_tyre(attitudes.rear_left, required_fy=fy_per_tyre),
+                rear_tyre(attitudes.rear_right, required_fy=fy_per_tyre),
             )
         except ValueError:
-            return FourCorner((0, 0, 0, 0))
+            return FourCorner(0, 0, 0, 0)

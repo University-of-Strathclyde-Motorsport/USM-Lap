@@ -3,8 +3,8 @@ This script compares the performance of different vehicle models.
 """
 
 from usmlap.model import VehicleModelInterface
-from usmlap.model.vehicle import Bicycle, PointMass
-from usmlap.plot import plot_channels
+from usmlap.model.vehicle import Bicycle, FourCornerModel, PointMass
+from usmlap.plot import plot_gg
 from usmlap.simulation import SimulationSettings, Solution, simulate
 from usmlap.simulation.channels.channel import Channel
 from usmlap.simulation.channels.library import (
@@ -25,7 +25,8 @@ CHANNELS: list[type[Channel]] = [
 
 vehicle_models: dict[str, type[VehicleModelInterface]] = {
     "Point Mass": PointMass,
-    "Bicycle": Bicycle,
+    # "Bicycle": Bicycle,
+    "Four Corner": FourCornerModel,
 }
 
 vehicle = Vehicle.from_json(VEHICLE_FILE)
@@ -39,4 +40,4 @@ for label, model in vehicle_models.items():
     solution = simulate(vehicle, mesh, settings)
     solutions[label] = solution
 
-plot_channels(solutions, CHANNELS)
+plot_gg(list(solutions.values()))

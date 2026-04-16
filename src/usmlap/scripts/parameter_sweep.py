@@ -11,14 +11,14 @@ from usmlap.vehicle.parameters import FinalDriveRatio
 
 BASELINE_VEHICLE = "USM26"
 PARAMETER = FinalDriveRatio
-START_VALUE = 1.5
-END_VALUE = 3.5
-NUMBER_OF_STEPS = 10
+START_VALUE = 2
+END_VALUE = 3.6
+NUMBER_OF_STEPS = 15
 QUALITY = QualityPresets.FAST
 
 vehicle = Vehicle.from_json(BASELINE_VEHICLE)
 
-competition = Competition(simulate_efficiency=False)
+competition = Competition()
 
 sweep_settings = SweepSettings(
     PARAMETER, START_VALUE, END_VALUE, NUMBER_OF_STEPS

@@ -59,7 +59,7 @@ def points_sensitivity(
             progress.update(task, description=f"{TASK_DESCRIPTION} ({i + 1}/2)")
             new_value = baseline_value + value
             modified_vehicle = get_new_vehicle(vehicle, parameter, new_value)
-            points = competition.simulate(modified_vehicle, settings)
+            points, _ = competition.simulate(modified_vehicle, settings)
             results[label] = sum(points.values())
 
     sensitivity = results["increased"] - results["decreased"]

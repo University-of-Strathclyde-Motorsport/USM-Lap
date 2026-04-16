@@ -52,7 +52,7 @@ class FrontRear[T](NamedTuple):
         return self * (1 / total)
 
 
-class FourCorner[T](tuple[T, T, T, T]):
+class FourCorner[T](NamedTuple):
     """
     Represents a property with values for each corner of the vehicle.
 
@@ -63,21 +63,50 @@ class FourCorner[T](tuple[T, T, T, T]):
         rear_right (T): Value for the rear right corner.
     """
 
-    @property
-    def front_left(self) -> T:
-        return self[0]
+    front_left: T
+    front_right: T
+    rear_left: T
+    rear_right: T
 
     @property
-    def front_right(self) -> T:
-        return self[1]
+    def fl(self) -> T:
+        return self.front_left
 
     @property
-    def rear_left(self) -> T:
-        return self[2]
+    def fr(self) -> T:
+        return self.front_right
 
     @property
-    def rear_right(self) -> T:
-        return self[3]
+    def rl(self) -> T:
+        return self.rear_left
+
+    @property
+    def rr(self) -> T:
+        return self.rear_right
+
+    def __str__(self) -> str:
+        return (
+            f"FL: {self.front_left}"
+            f"FR: {self.front_right}"
+            f"RL: {self.rear_left}"
+            f"RR: {self.rear_right}"
+        )
+
+    def __add__(self, other: Any) -> FourCorner[T]:
+        if isinstance(other, FourCorner):
+            return FourCorner(*(a + b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return FourCorner(*(a + other for a in self))
+        else:
+            return NotImplemented
+
+    def __mul__(self, other: Any) -> FourCorner[T]:
+        if isinstance(other, FourCorner):
+            return FourCorner(*(a * b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return FourCorner(*(a * other for a in self))
+        else:
+            return NotImplemented
 
 
 type Percentage = Annotated[float, Field(ge=0, le=1)]

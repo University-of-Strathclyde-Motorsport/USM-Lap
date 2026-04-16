@@ -32,5 +32,23 @@ class MaximumIterationsExceededError(ModelError):
         return (
             f"Failed to converge to desired precision {self.precision} "
             f"after {self.iterations} iterations. "
-            f"Final error: {self._final_error}"
+            f"Final error: {self._final_error}\n"
+            f"Residuals: {self.residuals}"
+        )
+
+
+@dataclass
+class InsufficientTractionError(ModelError):
+    """
+    Error raised when the vehicle has insufficient traction.
+    """
+
+    required: float
+    available: float
+
+    def __str__(self) -> str:
+        return (
+            f"Insufficient traction "
+            f"(required: {self.required:.3f}, "
+            f"available: {self.available:.3f})"
         )

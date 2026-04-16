@@ -37,6 +37,7 @@ def _transform_data(input_data: list[CompetitionPoints]) -> PointsData:
 def plot_competition_bar_chart(
     comparison_results: ComparisonResults,
     title: str = "Comparison Results",
+    bar_width: float = 0.8,
     padding: Optional[float] = None,
 ) -> None:
     """
@@ -45,6 +46,7 @@ def plot_competition_bar_chart(
     Args:
         comparison_results (ComparisonResults): Comparison results to plot.
         title (str): Title for the plot.
+        bar_width (float): Width of each bar, between 0 and 1 (default = 0.8).
         padding (Optional[float]): If specified, add padding
             to the left and right of the plot (default = None).
             Recommended value of 0.7.
@@ -63,7 +65,7 @@ def plot_competition_bar_chart(
             vehicle_labels,
             points,
             color=next(COLOURMAP),
-            width=0.7,
+            width=bar_width,
             label=event,
             tick_label=vehicle_labels,
             bottom=bottom,
@@ -113,7 +115,7 @@ def plot_points_bar_chart(
     data: dict[str, CompetitionPoints],
     title: str = "",
     y_label: str = "Points",
-    width: float = 0.7,
+    width: float = 0.9,
 ) -> None:
     """
     Plot a bar chart of points for a list of simulations.
@@ -123,7 +125,7 @@ def plot_points_bar_chart(
             Dictionary of bar chart labels and corresponding points data.
         title (str): Title for the plot (default = "").
         y_label (str): Label for the y-axis (default = "Points").
-        width (float): Overall width of the bars (default = 0.7).
+        width (float): Width of each bar, between 0 and 1 (default = 0.9).
     """
 
     simulation_labels = data.keys()

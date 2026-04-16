@@ -3,13 +3,12 @@
   "capacity": 38800,
   "nominal_voltage": 3.6,
   "voltage_lookup": [
-    { "state_of_charge": 1, "voltage": 4.2 },
-    { "state_of_charge": 0.35, "voltage": 3.4 },
+    { "state_of_charge": 0, "voltage": 2.5 },
     { "state_of_charge": 0.11, "voltage": 3 },
-    { "state_of_charge": 0, "voltage": 2.5 }
+    { "state_of_charge": 0.35, "voltage": 3.4 },
+    { "state_of_charge": 1, "voltage": 4.2 }
   ],
   "discharge_current": 30,
   "resistance": 0.017,
   "datasheet_url": "https://www.molicel.com/wp-content/uploads/Product-Data-Sheet-of-INR-18650-P30B-80111-2.pdf"
 }
-
