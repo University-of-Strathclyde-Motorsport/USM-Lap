@@ -3,7 +3,7 @@ This module contains code for generating a track mesh.
 """
 
 import math
-from typing import Any
+from typing import Any, Self
 
 import numpy as np
 
@@ -36,7 +36,7 @@ class Resolution(float):
     Must be a positive number.
     """
 
-    def __new__(cls, value: Any) -> None:
+    def __new__(cls, value: Any) -> Self:
         value = float(value)
         if value <= 0:
             raise ValueError("Resolution must be greater than 0")

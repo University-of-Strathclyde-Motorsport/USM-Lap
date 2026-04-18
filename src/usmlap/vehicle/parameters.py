@@ -4,6 +4,7 @@ This module contains code for getting and setting vehicle parameters.
 
 from __future__ import annotations
 
+import uuid
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import Any, ClassVar, Optional
@@ -118,7 +119,10 @@ class Parameter[T](ABC):
 
 
 def get_new_vehicle(
-    baseline: Vehicle, parameter: type[Parameter[Any]], value: float
+    baseline: Vehicle,
+    parameter: type[Parameter[Any]],
+    value: float,
+    label: Optional[str] = None,
 ) -> Vehicle:
     """
     Generate a new vehicle with a modified parameter value.
@@ -131,7 +135,10 @@ def get_new_vehicle(
     Returns:
         new_vehicle(Vehicle): A new vehicle with the updated parameter.
     """
+    if label is None:
+        label = str(uuid.uuid4())
     new_vehicle = deepcopy(baseline)
+    new_vehicle.label = label
     parameter.set_value(new_vehicle, value)
     return new_vehicle
 
@@ -249,6 +256,18 @@ class FinalDriveRatio(Parameter[float], name="Final Drive Ratio"):
 
 
 # Cell
+class ElectricalCell(Parameter[Cell], name="Electrical Cell"):
+    """The cell used in the vehicle."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> Cell:
+        return vehicle.powertrain.accumulator.cell
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: Cell) -> None:
+        vehicle.powertrain.accumulator.cell = value
+
+
 class CellCapacity(
     Parameter[float], name="Cell Capacity", unit="J", uncertainty=2000
 ):

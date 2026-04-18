@@ -22,8 +22,25 @@
       "description": "Number of cells connected in series",
       "type": "integer",
       "exclusiveMinimum": 0
+    },
+    "soc_derate_point": {
+      "description": "State of charge at which to begin derating current.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "thermal_derate_curve": {
+      "description": "Thermal derating curve. Must be the name of a json file in the /bms/thermal_derate library",
+      "type": "string"
     }
   },
-  "required": ["print_name", "cell", "cells_in_parallel", "cells_in_series"],
+  "required": [
+    "print_name",
+    "cell",
+    "cells_in_parallel",
+    "cells_in_series",
+    "soc_derate_point",
+    "thermal_derate_curve"
+  ],
   "additionalProperties": false
 }

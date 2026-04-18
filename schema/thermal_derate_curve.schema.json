@@ -1,0 +1,37 @@
+{
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
+  "$id": "thermal_derate_curve",
+  "title": "Thermal Derate Curve",
+  "description": "Curve for thermally derating the accumulator",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/derate_node" },
+      "minItems": 2
+    }
+  },
+  "required": ["nodes"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "derate_node": {
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "description": "Reference temperature",
+          "minimum": -273.15
+        },
+        "current": {
+          "type": "number",
+          "description": "Proportion of current available",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["temperature", "current"],
+      "additionalProperties": false
+    }
+  }
+}

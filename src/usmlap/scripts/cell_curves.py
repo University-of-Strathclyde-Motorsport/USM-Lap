@@ -3,7 +3,7 @@ This script plots the parameters of a cell.
 """
 
 from usmlap.plot import plot_cell_parameters
-from usmlap.vehicle.powertrain import Cell
+from usmlap.vehicle.powertrain import Accumulator
 
-cell = Cell.from_json("molicel_P30b")
-plot_cell_parameters(cell)
+accumulator = Accumulator.from_json("USM26")
+plot_cell_parameters(accumulator)

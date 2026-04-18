@@ -8,7 +8,7 @@ from abc import ABC
 from pathlib import Path
 from typing import Any, ClassVar, Generator, Self
 
-from pydantic import BaseModel, ValidationError, model_validator
+from pydantic import BaseModel, ConfigDict, ValidationError, model_validator
 
 from usmlap.filepath import LIBRARY_ROOT as LIBRARY_ROOT  # noqa: S1128
 
@@ -76,6 +76,8 @@ class HasLibrary(ABC, BaseModel):
     """
     Base class for objects that have a library.
     """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     _library_path: ClassVar[Path]
     _files: ClassVar[dict[str, Path]]

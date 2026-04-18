@@ -5,12 +5,21 @@ This module defines the interface for Formula Student events.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import NamedTuple, Optional
 
 from usmlap.simulation import SimulationSettings, Solution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
 from ..points import CompetitionData, CompetitionPoints
+
+
+class EventTuple[T](NamedTuple):
+    acceleration: Optional[T] = None
+    skidpad: Optional[T] = None
+    autocross: Optional[T] = None
+    endurance: Optional[T] = None
+    efficiency: Optional[T] = None
 
 
 class EventInterface(ABC):

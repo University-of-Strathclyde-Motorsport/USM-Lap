@@ -2,23 +2,192 @@
   "print_name": "Molicel P30b",
   "capacity": 38800,
   "charge_capacity": 10800,
+  "thermal_mass": 45,
   "nominal_voltage": 3.6,
   "voltage_lookup": [
-    { "state_of_charge": 0, "voltage": 2.5 },
-    { "state_of_charge": 0.11, "voltage": 3 },
+    { "state_of_charge": 1, "voltage": 4.2 },
     { "state_of_charge": 0.35, "voltage": 3.4 },
-    { "state_of_charge": 1, "voltage": 4.2 }
+    { "state_of_charge": 0.11, "voltage": 3 },
+    { "state_of_charge": 0, "voltage": 2.5 }
   ],
   "resistance_lookup": [
-    { "temperature": 0, "resistance": 0.04 },
-    { "temperature": 10, "resistance": 0.022 },
-    { "temperature": 25, "resistance": 0.017 },
-    { "temperature": 35, "resistance": 0.013 },
-    { "temperature": 45, "resistance": 0.011 },
-    { "temperature": 60, "resistance": 0.006 }
+    {
+      "temperature": 10,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.029436 },
+        { "state_of_charge": 0.1, "resistance": 0.029436 },
+        { "state_of_charge": 0.2, "resistance": 0.019723 },
+        { "state_of_charge": 0.3, "resistance": 0.017829 },
+        { "state_of_charge": 0.4, "resistance": 0.016971 },
+        { "state_of_charge": 0.5, "resistance": 0.016421 },
+        { "state_of_charge": 0.6, "resistance": 0.017564 },
+        { "state_of_charge": 0.7, "resistance": 0.016988 },
+        { "state_of_charge": 0.8, "resistance": 0.017717 },
+        { "state_of_charge": 0.9, "resistance": 0.018663 },
+        { "state_of_charge": 1, "resistance": 0.018663 }
+      ]
+    },
+    {
+      "temperature": 15,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.023025 },
+        { "state_of_charge": 0.1, "resistance": 0.023025 },
+        { "state_of_charge": 0.2, "resistance": 0.016904 },
+        { "state_of_charge": 0.3, "resistance": 0.015994 },
+        { "state_of_charge": 0.4, "resistance": 0.015675 },
+        { "state_of_charge": 0.5, "resistance": 0.015551 },
+        { "state_of_charge": 0.6, "resistance": 0.016089 },
+        { "state_of_charge": 0.7, "resistance": 0.015676 },
+        { "state_of_charge": 0.8, "resistance": 0.016516 },
+        { "state_of_charge": 0.9, "resistance": 0.017082 },
+        { "state_of_charge": 1, "resistance": 0.017082 }
+      ]
+    },
+    {
+      "temperature": 20,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.019436 },
+        { "state_of_charge": 0.1, "resistance": 0.019436 },
+        { "state_of_charge": 0.2, "resistance": 0.015401 },
+        { "state_of_charge": 0.3, "resistance": 0.014836 },
+        { "state_of_charge": 0.4, "resistance": 0.014724 },
+        { "state_of_charge": 0.5, "resistance": 0.014811 },
+        { "state_of_charge": 0.6, "resistance": 0.01473 },
+        { "state_of_charge": 0.7, "resistance": 0.014469 },
+        { "state_of_charge": 0.8, "resistance": 0.015389 },
+        { "state_of_charge": 0.9, "resistance": 0.015627 },
+        { "state_of_charge": 1, "resistance": 0.015627 }
+      ]
+    },
+    {
+      "temperature": 25,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.017783 },
+        { "state_of_charge": 0.1, "resistance": 0.017783 },
+        { "state_of_charge": 0.2, "resistance": 0.014361 },
+        { "state_of_charge": 0.3, "resistance": 0.013983 },
+        { "state_of_charge": 0.4, "resistance": 0.013925 },
+        { "state_of_charge": 0.5, "resistance": 0.014046 },
+        { "state_of_charge": 0.6, "resistance": 0.013733 },
+        { "state_of_charge": 0.7, "resistance": 0.013596 },
+        { "state_of_charge": 0.8, "resistance": 0.01439 },
+        { "state_of_charge": 0.9, "resistance": 0.014474 },
+        { "state_of_charge": 1, "resistance": 0.014474 }
+      ]
+    },
+    {
+      "temperature": 30,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.016534 },
+        { "state_of_charge": 0.1, "resistance": 0.016534 },
+        { "state_of_charge": 0.2, "resistance": 0.013763 },
+        { "state_of_charge": 0.3, "resistance": 0.013243 },
+        { "state_of_charge": 0.4, "resistance": 0.013066 },
+        { "state_of_charge": 0.5, "resistance": 0.013277 },
+        { "state_of_charge": 0.6, "resistance": 0.013163 },
+        { "state_of_charge": 0.7, "resistance": 0.013044 },
+        { "state_of_charge": 0.8, "resistance": 0.013625 },
+        { "state_of_charge": 0.9, "resistance": 0.013652 },
+        { "state_of_charge": 1, "resistance": 0.013652 }
+      ]
+    },
+    {
+      "temperature": 35,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.015937 },
+        { "state_of_charge": 0.1, "resistance": 0.015937 },
+        { "state_of_charge": 0.2, "resistance": 0.013523 },
+        { "state_of_charge": 0.3, "resistance": 0.012549 },
+        { "state_of_charge": 0.4, "resistance": 0.012234 },
+        { "state_of_charge": 0.5, "resistance": 0.012524 },
+        { "state_of_charge": 0.6, "resistance": 0.012584 },
+        { "state_of_charge": 0.7, "resistance": 0.012495 },
+        { "state_of_charge": 0.8, "resistance": 0.012872 },
+        { "state_of_charge": 0.9, "resistance": 0.012841 },
+        { "state_of_charge": 1, "resistance": 0.012841 }
+      ]
+    },
+    {
+      "temperature": 40,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.015457 },
+        { "state_of_charge": 0.1, "resistance": 0.015457 },
+        { "state_of_charge": 0.2, "resistance": 0.01311 },
+        { "state_of_charge": 0.3, "resistance": 0.011838 },
+        { "state_of_charge": 0.4, "resistance": 0.011389 },
+        { "state_of_charge": 0.5, "resistance": 0.011811 },
+        { "state_of_charge": 0.6, "resistance": 0.012015 },
+        { "state_of_charge": 0.7, "resistance": 0.011967 },
+        { "state_of_charge": 0.8, "resistance": 0.012167 },
+        { "state_of_charge": 0.9, "resistance": 0.012041 },
+        { "state_of_charge": 1, "resistance": 0.012041 }
+      ]
+    },
+    {
+      "temperature": 45,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.014359 },
+        { "state_of_charge": 0.1, "resistance": 0.014359 },
+        { "state_of_charge": 0.2, "resistance": 0.01237 },
+        { "state_of_charge": 0.3, "resistance": 0.011052 },
+        { "state_of_charge": 0.4, "resistance": 0.010743 },
+        { "state_of_charge": 0.5, "resistance": 0.011188 },
+        { "state_of_charge": 0.6, "resistance": 0.011495 },
+        { "state_of_charge": 0.7, "resistance": 0.011333 },
+        { "state_of_charge": 0.8, "resistance": 0.011431 },
+        { "state_of_charge": 0.9, "resistance": 0.011234 },
+        { "state_of_charge": 1, "resistance": 0.011234 }
+      ]
+    },
+    {
+      "temperature": 50,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.013361 },
+        { "state_of_charge": 0.1, "resistance": 0.013361 },
+        { "state_of_charge": 0.2, "resistance": 0.011662 },
+        { "state_of_charge": 0.3, "resistance": 0.010363 },
+        { "state_of_charge": 0.4, "resistance": 0.010385 },
+        { "state_of_charge": 0.5, "resistance": 0.010725 },
+        { "state_of_charge": 0.6, "resistance": 0.01111 },
+        { "state_of_charge": 0.7, "resistance": 0.010839 },
+        { "state_of_charge": 0.8, "resistance": 0.010981 },
+        { "state_of_charge": 0.9, "resistance": 0.010844 },
+        { "state_of_charge": 1, "resistance": 0.010844 }
+      ]
+    },
+    {
+      "temperature": 55,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.012558 },
+        { "state_of_charge": 0.1, "resistance": 0.012558 },
+        { "state_of_charge": 0.2, "resistance": 0.01098 },
+        { "state_of_charge": 0.3, "resistance": 0.009709 },
+        { "state_of_charge": 0.4, "resistance": 0.010061 },
+        { "state_of_charge": 0.5, "resistance": 0.010328 },
+        { "state_of_charge": 0.6, "resistance": 0.010795 },
+        { "state_of_charge": 0.7, "resistance": 0.010417 },
+        { "state_of_charge": 0.8, "resistance": 0.010628 },
+        { "state_of_charge": 0.9, "resistance": 0.010542 },
+        { "state_of_charge": 1, "resistance": 0.010542 }
+      ]
+    },
+    {
+      "temperature": 60,
+      "lookup": [
+        { "state_of_charge": 0, "resistance": 0.012695 },
+        { "state_of_charge": 0.1, "resistance": 0.012695 },
+        { "state_of_charge": 0.2, "resistance": 0.010324 },
+        { "state_of_charge": 0.3, "resistance": 0.009068 },
+        { "state_of_charge": 0.4, "resistance": 0.009748 },
+        { "state_of_charge": 0.5, "resistance": 0.009961 },
+        { "state_of_charge": 0.6, "resistance": 0.010517 },
+        { "state_of_charge": 0.7, "resistance": 0.010035 },
+        { "state_of_charge": 0.8, "resistance": 0.010319 },
+        { "state_of_charge": 0.9, "resistance": 0.010272 },
+        { "state_of_charge": 1, "resistance": 0.010272 }
+      ]
+    }
   ],
   "max_discharge_current": 30,
-  "resistance": 0.017,
-  "thermal_mass": 45,
   "datasheet_url": "https://www.molicel.com/wp-content/uploads/Product-Data-Sheet-of-INR-18650-P30B-80111-2.pdf"
 }

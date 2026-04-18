@@ -39,7 +39,7 @@
     "accumulator": "USM26",
     "motor": "EMRAX_228",
     "motor_controller": "BAMOCAR",
-    "soc_current_derate_point": 0.3
+    "cooling_coefficient": 24
   },
   "steering": {
     "steering_ratio": 5,

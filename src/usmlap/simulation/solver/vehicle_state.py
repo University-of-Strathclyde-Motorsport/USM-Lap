@@ -4,6 +4,7 @@ This module contains code for updating the vehicle state.
 
 from usmlap.model import FullVehicleState, NodeContext, StateVariables
 from usmlap.model.errors import OutOfChargeError
+from usmlap.vehicle.powertrain import StateOfCharge
 
 
 def update_state_variables(
@@ -14,7 +15,7 @@ def update_state_variables(
 ) -> StateVariables:
     """Update the values of the transient variables."""
 
-    soc = (
+    soc = StateOfCharge(
         initial_state.state_of_charge + _discharge_rate(ctx, vehicle_state) * dt
     )
     if soc < 0:
@@ -33,7 +34,7 @@ def _discharge_rate(ctx: NodeContext, vehicle_state: FullVehicleState) -> float:
     """Rate of change of state of charge"""
     return (
         -vehicle_state.accumulator_current
-        / ctx.vehicle.powertrain.accumulator.cell.capacity
+        / ctx.vehicle.powertrain.accumulator.charge_capacity
     )
 
 

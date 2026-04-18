@@ -2,7 +2,7 @@
 This module models the full vehicle.
 """
 
-from dataclasses import dataclass
+from typing import Optional
 
 from usmlap.filepath import LIBRARY_ROOT
 from usmlap.utils.datatypes import FrontRear
@@ -17,22 +17,6 @@ from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
 from .tyre.tyre_model import Tyres
-
-
-@dataclass
-class Metadata(object):
-    """
-    Metadata for a vehicle.
-
-    Attributes:
-        print_name (str): The name of the vehicle.
-        year (int): The year the vehicle was built.
-        description (str): A description of the vehicle (default = "").
-    """
-
-    print_name: str
-    year: int
-    description: str = ""
 
 
 class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
@@ -52,7 +36,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
         tyres (Tyres): The tyres of the vehicle.
     """
 
-    metadata: Metadata
+    print_name: str
     driver: Driver
     aero: AeroPackage
     brakes: Brakes
@@ -62,6 +46,9 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     suspension: Suspension
     transmission: Transmission
     tyres: Tyres
+    label: str = ""
+    description: str = ""
+    year: Optional[int] = None
 
     @property
     def total_mass(self) -> float:

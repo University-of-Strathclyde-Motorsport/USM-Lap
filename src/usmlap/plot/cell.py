@@ -5,11 +5,14 @@ This module contains code for plotting cell maps.
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.plot.style import USM_BLUE
-from usmlap.vehicle.powertrain import Cell
+from usmlap.plot.style import COLOURMAP, USM_BLUE
+from usmlap.vehicle.powertrain import Accumulator, Cell, CellState
 
 RESOLUTION = 1000
 NOMINAL_TEMPERATURE = 25
+REFERENCE_TEMPERATURES = [25, 30, 35, 40, 45]
+T_MIN = 0
+T_MAX = 80
 
 AXIS_LABELS = {
     "soc": "State of Charge (%)",
@@ -17,12 +20,11 @@ AXIS_LABELS = {
     "resistance": "DC Impedance (mΩ)",
     "current": "Discharge Current (A)",
     "temperature": "Temperature (°C)",
+    "derate": "Available Current",
 }
 
 
-def plot_cell_parameters(
-    cell: Cell, derate_soc: float = 0.3, t_min: float = 0, t_max: float = 60
-) -> None:
+def plot_cell_parameters(accumulator: Accumulator) -> None:
     """
     Plot the parameters of a cell.
 
@@ -36,12 +38,12 @@ def plot_cell_parameters(
     fig, axs = plt.subplots(2, 2)
     ((ax_voltage, ax_soc_derate), (ax_resistance, ax_thermal_derate)) = axs
 
-    _plot_voltage(cell, ax_voltage)
-    _plot_resistance(cell, ax_resistance)
-    _plot_soc_derate(cell, ax_soc_derate, derate_soc)
-    _plot_thermal_derate(cell, ax_thermal_derate)
+    _plot_voltage(accumulator.cell, ax_voltage)
+    _plot_resistance(accumulator.cell, ax_resistance)
+    _plot_soc_derate(accumulator, ax_soc_derate)
+    _plot_thermal_derate(accumulator, ax_thermal_derate)
 
-    fig.suptitle(f"Cell Characteristics\n{cell.print_name}")
+    fig.suptitle(f"Cell Characteristics\n{accumulator.cell.print_name}")
 
     plt.tight_layout()
     plt.show()
@@ -62,39 +64,44 @@ def _plot_voltage(cell: Cell, ax: plt.Axes) -> None:
 def _plot_resistance(cell: Cell, ax: plt.Axes) -> None:
     """Plot resistance against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
-    temperature = NOMINAL_TEMPERATURE
-    resistance = [cell.resistance(temperature) * 1000 for _ in state_of_charge]
-    ax.plot(state_of_charge * 100, resistance, color=USM_BLUE)
+    for temperature in REFERENCE_TEMPERATURES:
+        resistances = []
+        for soc in state_of_charge:
+            cell_state = CellState(soc, temperature)
+            resistances.append(cell.resistance(cell_state) * 1000)
+        ax.plot(
+            state_of_charge * 100,
+            resistances,
+            color=next(COLOURMAP),
+            label=str(temperature),
+        )
     ax.set_xlabel(AXIS_LABELS["soc"])
     ax.set_ylabel(AXIS_LABELS["resistance"])
     ax.set_title("Resistance")
     ax.grid(True)
+    ax.legend(title="Temperature (°C)")
     ax.set_xlim(0, 100)
 
 
-def _plot_soc_derate(cell: Cell, ax: plt.Axes, derate_soc: float) -> None:
+def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
     """Plot current against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
-    current = [
-        cell.discharge_current(soc, derate_soc) for soc in state_of_charge
-    ]
-    ax.plot(state_of_charge * 100, current, color=USM_BLUE)
+    derate = [accumulator.soc_derate(soc) for soc in state_of_charge]
+    ax.plot(state_of_charge * 100, derate, color=USM_BLUE)
     ax.set_xlabel(AXIS_LABELS["soc"])
-    ax.set_ylabel(AXIS_LABELS["current"])
+    ax.set_ylabel(AXIS_LABELS["derate"])
     ax.set_title("SOC Current Derating")
     ax.grid(True)
     ax.set_xlim(0, 100)
 
 
-def _plot_thermal_derate(cell: Cell, ax: plt.Axes) -> None:
+def _plot_thermal_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
     """Plot current against temperature."""
-    t_min = cell.minimum_temperature()
-    t_max = cell.maximum_temperature()
-    temperature = np.linspace(t_min, t_max, RESOLUTION)
-    resistance = [cell.resistance(t) * 1000 for t in temperature]
-    ax.plot(temperature, resistance, color=USM_BLUE)
+    temperature = np.linspace(T_MIN, T_MAX, RESOLUTION)
+    derate = [accumulator.thermal_derate(t) for t in temperature]
+    ax.plot(temperature, derate, color=USM_BLUE)
     ax.set_xlabel(AXIS_LABELS["temperature"])
-    ax.set_ylabel(AXIS_LABELS["resistance"])
-    ax.set_title("Resistance vs Temperature")
+    ax.set_ylabel(AXIS_LABELS["derate"])
+    ax.set_title("Thermal Current Derating")
     ax.grid(True)
-    ax.set_xlim(t_min, t_max)
+    ax.set_xlim(T_MIN, T_MAX)

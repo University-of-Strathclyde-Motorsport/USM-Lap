@@ -41,10 +41,9 @@ class RWDPowertrain(PowertrainInterface):
     motor: Motor
     motor_controller: MotorController
     cooling_coefficient: float
-    soc_current_derate_point: float
     discharge_current_limit: float = 1
 
-    def get_discharge_current(self, state_of_charge: float) -> float:
+    def get_discharge_current(self, cell_state: CellState) -> float:
         """
         Get the available discharge current at a given state of charge.
 
@@ -58,7 +57,7 @@ class RWDPowertrain(PowertrainInterface):
             current (float): Available discharge current.
         """
         maximum_discharge_current = self.accumulator.maximum_discharge_current(
-            state_of_charge, self.soc_current_derate_point
+            cell_state
         )
         return maximum_discharge_current * self.discharge_current_limit
 
@@ -89,9 +88,7 @@ class RWDPowertrain(PowertrainInterface):
         Returns:
             motor_voltage (float): Voltage across the motor.
         """
-        accumulator_voltage = self.accumulator.get_voltage(
-            cell_state.state_of_charge
-        )
+        accumulator_voltage = self.accumulator.get_voltage(cell_state.soc)
         voltage_drop = self.get_voltage_drop(cell_state, current)
         return accumulator_voltage - voltage_drop
 
@@ -110,7 +107,7 @@ class RWDPowertrain(PowertrainInterface):
             knee_speed (float): Knee speed of the motor.
         """
         if current is None:
-            current = self.get_discharge_current(cell_state.state_of_charge)
+            current = self.get_discharge_current(cell_state)
 
         motor_voltage = self.get_motor_voltage(cell_state, current)
         knee_speed = self.motor.get_speed(motor_voltage)
@@ -131,9 +128,7 @@ class RWDPowertrain(PowertrainInterface):
     def get_motor_torque(
         self, cell_state: CellState, motor_speed: float
     ) -> float:
-        discharge_current = self.get_discharge_current(
-            cell_state.state_of_charge
-        )
+        discharge_current = self.get_discharge_current(cell_state)
         knee_speed = self.get_knee_speed(cell_state, discharge_current)
         maximum_speed = self.get_knee_speed(cell_state, current=0)
         maximum_torque = self.motor.get_torque(discharge_current)
@@ -159,12 +154,6 @@ class RWDPowertrain(PowertrainInterface):
 
     def motor_to_accumulator_power(self, motor_power: float) -> float:
         return motor_power / self.get_powertrain_efficiency()
-
-    def update_state_of_charge(
-        self, state_of_charge: float, energy_used: float
-    ) -> float:
-        state_of_charge_used = energy_used / self.accumulator.capacity
-        return state_of_charge - state_of_charge_used
 
     def cooling_rate(
         self, cell_temperature: float, ambient_temperature: float

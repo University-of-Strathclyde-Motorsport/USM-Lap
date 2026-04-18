@@ -7,7 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from usmlap.model.environment import AMBIENT_TEMPERATURE
-from usmlap.vehicle.powertrain import CellState
+from usmlap.vehicle.powertrain import CellState, StateOfCharge
 
 
 @dataclass
@@ -21,14 +21,13 @@ class StateVariables(object):
             (default = 1).
     """
 
-    state_of_charge: float = 1
+    state_of_charge: StateOfCharge = StateOfCharge(1)
     cell_temperature: float = AMBIENT_TEMPERATURE
 
     @property
     def cell_state(self) -> CellState:
         return CellState(
-            state_of_charge=self.state_of_charge,
-            temperature=self.cell_temperature,
+            soc=self.state_of_charge, temperature=self.cell_temperature
         )
 
     @staticmethod

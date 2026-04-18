@@ -8,14 +8,16 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.vehicle.powertrain import CellState, RWDPowertrain
+from usmlap.vehicle.powertrain import CellState, RWDPowertrain, StateOfCharge
 
 from .style import COLOURMAP
+
+DEFAULT_SOC_VALUES = [StateOfCharge(v) for v in [1, 0.8, 0.6, 0.4, 0.2]]
 
 
 def plot_motor_curve(
     powertrain: RWDPowertrain,
-    state_of_charge: list[float] = [1, 0.8, 0.6, 0.4, 0.2],
+    state_of_charge: list[StateOfCharge] = DEFAULT_SOC_VALUES,
     resolution: int = 1000,
 ) -> None:
     """
@@ -30,7 +32,7 @@ def plot_motor_curve(
     fig, (ax_torque, ax_power) = plt.subplots(nrows=2, sharex=True)
 
     for soc in state_of_charge:
-        cell_state = CellState(state_of_charge=soc, temperature=25)
+        cell_state = CellState(soc=soc, temperature=25)
         motor_curve = _generate_motor_curve(powertrain, cell_state, resolution)
         rpm = [rads_to_rpm(node.speed) for node in motor_curve]
         torque = [node.torque for node in motor_curve]

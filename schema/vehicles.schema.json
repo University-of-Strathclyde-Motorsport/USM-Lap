@@ -5,26 +5,17 @@
   "description": "Vehicle definition for laptime simulation",
   "type": "object",
   "properties": {
-    "metadata": {
-      "description": "Metadata for the vehicle",
-      "type": "object",
-      "properties": {
-        "print_name": {
-          "description": "Printable name of the vehicle",
-          "type": "string"
-        },
-        "year": {
-          "description": "Year the vehicle was manufactured",
-          "type": "integer",
-          "minimum": 0
-        },
-        "description": {
-          "description": "Description of the vehicle",
-          "type": "string"
-        }
-      },
-      "required": ["print_name", "year"],
-      "additionalProperties": false
+    "print_name": {
+      "description": "Printable name of the vehicle",
+      "type": "string"
+    },
+    "year": {
+      "description": "Year the vehicle was manufactured",
+      "type": "integer"
+    },
+    "description": {
+      "description": "Description of the vehicle",
+      "type": "string"
     },
     "driver": {
       "description": "Driver for the vehicle. Should be the name of a json file in the drivers library",
@@ -139,7 +130,7 @@
     }
   },
   "required": [
-    "metadata",
+    "print_name",
     "driver",
     "aero",
     "brakes",
@@ -214,20 +205,13 @@
           "description": "The cooling coefficient for the accumulator, in Watts per Kelvin",
           "type": "number",
           "minimum": 0
-        },
-        "soc_current_derate_point": {
-          "description": "The state of charge at which to begin derating current",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
         }
       },
       "required": [
         "accumulator",
         "motor",
         "motor_controller",
-        "cooling_coefficient",
-        "soc_current_derate_point"
+        "cooling_coefficient"
       ],
       "additionalProperties": false
     },

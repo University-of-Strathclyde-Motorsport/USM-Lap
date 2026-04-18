@@ -24,6 +24,14 @@ type CompetitionSolutions = dict[str, Solution]
 
 
 @dataclass
+class CompetitionResults(object):
+    """Results of simulating a Formula Student competition."""
+
+    points: CompetitionPoints
+    solutions: CompetitionSolutions
+
+
+@dataclass
 class Competition(object):
     """
     Class for simulating a Formula Student competition.
@@ -90,7 +98,7 @@ class Competition(object):
 
     def simulate(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> tuple[CompetitionPoints, CompetitionSolutions]:
+    ) -> CompetitionResults:
         """
         Simulate a Formula Student competition.
 
@@ -125,4 +133,4 @@ class Competition(object):
 
                 progress.advance(task)
 
-        return competition_points, competition_results
+        return CompetitionResults(competition_points, competition_results)

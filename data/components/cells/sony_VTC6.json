@@ -2,18 +2,99 @@
   "print_name": "Sony VTC6",
   "capacity": 38880,
   "charge_capacity": 10800,
+  "thermal_mass": 45,
   "nominal_voltage": 3.6,
   "voltage_lookup": [
-    { "state_of_charge": 0, "voltage": 2.5 },
-    { "state_of_charge": 0.04, "voltage": 2.7 },
-    { "state_of_charge": 0.08, "voltage": 3 },
-    { "state_of_charge": 0.16, "voltage": 3.2 },
-    { "state_of_charge": 0.32, "voltage": 3.35 },
+    { "state_of_charge": 1, "voltage": 4.2 },
     { "state_of_charge": 0.96, "voltage": 3.8 },
-    { "state_of_charge": 1, "voltage": 4.2 }
+    { "state_of_charge": 0.32, "voltage": 3.35 },
+    { "state_of_charge": 0.16, "voltage": 3.2 },
+    { "state_of_charge": 0.08, "voltage": 3 },
+    { "state_of_charge": 0.04, "voltage": 2.7 },
+    { "state_of_charge": 0, "voltage": 2.5 }
+  ],
+  "resistance_lookup": [
+    {
+      "temperature": 25,
+      "lookup": [
+        { "state_of_charge": 0.0, "resistance": 0.0285 },
+        { "state_of_charge": 0.1, "resistance": 0.0285 },
+        { "state_of_charge": 0.2, "resistance": 0.0234 },
+        { "state_of_charge": 0.3, "resistance": 0.0203 },
+        { "state_of_charge": 0.4, "resistance": 0.0195 },
+        { "state_of_charge": 0.5, "resistance": 0.0192 },
+        { "state_of_charge": 0.6, "resistance": 0.0195 },
+        { "state_of_charge": 0.7, "resistance": 0.02 },
+        { "state_of_charge": 0.8, "resistance": 0.0216 },
+        { "state_of_charge": 0.9, "resistance": 0.0245 },
+        { "state_of_charge": 1.0, "resistance": 0.0247 }
+      ]
+    },
+    {
+      "temperature": 30,
+      "lookup": [
+        { "state_of_charge": 0.0, "resistance": 0.0262 },
+        { "state_of_charge": 0.1, "resistance": 0.0262 },
+        { "state_of_charge": 0.2, "resistance": 0.0218 },
+        { "state_of_charge": 0.3, "resistance": 0.0195 },
+        { "state_of_charge": 0.4, "resistance": 0.0187 },
+        { "state_of_charge": 0.5, "resistance": 0.0185 },
+        { "state_of_charge": 0.6, "resistance": 0.0186 },
+        { "state_of_charge": 0.7, "resistance": 0.0198 },
+        { "state_of_charge": 0.8, "resistance": 0.0202 },
+        { "state_of_charge": 0.9, "resistance": 0.0226 },
+        { "state_of_charge": 1.0, "resistance": 0.0228 }
+      ]
+    },
+    {
+      "temperature": 35,
+      "lookup": [
+        { "state_of_charge": 0.0, "resistance": 0.024 },
+        { "state_of_charge": 0.1, "resistance": 0.024 },
+        { "state_of_charge": 0.2, "resistance": 0.0205 },
+        { "state_of_charge": 0.3, "resistance": 0.0186 },
+        { "state_of_charge": 0.4, "resistance": 0.018 },
+        { "state_of_charge": 0.5, "resistance": 0.0178 },
+        { "state_of_charge": 0.6, "resistance": 0.0177 },
+        { "state_of_charge": 0.7, "resistance": 0.0179 },
+        { "state_of_charge": 0.8, "resistance": 0.0188 },
+        { "state_of_charge": 0.9, "resistance": 0.0207 },
+        { "state_of_charge": 1.0, "resistance": 0.0208 }
+      ]
+    },
+    {
+      "temperature": 40,
+      "lookup": [
+        { "state_of_charge": 0.0, "resistance": 0.0218 },
+        { "state_of_charge": 0.1, "resistance": 0.0218 },
+        { "state_of_charge": 0.2, "resistance": 0.0191 },
+        { "state_of_charge": 0.3, "resistance": 0.0178 },
+        { "state_of_charge": 0.4, "resistance": 0.0173 },
+        { "state_of_charge": 0.5, "resistance": 0.017 },
+        { "state_of_charge": 0.6, "resistance": 0.0168 },
+        { "state_of_charge": 0.7, "resistance": 0.0168 },
+        { "state_of_charge": 0.8, "resistance": 0.0175 },
+        { "state_of_charge": 0.9, "resistance": 0.0188 },
+        { "state_of_charge": 1.0, "resistance": 0.0189 }
+      ]
+    },
+    {
+      "temperature": 45,
+      "lookup": [
+        { "state_of_charge": 0.0, "resistance": 0.0195 },
+        { "state_of_charge": 0.1, "resistance": 0.0195 },
+        { "state_of_charge": 0.2, "resistance": 0.0178 },
+        { "state_of_charge": 0.3, "resistance": 0.017 },
+        { "state_of_charge": 0.4, "resistance": 0.0166 },
+        { "state_of_charge": 0.5, "resistance": 0.0163 },
+        { "state_of_charge": 0.6, "resistance": 0.0159 },
+        { "state_of_charge": 0.7, "resistance": 0.0157 },
+        { "state_of_charge": 0.8, "resistance": 0.0161 },
+        { "state_of_charge": 0.9, "resistance": 0.017 },
+        { "state_of_charge": 1.0, "resistance": 0.017 }
+      ]
+    }
   ],
   "max_discharge_current": 20,
-  "resistance": 0.0162,
-  "thermal_mass": 45,
   "datasheet_url": "https://enepaq.com/wp-content/uploads/2025/02/Sony-Murata-VTC6-Li-ion-Battery-Module-With-Temperature-Sensor-Datasheet-.pdf"
 }

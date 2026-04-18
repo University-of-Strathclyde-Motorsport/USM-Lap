@@ -41,7 +41,7 @@ class QuasiTransientSolver(SolverInterface):
     Quasi-transient solver.
     """
 
-    target_soc: float = 0
+    target_soc: float = 0.2
 
     def solve(self, previous_solution: Solution) -> Solution:
         times: list[float] = []

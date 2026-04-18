@@ -81,7 +81,7 @@ def plot_channels(
             ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         axs[0].legend(loc="upper left", bbox_to_anchor=(1, 1))
 
-    mng = plt.get_current_fig_manager()
-    mng.resize(*mng.window.maxsize())
+    # mng = plt.get_current_fig_manager()
+    # mng.resize(*mng.window.maxsize())
     plt.show()
     plt.tight_layout()

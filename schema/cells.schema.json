@@ -15,7 +15,12 @@
       "exclusiveMinimum": 0
     },
     "charge_capacity": {
-      "description": "Charge capacity of the cell, in Coulombs",
+      "description": "Capacity of the cell, in Coulombs",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "thermal_mass": {
+      "description": "Thermal mass of the cell, in J / K",
       "type": "number",
       "exclusiveMinimum": 0
     },
@@ -27,27 +32,34 @@
     "voltage_lookup": {
       "description": "Lookup table for cell voltage as a function of state of charge",
       "type": "array",
-      "items": { "$ref": "#/$defs/voltage_lookup" },
+      "items": {
+        "type": "object",
+        "properties": {
+          "state_of_charge": {
+            "description": "Reference state of charge",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "voltage": {
+            "description": "Voltage at reference state of charge",
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": ["state_of_charge", "voltage"],
+        "additionalProperties": false
+      },
       "minItems": 2
     },
     "resistance_lookup": {
       "description": "Lookup table for cell resistance as a function of temperature",
       "type": "array",
       "items": { "$ref": "#/$defs/resistance_lookup" },
-      "minItems": 2
+      "minItems": 1
     },
     "max_discharge_current": {
       "description": "Maximum continuous discharge current, in amps",
-      "type": "number",
-      "exclusiveMinimum": 0
-    },
-    "resistance": {
-      "description": "Nominal internal resistance of the cell, in ohms",
-      "type": "number",
-      "exclusiveMinimum": 0
-    },
-    "thermal_mass": {
-      "description": "Thermal mass of the cell, in J/K",
       "type": "number",
       "exclusiveMinimum": 0
     },
@@ -60,11 +72,11 @@
     "print_name",
     "capacity",
     "charge_capacity",
+    "thermal_mass",
     "nominal_voltage",
-    "max_discharge_current",
     "voltage_lookup",
     "resistance_lookup",
-    "resistance"
+    "max_discharge_current"
   ],
   "additionalProperties": false,
 
@@ -96,13 +108,32 @@
           "type": "number",
           "minimum": -273.15
         },
+        "lookup": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/soc_resistance_lookup" },
+          "minItems": 2
+        }
+      },
+      "required": ["temperature", "lookup"],
+      "additionalProperties": false
+    },
+
+    "soc_resistance_lookup": {
+      "type": "object",
+      "properties": {
+        "state_of_charge": {
+          "description": "Reference state of charge",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
         "resistance": {
-          "description": "Resistance at reference temperature",
+          "description": "Resistance at reference state of charge",
           "type": "number",
           "exclusiveMinimum": 0
         }
       },
-      "required": ["temperature", "resistance"],
+      "required": ["state_of_charge", "resistance"],
       "additionalProperties": false
     }
   }

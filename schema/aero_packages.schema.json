@@ -21,9 +21,9 @@
       "maximum": 1
     },
     "centre_of_pressure_height": {
-      "description": "The height of the centre of pressure above the ground",
+      "description": "The height of the centre of pressure of the aerodynamic package",
       "type": "number",
-      "minimum": 0
+      "exclusiveMinimum": 0
     },
     "aero_model": {
       "description": "Model of the aerodynamic package",
@@ -67,6 +67,7 @@
     "print_name",
     "frontal_area",
     "front_aero_distribution",
+    "centre_of_pressure_height",
     "aero_model"
   ],
   "additionalProperties": false

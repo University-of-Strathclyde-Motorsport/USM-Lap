@@ -1,8 +1,6 @@
 {
-  "metadata": {
-    "print_name": "USM26",
-    "year": 2026
-  },
+  "print_name": "USM26",
+  "year": 2026,
   "driver": "acceleration",
   "aero": "USM26",
   "brakes": {
@@ -39,8 +37,7 @@
     "accumulator": "USM26",
     "motor": "EMRAX_228",
     "motor_controller": "BAMOCAR",
-    "cooling_coefficient": 24,
-    "soc_current_derate_point": 0.3
+    "cooling_coefficient": 24
   },
   "steering": {
     "steering_ratio": 5,
