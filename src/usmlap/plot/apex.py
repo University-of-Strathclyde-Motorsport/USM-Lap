@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from usmlap.simulation import Solution
 from usmlap.simulation.channels.library import (
+    Curvature,
     MaximumVelocity,
     Position,
     Velocity,
@@ -20,7 +21,7 @@ def plot_apexes(solution: Solution) -> None:
     """
 
     position = Position.get_values(solution)
-    curvature = [node.track_node.curvature for node in solution]
+    curvature = Curvature.get_values(solution)
     velocity = Velocity.get_values(solution)
     maximum_velocity = MaximumVelocity.get_values(solution)
     sector_boundary_positions = solution.get_sector_boundary_positions()
@@ -31,7 +32,9 @@ def plot_apexes(solution: Solution) -> None:
     apex_velocity = Velocity.get_values(apex_solution)
     apex_position = Position.get_values(apex_solution)
 
-    fig, (ax_curvature, ax_apex) = plt.subplots(nrows=2, height_ratios=[1, 2])
+    fig, (ax_curvature, ax_apex) = plt.subplots(
+        nrows=2, height_ratios=[1, 2], sharex=True
+    )
 
     ax_curvature.plot(position, curvature, color=USM_BLUE, zorder=2)
     ax_curvature.axhline(0, color="black", linewidth=1, zorder=1)
@@ -53,16 +56,16 @@ def plot_apexes(solution: Solution) -> None:
     for i in range(len(apex_position)):
         plt.text(apex_position[i] + 5, apex_velocity[i], str(i + 1))
 
-    ax_curvature.set_xlim(min(position), max(position))
+    ax_apex.set_xlim(min(position), max(position))
+
+    # Centre the curvatue y-axis on zero.
     a, b = ax_curvature.get_ylim()
     c = max(abs(a), abs(b))
     ax_curvature.set_ylim(-c, c)
-    ax_apex.set_xlim(min(position), max(position))
 
-    ax_curvature.set_xlabel(Position.get_label())
-    ax_curvature.set_ylabel("Curvature (1/m)")
     ax_apex.set_xlabel(Position.get_label())
     ax_apex.set_ylabel(Velocity.get_label())
+    ax_curvature.set_ylabel(Curvature.get_label())
     fig.suptitle("Velocity Profile")
 
     ax_curvature.grid()

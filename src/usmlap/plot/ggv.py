@@ -33,7 +33,7 @@ def plot_velocity_acceleration(solution: Solution) -> None:
     plt.show()
 
 
-def plot_gg(solutions: Solution | list[Solution]) -> None:
+def plot_gg(solutions: Solution | list[Solution], marker_size: float =  5) -> None:
     """
     Create a scatter plot of lateral and longitudinal acceleration.
     """
@@ -42,10 +42,13 @@ def plot_gg(solutions: Solution | list[Solution]) -> None:
 
     _, ax = plt.subplots()
 
+    ax.axhline(0, color="black", linewidth=1)
+    ax.axvline(0, color="black", linewidth=1)
+
     for solution in solutions:
         lateral = LateralAcceleration.get_values(solution)
         longitudinal = LongitudinalAcceleration.get_values(solution)
-        ax.scatter(lateral, longitudinal, color=next(COLOURMAP))
+        ax.scatter(lateral, longitudinal, color=next(COLOURMAP), s=marker_size)
 
     ax.set_xlabel(LateralAcceleration.get_label())
     ax.set_ylabel(LongitudinalAcceleration.get_label())

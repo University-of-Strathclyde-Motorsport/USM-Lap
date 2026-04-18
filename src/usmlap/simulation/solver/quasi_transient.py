@@ -3,6 +3,7 @@ This module implements a quasi-transient solver.
 """
 
 import logging
+from dataclasses import dataclass
 
 from rich.progress import Progress
 
@@ -10,17 +11,37 @@ from usmlap.model.errors import OutOfChargeError
 
 from ..solution import Solution
 from .quasi_steady_state import QuasiSteadyStateSolver
-from .solver_interface import MaximumIterationsExceededError, SolverInterface
+from .solver_interface import (
+    MaximumIterationsExceededError,
+    SolverError,
+    SolverInterface,
+)
 
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 CONVERGENCE_TOLERANCE = 1e-4
 TASK_DESCRIPTION = "Solving transient simulation..."
 
 
+@dataclass
+class BelowTargetSOCError(SolverError):
+    """Error raised when the finishing SOC is below the target SOC."""
+
+    final_soc: float
+    target_soc: float
+
+    def __str__(self) -> str:
+        return f"Final SOC of {self.final_soc:.3f} is below the target SOC of {self.target_soc:.3f}."
+
+    def overshoot(self, initial_soc: float) -> float:
+        return (initial_soc - self.final_soc) / (initial_soc - self.target_soc)
+
+
 class QuasiTransientSolver(SolverInterface):
     """
     Quasi-transient solver.
     """
+
+    target_soc: float = 0
 
     def solve(self, previous_solution: Solution) -> Solution:
         times: list[float] = []
@@ -40,14 +61,13 @@ class QuasiTransientSolver(SolverInterface):
                         solution = self._solve_next_iteration(solution)
                         break
                     except OutOfChargeError:
-                        discharge_limit = self.global_context.vehicle.powertrain.discharge_current_limit
-                        new_limit = discharge_limit * 0.9
-                        logging.warning(
-                            "Insufficient charge with current limit of %.3f, reducing to %.3f",
-                            discharge_limit,
-                            new_limit,
-                        )
-                        self.global_context.vehicle.powertrain.discharge_current_limit = new_limit
+                        self._decrease_discharge_limit(0.9)
+
+                    except BelowTargetSOCError as e:
+                        initial_soc = 1  # TODO
+                        overshoot = e.overshoot(initial_soc)
+                        self._decrease_discharge_limit(1 / overshoot)
+
                 times.append(solution.total_time)
                 logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
 
@@ -56,6 +76,15 @@ class QuasiTransientSolver(SolverInterface):
                     return solution
 
         raise MaximumIterationsExceededError()
+
+    def _decrease_discharge_limit(self, scaling_factor: float) -> None:
+        powertrain = self.global_context.vehicle.powertrain
+        old_limit = powertrain.discharge_current_limit
+        new_limit = old_limit * scaling_factor
+        powertrain.discharge_current_limit = new_limit
+        logging.warning(
+            f"Discharge current limit decreased from {old_limit} to {new_limit}"
+        )
 
     def _solve_next_iteration(self, previous_solution: Solution) -> Solution:
         """
@@ -71,6 +100,9 @@ class QuasiTransientSolver(SolverInterface):
         """
         solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
+        final_soc = solution.nodes[-1].state_variables.state_of_charge
+        if final_soc < self.target_soc:
+            raise BelowTargetSOCError(final_soc, self.target_soc)
         return solution
 
 

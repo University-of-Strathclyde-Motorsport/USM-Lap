@@ -33,15 +33,23 @@ configurations: list[MeshConfiguration] = [
 _, ax = plt.subplots()
 track_data = TrackData.from_json(TRACK_SHEET)
 
-for config in configurations:
-    mesh = generate_mesh(
-        track_data,
-        resolution=MESH_RESOLUTION,
-        correct_tangency=config.correct_tangency,
-        correct_displacement=config.correct_displacement,
-    )
-    ax = plot_map(
-        mesh, ax, colour=config.colour, label=config.label, show_legend=True
-    )
+# for config in configurations:
+#     mesh = generate_mesh(
+#         track_data,
+#         resolution=MESH_RESOLUTION,
+#         correct_tangency=config.correct_tangency,
+#         correct_displacement=config.correct_displacement,
+#     )
+#     ax = plot_map(
+#         mesh, ax, colour=config.colour, label=config.label, show_legend=True
+#     )
+
+mesh = generate_mesh(
+    track_data,
+    resolution=MESH_RESOLUTION,
+    correct_tangency=True,
+    correct_displacement=True,
+)
+plot_map(mesh, ax, colour=USM_BLUE)
 
 plt.show()
