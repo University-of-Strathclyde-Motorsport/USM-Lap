@@ -56,6 +56,15 @@ class SolutionNode(object):
     previous: Optional[SolutionNode] = None
 
     @property
+    def apex_velocity(self) -> float:
+        velocities: list[float] = [self.maximum_velocity]
+        if self._initial_velocity_anchored:
+            velocities.append(self.initial_velocity)
+        if self._final_velocity_anchored:
+            velocities.append(self.final_velocity)
+        return min(velocities)
+
+    @property
     def length(self) -> float:
         return self.track_node.length
 
@@ -254,7 +263,7 @@ class Solution(object):
             sorted_apex_indices (list[int]): Indices of apexes.
         """
         indices = self.get_apex_indices()
-        velocities = [self.nodes[i].maximum_velocity for i in indices]
+        velocities = [self.nodes[i].apex_velocity for i in indices]
         _, sorted_indices = zip(*sorted(zip(velocities, indices)))
         return list(sorted_indices)
 

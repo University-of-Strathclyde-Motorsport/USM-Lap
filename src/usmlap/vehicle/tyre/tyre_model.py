@@ -144,6 +144,8 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
     def _get_scale_factor(required_force: float, maximum_force: float) -> float:
         if required_force > maximum_force:
             raise InsufficientTractionError(required_force, maximum_force)
+        if maximum_force == 0:
+            return 0
         return sqrt(1 - (required_force / maximum_force) ** 2)
 
     def calculate_lateral_force(

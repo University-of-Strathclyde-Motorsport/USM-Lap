@@ -94,13 +94,8 @@ class VehicleModelInterface(ABC):
         return body_force, aero_force
 
     @abstractmethod
-    def lateral_traction_limit(
-        self, ctx: NodeContext, velocity: float
-    ) -> float: ...
-
-    @abstractmethod  # To be  replaced by longitudinal_traction
-    def traction_limited_acceleration(
-        self, ctx: NodeContext, velocity: float
+    def lateral_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float: ...
 
     @abstractmethod

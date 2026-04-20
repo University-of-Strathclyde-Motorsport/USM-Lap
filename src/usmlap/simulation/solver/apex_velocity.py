@@ -8,11 +8,14 @@ import math
 from typing import Optional
 
 from usmlap.model import NodeContext, VehicleModelInterface
+from usmlap.model.errors import WheelLiftError
 
 from .solver_interface import MaximumIterationsExceededError
 
 PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100
+
+MIN_ERROR_SCALE_FACTOR = 0.1
 
 
 def solve_apex_velocity(
@@ -58,24 +61,30 @@ def solve_apex_velocity(
     if velocity_estimate is None:
         velocity_estimate = maximum_velocity
 
+    velocities: list[float] = [velocity_estimate]
+
     for _ in range(1, maximum_iterations + 1):
-        available_fy = vehicle_model.lateral_traction_limit(
-            ctx, velocity=velocity_estimate
-        )
-        required_fy = abs(vehicle_model.required_fy(ctx, velocity_estimate))
-        fy_error = available_fy - required_fy
+        ay = v_to_ay(v=velocities[-1], curvature=ctx.node.curvature)  # SIGNED
+        try:
+            available_fy = vehicle_model.lateral_traction(
+                ctx, velocity=velocities[-1], ax=0, ay=ay
+            )
+            ay = available_fy / ctx.vehicle.total_mass
+            velocities.append(
+                ay_to_velocity(ay=ay, curvature=ctx.node.curvature)
+            )
 
-        if abs(fy_error) < precision:
-            return velocity_estimate
+        except WheelLiftError as e:
+            scale_factor = 1 - (2 * e.max_wheel_lift) / e.lateral_load_transfer
+            scale_factor = max(MIN_ERROR_SCALE_FACTOR, scale_factor)
+            v_scale_factor = math.sqrt(scale_factor)
+            velocities.append(velocities[-1] * v_scale_factor)
+            continue
 
-        velocity_estimate = _update_velocity_estimate(
-            velocity=velocity_estimate,
-            fy_error=fy_error,
-            curvature=ctx.node.curvature,
-            vehicle_mass=ctx.vehicle.total_mass,
-        )
+        if abs(velocities[-1] - velocities[-2]) < precision:
+            return velocities[-1]
 
-        if velocity_estimate >= maximum_velocity:
+        if velocities[-1] >= maximum_velocity:
             return maximum_velocity
 
     raise MaximumIterationsExceededError()
@@ -94,3 +103,11 @@ def _update_velocity_estimate(
         vehicle_mass (float): The mass of the vehicle.
     """
     return math.sqrt(velocity**2 + fy_error / (abs(curvature) * vehicle_mass))
+
+
+def v_to_ay(v: float, curvature: float) -> float:
+    return curvature * v**2
+
+
+def ay_to_velocity(ay: float, curvature: float) -> float:
+    return math.sqrt(ay / abs(curvature))

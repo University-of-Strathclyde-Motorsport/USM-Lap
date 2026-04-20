@@ -21,10 +21,9 @@ class PointMass(VehicleModelInterface):
     Point mass vehicle model.
     """
 
-    def lateral_traction_limit(
-        self, ctx: NodeContext, velocity: float
+    def lateral_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
-
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
         normal_force = self._get_normal_force(ctx, velocity)
 
@@ -37,28 +36,6 @@ class PointMass(VehicleModelInterface):
         rear_traction = rear_tyre(tyre_attitude, required_fx=resistive_fx / 2)
 
         return 2 * (front_traction + rear_traction)
-
-    def traction_limited_acceleration(
-        self, ctx: NodeContext, velocity: float
-    ) -> float:
-
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        required_fy = self.required_fy(ctx, velocity)
-        normal_force = self._get_normal_force(ctx, velocity)
-
-        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
-
-        front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_fy = 2 * front_tyre.calculate_lateral_force(tyre_attitude)
-
-        rear_fy = max(required_fy - front_fy, 0)
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=rear_fy / 2
-        )
-
-        net_force = rear_traction - resistive_fx
-        return net_force / ctx.vehicle.equivalent_mass
 
     def longitudinal_traction(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float

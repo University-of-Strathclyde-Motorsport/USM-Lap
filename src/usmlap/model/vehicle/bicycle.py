@@ -20,11 +20,12 @@ class Bicycle(VehicleModelInterface):
     Bicycle vehicle model.
     """
 
-    def lateral_traction_limit(
-        self, ctx: NodeContext, velocity: float
+    def lateral_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
+
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        normal_force = self._get_normal_force(ctx, velocity, ax=0)
+        normal_force = self._get_normal_force(ctx, velocity, ax=ax)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
@@ -37,36 +38,6 @@ class Bicycle(VehicleModelInterface):
         )
 
         return front_traction + rear_traction
-
-    def traction_limited_acceleration(
-        self, ctx: NodeContext, velocity: float
-    ) -> float:
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        required_fy = abs(self.required_fy(ctx, velocity))
-        axs: list[float] = [0]
-
-        for _ in range(MAXIMUM_ITERATIONS):
-            normal_force = self._get_normal_force(ctx, velocity, axs[-1])
-
-            front_tyre = ctx.vehicle.tyres.front.tyre_model
-            front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
-            front_fy = 2 * front_tyre.calculate_lateral_force(front_attitude)
-
-            rear_fy = max(required_fy - front_fy, 0)
-            rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-            rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
-            rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-                rear_attitude, required_fy=rear_fy / 2
-            )
-
-            net_force = rear_traction - resistive_fx
-            ax = net_force / ctx.vehicle.equivalent_mass
-            if abs(ax - axs[-1]) < PRECISION:
-                return ax
-
-            axs.append(ax)
-
-        raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
     def longitudinal_traction(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float

@@ -20,17 +20,17 @@ def plot_apexes(solution: Solution) -> None:
     Plot a velocity profile, with apexes highlighted.
     """
 
-    position = Position.get_values(solution)
-    curvature = Curvature.get_values(solution)
-    velocity = Velocity.get_values(solution)
-    maximum_velocity = MaximumVelocity.get_values(solution)
+    position = Position().get_values(solution)
+    curvature = Curvature().get_values(solution)
+    velocity = Velocity().get_values(solution)
+    maximum_velocity = MaximumVelocity().get_values(solution)
     sector_boundary_positions = solution.get_sector_boundary_positions()
 
     apex_indices = solution.get_sorted_apex_indices()
     apex_solution = solution.get_subset(apex_indices)
 
-    apex_velocity = Velocity.get_values(apex_solution)
-    apex_position = Position.get_values(apex_solution)
+    apex_velocity = Velocity().get_values(apex_solution)
+    apex_position = Position().get_values(apex_solution)
 
     fig, (ax_curvature, ax_apex) = plt.subplots(
         nrows=2, height_ratios=[1, 2], sharex=True

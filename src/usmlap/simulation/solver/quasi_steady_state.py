@@ -23,11 +23,6 @@ class QuasiSteadyStateSolver(SolverInterface):
 
     def solve(self, previous_solution: Solution) -> Solution:
 
-        current_limit = (
-            self.global_context.vehicle.powertrain.discharge_current_limit
-        )
-        print(f"Solving with {current_limit=}")
-
         solution = previous_solution
 
         solution.nodes[0].anchor_initial_velocity(0)
@@ -197,7 +192,7 @@ def _find_apexes(solution: Solution) -> list[int]:
     Returns:
         apexes (list[int]): The indices of the apexes.
     """
-    maximum_velocities = [-node.maximum_velocity for node in solution]
+    maximum_velocities = [-node.apex_velocity for node in solution]
     apex_indices, _ = find_peaks(maximum_velocities)
     apex_indices = set(apex_indices.tolist())
     apex_indices.update([0, len(solution.nodes) - 1])

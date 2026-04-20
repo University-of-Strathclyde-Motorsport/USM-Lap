@@ -15,7 +15,6 @@ def update_state_variables(
 ) -> StateVariables:
     """Update the values of the transient variables."""
 
-    # print(initial_state.state_of_charge)
     try:
         soc = StateOfCharge(
             initial_state.state_of_charge

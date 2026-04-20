@@ -9,7 +9,11 @@ from usmlap.vehicle.tyre import TyreAttitude
 from usmlap.vehicle.tyre.tyre_model import TyreModelInterface
 
 from ..context import NodeContext
-from ..errors import InsufficientTractionError, MaximumIterationsExceededError
+from ..errors import (
+    InsufficientTractionError,
+    MaximumIterationsExceededError,
+    WheelLiftError,
+)
 from .interface import VehicleModelInterface
 
 PRECISION = 1e-3
@@ -21,12 +25,14 @@ class FourCornerModel(VehicleModelInterface):
     Four corner vehicle model.
     """
 
-    def lateral_traction_limit(
-        self, ctx: NodeContext, velocity: float
+    def lateral_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
+
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        ay = ctx.node.curvature * velocity**2
         normal_force = self._get_normal_force(ctx, velocity, ax=0, ay=ay)
+        if min(normal_force) < 0:
+            raise WheelLiftError(normal_force, ax=0, ay=ay)
 
         attitudes = FourCorner(
             *(TyreAttitude(normal_load=load) for load in normal_force)
@@ -46,69 +52,7 @@ class FourCornerModel(VehicleModelInterface):
             )
         )
 
-        # fl_traction = tyres.fl.calculate_lateral_force(attitude.fl)
-        # fr_traction = tyres.fr.calculate_lateral_force(attitude.fr)
-        # rl_traction = tyres.rl.calculate_lateral_force(
-        #     attitude.rl, required_fx=rl_fx
-        # )
-        # rr_traction = tyres.rr.calculate_lateral_force(
-        #     attitude.rr, required_fx=rr_fx
-        # )
-
         return sum(traction)
-
-    def traction_limited_acceleration(
-        self, ctx: NodeContext, velocity: float
-    ) -> float:
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        required_fy = abs(self.required_fy(ctx, velocity))
-        ay = ctx.node.curvature * velocity**2
-        axs: list[float] = [0]
-
-        for _ in range(MAXIMUM_ITERATIONS):
-            normal_force = self._get_normal_force(ctx, velocity, axs[-1], ay)
-            fl_attitude = TyreAttitude(normal_load=normal_force.front_left)
-            fr_attitude = TyreAttitude(normal_load=normal_force.front_right)
-            rl_attitude = TyreAttitude(normal_load=normal_force.rear_left)
-            rr_attitude = TyreAttitude(normal_load=normal_force.rear_right)
-
-            front_tyre = ctx.vehicle.tyres.front.tyre_model
-            rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-
-            fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
-            fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
-            front_fy = fl_fy + fr_fy
-
-            rear_fy = max(required_fy - front_fy, 0)
-            max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
-            max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
-
-            try:
-                _, _, rl_fy, rr_fy = self._split_traction(
-                    FourCorner(0, 0, max_rl_fy, max_rr_fy), rear_fy
-                )
-            except InsufficientTractionError as e:
-                print(axs[-1])
-                print(e)
-                next_ax = (axs[-1] + axs[-2]) / 2
-                axs.append(next_ax)
-                continue
-
-            rl_fx = rear_tyre.calculate_longitudinal_force(
-                rl_attitude, required_fy=rl_fy
-            )
-            rr_fx = rear_tyre.calculate_longitudinal_force(
-                rr_attitude, required_fy=rr_fy
-            )
-
-            net_force = rl_fx + rr_fx - resistive_fx
-            ax = net_force / ctx.vehicle.equivalent_mass
-            if abs(ax - axs[-1]) < PRECISION:
-                return ax
-
-            axs.append(ax)
-
-        raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
     def longitudinal_traction(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
@@ -116,6 +60,9 @@ class FourCornerModel(VehicleModelInterface):
         required_fy = abs(self.required_fy(ctx, velocity))
 
         normal_force = self._get_normal_force(ctx, velocity, ax, ay)
+        if min(normal_force) < 0:
+            raise WheelLiftError(normal_force, ax=ax, ay=ay)
+
         fl_attitude = TyreAttitude(normal_load=normal_force.front_left)
         fr_attitude = TyreAttitude(normal_load=normal_force.front_right)
         rl_attitude = TyreAttitude(normal_load=normal_force.rear_left)
@@ -174,14 +121,8 @@ class FourCornerModel(VehicleModelInterface):
                     maximum_fy, required_fy
                 )
             except InsufficientTractionError as e:
-                # next_ax = axs[-1] * 0.5
-                print(f"Failed: {axs[-1]:.8f} ({e})")
                 overshoot_ratio = e.required / e.available
                 next_ax = axs[-1] / (100 * overshoot_ratio)
-
-                # print(axs[-1])
-                # print(e)
-                # next_ax = (axs[-1] + axs[-2]) / 2
                 axs.append(next_ax)
                 continue
 
@@ -195,7 +136,7 @@ class FourCornerModel(VehicleModelInterface):
             if abs(ax - axs[-1]) < PRECISION:
                 return ax
 
-            print(f"{axs[-1]:.8f}, {ax:.8f}")
+            # print(f"{axs[-1]:.8f}, {ax:.8f}")
 
             # axs.append(0.5 * (axs[-1] + ax))
             axs.append(self._get_next_ax(ax, axs))
