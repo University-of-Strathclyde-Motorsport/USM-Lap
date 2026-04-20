@@ -9,8 +9,7 @@ from typing import Optional
 
 from usmlap.model import NodeContext, VehicleModelInterface
 from usmlap.model.errors import WheelLiftError
-
-from .solver_interface import MaximumIterationsExceededError
+from usmlap.solver.errors import MaximumIterationsExceededError
 
 PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100

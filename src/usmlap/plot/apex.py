@@ -4,13 +4,13 @@ This module contains functions for plotting velocity profiles and apexes.
 
 import matplotlib.pyplot as plt
 
-from usmlap.simulation import Solution
 from usmlap.simulation.channels.library import (
     Curvature,
     MaximumVelocity,
     Position,
     Velocity,
 )
+from usmlap.solver import Solution
 
 from .style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 

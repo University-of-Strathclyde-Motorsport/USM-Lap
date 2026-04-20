@@ -5,7 +5,7 @@ This module compares the performance of the QSS and QT solvers.
 from usmlap.competition.events import Autocross, Endurance
 from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
-from usmlap.simulation import SimulationSettings, Solution
+from usmlap.simulation import SimulationSettings
 from usmlap.simulation.channels import Channel
 from usmlap.simulation.channels.library import (
     LapAvgMotorTorque,
@@ -18,6 +18,7 @@ from usmlap.simulation.channels.library import (
     Velocity,
 )
 from usmlap.simulation.settings import QualityPresets
+from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
 configurations: dict[str, SimulationSettings] = {

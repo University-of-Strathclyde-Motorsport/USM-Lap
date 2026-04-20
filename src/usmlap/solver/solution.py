@@ -14,7 +14,6 @@ from usmlap.model import (
     TransientVariables,
     VehicleModelInterface,
 )
-from usmlap.model.vehicle_state import VehicleState
 from usmlap.track import Mesh, TrackNode
 
 
@@ -312,6 +311,7 @@ class Solution(object):
         return solutions
 
 
+# TODO: deprecate this
 def create_new_solution(
     track_mesh: Mesh,
     vehicle_model: VehicleModelInterface,

@@ -4,10 +4,10 @@ This script compares the solutions for multiple vehicles.
 
 from usmlap.competition.events import Autocross
 from usmlap.plot import plot_channels
-from usmlap.simulation import Solution
 from usmlap.simulation.channels import Channel
 from usmlap.simulation.channels.library import MotorTorque, Velocity
 from usmlap.simulation.settings import QualityPresets
+from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle, get_new_vehicle
 from usmlap.vehicle.parameters import FinalDriveRatio
 

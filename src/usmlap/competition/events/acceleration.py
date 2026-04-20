@@ -4,7 +4,8 @@ This module defines the acceleration event at Formula Student.
 
 from dataclasses import dataclass
 
-from usmlap.simulation import SimulationSettings, Solution, simulate
+from usmlap.simulation import SimulationSettings, simulate
+from usmlap.solver import Solution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

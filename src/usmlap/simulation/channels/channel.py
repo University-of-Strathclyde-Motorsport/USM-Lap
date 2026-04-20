@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from textwrap import wrap
 from typing import Optional
 
-from usmlap.simulation import Solution
+from usmlap.solver import Solution
 from usmlap.utils.units import Unit
 
 

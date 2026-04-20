@@ -7,9 +7,10 @@ from typing import Literal, Optional
 
 import matplotlib.pyplot as plt
 
+from usmlap.solver import Solution
+
 from ..simulation.channels import Channel
 from ..simulation.channels.library import PlotLap, Position, Time
-from ..simulation.solution import Solution
 from .style import COLOURMAP
 
 X_AXIS_OPTIONS = Literal["Position", "Time", "Lap"]

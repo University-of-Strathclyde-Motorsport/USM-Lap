@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.utils import combined_legend
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

@@ -4,12 +4,12 @@ This module defines the four corner vehicle model.
 
 import math
 
+from usmlap.model.context import NodeContext
+from usmlap.model.errors import InsufficientTractionError, WheelLiftError
 from usmlap.utils.datatypes import FourCorner, FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 from usmlap.vehicle.tyre.tyre_model import TyreModelInterface
 
-from ..context import NodeContext
-from ..errors import InsufficientTractionError, WheelLiftError
 from .interface import VehicleModelInterface
 
 PRECISION = 1e-3

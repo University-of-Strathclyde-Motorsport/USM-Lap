@@ -1,23 +1,12 @@
 """
-This module defines the interface for simulation solvers.
+This module defines custom error types for simulation solvers.
 """
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-
-from usmlap.model import (
-    GlobalContext,
-    NodeContext,
-    TransientVariables,
-    VehicleModelInterface,
-)
-from usmlap.track import TrackNode
-
-from ..solution import Solution
 
 
 class SolverError(Exception):
-    """Base class for simulation solver errors."""
+    """Base class for solver errors."""
 
     pass
 
@@ -49,18 +38,14 @@ class MaximumIterationsExceededError(SolverError):
 
 
 @dataclass
-class SolverInterface(ABC):
-    """
-    Abstract base class for simulation solvers.
-    """
+class BelowTargetSOCError(SolverError):
+    """Error raised when the finishing SOC is below the target SOC."""
 
-    vehicle_model: VehicleModelInterface
-    global_context: GlobalContext
+    final_soc: float
+    target_soc: float
 
-    @abstractmethod
-    def solve(self, previous_solution: Solution) -> Solution: ...
+    def __str__(self) -> str:
+        return f"Final SOC of {self.final_soc:.3f} is below the target SOC of {self.target_soc:.3f}."
 
-    def local_context(
-        self, node: TrackNode, state: TransientVariables
-    ) -> NodeContext:
-        return self.global_context.get_local_context(node, state)
+    def overshoot(self, initial_soc: float) -> float:
+        return (initial_soc - self.final_soc) / (initial_soc - self.target_soc)

@@ -7,12 +7,12 @@ from typing import Optional
 import matplotlib.pyplot as plt
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
-from usmlap.simulation import Solution
 from usmlap.simulation.channels.library import (
     LateralAcceleration,
     LongitudinalAcceleration,
     Velocity,
 )
+from usmlap.solver import Solution
 
 
 def plot_velocity_acceleration(solution: Solution) -> None:

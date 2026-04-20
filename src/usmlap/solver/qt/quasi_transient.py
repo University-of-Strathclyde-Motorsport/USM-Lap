@@ -3,38 +3,22 @@ This module implements a quasi-transient solver.
 """
 
 import logging
-from dataclasses import dataclass
 
 from rich.progress import Progress
 
 from usmlap.model.errors import OutOfChargeError
-
-from ..solution import Solution
-from .quasi_steady_state import QuasiSteadyStateSolver
-from .solver_interface import (
+from usmlap.solver.errors import (
+    BelowTargetSOCError,
     MaximumIterationsExceededError,
-    SolverError,
-    SolverInterface,
 )
-from .transient_variable import update_transient_variables
+from usmlap.solver.qss import QuasiSteadyStateSolver
+from usmlap.solver.qt.transient_variable import update_transient_variables
+from usmlap.solver.solution import Solution
+from usmlap.solver.solver_interface import SolverInterface
 
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 CONVERGENCE_TOLERANCE = 1e-4
 TASK_DESCRIPTION = "Solving transient simulation..."
-
-
-@dataclass
-class BelowTargetSOCError(SolverError):
-    """Error raised when the finishing SOC is below the target SOC."""
-
-    final_soc: float
-    target_soc: float
-
-    def __str__(self) -> str:
-        return f"Final SOC of {self.final_soc:.3f} is below the target SOC of {self.target_soc:.3f}."
-
-    def overshoot(self, initial_soc: float) -> float:
-        return (initial_soc - self.final_soc) / (initial_soc - self.target_soc)
 
 
 class QuasiTransientSolver(SolverInterface):

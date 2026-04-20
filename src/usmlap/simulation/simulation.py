@@ -7,11 +7,12 @@ from __future__ import annotations
 from pyparsing import Optional
 
 from usmlap.model import TransientVariables
+from usmlap.solver import Solution
+from usmlap.solver.solution import create_new_solution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
 from .settings import SimulationSettings
-from .solution import Solution, create_new_solution
 
 
 def simulate(

@@ -4,8 +4,7 @@ This module defines a format for storing the solution of a simulation.
 
 from dataclasses import dataclass
 
-from usmlap.simulation import Solution, SolutionNode
-from usmlap.simulation.solver import SolverInterface
+from usmlap.solver import Solution, SolutionNode, SolverInterface
 from usmlap.vehicle import Vehicle
 
 

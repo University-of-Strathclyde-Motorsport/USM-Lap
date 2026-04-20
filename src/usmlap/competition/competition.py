@@ -6,7 +6,8 @@ from dataclasses import InitVar, dataclass, field
 
 from rich.progress import Progress
 
-from usmlap.simulation import SimulationSettings, Solution
+from usmlap.simulation import SimulationSettings
+from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
 from .events.acceleration import Acceleration

@@ -4,7 +4,8 @@ This module defines the autocross event at Formula Student.
 
 from dataclasses import InitVar, dataclass, field
 
-from usmlap.simulation import SimulationSettings, Solution, simulate
+from usmlap.simulation import SimulationSettings, simulate
+from usmlap.solver import Solution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

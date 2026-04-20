@@ -6,7 +6,7 @@ from usmlap.model.vehicle import Bicycle
 from usmlap.plot import plot_apexes
 from usmlap.simulation import SimulationSettings, simulate
 from usmlap.simulation.settings import QualityPresets
-from usmlap.simulation.solver import QuasiTransientSolver
+from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

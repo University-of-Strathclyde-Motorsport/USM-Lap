@@ -11,12 +11,11 @@ from usmlap.model import (
     VehicleModelInterface,
 )
 from usmlap.model.vehicle import FourCornerModel, PointMass
+from usmlap.solver import QuasiSteadyStateSolver as QSS
+from usmlap.solver import QuasiTransientSolver as QT
+from usmlap.solver import SolverInterface
 from usmlap.track.mesh_generation import Resolution
 from usmlap.vehicle import Vehicle
-
-from .solver import QuasiSteadyStateSolver as QSS
-from .solver import QuasiTransientSolver as QT
-from .solver import SolverInterface
 
 
 @dataclass()

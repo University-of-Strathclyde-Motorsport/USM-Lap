@@ -7,11 +7,12 @@ import logging
 from rich import progress
 from scipy.signal import find_peaks
 
-from ..solution import Solution
+from usmlap.solver.solution import Solution
+from usmlap.solver.solver_interface import SolverInterface
+
 from .acceleration import calculate_next_velocity
 from .apex_velocity import solve_apex_velocity
 from .braking import calculate_initial_velocity
-from .solver_interface import SolverInterface
 
 logger = logging.getLogger(__name__)
 

@@ -6,7 +6,7 @@ from usmlap.competition import Competition, CompetitionPoints, points_delta
 from usmlap.model import LambdaCoefficients
 from usmlap.plot import plot_points_bar_chart
 from usmlap.simulation import SimulationSettings
-from usmlap.simulation.solver import QuasiSteadyStateSolver as QSS
+from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.vehicle import Vehicle
 
 competition = Competition()

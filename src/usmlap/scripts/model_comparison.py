@@ -9,7 +9,6 @@ from usmlap.model import VehicleModelInterface
 from usmlap.model.vehicle import Bicycle, FourCornerModel, PointMass
 from usmlap.plot import plot_channels, plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
-from usmlap.simulation import Solution
 from usmlap.simulation.channels import Channel
 from usmlap.simulation.channels.library import (
     Curvature,
@@ -22,6 +21,7 @@ from usmlap.simulation.channels.library import (
     Velocity,
 )
 from usmlap.simulation.settings import QualityPresets
+from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
 configuration = QualityPresets.HIGH_QUALITY

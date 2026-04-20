@@ -6,7 +6,8 @@ import math
 from collections.abc import Callable
 from itertools import accumulate
 
-from ..solution import Solution
+from usmlap.solver import Solution
+
 from .channel import ChannelType
 
 type ChannelFcn[T: ChannelType] = Callable[[Solution], T]
