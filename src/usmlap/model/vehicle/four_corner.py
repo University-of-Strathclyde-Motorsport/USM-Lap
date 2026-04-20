@@ -60,56 +60,90 @@ class FourCornerModel(VehicleModelInterface):
     def traction_limited_acceleration(
         self, ctx: NodeContext, velocity: float
     ) -> float:
-        return 1000
-        # resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        # required_fy = abs(self.required_fy(ctx, velocity))
-        # ay = ctx.node.curvature * velocity**2
-        # axs: list[float] = [0]
+        resistive_fx = sum(self.resistive_forces(ctx, velocity))
+        required_fy = abs(self.required_fy(ctx, velocity))
+        ay = ctx.node.curvature * velocity**2
+        axs: list[float] = [0]
 
-        # for _ in range(MAXIMUM_ITERATIONS):
-        #     normal_force = self._get_normal_force(ctx, velocity, axs[-1], ay)
-        #     fl_attitude = TyreAttitude(normal_load=normal_force.front_left)
-        #     fr_attitude = TyreAttitude(normal_load=normal_force.front_right)
-        #     rl_attitude = TyreAttitude(normal_load=normal_force.rear_left)
-        #     rr_attitude = TyreAttitude(normal_load=normal_force.rear_right)
+        for _ in range(MAXIMUM_ITERATIONS):
+            normal_force = self._get_normal_force(ctx, velocity, axs[-1], ay)
+            fl_attitude = TyreAttitude(normal_load=normal_force.front_left)
+            fr_attitude = TyreAttitude(normal_load=normal_force.front_right)
+            rl_attitude = TyreAttitude(normal_load=normal_force.rear_left)
+            rr_attitude = TyreAttitude(normal_load=normal_force.rear_right)
 
-        #     front_tyre = ctx.vehicle.tyres.front.tyre_model
-        #     rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+            front_tyre = ctx.vehicle.tyres.front.tyre_model
+            rear_tyre = ctx.vehicle.tyres.rear.tyre_model
 
-        #     fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
-        #     fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
-        #     front_fy = fl_fy + fr_fy
+            fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
+            fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
+            front_fy = fl_fy + fr_fy
 
-        #     rear_fy = max(required_fy - front_fy, 0)
-        #     max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
-        #     max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
+            rear_fy = max(required_fy - front_fy, 0)
+            max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
+            max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
 
-        #     try:
-        #         _, _, rl_fy, rr_fy = self._split_traction(
-        #             FourCorner(0, 0, max_rl_fy, max_rr_fy), rear_fy
-        #         )
-        #     except InsufficientTractionError as e:
-        #         print(axs[-1])
-        #         print(e)
-        #         next_ax = (axs[-1] + axs[-2]) / 2
-        #         axs.append(next_ax)
-        #         continue
+            try:
+                _, _, rl_fy, rr_fy = self._split_traction(
+                    FourCorner(0, 0, max_rl_fy, max_rr_fy), rear_fy
+                )
+            except InsufficientTractionError as e:
+                print(axs[-1])
+                print(e)
+                next_ax = (axs[-1] + axs[-2]) / 2
+                axs.append(next_ax)
+                continue
 
-        #     rl_fx = rear_tyre.calculate_longitudinal_force(
-        #         rl_attitude, required_fy=rl_fy
-        #     )
-        #     rr_fx = rear_tyre.calculate_longitudinal_force(
-        #         rr_attitude, required_fy=rr_fy
-        #     )
+            rl_fx = rear_tyre.calculate_longitudinal_force(
+                rl_attitude, required_fy=rl_fy
+            )
+            rr_fx = rear_tyre.calculate_longitudinal_force(
+                rr_attitude, required_fy=rr_fy
+            )
 
-        #     net_force = rl_fx + rr_fx - resistive_fx
-        #     ax = net_force / ctx.vehicle.equivalent_mass
-        #     if abs(ax - axs[-1]) < PRECISION:
-        #         return ax
+            net_force = rl_fx + rr_fx - resistive_fx
+            ax = net_force / ctx.vehicle.equivalent_mass
+            if abs(ax - axs[-1]) < PRECISION:
+                return ax
 
-        #     axs.append(ax)
+            axs.append(ax)
 
-        # raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
+        raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
+
+    def longitudinal_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+    ) -> float:
+        required_fy = abs(self.required_fy(ctx, velocity))
+
+        normal_force = self._get_normal_force(ctx, velocity, ax, ay)
+        fl_attitude = TyreAttitude(normal_load=normal_force.front_left)
+        fr_attitude = TyreAttitude(normal_load=normal_force.front_right)
+        rl_attitude = TyreAttitude(normal_load=normal_force.rear_left)
+        rr_attitude = TyreAttitude(normal_load=normal_force.rear_right)
+
+        front_tyre = ctx.vehicle.tyres.front.tyre_model
+        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+
+        fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
+        fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
+        front_fy = fl_fy + fr_fy
+
+        rear_fy = max(required_fy - front_fy, 0)
+        max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
+        max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
+
+        _, _, rl_fy, rr_fy = self._split_traction(
+            FourCorner(0, 0, max_rl_fy, max_rr_fy), rear_fy
+        )
+
+        rl_fx = rear_tyre.calculate_longitudinal_force(
+            rl_attitude, required_fy=rl_fy
+        )
+        rr_fx = rear_tyre.calculate_longitudinal_force(
+            rr_attitude, required_fy=rr_fy
+        )
+
+        return rl_fx + rr_fx
 
     def traction_limited_braking(
         self, ctx: NodeContext, velocity: float
@@ -207,7 +241,7 @@ class FourCornerModel(VehicleModelInterface):
         cog_height = ctx.vehicle.suspension.centre_of_gravity_height
         wheelbase = ctx.vehicle.suspension.wheelbase
         lt = 0.5 * inertial_fx * (cog_height / wheelbase)
-        return FourCorner(-lt, lt, -lt, lt)
+        return FourCorner(-lt, -lt, lt, lt)
 
     def _aero_lt_fx(
         self, ctx: NodeContext, aero_fx: float
@@ -215,7 +249,7 @@ class FourCornerModel(VehicleModelInterface):
         cop_height = ctx.vehicle.aero.centre_of_pressure_height
         wheelbase = ctx.vehicle.suspension.wheelbase
         lt = 0.5 * aero_fx * (cop_height / wheelbase)
-        return FourCorner(-lt, lt, -lt, lt)
+        return FourCorner(-lt, -lt, lt, lt)
 
     def _lateral_load_transfer_distribution(self) -> FrontRear[float]:
         return FrontRear(0.5, 0.5)

@@ -17,16 +17,16 @@ from usmlap.simulation.channels.library import (
 from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 
-configuration = QualityPresets.HIGH_QUALITY
+configuration = QualityPresets.FAST
 print(configuration)
 
 vehicle_models: dict[str, type[VehicleModelInterface]] = {
     "Point Mass": PointMass,
     "Bicycle": Bicycle,
-    # "Four Corner": FourCornerModel,
+    "Four Corner": FourCornerModel,
 }
 
-plot_colours = [USM_BLUE, USM_RED, USM_LIGHT_BLUE]
+plot_colours = [USM_RED, USM_LIGHT_BLUE, USM_BLUE]
 
 acceleration_channels: list[Channel] = [
     Velocity(),

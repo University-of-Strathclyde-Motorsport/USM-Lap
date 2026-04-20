@@ -46,6 +46,10 @@ class InsufficientTractionError(ModelError):
     required: float
     available: float
 
+    @property
+    def ratio(self) -> float:
+        return self.required / self.available
+
     def __str__(self) -> str:
         return (
             f"Insufficient traction "

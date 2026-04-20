@@ -98,9 +98,14 @@ class VehicleModelInterface(ABC):
         self, ctx: NodeContext, velocity: float
     ) -> float: ...
 
-    @abstractmethod
+    @abstractmethod  # To be  replaced by longitudinal_traction
     def traction_limited_acceleration(
         self, ctx: NodeContext, velocity: float
+    ) -> float: ...
+
+    @abstractmethod
+    def longitudinal_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float: ...
 
     @abstractmethod
@@ -108,14 +113,11 @@ class VehicleModelInterface(ABC):
         self, ctx: NodeContext, velocity: float
     ) -> float: ...
 
-    def power_limited_acceleration(
-        self, ctx: NodeContext, velocity: float
-    ) -> float:
-
-        drive_force = self.powertrain.drive_force(ctx, velocity)
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        net_force = drive_force - resistive_fx
-        return net_force / ctx.vehicle.equivalent_mass
+    # def drive_force(self, ctx: NodeContext, velocity: float) -> float:
+    #     return self.powertrain.drive_force(ctx, velocity)
+    #     # resistive_fx = sum(self.resistive_forces(ctx, velocity))
+    #     # net_force = drive_force - resistive_fx
+    #     # return net_force / ctx.vehicle.equivalent_mass
 
     def evaluate_full_vehicle_state(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float

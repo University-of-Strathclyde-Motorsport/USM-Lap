@@ -10,6 +10,7 @@ from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 from pydantic.dataclasses import dataclass
 
+from usmlap.model.errors import InsufficientTractionError
 from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
 from ..common import AbstractSubsystem
@@ -142,7 +143,7 @@ class LinearTyreModel(TyreModelInterface, type="linear_tyre_model"):
     @staticmethod
     def _get_scale_factor(required_force: float, maximum_force: float) -> float:
         if required_force > maximum_force:
-            raise ValueError("Required force is greater than maximum")
+            raise InsufficientTractionError(required_force, maximum_force)
         return sqrt(1 - (required_force / maximum_force) ** 2)
 
     def calculate_lateral_force(

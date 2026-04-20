@@ -68,6 +68,26 @@ class Bicycle(VehicleModelInterface):
 
         raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
+    def longitudinal_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+    ) -> float:
+        required_fy = abs(self.required_fy(ctx, velocity))
+
+        normal_force = self._get_normal_force(ctx, velocity, ax)
+
+        front_tyre = ctx.vehicle.tyres.front.tyre_model
+        front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+        front_fy = 2 * front_tyre.calculate_lateral_force(front_attitude)
+
+        rear_fy = max(required_fy - front_fy, 0)
+        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+        rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+            rear_attitude, required_fy=rear_fy / 2
+        )
+
+        return rear_traction
+
     def traction_limited_braking(
         self, ctx: NodeContext, velocity: float
     ) -> float:
