@@ -24,7 +24,7 @@ from usmlap.simulation.settings import QualityPresets
 from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
-configuration = QualityPresets.HIGH_QUALITY
+configuration = QualityPresets.FAST
 
 vehicle_models: dict[str, type[VehicleModelInterface]] = {
     "Point Mass": PointMass,
@@ -92,34 +92,34 @@ print("Autocross times:")
 for label, solution in autocross_results.items():
     print(f"{label} {solution.total_time}")
 
-plot_channels(
-    acceleration_results,
-    acceleration_channels,
-    title="Model Comparison - Acceleration",
-    colours=plot_colours,
-    linestyle=["solid", "solid", "dashed"],
-    y_label_rotation="horizontal",
-)
+# plot_channels(
+#     acceleration_results,
+#     acceleration_channels,
+#     title="Model Comparison - Acceleration",
+#     colours=plot_colours,
+#     linestyle=["solid", "solid", "dashed"],
+#     y_label_rotation="horizontal",
+# )
 
 
-plot_channels(
-    skidpad_results,
-    skidpad_channels,
-    title="Model Comparison - Skidpad",
-    colours=plot_colours,
-    show_sectors=True,
-)
+# plot_channels(
+#     skidpad_results,
+#     skidpad_channels,
+#     title="Model Comparison - Skidpad",
+#     colours=plot_colours,
+#     show_sectors=True,
+# )
 
-plot_channels(
-    autocross_results,
-    autocross_channels,
-    title="Model Comparison - Autocross",
-    colours=plot_colours,
-)
+# plot_channels(
+#     autocross_results,
+#     autocross_channels,
+#     title="Model Comparison - Autocross",
+#     colours=plot_colours,
+# )
 
-plot_gg(
-    autocross_results,
-    title="Model Comparison - Autocross",
-    colours=plot_colours,
-    marker_size=25,
-)
+# plot_gg(
+#     autocross_results,
+#     title="Model Comparison - Autocross",
+#     colours=plot_colours,
+#     marker_size=25,
+# )

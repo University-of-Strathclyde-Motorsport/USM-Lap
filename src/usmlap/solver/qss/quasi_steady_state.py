@@ -7,6 +7,7 @@ import logging
 from rich import progress
 from scipy.signal import find_peaks
 
+from usmlap.model.vehicle_state import VehicleMotion
 from usmlap.solver.solution import Solution
 from usmlap.solver.solver_interface import SolverInterface
 
@@ -55,13 +56,13 @@ class QuasiSteadyStateSolver(SolverInterface):
         logger.info("Resolving full vehicle state...")
         for node in solution.nodes:
             ctx = self.local_context(node.track_node, node.transient_variables)
+            motion = VehicleMotion(
+                node.average_velocity,
+                node.longitudinal_acceleration,
+                node.lateral_acceleration,
+            )
             node.calculated_vehicle_state = (
-                self.vehicle_model.evaluate_full_vehicle_state(
-                    ctx,
-                    velocity=node.average_velocity,
-                    ax=node.longitudinal_acceleration,
-                    ay=node.lateral_acceleration,
-                )
+                self.vehicle_model.evaluate_full_vehicle_state(ctx, motion)
             )
 
         return solution

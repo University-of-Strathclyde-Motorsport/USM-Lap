@@ -9,6 +9,7 @@ from typing import Optional
 
 from usmlap.model import NodeContext, VehicleModelInterface
 from usmlap.model.errors import WheelLiftError
+from usmlap.model.vehicle_state import VehicleMotion
 from usmlap.solver.errors import MaximumIterationsExceededError
 
 PRECISION = 1e-2
@@ -66,9 +67,8 @@ def solve_apex_velocity(
     for _ in range(1, maximum_iterations + 1):
         ay = v_to_ay(v=velocities[-1], curvature=ctx.node.curvature)  # SIGNED
         try:
-            available_fy = vehicle_model.lateral_traction(
-                ctx, velocity=velocities[-1], ax=0, ay=ay
-            )
+            motion = VehicleMotion(velocities[-1], ax=0, ay=ay)
+            available_fy = vehicle_model.lateral_traction(ctx, motion)
             ay = available_fy / ctx.vehicle.total_mass
             velocities.append(
                 ay_to_velocity(ay=ay, curvature=ctx.node.curvature)

@@ -7,6 +7,7 @@ import math
 
 from usmlap.model import NodeContext, VehicleModelInterface
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
+from usmlap.model.vehicle_state import VehicleMotion
 
 MAXIMUM_ITERATIONS = 100
 PRECISION = 1e-3
@@ -37,9 +38,8 @@ def calculate_initial_velocity(
 
     for _ in range(1, MAXIMUM_ITERATIONS + 1):
         try:
-            traction = vehicle_model.braking_traction(
-                ctx, final_velocity, axs[-1], ay=ay
-            )
+            motion = VehicleMotion(final_velocity, axs[-1], ay)
+            traction = vehicle_model.braking_traction(ctx, motion)
         except InsufficientTractionError as e:
             axs.append(axs[-1] / e.ratio)
             continue

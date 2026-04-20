@@ -6,6 +6,7 @@ import math
 
 from usmlap.model.context import NodeContext
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
+from usmlap.model.vehicle_state import VehicleMotion
 from usmlap.utils.datatypes import FourCorner, FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 from usmlap.vehicle.tyre.tyre_model import TyreModelInterface
@@ -22,13 +23,13 @@ class FourCornerModel(VehicleModelInterface):
     """
 
     def lateral_traction(
-        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+        self, ctx: NodeContext, motion: VehicleMotion
     ) -> float:
 
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        normal_loads = self.normal_loads(ctx, velocity, ax=0, ay=ay)
+        resistive_fx = sum(self.resistive_forces(ctx, motion.velocity))
+        normal_loads = self.normal_loads(ctx, motion)
         if min(normal_loads) < 0:
-            raise WheelLiftError(normal_loads, ax=0, ay=ay)
+            raise WheelLiftError(normal_loads, motion.ax, motion.ay)
 
         attitudes = FourCorner(
             *(TyreAttitude(normal_load=load) for load in normal_loads)
@@ -51,13 +52,13 @@ class FourCornerModel(VehicleModelInterface):
         return sum(traction)
 
     def longitudinal_traction(
-        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+        self, ctx: NodeContext, motion: VehicleMotion
     ) -> float:
-        required_fy = abs(self.required_fy(ctx, velocity))
+        required_fy = abs(self.required_fy(ctx, motion.velocity))
 
-        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
+        normal_loads = self.normal_loads(ctx, motion)
         if min(normal_loads) < 0:
-            raise WheelLiftError(normal_loads, ax=ax, ay=ay)
+            raise WheelLiftError(normal_loads, ax=motion.ax, ay=motion.ay)
 
         fl_attitude = TyreAttitude(normal_load=normal_loads.front_left)
         fr_attitude = TyreAttitude(normal_load=normal_loads.front_right)
@@ -89,10 +90,10 @@ class FourCornerModel(VehicleModelInterface):
         return rl_fx + rr_fx
 
     def braking_traction(
-        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+        self, ctx: NodeContext, motion: VehicleMotion
     ) -> float:
-        required_fy = abs(self.required_fy(ctx, velocity))
-        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
+        required_fy = abs(self.required_fy(ctx, motion.velocity))
+        normal_loads = self.normal_loads(ctx, motion)
         fl_attitude = TyreAttitude(normal_load=normal_loads.front_left)
         fr_attitude = TyreAttitude(normal_load=normal_loads.front_right)
         rl_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
@@ -119,14 +120,14 @@ class FourCornerModel(VehicleModelInterface):
         return fl_fx + fr_fx + rl_fx + rr_fx
 
     def normal_loads(
-        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+        self, ctx: NodeContext, motion: VehicleMotion
     ) -> FourCorner[float]:
-        body_fx, aero_fx = self.resistive_forces(ctx, velocity)
-        inertial_fx = ctx.vehicle.total_mass * ax
+        body_fx, aero_fx = self.resistive_forces(ctx, motion.velocity)
+        inertial_fx = ctx.vehicle.total_mass * motion.ax
 
-        inertial_fy = ctx.vehicle.total_mass * ay
+        inertial_fy = ctx.vehicle.total_mass * motion.ay
 
-        body_fz, aero_fz = self.normal_forces(ctx, velocity)
+        body_fz, aero_fz = self.normal_forces(ctx, motion.velocity)
         normal_force = self._split_normal_force(ctx, body_fz, aero_fz)
 
         inertial_lt_fx = self._inertial_lt_fx(ctx, body_fx + inertial_fx)
