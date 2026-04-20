@@ -12,7 +12,7 @@ from usmlap.vehicle import Vehicle
 
 from .environment import Environment
 from .lambda_coefficients import LambdaCoefficients
-from .vehicle_state import StateVariables
+from .vehicle_state import TransientVariables
 
 
 @dataclass
@@ -31,7 +31,7 @@ class GlobalContext(object):
     lambdas: LambdaCoefficients
 
     def get_local_context(
-        self, node: TrackNode, state: StateVariables
+        self, node: TrackNode, state: TransientVariables
     ) -> NodeContext:
         return NodeContext(
             environment=self.environment,
@@ -50,10 +50,10 @@ class NodeContext(GlobalContext):
     Attributes:
         environment (Environment): Environmental variables for the simulation.
         vehicle (Vehicle): The vehicle being simulated.
-        state (StateVariables): The vehicle's state variables.
+        state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to evaluate.
         lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
     """
 
-    state: StateVariables
+    state: TransientVariables
     node: TrackNode

@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from rich.progress import Progress
 
 from usmlap.model.errors import OutOfChargeError
-from usmlap.simulation.solver.vehicle_state import update_state_variables
 
 from ..solution import Solution
 from .quasi_steady_state import QuasiSteadyStateSolver
@@ -17,6 +16,7 @@ from .solver_interface import (
     SolverError,
     SolverInterface,
 )
+from .transient_variable import update_transient_variables
 
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 CONVERGENCE_TOLERANCE = 1e-4
@@ -120,16 +120,16 @@ class QuasiTransientSolver(SolverInterface):
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
             ctx = self.local_context(
-                previous_node.track_node, previous_node.state_variables
+                previous_node.track_node, previous_node.transient_variables
             )
-            solution.nodes[i].state_variables = update_state_variables(
+            solution.nodes[i].transient_variables = update_transient_variables(
                 ctx=ctx,
-                initial_state=previous_node.state_variables,
+                initial_state=previous_node.transient_variables,
                 dt=previous_node.time,
-                vehicle_state=previous_node.vehicle_state,  # noqa
+                vehicle_state=previous_node.calculated_vehicle_state,  # noqa
             )
 
-        final_soc = solution.nodes[-1].state_variables.state_of_charge
+        final_soc = solution.nodes[-1].transient_variables.soc
         if final_soc < self.target_soc:
             raise BelowTargetSOCError(final_soc, self.target_soc)
         return solution

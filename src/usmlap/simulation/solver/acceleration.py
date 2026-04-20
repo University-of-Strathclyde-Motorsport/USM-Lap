@@ -21,7 +21,7 @@ def calculate_next_velocity(
 
     Args:
         vehicle_model (VehicleModelInterface): The vehicle model to use.
-        state (StateVariables): The vehicle's state variables.
+        state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to solve.
         initial_velocity (float): The velocity at the start of the node.
 

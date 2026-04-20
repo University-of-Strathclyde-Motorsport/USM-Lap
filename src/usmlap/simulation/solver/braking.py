@@ -23,7 +23,7 @@ def calculate_initial_velocity(
 
     Args:
         vehicle_model (VehicleModelInterface): The vehicle model to use.
-        state (StateVariables): The vehicle's state variables.
+        state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to solve.
         final_velocity (float): The velocity at the end of the node.
 

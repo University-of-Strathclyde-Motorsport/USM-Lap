@@ -9,7 +9,12 @@ from copy import copy
 from dataclasses import dataclass, field
 from typing import Generator, Optional
 
-from usmlap.model import FullVehicleState, StateVariables, VehicleModelInterface
+from usmlap.model import (
+    CalculatedVehicleState,
+    TransientVariables,
+    VehicleModelInterface,
+)
+from usmlap.model.vehicle_state import VehicleState
 from usmlap.track import Mesh, TrackNode
 
 
@@ -23,8 +28,8 @@ class SolutionNode(object):
         maximum_velocity (float): The maximum possible velocity at the node,
             obtained from the lateral vehicle model.
         acceleration (float): The longitudinal acceleration at the node.
-        state_variables (StateVariables): The state variables at the node.
-        vehicle_state (FullVehicleState): The state of the vehicle at the node.
+        transient_variables (TransientVariables): The transient variables at the node.
+        calculated_vehicle_state (CalculatedVehicleState): The state of the vehicle at the node.
         next (Optional[SolutionNode]): The next node in the solution
             (`None` if this is the final node).
         previous (Optional[SolutionNode]): The previous node in the solution
@@ -48,12 +53,13 @@ class SolutionNode(object):
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
     acceleration: float = 0
-    state_variables: StateVariables = field(
-        default_factory=StateVariables.get_default
+    transient_variables: TransientVariables = field(
+        default_factory=TransientVariables.get_default
     )
-    vehicle_state: Optional[FullVehicleState] = None
+    calculated_vehicle_state: Optional[CalculatedVehicleState] = None
     next: Optional[SolutionNode] = None
     previous: Optional[SolutionNode] = None
+    # vehicle_state: VehicleState = field(default_factory=VehicleState)
 
     @property
     def apex_velocity(self) -> float:
@@ -104,9 +110,9 @@ class SolutionNode(object):
 
     @property
     def energy_used(self) -> float:
-        if self.vehicle_state is None:
+        if self.calculated_vehicle_state is None:
             return 0
-        return self.vehicle_state.motor_power * self.time  # TODO
+        return self.calculated_vehicle_state.motor_power * self.time  # TODO
 
     def is_apex(self) -> bool:
         """
@@ -173,9 +179,6 @@ class SolutionNode(object):
         """
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
-
-    def update_state_variables(self, state_variables: StateVariables) -> None:
-        self.state_variables = state_variables
 
 
 @dataclass
@@ -312,7 +315,7 @@ class Solution(object):
 def create_new_solution(
     track_mesh: Mesh,
     vehicle_model: VehicleModelInterface,
-    initial_state: StateVariables,
+    initial_state: TransientVariables,
 ) -> Solution:
     """
     Create a new solution from a track mesh and vehicle model.
@@ -324,20 +327,22 @@ def create_new_solution(
     Returns:
         solution (Solution): A blank solution.
     """
-    estimated_states = estimate_states(track_mesh, initial_state)
+    transient_variables = initialise_transient_variables(
+        track_mesh, initial_state
+    )
     solution_nodes = [
-        SolutionNode(track_node=track_node, state_variables=estimated_state)
+        SolutionNode(track_node=track_node, transient_variables=estimated_state)
         for track_node, estimated_state in zip(
-            track_mesh.nodes, estimated_states
+            track_mesh.nodes, transient_variables
         )
     ]
     solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
     return solution
 
 
-def estimate_states(
-    track_mesh: Mesh, initial_state: StateVariables
-) -> list[StateVariables]:
+def initialise_transient_variables(
+    track_mesh: Mesh, initial_state: TransientVariables
+) -> list[TransientVariables]:
     """
     Generate initial estimated state variables for a simulation.
     """

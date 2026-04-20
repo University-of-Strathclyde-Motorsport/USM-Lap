@@ -8,3 +8,6 @@ from .braking import calculate_initial_velocity as calculate_initial_velocity
 from .quasi_steady_state import QuasiSteadyStateSolver as QuasiSteadyStateSolver
 from .quasi_transient import QuasiTransientSolver as QuasiTransientSolver
 from .solver_interface import SolverInterface as SolverInterface
+from .transient_variable import (
+    update_transient_variables as update_transient_variables,
+)

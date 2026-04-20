@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from usmlap.model import (
     GlobalContext,
     NodeContext,
-    StateVariables,
+    TransientVariables,
     VehicleModelInterface,
 )
 from usmlap.track import TrackNode
@@ -61,6 +61,6 @@ class SolverInterface(ABC):
     def solve(self, previous_solution: Solution) -> Solution: ...
 
     def local_context(
-        self, node: TrackNode, state: StateVariables
+        self, node: TrackNode, state: TransientVariables
     ) -> NodeContext:
         return self.global_context.get_local_context(node, state)

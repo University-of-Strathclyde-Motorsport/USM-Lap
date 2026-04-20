@@ -10,7 +10,7 @@ from usmlap.vehicle.aero import AeroAttitude
 
 from ..context import NodeContext
 from ..powertrain import PowertrainModelInterface, SingleMotorRWD
-from ..vehicle_state import FullVehicleState
+from ..vehicle_state import CalculatedVehicleState
 
 
 @dataclass
@@ -116,7 +116,7 @@ class VehicleModelInterface(ABC):
 
     def evaluate_full_vehicle_state(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
-    ) -> FullVehicleState:
+    ) -> CalculatedVehicleState:
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, velocity)
         body_fz, aero_fz = self.normal_forces(ctx, velocity)
@@ -144,7 +144,7 @@ class VehicleModelInterface(ABC):
             ctx.state.cell_temperature, ctx.environment.ambient_temperature
         )
 
-        return FullVehicleState(
+        return CalculatedVehicleState(
             velocity=velocity,
             ax=ax,
             ay=ay,

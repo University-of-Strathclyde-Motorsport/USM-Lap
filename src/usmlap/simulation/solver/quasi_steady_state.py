@@ -53,12 +53,14 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         logger.info("Resolving full vehicle state...")
         for node in solution.nodes:
-            ctx = self.local_context(node.track_node, node.state_variables)
-            node.vehicle_state = self.vehicle_model.evaluate_full_vehicle_state(
-                ctx,
-                velocity=node.average_velocity,
-                ax=node.longitudinal_acceleration,
-                ay=node.lateral_acceleration,
+            ctx = self.local_context(node.track_node, node.transient_variables)
+            node.calculated_vehicle_state = (
+                self.vehicle_model.evaluate_full_vehicle_state(
+                    ctx,
+                    velocity=node.average_velocity,
+                    ax=node.longitudinal_acceleration,
+                    ay=node.lateral_acceleration,
+                )
             )
 
         return solution
@@ -83,7 +85,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             description="Solving maximum velocities...",
             transient=True,
         ):
-            ctx = self.local_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.transient_variables)
             velocity = solve_apex_velocity(
                 vehicle_model=self.vehicle_model,
                 ctx=ctx,
@@ -112,7 +114,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution.nodes[start_index].set_initial_velocity(maximum_velocity)
 
         for node in solution.nodes[start_index:]:
-            ctx = self.local_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.transient_variables)
             potential_velocity = calculate_next_velocity(
                 model=solution.vehicle_model,
                 ctx=ctx,
@@ -161,7 +163,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             if node.previous.is_apex():
                 node.previous.remove_apex()
 
-            ctx = self.local_context(node.track_node, node.state_variables)
+            ctx = self.local_context(node.track_node, node.transient_variables)
 
             potential_velocity = calculate_initial_velocity(
                 vehicle_model=solution.vehicle_model,

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from pyparsing import Optional
 
-from usmlap.model import StateVariables
+from usmlap.model import TransientVariables
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
@@ -18,7 +18,7 @@ def simulate(
     vehicle: Vehicle,
     track_mesh: Mesh,
     settings: SimulationSettings,
-    initial_state: Optional[StateVariables] = None,
+    initial_state: Optional[TransientVariables] = None,
 ) -> Solution:
     """
     Simulate a vehicle driving around a track.
@@ -28,7 +28,7 @@ def simulate(
         settings (SimulationSettings): Settings for the simulation.
     """
     if initial_state is None:
-        initial_state = StateVariables.get_default()
+        initial_state = TransientVariables.get_default()
 
     vehicle_model = settings.vehicle_model()
     global_context = settings.get_global_context(vehicle)
