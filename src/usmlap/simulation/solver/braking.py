@@ -6,6 +6,10 @@ which calculates the maximum possible braking at a node.
 import math
 
 from usmlap.model import NodeContext, VehicleModelInterface
+from usmlap.model.errors import InsufficientTractionError, WheelLiftError
+
+MAXIMUM_ITERATIONS = 100
+PRECISION = 1e-3
 
 
 def calculate_initial_velocity(
@@ -26,17 +30,34 @@ def calculate_initial_velocity(
     Returns:
         initial_velocity (float): The velocity at the start of the node.
     """
+    axs: list[float] = [0]
+    ay = ctx.node.curvature * final_velocity**2
 
-    try:
-        deceleration = vehicle_model.traction_limited_braking(
-            ctx, final_velocity
-        )
+    resistive_fx = sum(vehicle_model.resistive_forces(ctx, final_velocity))
 
-        initial_velocity = math.sqrt(
-            final_velocity**2 + 2 * deceleration * ctx.node.length
-        )
+    for _ in range(1, MAXIMUM_ITERATIONS + 1):
+        try:
+            traction = vehicle_model.braking_traction(
+                ctx, final_velocity, axs[-1], ay=ay
+            )
+        except InsufficientTractionError as e:
+            axs.append(axs[-1] / e.ratio)
+            continue
+        except WheelLiftError as e:
+            scale_factor = (
+                1 - (2 * e.max_wheel_lift) / e.longitudinal_load_transfer
+            )
+            axs.append(axs[-1] * scale_factor)
+            continue
 
-    except ValueError:
-        initial_velocity = final_velocity
+        net_force = traction + resistive_fx
+        ax = net_force / ctx.vehicle.equivalent_mass
+        axs.append(ax)
 
+        if abs(ax - axs[-2]) < PRECISION:
+            break
+
+    initial_velocity = math.sqrt(
+        final_velocity**2 + 2 * axs[-1] * ctx.node.length
+    )
     return initial_velocity

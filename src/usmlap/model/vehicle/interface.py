@@ -104,9 +104,14 @@ class VehicleModelInterface(ABC):
     ) -> float: ...
 
     @abstractmethod
-    def traction_limited_braking(
-        self, ctx: NodeContext, velocity: float
+    def braking_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float: ...
+
+    # @abstractmethod
+    # def traction_limited_braking(
+    #     self, ctx: NodeContext, velocity: float
+    # ) -> float: ...
 
     # def drive_force(self, ctx: NodeContext, velocity: float) -> float:
     #     return self.powertrain.drive_force(ctx, velocity)

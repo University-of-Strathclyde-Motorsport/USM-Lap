@@ -2,6 +2,8 @@
 This module contains functions for plotting GG and GGV scatter plots.
 """
 
+from typing import Optional
+
 import matplotlib.pyplot as plt
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
@@ -20,8 +22,8 @@ def plot_velocity_acceleration(solution: Solution) -> None:
 
     _, ax = plt.subplots()
 
-    velocity = Velocity.get_values(solution)
-    longitudinal = LongitudinalAcceleration.get_values(solution)
+    velocity = Velocity().get_values(solution)
+    longitudinal = LongitudinalAcceleration().get_values(solution)
 
     ax.scatter(velocity, longitudinal, color=USM_BLUE, alpha=0.5)
 
@@ -30,35 +32,67 @@ def plot_velocity_acceleration(solution: Solution) -> None:
     ax.set_title("Velocity - Acceleration")
     ax.grid()
 
+    plt.tight_layout()
     plt.show()
 
 
-def plot_gg(solutions: Solution | list[Solution], marker_size: float =  5) -> None:
+def plot_gg(
+    solutions: dict[str, Solution],
+    *,
+    title: str = "GG Plot",
+    marker_size: float = 10,
+    colours: Optional[list[str]] = None,
+    show_legend: Optional[bool] = None,
+) -> None:
     """
     Create a scatter plot of lateral and longitudinal acceleration.
     """
-    if isinstance(solutions, Solution):
-        solutions = [solutions]
+
+    if colours is None:
+        colourmap = COLOURMAP
+    else:
+        colourmap = iter(colours)
+
+    if show_legend is None:
+        show_legend = len(solutions) > 1
 
     _, ax = plt.subplots()
 
     ax.axhline(0, color="black", linewidth=1)
     ax.axvline(0, color="black", linewidth=1)
 
-    for solution in solutions:
-        lateral = LateralAcceleration.get_values(solution)
-        longitudinal = LongitudinalAcceleration.get_values(solution)
-        ax.scatter(lateral, longitudinal, color=next(COLOURMAP), s=marker_size)
+    for label, solution in solutions.items():
+        lateral = LateralAcceleration().get_values(solution)
+        longitudinal = LongitudinalAcceleration().get_values(solution)
+        ax.scatter(
+            lateral,
+            longitudinal,
+            color=next(colourmap),
+            s=marker_size,
+            label=label,
+        )
 
-    ax.set_xlabel(LateralAcceleration.get_label())
-    ax.set_ylabel(LongitudinalAcceleration.get_label())
-    ax.set_title("GG Plot")
+    if show_legend:
+        ax.legend(fontsize=16)
+
+    ax.set_xlabel(LateralAcceleration.get_label(), fontsize=16)
+    ax.set_ylabel(LongitudinalAcceleration.get_label(), fontsize=16)
+    ax.set_title(title, fontsize=20)
+    ax.tick_params(axis="both", which="major", labelsize=16)
     ax.grid()
 
+    plt.tight_layout()
     plt.show()
 
 
-def plot_ggv(solution: Solution) -> None:
+def plot_ggv(
+    solutions: dict[str, Solution],
+    *,
+    title: str = "GGV Plot",
+    marker_size: float = 10,
+    colours: Optional[list[str]] = None,
+    show_legend: Optional[bool] = None,
+) -> None:
     """
     Create a 3D scatter plot of velocity, lateral and longitudinal acceleration.
     """
@@ -66,16 +100,30 @@ def plot_ggv(solution: Solution) -> None:
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
 
-    lateral = LateralAcceleration.get_values(solution)
-    longitudinal = LongitudinalAcceleration.get_values(solution)
-    velocity = Velocity.get_values(solution)
+    if colours is None:
+        colourmap = COLOURMAP
+    else:
+        colourmap = iter(colours)
 
-    ax.scatter(lateral, longitudinal, velocity)
+    if show_legend is None:
+        show_legend = len(solutions) > 1
+
+    for label, solution in solutions.items():
+        lateral = LateralAcceleration().get_values(solution)
+        longitudinal = LongitudinalAcceleration().get_values(solution)
+        velocity = Velocity().get_values(solution)
+        ax.scatter(
+            lateral, longitudinal, velocity, color=next(colourmap), label=label
+        )
 
     ax.set_xlabel(LateralAcceleration.get_label())
     ax.set_ylabel(LongitudinalAcceleration.get_label())
     ax.set_zlabel(Velocity.get_label())
-    ax.set_title("GG Plot")
+    ax.set_title(title)
     ax.grid()
 
+    if show_legend:
+        ax.legend()
+
+    plt.tight_layout()
     plt.show()

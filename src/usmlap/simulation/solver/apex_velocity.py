@@ -16,6 +16,7 @@ PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100
 
 MIN_ERROR_SCALE_FACTOR = 0.1
+MAX_ERROR_SCALE_FACTOR = 0.9
 
 
 def solve_apex_velocity(
@@ -75,8 +76,10 @@ def solve_apex_velocity(
             )
 
         except WheelLiftError as e:
+            # TODO: Make this more robust
             scale_factor = 1 - (2 * e.max_wheel_lift) / e.lateral_load_transfer
             scale_factor = max(MIN_ERROR_SCALE_FACTOR, scale_factor)
+            scale_factor = min(MAX_ERROR_SCALE_FACTOR, scale_factor)
             v_scale_factor = math.sqrt(scale_factor)
             velocities.append(velocities[-1] * v_scale_factor)
             continue
@@ -87,7 +90,9 @@ def solve_apex_velocity(
         if velocities[-1] >= maximum_velocity:
             return maximum_velocity
 
-    raise MaximumIterationsExceededError()
+    raise MaximumIterationsExceededError(
+        maximum_iterations, precision, velocities
+    )
 
 
 def _update_velocity_estimate(

@@ -59,48 +59,79 @@ class Bicycle(VehicleModelInterface):
 
         return rear_traction
 
-    def traction_limited_braking(
-        self, ctx: NodeContext, velocity: float
+    def braking_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = abs(self.required_fy(ctx, velocity))
-        axs: list[float] = [0]
 
-        for _ in range(MAXIMUM_ITERATIONS):
-            normal_force = self._get_normal_force(ctx, velocity, -axs[-1])
+        normal_force = self._get_normal_force(ctx, velocity, -ax)
 
-            front_tyre = ctx.vehicle.tyres.front.tyre_model
-            front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
-            rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-            rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+        front_tyre = ctx.vehicle.tyres.front.tyre_model
+        front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+        rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
 
-            maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
-                front_attitude
-            )
-            maximum_rear_fy = 2 * rear_tyre.calculate_lateral_force(
-                rear_attitude
-            )
+        maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
+            front_attitude
+        )
+        maximum_rear_fy = 2 * rear_tyre.calculate_lateral_force(rear_attitude)
 
-            front_fy, rear_fy = self._determine_fy_split(
-                FrontRear(maximum_front_fy, maximum_rear_fy), required_fy
-            )
+        front_fy, rear_fy = self._determine_fy_split(
+            FrontRear(maximum_front_fy, maximum_rear_fy), required_fy
+        )
 
-            front_traction = 2 * front_tyre.calculate_longitudinal_force(
-                front_attitude, required_fy=front_fy / 2
-            )
+        front_traction = 2 * front_tyre.calculate_longitudinal_force(
+            front_attitude, required_fy=front_fy / 2
+        )
 
-            rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-                rear_attitude, required_fy=rear_fy / 2
-            )
+        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+            rear_attitude, required_fy=rear_fy / 2
+        )
 
-            net_force = front_traction + rear_traction + resistive_fx
-            ax = net_force / ctx.vehicle.equivalent_mass
-            if abs(ax - axs[-1]) < PRECISION:
-                return ax
+        return front_traction + rear_traction
 
-            axs.append(self._get_next_ax(ax, axs))
+    # def traction_limited_braking(
+    #     self, ctx: NodeContext, velocity: float
+    # ) -> float:
+    #     resistive_fx = sum(self.resistive_forces(ctx, velocity))
+    #     required_fy = abs(self.required_fy(ctx, velocity))
+    #     axs: list[float] = [0]
 
-        raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
+    #     for _ in range(MAXIMUM_ITERATIONS):
+    #         normal_force = self._get_normal_force(ctx, velocity, -axs[-1])
+
+    #         front_tyre = ctx.vehicle.tyres.front.tyre_model
+    #         front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+    #         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+    #         rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+
+    #         maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
+    #             front_attitude
+    #         )
+    #         maximum_rear_fy = 2 * rear_tyre.calculate_lateral_force(
+    #             rear_attitude
+    #         )
+
+    #         front_fy, rear_fy = self._determine_fy_split(
+    #             FrontRear(maximum_front_fy, maximum_rear_fy), required_fy
+    #         )
+
+    #         front_traction = 2 * front_tyre.calculate_longitudinal_force(
+    #             front_attitude, required_fy=front_fy / 2
+    #         )
+
+    #         rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+    #             rear_attitude, required_fy=rear_fy / 2
+    #         )
+
+    #         net_force = front_traction + rear_traction + resistive_fx
+    #         ax = net_force / ctx.vehicle.equivalent_mass
+    #         if abs(ax - axs[-1]) < PRECISION:
+    #             return ax
+
+    #         axs.append(self._get_next_ax(ax, axs))
+
+    #     raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
 
     def _get_normal_force(
         self, ctx: NodeContext, velocity: float, ax: float

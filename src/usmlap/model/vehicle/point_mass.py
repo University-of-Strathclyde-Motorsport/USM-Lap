@@ -55,11 +55,10 @@ class PointMass(VehicleModelInterface):
         )
         return rear_traction
 
-    def traction_limited_braking(
-        self, ctx: NodeContext, velocity: float
+    def braking_traction(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
 
-        resistive_fx = sum(self.resistive_forces(ctx, velocity))
         required_fy = self.required_fy(ctx, velocity)
         normal_force = self._get_normal_force(ctx, velocity)
 
@@ -74,9 +73,30 @@ class PointMass(VehicleModelInterface):
         rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
             tyre_attitude, required_fy=required_fy / 4
         )
+        return front_traction + rear_traction
 
-        net_fx = front_traction + rear_traction + resistive_fx
-        return net_fx / ctx.vehicle.equivalent_mass
+    # def traction_limited_braking(
+    #     self, ctx: NodeContext, velocity: float
+    # ) -> float:
+
+    #     resistive_fx = sum(self.resistive_forces(ctx, velocity))
+    #     required_fy = self.required_fy(ctx, velocity)
+    #     normal_force = self._get_normal_force(ctx, velocity)
+
+    #     tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+
+    #     front_tyre = ctx.vehicle.tyres.front.tyre_model
+    #     front_traction = 2 * front_tyre.calculate_longitudinal_force(
+    #         tyre_attitude, required_fy=required_fy / 4
+    #     )
+
+    #     rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+    #     rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
+    #         tyre_attitude, required_fy=required_fy / 4
+    #     )
+
+    #     net_fx = front_traction + rear_traction + resistive_fx
+    #     return net_fx / ctx.vehicle.equivalent_mass
 
     def _get_normal_force(self, ctx: NodeContext, velocity: float) -> float:
         return sum(self.normal_forces(ctx, velocity))

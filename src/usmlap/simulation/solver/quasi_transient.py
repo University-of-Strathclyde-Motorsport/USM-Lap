@@ -77,7 +77,9 @@ class QuasiTransientSolver(SolverInterface):
                     logging.info(f"Converged after {i} iterations.")
                     return solution
 
-        raise MaximumIterationsExceededError()
+        raise MaximumIterationsExceededError(
+            MAXIMUM_TRANSIENT_ITERATIONS, CONVERGENCE_TOLERANCE, times
+        )
 
     def _decrease_discharge_limit(self, scaling_factor: float) -> None:
         powertrain = self.global_context.vehicle.powertrain
