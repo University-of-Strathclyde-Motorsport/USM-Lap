@@ -4,7 +4,7 @@ This module defines a format for storing the solution of a simulation.
 
 from dataclasses import dataclass
 
-from usmlap.simulation import Solution
+from usmlap.simulation import Solution, SolutionNode
 from usmlap.simulation.solver import SolverInterface
 from usmlap.vehicle import Vehicle
 
@@ -17,9 +17,6 @@ class TelemetrySolution(object):
     solution: Solution
     solver: type[SolverInterface]
 
-
-def create_telemetry_solution(
-    vehicle: Vehicle, solution: Solution
-) -> TelemetrySolution:
-    """Create a telemetry solution."""
-    return TelemetrySolution(vehicle=vehicle, solution=solution)
+    @property
+    def nodes(self) -> list[SolutionNode]:
+        return self.solution.nodes
