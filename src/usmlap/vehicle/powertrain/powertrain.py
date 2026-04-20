@@ -13,6 +13,8 @@ from .accumulator import Accumulator, CellState
 from .motor import Motor
 from .motor_controller import MotorController
 
+COOLING_TEMPERATURE_THRESHOLD = 45
+
 
 class PowertrainInterface(ABC, BaseModel):
     """
@@ -158,5 +160,7 @@ class RWDPowertrain(PowertrainInterface):
     def cooling_rate(
         self, cell_temperature: float, ambient_temperature: float
     ) -> float:
+        if cell_temperature < COOLING_TEMPERATURE_THRESHOLD:
+            return 0
         temperature_delta = cell_temperature - ambient_temperature
         return self.cooling_coefficient * max(temperature_delta, 0)

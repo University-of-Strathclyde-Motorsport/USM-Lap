@@ -7,8 +7,9 @@ from collections.abc import Callable
 from itertools import accumulate
 
 from ..solution import Solution
+from .channel import ChannelType
 
-type ChannelFcn = Callable[[Solution], list[float]]
+type ChannelFcn[T: ChannelType] = Callable[[Solution], T]
 
 
 def negate(channel: ChannelFcn) -> ChannelFcn:
@@ -140,6 +141,7 @@ def square(channel: ChannelFcn) -> ChannelFcn:
     Returns:
         results (ChannelFcn): The channel squared.
     """
+
     return power(channel, 2)
 
 
@@ -257,3 +259,24 @@ def integral(channel: ChannelFcn, wrt: ChannelFcn) -> ChannelFcn:
     """
 
     return cumulative_sum(product(channel, wrt))
+
+
+def total(channel: ChannelFcn) -> Callable[[Solution], float]:
+    def inner(solution: Solution) -> float:
+        return sum(channel(solution))
+
+    return inner
+
+
+def average(channel: ChannelFcn) -> Callable[[Solution], float]:
+    def inner(solution: Solution) -> float:
+        return total(channel)(solution) / len(solution.nodes)
+
+    return inner
+
+
+def maximum(channel: ChannelFcn) -> Callable[[Solution], float]:
+    def inner(solution: Solution) -> float:
+        return max(channel(solution))
+
+    return inner

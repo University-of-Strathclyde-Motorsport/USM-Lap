@@ -2,6 +2,8 @@
 This module contains code for plotting cell maps.
 """
 
+from typing import Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -17,7 +19,7 @@ T_MAX = 80
 AXIS_LABELS = {
     "soc": "State of Charge (%)",
     "voltage": "Voltage (V)",
-    "resistance": "DC Impedance (mΩ)",
+    "resistance": "DC Internal Resistance (mΩ)",
     "current": "Discharge Current (A)",
     "temperature": "Temperature (°C)",
     "derate": "Available Current",
@@ -61,7 +63,13 @@ def _plot_voltage(cell: Cell, ax: plt.Axes) -> None:
     ax.set_xlim(0, 100)
 
 
-def _plot_resistance(cell: Cell, ax: plt.Axes) -> None:
+def _plot_resistance(
+    cell: Cell,
+    ax: plt.Axes,
+    *,
+    title: str = "Resistance",
+    y_limits: Optional[tuple[float, float]] = None,
+) -> None:
     """Plot resistance against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     for temperature in REFERENCE_TEMPERATURES:
@@ -77,10 +85,12 @@ def _plot_resistance(cell: Cell, ax: plt.Axes) -> None:
         )
     ax.set_xlabel(AXIS_LABELS["soc"])
     ax.set_ylabel(AXIS_LABELS["resistance"])
-    ax.set_title("Resistance")
+    ax.set_title(title)
     ax.grid(True)
     ax.legend(title="Temperature (°C)")
     ax.set_xlim(0, 100)
+    if y_limits is not None:
+        ax.set_ylim(*y_limits)
 
 
 def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:

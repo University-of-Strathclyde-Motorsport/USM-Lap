@@ -130,7 +130,16 @@ class VehicleModelInterface(ABC):
         motor_speed = ctx.vehicle.velocity_to_motor_speed(velocity)
         motor_torque = self.powertrain.required_torque(ctx, drive_force)
         motor_power = motor_speed * motor_torque
-        accu_current = self.powertrain.required_current(ctx, motor_torque)
+        accu_power = (
+            motor_power / ctx.vehicle.powertrain.get_powertrain_efficiency()
+        )
+        accu_current = (
+            accu_power
+            / ctx.vehicle.powertrain.accumulator.get_voltage(
+                ctx.state.cell_state.soc
+            )
+        )
+        # accu_current = self.powertrain.required_current(ctx, motor_torque)
         heating_power = ctx.vehicle.powertrain.accumulator.heating_power(
             ctx.state.cell_state, accu_current
         )

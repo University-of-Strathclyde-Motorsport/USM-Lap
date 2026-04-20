@@ -15,10 +15,13 @@ def update_state_variables(
 ) -> StateVariables:
     """Update the values of the transient variables."""
 
-    soc = StateOfCharge(
-        initial_state.state_of_charge + _discharge_rate(ctx, vehicle_state) * dt
-    )
-    if soc < 0:
+    # print(initial_state.state_of_charge)
+    try:
+        soc = StateOfCharge(
+            initial_state.state_of_charge
+            + _discharge_rate(ctx, vehicle_state) * dt
+        )
+    except ValueError:
         raise OutOfChargeError
 
     cell_temperature = initial_state.cell_temperature + (

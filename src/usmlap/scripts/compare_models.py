@@ -17,10 +17,10 @@ from usmlap.vehicle import Vehicle
 
 VEHICLE_FILE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012"
-CHANNELS: list[type[Channel]] = [
-    Velocity,
-    LongitudinalAcceleration,
-    LateralAcceleration,
+CHANNELS: list[Channel] = [
+    Velocity(),
+    LongitudinalAcceleration(),
+    LateralAcceleration(),
 ]
 
 vehicle_models: dict[str, type[VehicleModelInterface]] = {

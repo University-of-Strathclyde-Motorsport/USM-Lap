@@ -3,6 +3,7 @@ This module defines settings for a simulation.
 """
 
 from dataclasses import dataclass, field
+from enum import Enum
 
 from usmlap.model import (
     Environment,
@@ -19,7 +20,7 @@ from .solver import QuasiTransientSolver as QT
 from .solver import SolverInterface
 
 
-@dataclass(frozen=True)
+@dataclass()
 class SimulationSettings(object):
     """
     Settings for a simulation.
@@ -31,10 +32,10 @@ class SimulationSettings(object):
         lambdas (LambdaCoefficients): Coefficients for the vehicle model.
     """
 
-    environment: Environment = field(default_factory=Environment)
     mesh_resolution: Resolution = Resolution(0.1)
     vehicle_model: type[VehicleModelInterface] = PointMass
     solver: type[SolverInterface] = QT
+    environment: Environment = field(default_factory=Environment)
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
 
     def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
@@ -56,8 +57,15 @@ class QualityPresets(object):
     DRAFT: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QSS
     )
+    DRAFT_QT: SimulationSettings = SimulationSettings(
+        mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QT
+    )
     FAST: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(0.5), vehicle_model=Bicycle, solver=QT
+    )
+
+    FAST_QSS: SimulationSettings = SimulationSettings(
+        mesh_resolution=Resolution(0.5), vehicle_model=Bicycle, solver=QSS
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(0.1), vehicle_model=Bicycle, solver=QT

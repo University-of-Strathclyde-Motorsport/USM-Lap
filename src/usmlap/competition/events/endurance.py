@@ -19,8 +19,8 @@ from ..points import (
 )
 from .event import EventInterface
 
-ENDURANCE_TRACK_LENGTH = 22000
-DEFAULT_DISCHARGE_LIMIT = 0.5
+ENDURANCE_TRACK_LENGTH: float = 22000
+DEFAULT_DISCHARGE_LIMIT: float = 0.4
 
 
 @dataclass

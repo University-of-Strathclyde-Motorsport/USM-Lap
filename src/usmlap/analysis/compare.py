@@ -62,7 +62,7 @@ class ComparisonResults(object):
             labels (list[str]): The labels for the vehicles.
         """
 
-        return [vehicle.metadata.print_name for vehicle in self._vehicles]
+        return [vehicle.label for vehicle in self._vehicles]
 
 
 def compare_vehicles(

@@ -19,12 +19,12 @@ VEHICLE_FILE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012"
 SETTINGS = QualityPresets.FAST
 
-CHANNELS: list[type[Channel]] = [
-    Curvature,
-    Velocity,
-    MotorPower,
-    StateOfCharge,
-    CellTemperature,
+CHANNELS: list[Channel] = [
+    Curvature(),
+    Velocity(),
+    MotorPower(),
+    StateOfCharge(),
+    CellTemperature(),
 ]
 
 

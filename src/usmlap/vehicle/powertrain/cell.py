@@ -3,12 +3,17 @@ This module models electrical cells.
 """
 
 from dataclasses import dataclass
-from functools import cached_property
+from functools import cached_property, lru_cache
 from typing import Any, Self
 
 import numpy as np
-from scipy.interpolate import interpn
+from scipy.interpolate import (
+    LinearNDInterpolator,
+    NearestNDInterpolator,
+    RegularGridInterpolator,
+)
 
+from usmlap.utils import clamp
 from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
 
 NOMINAL_TEMPERATURE = 25
@@ -28,11 +33,11 @@ class StateOfCharge(float):
             raise ValueError("State of charge must be between 0 and 1")
         return super().__new__(cls, value)
 
-    def __str__(self) -> str:
-        return f"{float(self) * 100:.3f}%"
+    # def __str__(self) -> str:
+    #     return f"{float(self) * 100:.3f}%"
 
 
-@dataclass
+@dataclass(frozen=True, eq=True)
 class CellState(object):
     """
     The state of a cell in the accumulator.
@@ -101,6 +106,17 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
     def __str__(self) -> str:
         return self.print_name
 
+    def __key(self) -> str:
+        return self.print_name
+
+    def __hash__(self) -> int:
+        return hash(self.__key())
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Cell):
+            return NotImplemented
+        return self.__key() == other.__key()
+
     @cached_property
     def _soc_lookup_values(self) -> list[float]:
         self.voltage_lookup.sort(key=lambda node: node.state_of_charge)
@@ -135,29 +151,21 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
         return voltage + self.voltage_offset
 
     @cached_property
-    def _resistance_lookup(self) -> tuple[tuple[Grid, Grid], Grid]:
+    def _resistance_interpolator(self) -> LinearNDInterpolator:
         self.resistance_lookup.sort(key=lambda node: node.temperature)
-        soc = np.linspace(0, 1, 20)
+        values: list[tuple[float, float, float]] = []
+        for temperature in self.resistance_lookup:
+            for node in temperature.lookup:
+                values.append(
+                    (
+                        node.state_of_charge,
+                        temperature.temperature,
+                        node.resistance,
+                    )
+                )
 
-        resistance_grid = []
-        temperature = np.array(
-            [node.temperature for node in self.resistance_lookup]
-        )
-
-        for i, temperature_lookup in enumerate(self.resistance_lookup):
-            lookup = temperature_lookup.lookup
-            lookup.sort(key=lambda node: node.state_of_charge)
-            ref_soc = np.array([node.state_of_charge for node in lookup])
-            ref_resistance = np.array([node.resistance for node in lookup])
-            resistance = np.interp(soc, ref_soc, ref_resistance)
-
-            if i == 0:
-                resistance_grid = resistance
-                continue
-
-            resistance_grid = np.vstack((resistance_grid, resistance))
-
-        return (soc, temperature), np.transpose(resistance_grid)
+        soc, temperature, resistance = zip(*values)
+        return LinearNDInterpolator(list(zip(soc, temperature)), resistance)
 
     @cached_property
     def _min_temp(self) -> float:
@@ -167,14 +175,16 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
     def _max_temp(self) -> float:
         return max([node.temperature for node in self.resistance_lookup])
 
+    @lru_cache(maxsize=100000)
     def resistance(self, cell_state: CellState) -> float:
         """Get the resistance of the cell for a given cell state."""
         soc = cell_state.soc
-        temp = min(max(cell_state.temperature, self._min_temp), self._max_temp)
-        input_grid, resistance_grid = self._resistance_lookup
-        resistance = float(
-            interpn(input_grid, resistance_grid, (soc, temp), method="linear")
+        temperature = clamp(
+            cell_state.temperature,
+            minimum=self._min_temp,
+            maximum=self._max_temp,
         )
+        resistance = self._resistance_interpolator((soc, temperature))
         return resistance + self.resistance_offset
 
     def discharge_current(self, cell_state: CellState) -> float:

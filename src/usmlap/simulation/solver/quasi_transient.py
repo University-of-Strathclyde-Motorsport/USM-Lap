@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from rich.progress import Progress
 
 from usmlap.model.errors import OutOfChargeError
+from usmlap.simulation.solver.vehicle_state import update_state_variables
 
 from ..solution import Solution
 from .quasi_steady_state import QuasiSteadyStateSolver
@@ -59,14 +60,15 @@ class QuasiTransientSolver(SolverInterface):
                 while True:
                     try:
                         solution = self._solve_next_iteration(solution)
+                        solution = self._recalculate_state_variables(solution)
                         break
                     except OutOfChargeError:
                         self._decrease_discharge_limit(0.9)
 
                     except BelowTargetSOCError as e:
                         initial_soc = 1  # TODO
-                        overshoot = e.overshoot(initial_soc)
-                        self._decrease_discharge_limit(1 / overshoot)
+                        scaling_factor = e.overshoot(initial_soc) * 1.01
+                        self._decrease_discharge_limit(1 / scaling_factor)
 
                 times.append(solution.total_time)
                 logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
@@ -100,6 +102,31 @@ class QuasiTransientSolver(SolverInterface):
         """
         solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
+
+        return solution
+
+    def _recalculate_state_variables(self, solution: Solution) -> Solution:
+        """
+        Recalculate the state variables of the vehicle.
+
+        Args:
+            solution (Solution): The solution object.
+
+        Returns:
+            solution (Solution): The solution with updated state variables.
+        """
+        for i in range(1, len(solution.nodes)):
+            previous_node = solution.nodes[i - 1]
+            ctx = self.local_context(
+                previous_node.track_node, previous_node.state_variables
+            )
+            solution.nodes[i].state_variables = update_state_variables(
+                ctx=ctx,
+                initial_state=previous_node.state_variables,
+                dt=previous_node.time,
+                vehicle_state=previous_node.vehicle_state,  # noqa
+            )
+
         final_soc = solution.nodes[-1].state_variables.state_of_charge
         if final_soc < self.target_soc:
             raise BelowTargetSOCError(final_soc, self.target_soc)

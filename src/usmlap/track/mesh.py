@@ -38,6 +38,7 @@ class TrackNode(BaseModel):
     banking: float = Field(ge=-math.pi / 2, le=math.pi / 2, default=0)
     grip_factor: float = Field(gt=0, default=1)
     sector: str = Field(default="Sector 1")
+    lap_number: int = Field(default=1)
     start_coordinate: tuple[float, float] = Field(default=(0, 0))
     end_coordinate: tuple[float, float] = Field(default=(0, 0))
     heading_angle: float = Field(default=0)
@@ -128,18 +129,20 @@ class Mesh(object):
             mesh (Mesh): A new mesh that repeats the track a number of times.
         """
 
-        new_nodes: list[TrackNode] = []
-        for _ in range(number_of_laps):
-            for node in self:
-                new_nodes.append(copy.copy(node))
+        repeating_nodes: list[TrackNode] = []
+        for lap in range(1, number_of_laps + 1):
+            new_nodes = copy.deepcopy(self.nodes)
+            for node in new_nodes:
+                node.lap_number = lap
+                repeating_nodes.append(node)
 
         position = 0
-        for node in new_nodes:
+        for node in repeating_nodes:
             node.position = position
             position += node.length
 
         return Mesh(
-            nodes=new_nodes,
+            nodes=repeating_nodes,
             configuration=self.configuration,
             track_name=self.track_name,
             location=self.location,

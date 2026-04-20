@@ -5,15 +5,68 @@ This module defines the interface for data channels.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import Optional
 
 from usmlap.simulation import Solution
 from usmlap.utils.units import Unit
 
-from .functions import ChannelFcn
+
+@dataclass
+class IncompatibleUnitError(ValueError):
+    """Raised when a channel cannot be converted to a given unit."""
+
+    # TODO: move this to unit module
+    unit: Unit
+    channel: Channel
+
+    def __str__(self) -> str:
+        return (
+            f"Unit '{self.unit}' of quantity '{self.unit.quantity}' does not match "
+            f"the quantity '{self.channel.unit.quantity}' for channel '{self.channel.name}'."
+        )
 
 
-class Channel(ABC):
+# class ChannelBase[T](ABC):
+#     pass
+#     # @abstractmethod
+#     # def unit_conversion(value: T, unit: Unit) -> T: ...
+
+
+# type ChannelCallable[T: ChannelSize] = Callable[[Solution], T]
+# class ChannelReturnType[T](ABC):
+#     def __init__(self, value: T) -> None:
+#         self.value = value
+
+#     @abstractmethod
+#     def unit_conversion(self, unit: Unit) -> T: ...
+
+
+# class DataChannel(ChannelReturnType[list[float]]):
+#     def __init__(self, value: list[float]) -> None:
+#         super().__init__(value)
+
+#     def unit_conversion(self, unit: Unit) -> list[float]:
+#         return [unit.convert(v) for v in self.value]
+
+type Data = list[float]
+type Lap = list[float]
+type Scalar = float
+
+type ChannelType = Data | Lap | Scalar
+
+
+# class LapChannel(ChannelReturnType[list[float]]):
+#     def unit_conversion(self, unit: Unit) -> list[float]:
+#         return [unit.convert(v) for v in self.value]
+
+
+# class ScalarChannel(ChannelReturnType[float]):
+#     def unit_conversion(self, unit: Unit) -> float:
+#         return unit.convert(self.value)
+
+
+class Channel[T: ChannelType](ABC):
     """
     An abstract class representing a data channel.
 
@@ -28,7 +81,6 @@ class Channel(ABC):
         unit (Unit): The default unit to use when displaying the channel.
     """
 
-    _REGISTRY: dict[str, type[Channel]] = {}
     name: str
     unit: Unit
 
@@ -36,83 +88,42 @@ class Channel(ABC):
         cls: type[Channel], name: str, unit: Unit = Unit.UNITLESS
     ) -> None:
         super().__init_subclass__()
-        cls._REGISTRY[name] = cls
         cls.name = name
         cls.unit = unit
 
-    def __new__(cls, solution: Solution) -> list[float]:
-        """Overwrite the __new__ method to allow for static calls."""
-        return cls._channel_fcn()(solution)
-
-    @classmethod
-    def get_values(
-        cls,
+    def __call__(
+        self,
         solution: Solution,
+        *,
         unit: Optional[Unit] = None,
         indices: Optional[list[int]] = None,
-    ) -> list[float]:
-        """
-        Extract a list of values from a solution.
-
-        The values are converted to the channel's units.
-
-        Args:
-            solution (Solution): A solution object.
-            unit (Unit): The unit to convert the values to.
-                If not specified, the channel's default unit is used.
-                (default = None)
-
-        Returns:
-            values (list[float]): The values of the corresponding data channel.
-        """
-
-        if unit is None:
-            unit = cls.unit
-        else:
-            error_message = (
-                f"Unit '{unit}' of quantity '{unit.quantity}' does not match "
-                f"the quantity '{cls.unit.quantity}' for channel '{cls.name}'."
-            )
-            assert unit.quantity == cls.unit.quantity, error_message
-
+    ) -> T:
         if indices is not None:
             solution = solution.get_subset(indices)
 
-        si_values = cls._channel_fcn()(solution)
+        si_values = self._channel_fcn(solution)
+        return si_values
+
+    def get_values(self, solution: Solution, unit: Optional[Unit] = None) -> T:
+        if unit is None:
+            unit = self.unit
+        else:
+            if unit.quantity != self.unit.quantity:
+                raise IncompatibleUnitError(unit, self)
+
+        si_values = self.__call__(solution)
         return [unit.convert(value) for value in si_values]
 
-    @classmethod
-    def get_channel(cls, channel_name: str) -> type[Channel]:
+    @abstractmethod
+    def _channel_fcn(self, solution: Solution) -> T:
         """
-        Get a data channel from its name.
-
-        Args:
-            channel_name (str): The name of the data channel.
-
-        Raises:
-            KeyError: If no data channel with the given name exists.
+        Function that returns the channel values from a solution.
 
         Returns:
-            channel (type[Channel]): A data channel object.
+            channel_fcn (ChannelFcn):
+                A function which takes a solution and returns a list of floats.
         """
-        try:
-            return cls._REGISTRY[channel_name]
-        except KeyError:
-            error_message = (
-                f"Data channel '{channel_name}' not found. "
-                f"Available channels: {list(cls._REGISTRY.keys())}"
-            )
-            raise KeyError(error_message)
-
-    @classmethod
-    def list_channels(cls) -> list[str]:
-        """
-        Get a list of available data channels.
-
-        Returns:
-            channels (list[str]): Available data channel names.
-        """
-        return list(cls._REGISTRY.keys())
+        ...
 
     @classmethod
     def get_label(cls) -> str:
@@ -125,19 +136,28 @@ class Channel(ABC):
         Returns:
             label (str): A label with the name and unit of the channel.
         """
+        # TODO: move this to unit module
         if cls.unit:
             return f"{cls.name} ({cls.unit})"
         else:
             return f"{cls.name} (-)"
 
-    @classmethod
-    @abstractmethod
-    def _channel_fcn(cls) -> ChannelFcn:
-        """
-        Function that returns the channel values from a solution.
 
-        Returns:
-            channel_fcn (ChannelFcn):
-                A function which takes a solution and returns a list of floats.
-        """
-        ...
+# class DataChannel(ChannelBase[list[float]]):
+#     pass
+#     # def unit_conversion(value: list[float], unit: Unit) -> list[float]:
+#     #     return [unit.convert(v) for v in value]
+
+
+# class LapChannel(ChannelBase[list[float]]):
+#     pass
+
+
+# def unit_conversion(value: list[float], unit: Unit) -> list[float]:
+#     return [unit.convert(v) for v in value]
+
+
+# class ScalarChannel(ChannelSize[float]):
+#     pass
+# def unit_conversion(value: float, unit: Unit) -> float:
+#     return unit.convert(value)

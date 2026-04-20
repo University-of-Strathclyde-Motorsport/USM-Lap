@@ -12,7 +12,7 @@ from .aero import AeroPackage
 from .brakes import Brakes
 from .driver import Driver
 from .inertia import Inertia
-from .powertrain import CellState, RWDPowertrain
+from .powertrain import CellState, RWDPowertrain, StateOfCharge
 from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
@@ -60,7 +60,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
 
     @property
     def maximum_velocity(self) -> float:
-        cell_state = CellState(state_of_charge=1)
+        cell_state = CellState(soc=StateOfCharge(1))
         maximum_motor_speed = self.powertrain.get_maximum_motor_speed(
             cell_state
         )

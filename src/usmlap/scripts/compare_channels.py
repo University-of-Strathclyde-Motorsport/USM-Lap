@@ -16,7 +16,7 @@ TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
 SETTINGS = QualityPresets.HIGH_QUALITY
-CHANNELS: list[type[Channel]] = [Velocity, MotorTorque]
+CHANNELS: list[Channel] = [Velocity(), MotorTorque()]
 
 baseline = Vehicle.from_json(BASELINE_VEHICLE)
 vehicles: dict[str, Vehicle] = {}

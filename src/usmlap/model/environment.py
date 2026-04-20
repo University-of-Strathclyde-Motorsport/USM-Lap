@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 GRAVITY = 9.81
 AIR_DENSITY = 1.225
-AMBIENT_TEMPERATURE = 25
+AMBIENT_TEMPERATURE = 32
 
 
 @dataclass

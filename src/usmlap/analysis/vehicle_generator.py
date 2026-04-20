@@ -57,7 +57,9 @@ class VehicleGenerator[T](Collection[Vehicle]):
 
     def __iter__(self) -> Iterator[Vehicle]:
         for value in self.values:
-            yield get_new_vehicle(self.baseline_vehicle, self.parameter, value)
+            yield get_new_vehicle(
+                self.baseline_vehicle, self.parameter, value, label=str(value)
+            )
 
     def __contains__(self, value: Vehicle) -> bool:
         return value in iter(self)

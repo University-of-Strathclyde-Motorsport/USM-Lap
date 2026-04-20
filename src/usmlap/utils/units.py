@@ -104,3 +104,4 @@ class Unit(Enum):
     KILOWATT = ("kilowatt", Quantity.POWER, "kW", 1e3)
     DEGREE_CELSIUS = ("degree celsius", Quantity.TEMPERATURE, "°C")
     AMPERE = ("ampere", Quantity.CURRENT, "A")
+    PERCENTAGE = ("percentage", Quantity.UNITLESS, "%", 0.01)

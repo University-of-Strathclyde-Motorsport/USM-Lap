@@ -64,6 +64,10 @@ class SolutionNode(object):
         return self.track_node.sector
 
     @property
+    def lap_number(self) -> int:
+        return self.track_node.lap_number
+
+    @property
     def initial_velocity(self) -> float:
         return self._initial_velocity
 
@@ -282,6 +286,19 @@ class Solution(object):
         new_solution.nodes = [self.nodes[i] for i in indices]
         return new_solution
 
+    def get_lap_solutions(self) -> list[Solution]:
+        """
+        Get a list of solutions separated by lap.
+        """
+        laps = {node.lap_number for node in self.nodes}
+        solutions: list[Solution] = []
+        for lap in laps:
+            indices = [
+                i for i, node in enumerate(self.nodes) if node.lap_number == lap
+            ]
+            solutions.append(self.get_subset(indices))
+        return solutions
+
 
 def create_new_solution(
     track_mesh: Mesh,
@@ -315,8 +332,4 @@ def estimate_states(
     """
     Generate initial estimated state variables for a simulation.
     """
-    node_count = track_mesh.node_count
-    initial_soc = initial_state.state_of_charge
-    soc = [initial_soc * (1 - i / node_count) for i in range(node_count)]
-    states = [StateVariables(state_of_charge=s) for s in soc]
-    return states
+    return [initial_state for _ in range(track_mesh.node_count)]

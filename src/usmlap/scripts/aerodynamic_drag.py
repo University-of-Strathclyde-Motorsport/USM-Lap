@@ -26,6 +26,6 @@ for label, vehicle_file in vehicle_files.items():
 
 plot_channels(
     results,
-    [Velocity, Drag, MotorPower],
+    [Velocity(), Drag(), MotorPower()],
     title="Impact of Aerodynamic Drag on Motor Power",
 )

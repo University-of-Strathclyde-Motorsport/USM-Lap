@@ -118,10 +118,10 @@ class Parameter[T](ABC):
         return f"Test({super().get_type()})"
 
 
-def get_new_vehicle(
+def get_new_vehicle[T](
     baseline: Vehicle,
-    parameter: type[Parameter[Any]],
-    value: float,
+    parameter: type[Parameter[T]],
+    value: T,
     label: Optional[str] = None,
 ) -> Vehicle:
     """

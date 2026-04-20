@@ -19,10 +19,10 @@ from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 
 QUALITY = QualityPresets.DRAFT
-CHANNELS: list[type[Channel]] = [
-    Velocity,
-    LongitudinalAcceleration,
-    LateralAcceleration,
+CHANNELS: list[Channel] = [
+    Velocity(),
+    LongitudinalAcceleration(),
+    LateralAcceleration(),
 ]
 
 competition = Competition()
@@ -55,6 +55,6 @@ acceleration_solutions = {
 }
 plot_channels(
     acceleration_solutions,
-    [Velocity, LongitudinalAcceleration],
+    [Velocity(), LongitudinalAcceleration()],
     title="Acceleration",
 )

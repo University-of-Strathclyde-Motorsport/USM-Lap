@@ -7,8 +7,6 @@ import logging
 from rich import progress
 from scipy.signal import find_peaks
 
-from usmlap.simulation.solver.vehicle_state import update_state_variables
-
 from ..solution import Solution
 from .acceleration import calculate_next_velocity
 from .apex_velocity import solve_apex_velocity
@@ -24,6 +22,11 @@ class QuasiSteadyStateSolver(SolverInterface):
     """
 
     def solve(self, previous_solution: Solution) -> Solution:
+
+        current_limit = (
+            self.global_context.vehicle.powertrain.discharge_current_limit
+        )
+        print(f"Solving with {current_limit=}")
 
         solution = previous_solution
 
@@ -62,9 +65,6 @@ class QuasiSteadyStateSolver(SolverInterface):
                 ax=node.longitudinal_acceleration,
                 ay=node.lateral_acceleration,
             )
-
-        logger.info("Recalculating state variables...")
-        solution = self._recalculate_state_variables(solution)
 
         return solution
 
@@ -182,30 +182,6 @@ class QuasiSteadyStateSolver(SolverInterface):
             node.previous.set_final_velocity(initial_velocity)
 
         logger.debug(f"Solved backward propogation of apex {start_index}.")
-        return solution
-
-    def _recalculate_state_variables(self, solution: Solution) -> Solution:
-        """
-        Recalculate the state variables of the vehicle.
-
-        Args:
-            solution (Solution): The solution object.
-
-        Returns:
-            solution (Solution): The solution with updated state variables.
-        """
-        for i in range(1, len(solution.nodes)):
-            previous_node = solution.nodes[i - 1]
-            ctx = self.local_context(
-                previous_node.track_node, previous_node.state_variables
-            )
-            solution.nodes[i].state_variables = update_state_variables(
-                ctx=ctx,
-                initial_state=previous_node.state_variables,
-                dt=previous_node.time,
-                vehicle_state=previous_node.vehicle_state,  # noqa
-            )
-
         return solution
 
 
