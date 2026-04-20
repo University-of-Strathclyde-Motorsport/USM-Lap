@@ -25,9 +25,9 @@ class PointMass(VehicleModelInterface):
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        normal_force = self._get_normal_force(ctx, velocity)
+        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
 
-        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model.calculate_lateral_force
         front_traction = front_tyre(tyre_attitude, required_fx=0)
@@ -40,10 +40,10 @@ class PointMass(VehicleModelInterface):
     def longitudinal_traction(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float:
-        required_fy = self.required_fy(ctx, velocity)
-        normal_force = self._get_normal_force(ctx, velocity)
+        required_fy = abs(self.required_fy(ctx, velocity))
+        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
 
-        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_fy = 2 * front_tyre.calculate_lateral_force(tyre_attitude)
@@ -60,9 +60,9 @@ class PointMass(VehicleModelInterface):
     ) -> float:
 
         required_fy = self.required_fy(ctx, velocity)
-        normal_force = self._get_normal_force(ctx, velocity)
+        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
 
-        tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
+        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_traction = 2 * front_tyre.calculate_longitudinal_force(
@@ -75,85 +75,13 @@ class PointMass(VehicleModelInterface):
         )
         return front_traction + rear_traction
 
-    # def traction_limited_braking(
-    #     self, ctx: NodeContext, velocity: float
-    # ) -> float:
-
-    #     resistive_fx = sum(self.resistive_forces(ctx, velocity))
-    #     required_fy = self.required_fy(ctx, velocity)
-    #     normal_force = self._get_normal_force(ctx, velocity)
-
-    #     tyre_attitude = TyreAttitude(normal_load=normal_force / 4)
-
-    #     front_tyre = ctx.vehicle.tyres.front.tyre_model
-    #     front_traction = 2 * front_tyre.calculate_longitudinal_force(
-    #         tyre_attitude, required_fy=required_fy / 4
-    #     )
-
-    #     rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-    #     rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-    #         tyre_attitude, required_fy=required_fy / 4
-    #     )
-
-    #     net_fx = front_traction + rear_traction + resistive_fx
-    #     return net_fx / ctx.vehicle.equivalent_mass
-
-    def _get_normal_force(self, ctx: NodeContext, velocity: float) -> float:
-        return sum(self.normal_forces(ctx, velocity))
-
-    #########################################################
-    # Marked for death
-
-    def get_normal_loads(self, normal_force: float) -> FourCorner[float]:
-        normal_load = normal_force / 4
-        return FourCorner(normal_load, normal_load, normal_load, normal_load)
-
-    def get_tyre_attitudes(
-        self, normal_loads: FourCorner[float]
-    ) -> FourCorner[TyreAttitude]:
-        attitudes = [
-            TyreAttitude(normal_load=normal_load)
-            for normal_load in normal_loads
-        ]
-        return FourCorner(*attitudes)
-
-    def get_lateral_traction(
-        self,
-        ctx: NodeContext,
-        attitudes: FourCorner[TyreAttitude],
-        required_fx: float,
+    def normal_loads(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> FourCorner[float]:
-        front_tyre = ctx.vehicle.tyres.front.tyre_model.calculate_lateral_force
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model.calculate_lateral_force
-        try:
-            return FourCorner(
-                front_tyre(attitudes.front_left, required_fx=0),
-                front_tyre(attitudes.front_right, required_fx=0),
-                rear_tyre(attitudes.rear_left, required_fx=required_fx / 2),
-                rear_tyre(attitudes.rear_right, required_fx=required_fx / 2),
-            )
-        except ValueError:
-            return FourCorner(0, 0, 0, 0)
-
-    def get_longitudinal_traction(
-        self,
-        ctx: NodeContext,
-        attitudes: FourCorner[TyreAttitude],
-        required_fy: float,
-    ) -> FourCorner[float]:
-        front_tyre = (
-            ctx.vehicle.tyres.front.tyre_model.calculate_longitudinal_force
+        normal_force = sum(self.normal_forces(ctx, velocity))
+        return FourCorner(
+            0.25 * normal_force,
+            0.25 * normal_force,
+            0.25 * normal_force,
+            0.25 * normal_force,
         )
-        rear_tyre = (
-            ctx.vehicle.tyres.rear.tyre_model.calculate_longitudinal_force
-        )
-        fy_per_tyre = abs(required_fy / 4)
-        try:
-            return FourCorner(
-                front_tyre(attitudes.front_left, required_fy=fy_per_tyre),
-                front_tyre(attitudes.front_right, required_fy=fy_per_tyre),
-                rear_tyre(attitudes.rear_left, required_fy=fy_per_tyre),
-                rear_tyre(attitudes.rear_right, required_fy=fy_per_tyre),
-            )
-        except ValueError:
-            return FourCorner(0, 0, 0, 0)

@@ -3,7 +3,6 @@ This module defines settings for a simulation.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
 
 from usmlap.model import (
     Environment,
@@ -11,7 +10,7 @@ from usmlap.model import (
     LambdaCoefficients,
     VehicleModelInterface,
 )
-from usmlap.model.vehicle import Bicycle, PointMass
+from usmlap.model.vehicle import FourCornerModel, PointMass
 from usmlap.track.mesh_generation import Resolution
 from usmlap.vehicle import Vehicle
 
@@ -61,12 +60,18 @@ class QualityPresets(object):
         mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QT
     )
     FAST: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(0.5), vehicle_model=Bicycle, solver=QT
+        mesh_resolution=Resolution(0.5),
+        vehicle_model=FourCornerModel,
+        solver=QT,
     )
 
     FAST_QSS: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(0.5), vehicle_model=Bicycle, solver=QSS
+        mesh_resolution=Resolution(0.5),
+        vehicle_model=FourCornerModel,
+        solver=QSS,
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(0.1), vehicle_model=Bicycle, solver=QT
+        mesh_resolution=Resolution(0.1),
+        vehicle_model=FourCornerModel,
+        solver=QT,
     )

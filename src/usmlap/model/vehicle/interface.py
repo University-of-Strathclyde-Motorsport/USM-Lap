@@ -5,6 +5,7 @@ This module defines a common interface for vehicle models.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.aero import AeroAttitude
 
 from ..context import NodeContext
@@ -94,6 +95,11 @@ class VehicleModelInterface(ABC):
         return body_force, aero_force
 
     @abstractmethod
+    def normal_loads(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+    ) -> FourCorner[float]: ...
+
+    @abstractmethod
     def lateral_traction(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float: ...
@@ -108,17 +114,6 @@ class VehicleModelInterface(ABC):
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> float: ...
 
-    # @abstractmethod
-    # def traction_limited_braking(
-    #     self, ctx: NodeContext, velocity: float
-    # ) -> float: ...
-
-    # def drive_force(self, ctx: NodeContext, velocity: float) -> float:
-    #     return self.powertrain.drive_force(ctx, velocity)
-    #     # resistive_fx = sum(self.resistive_forces(ctx, velocity))
-    #     # net_force = drive_force - resistive_fx
-    #     # return net_force / ctx.vehicle.equivalent_mass
-
     def evaluate_full_vehicle_state(
         self, ctx: NodeContext, velocity: float, ax: float, ay: float
     ) -> FullVehicleState:
@@ -129,6 +124,7 @@ class VehicleModelInterface(ABC):
         drive_force = max(
             body_fx + aero_fx + ax * ctx.vehicle.equivalent_mass, 0
         )
+        normal_loads = self.normal_loads(ctx, velocity, ax, ay)
         motor_speed = ctx.vehicle.velocity_to_motor_speed(velocity)
         motor_torque = self.powertrain.required_torque(ctx, drive_force)
         motor_power = motor_speed * motor_torque
@@ -141,7 +137,6 @@ class VehicleModelInterface(ABC):
                 ctx.state.cell_state.soc
             )
         )
-        # accu_current = self.powertrain.required_current(ctx, motor_torque)
         heating_power = ctx.vehicle.powertrain.accumulator.heating_power(
             ctx.state.cell_state, accu_current
         )
@@ -160,6 +155,7 @@ class VehicleModelInterface(ABC):
             resistive_fx=(body_fx + aero_fx),
             required_fy=self.required_fy(ctx, velocity),
             normal_force=body_fz,
+            normal_loads=normal_loads,
             motor_speed=motor_speed,
             motor_torque=motor_torque,
             motor_power=motor_power,

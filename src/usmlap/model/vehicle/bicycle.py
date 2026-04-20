@@ -4,11 +4,11 @@ This module defines the bicycle vehicle model.
 
 import math
 
-from usmlap.utils.datatypes import FrontRear
+from usmlap.utils.datatypes import FourCorner, FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 
 from ..context import NodeContext
-from ..errors import InsufficientTractionError, MaximumIterationsExceededError
+from ..errors import InsufficientTractionError
 from .interface import VehicleModelInterface
 
 PRECISION = 1e-3
@@ -25,14 +25,14 @@ class Bicycle(VehicleModelInterface):
     ) -> float:
 
         resistive_fx = sum(self.resistive_forces(ctx, velocity))
-        normal_force = self._get_normal_force(ctx, velocity, ax=ax)
+        normal_loads = self.normal_loads(ctx, velocity, ax=ax, ay=ay)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+        front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
         front_traction = 2 * front_tyre.calculate_lateral_force(front_attitude)
 
         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+        rear_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
         rear_traction = 2 * rear_tyre.calculate_lateral_force(
             rear_attitude, required_fx=resistive_fx / 2
         )
@@ -44,15 +44,15 @@ class Bicycle(VehicleModelInterface):
     ) -> float:
         required_fy = abs(self.required_fy(ctx, velocity))
 
-        normal_force = self._get_normal_force(ctx, velocity, ax)
+        normal_loads = self.normal_loads(ctx, velocity, ax, ay=ay)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+        front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
         front_fy = 2 * front_tyre.calculate_lateral_force(front_attitude)
 
         rear_fy = max(required_fy - front_fy, 0)
         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+        rear_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
         rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
             rear_attitude, required_fy=rear_fy / 2
         )
@@ -64,12 +64,12 @@ class Bicycle(VehicleModelInterface):
     ) -> float:
         required_fy = abs(self.required_fy(ctx, velocity))
 
-        normal_force = self._get_normal_force(ctx, velocity, -ax)
+        normal_loads = self.normal_loads(ctx, velocity, -ax, ay=ay)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
+        front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
+        rear_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
 
         maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
             front_attitude
@@ -90,52 +90,9 @@ class Bicycle(VehicleModelInterface):
 
         return front_traction + rear_traction
 
-    # def traction_limited_braking(
-    #     self, ctx: NodeContext, velocity: float
-    # ) -> float:
-    #     resistive_fx = sum(self.resistive_forces(ctx, velocity))
-    #     required_fy = abs(self.required_fy(ctx, velocity))
-    #     axs: list[float] = [0]
-
-    #     for _ in range(MAXIMUM_ITERATIONS):
-    #         normal_force = self._get_normal_force(ctx, velocity, -axs[-1])
-
-    #         front_tyre = ctx.vehicle.tyres.front.tyre_model
-    #         front_attitude = TyreAttitude(normal_load=normal_force.front / 2)
-    #         rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-    #         rear_attitude = TyreAttitude(normal_load=normal_force.rear / 2)
-
-    #         maximum_front_fy = 2 * front_tyre.calculate_lateral_force(
-    #             front_attitude
-    #         )
-    #         maximum_rear_fy = 2 * rear_tyre.calculate_lateral_force(
-    #             rear_attitude
-    #         )
-
-    #         front_fy, rear_fy = self._determine_fy_split(
-    #             FrontRear(maximum_front_fy, maximum_rear_fy), required_fy
-    #         )
-
-    #         front_traction = 2 * front_tyre.calculate_longitudinal_force(
-    #             front_attitude, required_fy=front_fy / 2
-    #         )
-
-    #         rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-    #             rear_attitude, required_fy=rear_fy / 2
-    #         )
-
-    #         net_force = front_traction + rear_traction + resistive_fx
-    #         ax = net_force / ctx.vehicle.equivalent_mass
-    #         if abs(ax - axs[-1]) < PRECISION:
-    #             return ax
-
-    #         axs.append(self._get_next_ax(ax, axs))
-
-    #     raise MaximumIterationsExceededError(MAXIMUM_ITERATIONS, PRECISION, axs)
-
-    def _get_normal_force(
-        self, ctx: NodeContext, velocity: float, ax: float
-    ) -> FrontRear[float]:
+    def normal_loads(
+        self, ctx: NodeContext, velocity: float, ax: float, ay: float
+    ) -> FourCorner[float]:
         body_fx, aero_fx = self.resistive_forces(ctx, velocity)
         inertial_fx = ctx.vehicle.total_mass * ax
 
@@ -145,7 +102,13 @@ class Bicycle(VehicleModelInterface):
         inertial_lt = self._inertial_load_transfer(ctx, body_fx + inertial_fx)
         aero_lt = self._aero_load_transfer(ctx, aero_fx)
 
-        return normal_force + inertial_lt + aero_lt
+        axle_loads = normal_force + inertial_lt + aero_lt
+        return FourCorner(
+            0.5 * axle_loads.front,
+            0.5 * axle_loads.front,
+            0.5 * axle_loads.rear,
+            0.5 * axle_loads.rear,
+        )
 
     def _split_normal_force(
         self, ctx: NodeContext, inertial: float, aero: float

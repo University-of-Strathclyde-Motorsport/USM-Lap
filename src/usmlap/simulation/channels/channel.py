@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from textwrap import wrap
 from typing import Optional
 
 from usmlap.simulation import Solution
@@ -126,21 +127,32 @@ class Channel[T: ChannelType](ABC):
         ...
 
     @classmethod
-    def get_label(cls) -> str:
+    def get_label(cls, wrap_width: Optional[int] = 20) -> str:
         """
         Get a label for a graph.
+        Long labels will be formatted into multiple lines.
 
         The label is in the format *"{name} ({unit})"*.
-        If the unit is None, the label is in the format *"{name} (-)"*.
+        If the unit is None, the label is in the format *"{name}"*.
+
+        Args:
+            wrap_width (Optional[int]): The width to wrap the label to.
+                To disable wrapping, set to None.
 
         Returns:
             label (str): A label with the name and unit of the channel.
         """
         # TODO: move this to unit module
         if cls.unit:
-            return f"{cls.name} ({cls.unit})"
+            label = f"{cls.name} ({cls.unit})"
         else:
-            return f"{cls.name} (-)"
+            label = f"{cls.name}"
+
+        if wrap_width is not None:
+            lines = wrap(label, width=wrap_width)
+            label = "\n".join([line.center(wrap_width) for line in lines])
+
+        return label
 
 
 # class DataChannel(ChannelBase[list[float]]):

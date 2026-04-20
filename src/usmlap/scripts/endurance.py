@@ -29,14 +29,14 @@ solution = endurance.simulate_event(vehicle, QUALITY)
 plot_channels(
     {"": solution},
     [
-        Velocity,
-        MotorTorque,
-        AccumulatorCurrent,
-        StateOfCharge,
-        CellTemperature,
-        HeatingPower,
-        CoolingPower,
-        NetHeatingPower,
+        Velocity(),
+        MotorTorque(),
+        AccumulatorCurrent(),
+        StateOfCharge(),
+        CellTemperature(),
+        HeatingPower(),
+        CoolingPower(),
+        NetHeatingPower(),
     ],
     show_legend=False,
 )

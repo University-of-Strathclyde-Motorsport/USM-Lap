@@ -52,6 +52,46 @@ class FrontRear[T](NamedTuple):
         return self * (1 / total)
 
 
+class LeftRight[T](NamedTuple):
+    """
+    Represents a property with a left and right value.
+
+    Used for properties which differ on each side of the vehicle.
+
+    Attributes:
+        left (T): Value for the left hand side.
+        rear (T): Value for the right hand side.
+    """
+
+    left: T
+    right: T
+
+    def __str__(self) -> str:
+        return f"left: {self.left}, right: {self.right}"
+
+    def __add__(self, other: Any) -> LeftRight[T]:
+        if isinstance(other, LeftRight):
+            return LeftRight(*(a + b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return LeftRight(*(a + other for a in self))
+        else:
+            return NotImplemented
+
+    def __mul__(self, other: Any) -> LeftRight[T]:
+        if isinstance(other, LeftRight):
+            return LeftRight(*(a * b for a, b in zip(self, other)))
+        elif isinstance(other, float | int):
+            return LeftRight(*(a * other for a in self))
+        else:
+            return NotImplemented
+
+    def normalise(self) -> LeftRight[T]:
+        total = sum(self)
+        if not isinstance(total, float | int):
+            return NotImplemented
+        return self * (1 / total)
+
+
 class FourCorner[T](NamedTuple):
     """
     Represents a property with values for each corner of the vehicle.
@@ -83,6 +123,22 @@ class FourCorner[T](NamedTuple):
     @property
     def rr(self) -> T:
         return self.rear_right
+
+    @property
+    def front(self) -> LeftRight[T]:
+        return LeftRight(self.front_left, self.front_right)
+
+    @property
+    def rear(self) -> LeftRight[T]:
+        return LeftRight(self.rear_left, self.rear_right)
+
+    @property
+    def left(self) -> FrontRear[T]:
+        return FrontRear(self.front_left, self.rear_left)
+
+    @property
+    def right(self) -> FrontRear[T]:
+        return FrontRear(self.front_right, self.rear_right)
 
     def __str__(self) -> str:
         return (

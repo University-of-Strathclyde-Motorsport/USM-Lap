@@ -36,12 +36,15 @@ class Skidpad(EventInterface, label="skidpad"):
         solution = simulate(vehicle, mesh, settings)
         return solution
 
+    def event_time(self, solution: Solution) -> float:
+        right_time = solution.get_sector_time(RIGHT_CIRCLE_TIMED_SECTOR)
+        left_time = solution.get_sector_time(LEFT_CIRCLE_TIMED_SECTOR)
+        return (right_time + left_time) / 2
+
     def calculate_points(
         self, solution: Solution, data: CompetitionData
     ) -> CompetitionPoints:
-        right_time = solution.get_sector_time(RIGHT_CIRCLE_TIMED_SECTOR)
-        left_time = solution.get_sector_time(LEFT_CIRCLE_TIMED_SECTOR)
-        t_team = (right_time + left_time) / 2
+        t_team = self.event_time(solution)
         t_min = data.skidpad_t_min
         points = calculate_points(t_team, t_min, SKIDPAD_COEFFICIENTS)[1]
         return {"skidpad": points}

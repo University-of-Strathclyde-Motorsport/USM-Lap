@@ -2,18 +2,13 @@
 This module contains functions for plotting traces of channels.
 """
 
-from typing import Iterable, Literal, Optional
+from itertools import cycle
+from typing import Literal, Optional
 
 import matplotlib.pyplot as plt
 
 from ..simulation.channels import Channel
-from ..simulation.channels.library import (
-    LapNumber,
-    PlotLap,
-    Position,
-    Time,
-    lap_average,
-)
+from ..simulation.channels.library import PlotLap, Position, Time
 from ..simulation.solution import Solution
 from .style import COLOURMAP
 
@@ -25,6 +20,8 @@ X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, Channel] = {
 }
 ROTATION_OPTIONS = Literal["vertical", "horizontal"]
 
+LINESTYLES = Literal["solid", "dotted", "dashed", "dashdot"]
+
 
 def plot_channels(
     solutions: dict[str, Solution],
@@ -33,8 +30,10 @@ def plot_channels(
     x_axis: X_AXIS_OPTIONS = "Position",
     title: Optional[str] = None,
     colours: Optional[list[str]] = None,
+    linestyle: LINESTYLES | list[LINESTYLES] = "solid",
     show_legend: bool = True,
     y_label_rotation: Optional[ROTATION_OPTIONS] = None,
+    show_sectors: bool = False,
 ) -> None:
     """
     Plot traces of the specified data channels.
@@ -52,15 +51,19 @@ def plot_channels(
     if y_label_rotation is None:
         if len(channels) > 4:
             y_label_rotation = "horizontal"
-            y_label_alignment = "right"
         else:
             y_label_rotation = "vertical"
-            y_label_alignment = "center"
+
+    y_label_alignment = get_label_alignment(y_label_rotation)
 
     if colours is None:
         colourmap = COLOURMAP
     else:
         colourmap = iter(colours)
+
+    if isinstance(linestyle, str):
+        linestyle = [linestyle]
+    linestyles = cycle(linestyle)
 
     fig, axs = plt.subplots(nrows=len(channels), sharex=True)
     if len(channels) == 1:
@@ -83,10 +86,22 @@ def plot_channels(
 
     for label, solution in solutions.items():
         x_data = x_channel.get_values(solution)
+        sector_boundary_positions = solution.get_sector_boundary_positions()
         colour = next(colourmap)
+        linestyle = next(linestyles)
         for i, channel in enumerate(channels):
             y_data: list[float] = channel.get_values(solution)
-            axs[i].plot(x_data, y_data, label=label, color=colour)
+            axs[i].plot(
+                x_data, y_data, label=label, color=colour, linestyle=linestyle
+            )
+            if show_sectors:
+                for sector_boundary in sector_boundary_positions:
+                    axs[i].axvline(
+                        sector_boundary,
+                        color="black",
+                        linewidth=1,
+                        linestyle="dashed",
+                    )
 
     if title is not None:
         axs[0].set_title(title, fontsize=20)
@@ -98,7 +113,16 @@ def plot_channels(
             ax.tick_params(axis="both", which="major", labelsize=16)
         axs[0].legend(loc="upper left", bbox_to_anchor=(1, 1), fontsize=16)
 
-    # mng = plt.get_current_fig_manager()
-    # mng.resize(*mng.window.maxsize())
     plt.show()
     plt.tight_layout()
+
+
+def get_label_alignment(rotation: ROTATION_OPTIONS) -> str:
+    """Get the alignment of y-axis labels."""
+    match rotation:
+        case "vertical":
+            return "center"
+        case "horizontal":
+            return "right"
+        case _:
+            raise ValueError

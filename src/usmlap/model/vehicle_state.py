@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from usmlap.model.environment import AMBIENT_TEMPERATURE
+from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.powertrain import CellState, StateOfCharge
 
 
@@ -54,6 +55,7 @@ class FullVehicleState(object):
     resistive_fx: float
     required_fy: float
     normal_force: float
+    normal_loads: FourCorner[float]
     motor_speed: float
     motor_torque: float
     motor_power: float
@@ -64,3 +66,13 @@ class FullVehicleState(object):
     @property
     def net_heating_power(self) -> float:
         return self.heating_power - self.cooling_power
+
+    @property
+    def long_lt(self) -> float:
+        """Longitudinal load transfer."""
+        return sum(self.normal_loads.front) - sum(self.normal_loads.rear)
+
+    @property
+    def lat_lt(self) -> float:
+        """Lateral load transfer."""
+        return sum(self.normal_loads.left) - sum(self.normal_loads.right)
