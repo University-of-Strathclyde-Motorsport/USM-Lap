@@ -69,7 +69,20 @@ class Unit(Enum):
     def __str__(self) -> str:
         return self.symbol
 
-    UNITLESS = ("unitless", Quantity.UNITLESS, "-")
+    def format_label(self, label: str) -> str:
+        """Format a label for a plot with the unit's symbol in brackets.
+
+        Example:
+            >>> Unit.METER_PER_SECOND.format_label("Velocity")
+            "Velocity (m/s)"
+            >>> Unit.UNITLESS.format_label("Lap Number")
+            "Lap Number"
+        """
+        if not self.symbol:
+            return label
+        return f"{label} ({self.symbol})"
+
+    UNITLESS = ("unitless", Quantity.UNITLESS, "")
     METER = ("meter", Quantity.LENGTH, "m")
     PER_METER = ("per meter", Quantity.CURVATURE, "1/m")
     SECOND = ("second", Quantity.TIME, "s")

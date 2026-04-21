@@ -2,7 +2,6 @@
 This subpackage defines telemetry channels, which plot data from a simulation.
 """
 
-from .channel import ChannelFunction as ChannelFunction
 from .channel import DataChannel as DataChannel
 from .channel import DataChannelValues as DataChannelValues
 from .channel import ScalarChannel as ScalarChannel

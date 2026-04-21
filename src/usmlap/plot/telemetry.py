@@ -12,8 +12,6 @@ from usmlap.telemetry.channels import DataChannel
 
 from .errors import NoChannelsError
 
-type AxesGrid = np.ndarray[tuple[int, int], np.dtype[Any]]
-
 
 def plot_telemetry_channels(
     solution: TelemetrySolution,
@@ -21,6 +19,7 @@ def plot_telemetry_channels(
     *,
     title: Optional[str] = None,
 ):
+    """Creates a plot of telemetry channels."""
     if len(channels) == 0:
         raise NoChannelsError
 
