@@ -6,7 +6,7 @@ import time
 
 from usmlap.competition.events import Acceleration, Autocross, Skidpad
 from usmlap.model import TractionModel
-from usmlap.model.vehicle import Bicycle, FourCornerModel, PointMass
+from usmlap.model.traction import Bicycle, FourCornerModel, PointMass
 from usmlap.plot import plot_channels, plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.simulation.channels import Channel

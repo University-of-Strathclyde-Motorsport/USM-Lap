@@ -10,7 +10,7 @@ from usmlap.model import (
     LambdaCoefficients,
     TractionModel,
 )
-from usmlap.model.vehicle import FourCornerModel, PointMass
+from usmlap.model.traction import FourCornerModel, PointMass
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface

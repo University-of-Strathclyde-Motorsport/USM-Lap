@@ -1,5 +1,5 @@
 """
-This subpackage contains defintions of vehicle models.
+This subpackage contains defintions of traction models.
 """
 
 from .bicycle import Bicycle as Bicycle
