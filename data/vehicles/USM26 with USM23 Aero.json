@@ -1,8 +1,6 @@
 {
-  "metadata": {
-    "print_name": "USM23",
-    "year": 2026
-  },
+  "print_name": "USM23",
+  "year": 2026,
   "driver": "acceleration",
   "aero": "USM23",
   "brakes": {

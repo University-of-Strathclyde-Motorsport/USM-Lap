@@ -1,8 +1,6 @@
 {
-  "metadata": {
-    "print_name": "USM26 No Aero",
-    "year": 2026
-  },
+  "print_name": "USM26 No Aero",
+  "year": 2026,
   "driver": "acceleration",
   "aero": "no_aero",
   "brakes": {

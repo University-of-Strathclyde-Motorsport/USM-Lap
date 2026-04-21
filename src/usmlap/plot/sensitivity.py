@@ -31,7 +31,9 @@ def _transform_dictionary(data: list[CompetitionPoints]) -> PointsData:
 
 
 def plot_points_sensitivity(
-    parameter: type[Parameter[float]], data: dict[float, CompetitionPoints]
+    parameter: type[Parameter[float]],
+    data: dict[float, CompetitionPoints],
+    title: str = "Event Points",
 ) -> None:
     """
     Plot the results of a parameter sweep.
@@ -66,7 +68,7 @@ def plot_points_sensitivity(
     ax_total.set_ylabel("Points")
     ax_event.set_ylabel("Points")
     ax_total.set_title("Total Points")
-    ax_event.set_title("Event Points")
+    ax_event.set_title(title)
     fig.suptitle(f"Points Sensitivity of {parameter.name}")
 
     ax_event.legend()

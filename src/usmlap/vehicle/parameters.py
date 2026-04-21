@@ -9,6 +9,8 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import Any, ClassVar, Optional
 
+from usmlap.vehicle.aero import AeroPackage
+
 from .powertrain.accumulator import Cell
 from .vehicle import Vehicle
 
@@ -154,6 +156,18 @@ def list_all_parameters() -> list[type[Parameter[Any]]]:
 
 
 # Aerodynamics
+class AerodynamicPackage(Parameter[AeroPackage], name="Aerodynamic Package"):
+    """The aerodynamic package."""
+
+    @staticmethod
+    def get_value(vehicle: Vehicle) -> AeroPackage:
+        return vehicle.aero
+
+    @staticmethod
+    def set_value(vehicle: Vehicle, value: AeroPackage) -> None:
+        vehicle.aero = value
+
+
 class LiftCoefficient(
     Parameter[float], name="Lift Coefficient", uncertainty=0.2
 ):

@@ -127,7 +127,7 @@ class Channel[T: ChannelType](ABC):
         ...
 
     @classmethod
-    def get_label(cls, wrap_width: Optional[int] = 20) -> str:
+    def get_label(cls, wrap_width: Optional[int] = 25) -> str:
         """
         Get a label for a graph.
         Long labels will be formatted into multiple lines.

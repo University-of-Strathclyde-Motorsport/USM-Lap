@@ -33,6 +33,7 @@ def plot_channels(
     colours: Optional[list[str]] = None,
     linestyle: LINESTYLES | list[LINESTYLES] = "solid",
     show_legend: bool = True,
+    legend_title: Optional[str] = None,
     y_label_rotation: Optional[ROTATION_OPTIONS] = None,
     show_sectors: bool = False,
 ) -> None:
@@ -112,7 +113,13 @@ def plot_channels(
             box = ax.get_position()
             ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
             ax.tick_params(axis="both", which="major", labelsize=16)
-        axs[0].legend(loc="upper left", bbox_to_anchor=(1, 1), fontsize=16)
+        axs[0].legend(
+            loc="upper left",
+            bbox_to_anchor=(1, 1),
+            fontsize=16,
+            title=legend_title,
+            title_fontsize=16,
+        )
 
     plt.show()
     plt.tight_layout()

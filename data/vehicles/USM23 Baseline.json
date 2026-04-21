@@ -1,8 +1,6 @@
 {
-  "metadata": {
-    "print_name": "USM23 Baseline",
-    "year": 2023
-  },
+  "print_name": "USM23 Baseline",
+  "year": 2023,
   "driver": "acceleration",
   "aero": "USM26",
   "brakes": {
