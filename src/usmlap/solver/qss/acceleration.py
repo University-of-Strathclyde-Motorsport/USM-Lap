@@ -5,7 +5,7 @@ which calculates the maximum possible acceleration at a node.
 
 import math
 
-from usmlap.model import NodeContext, VehicleModelInterface
+from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
 from usmlap.model.vehicle_state import VehicleMotion
 
@@ -14,14 +14,14 @@ PRECISION = 1e-3
 
 
 def calculate_next_velocity(
-    model: VehicleModelInterface, ctx: NodeContext, initial_velocity: float
+    model: TractionModel, ctx: NodeContext, initial_velocity: float
 ) -> float:
     """
     Calculate the velocity at the end of a node,
     given the initial velocity at the start of the node.
 
     Args:
-        vehicle_model (VehicleModelInterface): The vehicle model to use.
+        vehicle_model (TractionModel): The vehicle model to use.
         state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to solve.
         initial_velocity (float): The velocity at the start of the node.

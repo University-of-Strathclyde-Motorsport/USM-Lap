@@ -5,7 +5,7 @@ This module compares the accuracy of different vehicle models.
 import time
 
 from usmlap.competition.events import Acceleration, Autocross, Skidpad
-from usmlap.model import VehicleModelInterface
+from usmlap.model import TractionModel
 from usmlap.model.vehicle import Bicycle, FourCornerModel, PointMass
 from usmlap.plot import plot_channels, plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
@@ -26,7 +26,7 @@ from usmlap.vehicle import Vehicle
 
 configuration = QualityPresets.FAST
 
-vehicle_models: dict[str, type[VehicleModelInterface]] = {
+vehicle_models: dict[str, type[TractionModel]] = {
     "Point Mass": PointMass,
     "Bicycle": Bicycle,
     "Four Corner": FourCornerModel,

@@ -7,7 +7,7 @@ assuming zero longitudinal acceleration.
 import math
 from typing import Optional
 
-from usmlap.model import NodeContext, VehicleModelInterface
+from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import WheelLiftError
 from usmlap.model.vehicle_state import VehicleMotion
 from usmlap.solver.errors import MaximumIterationsExceededError
@@ -20,7 +20,7 @@ MAX_ERROR_SCALE_FACTOR = 0.9
 
 
 def solve_apex_velocity(
-    vehicle_model: VehicleModelInterface,
+    vehicle_model: TractionModel,
     ctx: NodeContext,
     velocity_estimate: Optional[float] = None,
     precision: float = PRECISION,
@@ -33,7 +33,7 @@ def solve_apex_velocity(
     with zero longitudinal acceleration.
 
     Args:
-        vehicle_model (VehicleModelInterface):
+        vehicle_model (TractionModel):
             The vehicle model to use.
         ctx (NodeContext): The simulation context.
         velocity_estimate (Optional[float]):

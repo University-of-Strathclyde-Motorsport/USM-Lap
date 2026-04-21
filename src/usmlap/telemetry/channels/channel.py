@@ -4,7 +4,7 @@ This module defines an interface for telemetry channels.
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from typing import NamedTuple, Protocol, Self
+from typing import NamedTuple, Protocol
 
 from usmlap.solver import SolutionNode
 from usmlap.telemetry.data import TelemetrySolution
@@ -58,6 +58,5 @@ class TelemetryChannelProductType[T](NamedTuple):
     label: str
     unit: Unit
 
-    def __add__(self, other) -> Self:
-        if isinstance(other, TelemetryChannelProductType):
-            
+    # def __add__(self, other) -> Self:
+    #     if isinstance(other, TelemetryChannelProductType):

@@ -8,7 +8,7 @@ from usmlap.model import (
     Environment,
     GlobalContext,
     LambdaCoefficients,
-    VehicleModelInterface,
+    TractionModel,
 )
 from usmlap.model.vehicle import FourCornerModel, PointMass
 from usmlap.solver import QuasiSteadyStateSolver as QSS
@@ -25,13 +25,13 @@ class SimulationSettings(object):
 
     Attributes:
         environment (Environment): Environmental variables for the simulation.
-        vehicle_model (VehicleModelInterface): The vehicle model to use.
+        vehicle_model (TractionModel): The vehicle model to use.
         solver (SolverInterface): The solver to use.
         lambdas (LambdaCoefficients): Coefficients for the vehicle model.
     """
 
     mesh_resolution: Resolution = Resolution(0.1)
-    vehicle_model: type[VehicleModelInterface] = PointMass
+    vehicle_model: type[TractionModel] = PointMass
     solver: type[SolverInterface] = QT
     environment: Environment = field(default_factory=Environment)
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)

@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from usmlap.model import (
     GlobalContext,
     NodeContext,
+    TractionModel,
     TransientVariables,
-    VehicleModelInterface,
 )
 from usmlap.track import TrackNode
 
@@ -22,7 +22,7 @@ class SolverInterface(ABC):
     Abstract base class for simulation solvers.
     """
 
-    vehicle_model: VehicleModelInterface
+    vehicle_model: TractionModel
     global_context: GlobalContext
 
     @abstractmethod

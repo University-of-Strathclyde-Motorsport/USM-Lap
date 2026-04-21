@@ -9,7 +9,7 @@ from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.tyre import TyreAttitude
 
 from ..context import NodeContext
-from .interface import VehicleModelInterface
+from .traction_model import TractionModel
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100
 
 
-class PointMass(VehicleModelInterface):
+class PointMass(TractionModel):
     """
     Point mass vehicle model.
     """

@@ -10,13 +10,13 @@ from usmlap.vehicle.tyre import TyreAttitude
 
 from ..context import NodeContext
 from ..errors import InsufficientTractionError
-from .interface import VehicleModelInterface
+from .traction_model import TractionModel
 
 PRECISION = 1e-3
 MAXIMUM_ITERATIONS = 100
 
 
-class Bicycle(VehicleModelInterface):
+class Bicycle(TractionModel):
     """
     Bicycle vehicle model.
     """

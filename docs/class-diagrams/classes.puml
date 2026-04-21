@@ -628,7 +628,7 @@ class "PositionData" as src.usmlap.track.track_data.PositionData {
 class "Powertrain" as src.usmlap.vehicle.powertrain.powertrain.Powertrain {
 }
 class "QuasiSteadyStateSolver" as src.usmlap.simulation.solver.quasi_steady_state.QuasiSteadyStateSolver {
-  solve(vehicle_model: VehicleModelInterface, track_mesh: Mesh) -> Solution
+  solve(vehicle_model: TractionModel, track_mesh: Mesh) -> Solution
 }
 class "RWDPowertrain" as src.usmlap.vehicle.powertrain.powertrain.RWDPowertrain {
   accumulator
@@ -713,7 +713,7 @@ class "ShapeData" as src.usmlap.track.track_data.ShapeData {
 class "SimulationSettings" as src.usmlap.simulation.simulation.SimulationSettings {
   environment
   solver : type[SolverInterface]
-  vehicle_model : type[VehicleModelInterface]
+  vehicle_model : type[TractionModel]
 }
 class "SlipAngleRange" as src.usmlap.vehicle.tyre.tir.SlipAngleRange {
   ALPMAX : Optional[float]
@@ -736,7 +736,7 @@ class "Solution" as src.usmlap.simulation.solution.Solution {
   plot_velocity_acceleration() -> None
 }
 class "SolverInterface" as src.usmlap.simulation.solver.solver_interface.SolverInterface {
-  {abstract}solve(vehicle_model: VehicleModelInterface, track_mesh: Mesh) -> Solution
+  {abstract}solve(vehicle_model: TractionModel, track_mesh: Mesh) -> Solution
 }
 class "StartpointData" as src.usmlap.track.track_data.StartpointData {
   T : NoneType
@@ -935,7 +935,7 @@ class "Vehicle" as src.usmlap.vehicle.vehicle.Vehicle {
   traction_force_to_motor_torque(traction_force: float) -> float
   velocity_to_motor_speed(velocity: float) -> float
 }
-class "VehicleModelInterface" as src.usmlap.simulation.model.vehicle_model.VehicleModelInterface {
+class "TractionModel" as src.usmlap.simulation.model.vehicle_model.TractionModel {
   environment
   vehicle
   weight : float
@@ -997,7 +997,7 @@ class "_TIRReader" as src.usmlap.vehicle.tyre.tir._TIRReader {
   data : dict[str, dict[str, str]]
   read(filepath: str) -> dict[str, dict[str, str]]
 }
-src.usmlap.simulation.model.point_mass.PointMass --|> src.usmlap.simulation.model.vehicle_model.VehicleModelInterface
+src.usmlap.simulation.model.point_mass.PointMass --|> src.usmlap.simulation.model.vehicle_model.TractionModel
 src.usmlap.simulation.points.points_functions.FSUKPointsFunctions --|> src.usmlap.simulation.points.points_functions.PointsFunctions
 src.usmlap.simulation.solver.quasi_steady_state.QuasiSteadyStateSolver --|> src.usmlap.simulation.solver.solver_interface.SolverInterface
 src.usmlap.track.track_data.BankingData --|> src.usmlap.track.track_data.LocationData

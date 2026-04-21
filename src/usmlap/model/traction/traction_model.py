@@ -15,7 +15,7 @@ from ..vehicle_state import CalculatedVehicleState
 
 
 @dataclass
-class VehicleModelInterface(ABC):
+class TractionModel(ABC):
     """
     Abstract base class for vehicle models.
     """

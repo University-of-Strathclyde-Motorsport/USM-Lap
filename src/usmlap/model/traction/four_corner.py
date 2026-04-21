@@ -11,13 +11,13 @@ from usmlap.utils.datatypes import FourCorner, FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 from usmlap.vehicle.tyre.tyre_model import TyreModelInterface
 
-from .interface import VehicleModelInterface
+from .traction_model import TractionModel
 
 PRECISION = 1e-3
 MAXIMUM_ITERATIONS = 100
 
 
-class FourCornerModel(VehicleModelInterface):
+class FourCornerModel(TractionModel):
     """
     Four corner vehicle model.
     """

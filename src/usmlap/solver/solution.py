@@ -11,8 +11,8 @@ from typing import Generator, Optional
 
 from usmlap.model import (
     CalculatedVehicleState,
+    TractionModel,
     TransientVariables,
-    VehicleModelInterface,
 )
 from usmlap.track import Mesh, TrackNode
 
@@ -187,7 +187,7 @@ class Solution(object):
     """
 
     nodes: list[SolutionNode]
-    vehicle_model: VehicleModelInterface
+    vehicle_model: TractionModel
 
     def __post_init__(self) -> None:
         for i in range(len(self.nodes) - 1):
@@ -314,7 +314,7 @@ class Solution(object):
 # TODO: deprecate this
 def create_new_solution(
     track_mesh: Mesh,
-    vehicle_model: VehicleModelInterface,
+    vehicle_model: TractionModel,
     initial_state: TransientVariables,
 ) -> Solution:
     """
@@ -322,7 +322,7 @@ def create_new_solution(
 
     Args:
         track_mesh (Mesh): The track mesh.
-        vehicle_model (VehicleModelInterface): The vehicle model.
+        vehicle_model (TractionModel): The vehicle model.
 
     Returns:
         solution (Solution): A blank solution.
