@@ -27,7 +27,7 @@ from usmlap.vehicle import Vehicle
 from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.parameters import AerodynamicPackage
 
-QUALITY = QualityPresets.FAST
+QUALITY = QualityPresets.FAST_QSS
 CHANNELS: list[Channel] = [
     Velocity(),
     LongitudinalAcceleration(),

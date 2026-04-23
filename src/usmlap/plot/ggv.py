@@ -5,6 +5,7 @@ This module contains functions for plotting GG and GGV scatter plots.
 from typing import Optional
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
 from usmlap.simulation.channels.library import (
@@ -40,9 +41,10 @@ def plot_gg(
     solutions: dict[str, Solution],
     *,
     title: str = "GG Plot",
-    marker_size: float = 10,
+    marker_size: float = 30,
     colours: Optional[list[str]] = None,
     show_legend: Optional[bool] = None,
+    velocity_transparency: bool = True,
 ) -> None:
     """
     Create a scatter plot of lateral and longitudinal acceleration.
@@ -64,16 +66,26 @@ def plot_gg(
     for label, solution in solutions.items():
         lateral = LateralAcceleration().get_values(solution)
         longitudinal = LongitudinalAcceleration().get_values(solution)
+        if velocity_transparency:
+            velocity = Velocity().get_values(solution)
+            transparency = np.power(np.array(velocity) / max(velocity), 2)
+        else:
+            transparency = 1
         ax.scatter(
             lateral,
             longitudinal,
             color=next(colourmap),
             s=marker_size,
             label=label,
+            alpha=transparency,
+            linewidths=0,
         )
 
     if show_legend:
-        ax.legend(fontsize=16)
+        legend = ax.legend(fontsize=16)
+        for lh in legend.legend_handles:  # ty: ignore[unresolved-attribute]
+            alphas = np.repeat(1, len(solutions))
+            lh.set_alpha(alphas)
 
     ax.set_xlabel(LateralAcceleration.get_label(), fontsize=16)
     ax.set_ylabel(LongitudinalAcceleration.get_label(), fontsize=16)

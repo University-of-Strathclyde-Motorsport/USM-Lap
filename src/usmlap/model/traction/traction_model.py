@@ -5,7 +5,7 @@ This module defines a common interface for vehicle models.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from usmlap.model.vehicle_state import VehicleMotion
+from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.aero import AeroAttitude
 
@@ -97,36 +97,36 @@ class TractionModel(ABC):
 
     @abstractmethod
     def normal_loads(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> FourCorner[float]: ...
 
     @abstractmethod
     def lateral_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float: ...
 
     @abstractmethod
     def longitudinal_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float: ...
 
     @abstractmethod
     def braking_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float: ...
 
     def evaluate_full_vehicle_state(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> CalculatedVehicleState:
         weight = self.weight(ctx)
-        centripetal_force = self.centripetal_force(ctx, motion.velocity)
-        body_fz, aero_fz = self.normal_forces(ctx, motion.velocity)
-        body_fx, aero_fx = self.resistive_forces(ctx, motion.velocity)
+        centripetal_force = self.centripetal_force(ctx, trajectory.velocity)
+        body_fz, aero_fz = self.normal_forces(ctx, trajectory.velocity)
+        body_fx, aero_fx = self.resistive_forces(ctx, trajectory.velocity)
         drive_force = max(
-            body_fx + aero_fx + motion.ax * ctx.vehicle.equivalent_mass, 0
+            body_fx + aero_fx + trajectory.ax * ctx.vehicle.equivalent_mass, 0
         )
-        normal_loads = self.normal_loads(ctx, motion)
-        motor_speed = ctx.vehicle.velocity_to_motor_speed(motion.velocity)
+        normal_loads = self.normal_loads(ctx, trajectory)
+        motor_speed = ctx.vehicle.velocity_to_motor_speed(trajectory.velocity)
         motor_torque = self.powertrain.required_torque(ctx, drive_force)
         motor_power = motor_speed * motor_torque
         accu_power = (
@@ -146,15 +146,15 @@ class TractionModel(ABC):
         )
 
         return CalculatedVehicleState(
-            velocity=motion.velocity,
-            ax=motion.ax,
-            ay=motion.ay,
+            velocity=trajectory.velocity,
+            ax=trajectory.ax,
+            ay=trajectory.ay,
             weight=weight,
             centripetal_force=centripetal_force,
             downforce=aero_fz,
             drag=aero_fx,
             resistive_fx=(body_fx + aero_fx),
-            required_fy=self.required_fy(ctx, motion.velocity),
+            required_fy=self.required_fy(ctx, trajectory.velocity),
             normal_force=body_fz,
             normal_loads=normal_loads,
             motor_speed=motor_speed,

@@ -4,7 +4,7 @@ This module defines the bicycle vehicle model.
 
 import math
 
-from usmlap.model.vehicle_state import VehicleMotion
+from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner, FrontRear
 from usmlap.vehicle.tyre import TyreAttitude
 
@@ -22,11 +22,11 @@ class Bicycle(TractionModel):
     """
 
     def lateral_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float:
 
-        resistive_fx = sum(self.resistive_forces(ctx, motion.velocity))
-        normal_loads = self.normal_loads(ctx, motion)
+        resistive_fx = sum(self.resistive_forces(ctx, trajectory.velocity))
+        normal_loads = self.normal_loads(ctx, trajectory)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
@@ -41,11 +41,11 @@ class Bicycle(TractionModel):
         return front_traction + rear_traction
 
     def longitudinal_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float:
-        required_fy = abs(self.required_fy(ctx, motion.velocity))
+        required_fy = abs(self.required_fy(ctx, trajectory.velocity))
 
-        normal_loads = self.normal_loads(ctx, motion)
+        normal_loads = self.normal_loads(ctx, trajectory)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
@@ -61,11 +61,11 @@ class Bicycle(TractionModel):
         return rear_traction
 
     def braking_traction(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> float:
-        required_fy = abs(self.required_fy(ctx, motion.velocity))
+        required_fy = abs(self.required_fy(ctx, trajectory.velocity))
 
-        normal_loads = self.normal_loads(ctx, motion)
+        normal_loads = self.normal_loads(ctx, trajectory)
 
         front_tyre = ctx.vehicle.tyres.front.tyre_model
         front_attitude = TyreAttitude(normal_load=normal_loads.front_left)
@@ -92,12 +92,12 @@ class Bicycle(TractionModel):
         return front_traction + rear_traction
 
     def normal_loads(
-        self, ctx: NodeContext, motion: VehicleMotion
+        self, ctx: NodeContext, trajectory: Trajectory
     ) -> FourCorner[float]:
-        body_fx, aero_fx = self.resistive_forces(ctx, motion.velocity)
-        inertial_fx = ctx.vehicle.total_mass * motion.ax
+        body_fx, aero_fx = self.resistive_forces(ctx, trajectory.velocity)
+        inertial_fx = ctx.vehicle.total_mass * trajectory.ax
 
-        body_fz, aero_fz = self.normal_forces(ctx, motion.velocity)
+        body_fz, aero_fz = self.normal_forces(ctx, trajectory.velocity)
         normal_force = self._split_normal_force(ctx, body_fz, aero_fz)
 
         inertial_lt = self._inertial_load_transfer(ctx, body_fx + inertial_fx)

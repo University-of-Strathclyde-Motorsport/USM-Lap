@@ -20,14 +20,14 @@ configurations: dict[str, LambdaCoefficients] = {
 }
 
 baseline_settings = SimulationSettings(solver=QSS)
-baseline_points, _ = competition.simulate(vehicle, baseline_settings)
+baseline_results = competition.simulate(vehicle, baseline_settings)
 
 data: dict[str, CompetitionPoints] = {}
 
 for name, coefficients in configurations.items():
     simulation_settings = SimulationSettings(solver=QSS, lambdas=coefficients)
-    points, _ = competition.simulate(vehicle, simulation_settings)
-    delta = points_delta(points, baseline_points)
+    results = competition.simulate(vehicle, simulation_settings)
+    delta = points_delta(results.points, baseline_results.points)
     data[name] = delta
 
 plot_points_bar_chart(data, title="Lambda Coefficients", y_label="Points Delta")

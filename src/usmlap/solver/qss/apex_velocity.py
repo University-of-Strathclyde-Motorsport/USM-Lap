@@ -9,14 +9,14 @@ from typing import Optional
 
 from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import WheelLiftError
-from usmlap.model.vehicle_state import VehicleMotion
+from usmlap.model.vehicle_state import Trajectory
 from usmlap.solver.errors import MaximumIterationsExceededError
 
 PRECISION = 1e-2
 MAXIMUM_ITERATIONS = 100
 
-MIN_ERROR_SCALE_FACTOR = 0.1
-MAX_ERROR_SCALE_FACTOR = 0.9
+MIN_ERROR_SF = 0.1
+MAX_ERROR_SF = 0.9
 
 
 def solve_apex_velocity(
@@ -62,56 +62,34 @@ def solve_apex_velocity(
     if velocity_estimate is None:
         velocity_estimate = maximum_velocity
 
-    velocities: list[float] = [velocity_estimate]
+    velocities: list[float] = []
+
+    trajectory = Trajectory(
+        velocity=velocity_estimate, ax=0, curvature=ctx.node.curvature
+    )
 
     for _ in range(1, maximum_iterations + 1):
-        ay = v_to_ay(v=velocities[-1], curvature=ctx.node.curvature)  # SIGNED
+        velocities.append(trajectory.velocity)
         try:
-            motion = VehicleMotion(velocities[-1], ax=0, ay=ay)
-            available_fy = vehicle_model.lateral_traction(ctx, motion)
+            available_fy = vehicle_model.lateral_traction(ctx, trajectory)
             ay = available_fy / ctx.vehicle.total_mass
-            velocities.append(
-                ay_to_velocity(ay=ay, curvature=ctx.node.curvature)
-            )
+            trajectory.ay = math.copysign(ay, trajectory.curvature)
 
         except WheelLiftError as e:
             # TODO: Make this more robust
             scale_factor = 1 - (2 * e.max_wheel_lift) / e.lateral_load_transfer
-            scale_factor = max(MIN_ERROR_SCALE_FACTOR, scale_factor)
-            scale_factor = min(MAX_ERROR_SCALE_FACTOR, scale_factor)
-            v_scale_factor = math.sqrt(scale_factor)
-            velocities.append(velocities[-1] * v_scale_factor)
+            clamped_scale_factor = min(
+                max(scale_factor, MIN_ERROR_SF), MAX_ERROR_SF
+            )
+            trajectory.ay *= clamped_scale_factor * scale_factor
             continue
 
-        if abs(velocities[-1] - velocities[-2]) < precision:
-            return velocities[-1]
+        if abs(trajectory.velocity - velocities[-1]) < precision:
+            return trajectory.velocity
 
-        if velocities[-1] >= maximum_velocity:
+        if trajectory.velocity >= maximum_velocity:
             return maximum_velocity
 
     raise MaximumIterationsExceededError(
         maximum_iterations, precision, velocities
     )
-
-
-def _update_velocity_estimate(
-    velocity: float, fy_error: float, curvature: float, vehicle_mass: float
-) -> float:
-    """
-    Update the velocity estimate for the next iteration.
-
-    Args:
-        velocity (float): The current velocity estimate.
-        fy_error (float): The lateral force error.
-        curvature (float): The curvature of the track segment.
-        vehicle_mass (float): The mass of the vehicle.
-    """
-    return math.sqrt(velocity**2 + fy_error / (abs(curvature) * vehicle_mass))
-
-
-def v_to_ay(v: float, curvature: float) -> float:
-    return curvature * v**2
-
-
-def ay_to_velocity(ay: float, curvature: float) -> float:
-    return math.sqrt(ay / abs(curvature))

@@ -4,27 +4,37 @@ This module defines the variables associated with a vehicle's state.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from typing import NamedTuple
 
 from usmlap.model.environment import AMBIENT_TEMPERATURE
 from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.powertrain import CellState, StateOfCharge
 
 
-class VehicleMotion(NamedTuple):
+@dataclass(slots=True)
+class Trajectory(object):
     """
-    Variables describing the motion of the vehicle.
+    Variables describing the trajectory of the vehicle.
 
     Attributes:
-        velocity (float): Velocity in the x direction.
+        curvature (float): Curvature of the track (left +ve).
+        velocity (float): Longitudinal velocity.
         ax (float): Longitudinal acceleration (forwards +ve).
         ay (float): Lateral acceleration (left +ve).
     """
 
+    curvature: float = 0
     velocity: float = 0
     ax: float = 0
-    ay: float = 0
+
+    @property
+    def ay(self) -> float:
+        return self.velocity**2 * self.curvature
+
+    @ay.setter
+    def ay(self, value: float) -> None:
+        self.velocity = math.sqrt(value / self.curvature)
 
 
 @dataclass
@@ -97,11 +107,11 @@ class VehicleState(object):
     Container for variables describing a vehicle's state.
 
     Attributes:
-        motion (VehicleMotion): Variables describing the vehicle's motion.
+        trajectory (Trajectory): Variables describing the vehicle's trajectory.
         transient (TransientVariables): The vehicle's transient variables.
         calculated (CalculatedVehicleState): Full state of the vehicle.
     """
 
-    motion: VehicleMotion
+    trajectory: Trajectory
     transient: TransientVariables
     calculated: CalculatedVehicleState
