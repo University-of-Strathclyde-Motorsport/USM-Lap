@@ -2,10 +2,8 @@
 This module implements a linear, load-sensitive tyre model.
 """
 
-from usmlap.model.tyre.tyre_model import TyreAttitude
+from usmlap.model.tyre.tyre_model import PureTyreModel, TyreAttitude
 from usmlap.vehicle import Tyre
-
-from .pure_tyre_model import PureTyreModel as PureTyreModel
 
 
 class LinearTyre(PureTyreModel):

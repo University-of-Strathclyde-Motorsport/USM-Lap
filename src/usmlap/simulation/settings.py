@@ -11,6 +11,7 @@ from usmlap.model import (
     TractionModel,
 )
 from usmlap.model.traction import FourCornerModel, PointMass
+from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface
@@ -31,7 +32,9 @@ class SimulationSettings(object):
     """
 
     mesh_resolution: Resolution = Resolution(0.1)
-    vehicle_model: type[TractionModel] = PointMass
+    vehicle_model: VehicleModelSettings = field(
+        default_factory=VehicleModelSettings
+    )
     solver: type[SolverInterface] = QT
     environment: Environment = field(default_factory=Environment)
     lambdas: LambdaCoefficients = field(default_factory=LambdaCoefficients)
@@ -53,24 +56,28 @@ class QualityPresets(object):
     """
 
     DRAFT: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QSS
+        mesh_resolution=Resolution(1),
+        vehicle_model=VehicleModelSettings(traction_model=PointMass),
+        solver=QSS,
     )
     DRAFT_QT: SimulationSettings = SimulationSettings(
-        mesh_resolution=Resolution(1), vehicle_model=PointMass, solver=QT
+        mesh_resolution=Resolution(1),
+        vehicle_model=VehicleModelSettings(traction_model=PointMass),
+        solver=QT,
     )
     FAST: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(0.5),
-        vehicle_model=FourCornerModel,
+        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
         solver=QT,
     )
 
     FAST_QSS: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(0.5),
-        vehicle_model=FourCornerModel,
+        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
         solver=QSS,
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
         mesh_resolution=Resolution(0.1),
-        vehicle_model=FourCornerModel,
+        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
         solver=QT,
     )

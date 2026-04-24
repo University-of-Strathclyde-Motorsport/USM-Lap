@@ -12,11 +12,13 @@ from .aero import AeroPackage
 from .brakes import Brakes
 from .driver import Driver
 from .inertia import Inertia
+from .new_tyre import Tyre
 from .powertrain import CellState, RWDPowertrain, StateOfCharge
 from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
-from .tyre.tyre_model import Tyres
+
+# from .tyre.tyre_model import Tyres
 
 
 class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
@@ -45,7 +47,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     steering: Steering
     suspension: Suspension
     transmission: Transmission
-    tyres: Tyres
+    tyres: FrontRear[Tyre]
     label: str = ""
     description: str = ""
     year: Optional[int] = None
@@ -69,7 +71,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     @property
     def _overall_motor_scaling(self) -> float:
         final_drive_ratio = self.transmission.final_drive_ratio
-        tyre_radius = self.tyres.rear.unloaded_radius
+        tyre_radius = self.tyres.rear.effective_radius
         return final_drive_ratio / tyre_radius
 
     @property

@@ -5,12 +5,14 @@ This module defines a common interface for vehicle models.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from usmlap.model.tyre import TyreAttitude, TyreModel
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner
+from usmlap.vehicle import Tyre, Vehicle
 from usmlap.vehicle.aero import AeroAttitude
 
 from ..context import NodeContext
-from ..powertrain import PowertrainModelInterface, SingleMotorRWD
+from ..powertrain import PowertrainModelInterface
 from ..vehicle_state import CalculatedVehicleState
 
 
@@ -20,7 +22,8 @@ class TractionModel(ABC):
     Abstract base class for vehicle models.
     """
 
-    powertrain: PowertrainModelInterface = SingleMotorRWD()
+    powertrain: PowertrainModelInterface
+    tyre_model: TyreModel
 
     @staticmethod
     def weight(ctx: NodeContext) -> float:
@@ -103,17 +106,17 @@ class TractionModel(ABC):
     @abstractmethod
     def lateral_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float: ...
+    ) -> FourCorner[float]: ...
 
     @abstractmethod
     def longitudinal_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float: ...
+    ) -> FourCorner[float]: ...
 
     @abstractmethod
     def braking_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float: ...
+    ) -> FourCorner[float]: ...
 
     def evaluate_full_vehicle_state(
         self, ctx: NodeContext, trajectory: Trajectory
@@ -163,4 +166,68 @@ class TractionModel(ABC):
             accumulator_current=accu_current,
             heating_power=heating_power,
             cooling_power=cooling_power,
+        )
+
+    def get_tyre_attitudes(
+        self, normal_loads: FourCorner[float]
+    ) -> FourCorner[TyreAttitude]:
+        return FourCorner(
+            *(
+                TyreAttitude(normal_load=normal_load)
+                for normal_load in normal_loads
+            )
+        )
+
+    def get_tyres(self, vehicle: Vehicle) -> FourCorner[Tyre]:
+        return FourCorner(
+            front_left=vehicle.tyres.front,
+            front_right=vehicle.tyres.front,
+            rear_left=vehicle.tyres.rear,
+            rear_right=vehicle.tyres.rear,
+        )
+
+    def fx_max(
+        self, tyres: FourCorner[Tyre], attitudes: FourCorner[TyreAttitude]
+    ) -> FourCorner[float]:
+        return FourCorner(
+            *(
+                self.tyre_model.fx_max(tyre, attitude)
+                for tyre, attitude in zip(tyres, attitudes)
+            )
+        )
+
+    def fy_max(
+        self, tyres: FourCorner[Tyre], attitudes: FourCorner[TyreAttitude]
+    ) -> FourCorner[float]:
+        return FourCorner(
+            *(
+                self.tyre_model.fy_max(tyre, attitude)
+                for tyre, attitude in zip(tyres, attitudes)
+            )
+        )
+
+    def fy_available(
+        self,
+        fx: FourCorner[float],
+        fx_max: FourCorner[float],
+        fy_max: FourCorner[float],
+    ) -> FourCorner[float]:
+        return FourCorner(
+            *(
+                self.tyre_model.fy(fx=fx, fx_max=fx_max, fy_max=fy_max)
+                for fx, fx_max, fy_max in zip(fx, fx_max, fy_max)
+            )
+        )
+
+    def fx_available(
+        self,
+        fy: FourCorner[float],
+        fx_max: FourCorner[float],
+        fy_max: FourCorner[float],
+    ) -> FourCorner[float]:
+        return FourCorner(
+            *(
+                self.tyre_model.fx(fy=fy, fx_max=fx_max, fy_max=fy_max)
+                for fy, fx_max, fy_max in zip(fy, fx_max, fy_max)
+            )
         )

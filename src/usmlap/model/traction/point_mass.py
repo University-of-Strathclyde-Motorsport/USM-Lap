@@ -6,7 +6,6 @@ import logging
 
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner
-from usmlap.vehicle.tyre import TyreAttitude
 
 from ..context import NodeContext
 from .traction_model import TractionModel
@@ -24,57 +23,65 @@ class PointMass(TractionModel):
 
     def lateral_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
         resistive_fx = sum(self.resistive_forces(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = ctx.vehicle.tyres
 
-        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
+        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
 
-        front_tyre = ctx.vehicle.tyres.front.tyre_model.calculate_lateral_force
-        front_traction = front_tyre(tyre_attitude, required_fx=0)
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
+        rear_fy = self.tyre_model.fy(
+            fx=resistive_fx / 2, fx_max=rear_fx_max, fy_max=rear_fy_max
+        )
 
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model.calculate_lateral_force
-        rear_traction = rear_tyre(tyre_attitude, required_fx=resistive_fx / 2)
-
-        return 2 * (front_traction + rear_traction)
+        return FourCorner(front_fy, front_fy, rear_fy, rear_fy)
 
     def longitudinal_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
         required_fy = abs(self.required_fy(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = ctx.vehicle.tyres
 
-        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
+        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
+        rear_fy = max(required_fy - 2 * front_fy, 0)
 
-        front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_fy = 2 * front_tyre.calculate_lateral_force(tyre_attitude)
-
-        rear_fy = max(required_fy - front_fy, 0)
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=rear_fy / 2
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
+        rear_traction = self.tyre_model.fx(
+            fy=rear_fy / 2, fx_max=rear_fx_max, fy_max=rear_fy_max
         )
-        return rear_traction
+
+        return FourCorner(0, 0, rear_traction, rear_traction)
 
     def braking_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
 
         required_fy = self.required_fy(ctx, trajectory.velocity)
         normal_loads = self.normal_loads(ctx, trajectory)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = ctx.vehicle.tyres
 
-        tyre_attitude = TyreAttitude(normal_load=normal_loads.front_left)
-
-        front_tyre = ctx.vehicle.tyres.front.tyre_model
-        front_traction = 2 * front_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=required_fy / 4
+        front_fx_max = self.tyre_model.fx_max(tyres.front, attitudes.front_left)
+        front_fy_max = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
+        front_traction = self.tyre_model.fx(
+            fy=required_fy / 4, fx_max=front_fx_max, fy_max=front_fy_max
         )
 
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
-        rear_traction = 2 * rear_tyre.calculate_longitudinal_force(
-            tyre_attitude, required_fy=required_fy / 4
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
+        rear_traction = self.tyre_model.fx(
+            fy=required_fy / 4, fx_max=rear_fx_max, fy_max=rear_fy_max
         )
-        return front_traction + rear_traction
+
+        return FourCorner(
+            front_traction, front_traction, rear_traction, rear_traction
+        )
 
     def normal_loads(
         self, ctx: NodeContext, trajectory: Trajectory

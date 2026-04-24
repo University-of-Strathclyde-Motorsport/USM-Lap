@@ -4,11 +4,15 @@ This module implements the vehicle model, which contains all the subsystem model
 
 from dataclasses import dataclass
 
-from usmlap.model.tyre.pure import PureTyreModel
-
 from .powertrain import PowertrainModelInterface, SingleMotorRWD
 from .traction import FourCornerModel, TractionModel
-from .tyre import CombinedTyreModel, FrictionEllipse, LinearTyre
+from .tyre import (
+    CombinedTyreModel,
+    FrictionEllipse,
+    LinearTyre,
+    PureTyreModel,
+    TyreModel,
+)
 
 
 @dataclass
@@ -25,12 +29,16 @@ class VehicleModelSettings(object):
 
     powertrain: type[PowertrainModelInterface] = SingleMotorRWD
     traction_model: type[TractionModel] = FourCornerModel
-    # tyre_model: type[TyreModel] = LinearTyre
     longitudinal_tyre: type[PureTyreModel] = LinearTyre
     lateral_tyre: type[PureTyreModel] = LinearTyre
     combined_tyre: type[CombinedTyreModel] = FrictionEllipse
 
     def build_vehicle_model(self) -> VehicleModel:
+        tyre_model = TyreModel(
+            longitudinal=self.longitudinal_tyre(),
+            lateral=self.lateral_tyre(),
+            combined=self.combined_tyre(),
+        )
         powertrain = self.powertrain()
-        traction = self.traction_model(powertrain)
+        traction = self.traction_model(powertrain, tyre_model)
         return VehicleModel(powertrain=powertrain, traction=traction)

@@ -3,8 +3,6 @@ This module implements the braking solver,
 which calculates the maximum possible braking at a node.
 """
 
-import math
-
 from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
 from usmlap.model.vehicle_state import Trajectory
@@ -13,7 +11,7 @@ MAXIMUM_ITERATIONS = 100
 PRECISION = 1e-3
 
 
-def calculate_initial_velocity(
+def solve_braking(
     vehicle_model: TractionModel, ctx: NodeContext, final_velocity: float
 ) -> float:
     """
@@ -54,13 +52,11 @@ def calculate_initial_velocity(
             trajectory.ax *= scale_factor
             continue
 
-        net_force = traction + resistive_fx
+        net_force = -(sum(traction) + resistive_fx)
         trajectory.ax = net_force / ctx.vehicle.equivalent_mass
 
         if abs(trajectory.ax - axs[-1]) < PRECISION:
             break
 
-    initial_velocity = math.sqrt(
-        final_velocity**2 + 2 * trajectory.ax * ctx.node.length
-    )
+    initial_velocity = trajectory.next_velocity(-ctx.node.length)
     return initial_velocity

@@ -53,26 +53,24 @@ def solve_apex_velocity(
             If the maximum number of iterations is exceeded
             without converging on a solution.
     """
-
     maximum_velocity = ctx.vehicle.maximum_velocity
-
     if ctx.node.curvature == 0:
         return maximum_velocity
 
     if velocity_estimate is None:
         velocity_estimate = maximum_velocity
 
-    velocities: list[float] = []
-
     trajectory = Trajectory(
         velocity=velocity_estimate, ax=0, curvature=ctx.node.curvature
     )
+
+    velocities: list[float] = []
 
     for _ in range(1, maximum_iterations + 1):
         velocities.append(trajectory.velocity)
         try:
             available_fy = vehicle_model.lateral_traction(ctx, trajectory)
-            ay = available_fy / ctx.vehicle.total_mass
+            ay = sum(available_fy) / ctx.vehicle.total_mass
             trajectory.ay = math.copysign(ay, trajectory.curvature)
 
         except WheelLiftError as e:

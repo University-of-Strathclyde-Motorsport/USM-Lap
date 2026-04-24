@@ -11,9 +11,9 @@ from usmlap.model.vehicle_state import Trajectory
 from usmlap.solver.solution import Solution
 from usmlap.solver.solver_interface import SolverInterface
 
-from .acceleration import calculate_next_velocity
+from .acceleration import solve_acceleration
 from .apex_velocity import solve_apex_velocity
-from .braking import calculate_initial_velocity
+from .braking import solve_braking
 
 logger = logging.getLogger(__name__)
 
@@ -117,7 +117,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         for node in solution.nodes[start_index:]:
             ctx = self.local_context(node.track_node, node.transient_variables)
-            potential_velocity = calculate_next_velocity(
+            potential_velocity = solve_acceleration(
                 model=solution.vehicle_model,
                 ctx=ctx,
                 initial_velocity=node.initial_velocity,
@@ -167,7 +167,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
             ctx = self.local_context(node.track_node, node.transient_variables)
 
-            potential_velocity = calculate_initial_velocity(
+            potential_velocity = solve_braking(
                 vehicle_model=solution.vehicle_model,
                 ctx=ctx,
                 final_velocity=node.final_velocity,

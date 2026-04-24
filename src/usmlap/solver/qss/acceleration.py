@@ -3,8 +3,6 @@ This module implements the acceleration solver,
 which calculates the maximum possible acceleration at a node.
 """
 
-import math
-
 from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
 from usmlap.model.vehicle_state import Trajectory
@@ -13,7 +11,7 @@ MAXIMUM_ITERATIONS = 100
 PRECISION = 1e-3
 
 
-def calculate_next_velocity(
+def solve_acceleration(
     model: TractionModel, ctx: NodeContext, initial_velocity: float
 ) -> float:
     """
@@ -55,14 +53,12 @@ def calculate_next_velocity(
             trajectory.ax *= scale_factor
             continue
 
-        limiting_force = min(traction_force, drive_force)
+        limiting_force = min(sum(traction_force), drive_force)
         net_force = limiting_force - resistive_fx
         trajectory.ax = net_force / ctx.vehicle.equivalent_mass
 
         if abs(trajectory.ax - axs[-1]) < PRECISION:
             break
 
-    final_velocity = math.sqrt(
-        initial_velocity**2 + 2 * trajectory.ax * ctx.node.length
-    )
+    final_velocity = trajectory.next_velocity(ctx.node.length)
     return final_velocity

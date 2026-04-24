@@ -14,6 +14,7 @@ from usmlap.model import (
     TractionModel,
     TransientVariables,
 )
+from usmlap.model.vehicle_state import Trajectory
 from usmlap.track import Mesh, TrackNode
 
 
@@ -51,14 +52,12 @@ class SolutionNode(object):
     _final_velocity: float = 0
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
-    acceleration: float = 0
     transient_variables: TransientVariables = field(
         default_factory=TransientVariables.get_default
     )
     calculated_vehicle_state: Optional[CalculatedVehicleState] = None
     next: Optional[SolutionNode] = None
     previous: Optional[SolutionNode] = None
-    # vehicle_state: VehicleState = field(default_factory=VehicleState)
 
     @property
     def apex_velocity(self) -> float:
@@ -68,18 +67,6 @@ class SolutionNode(object):
         if self._final_velocity_anchored:
             velocities.append(self.final_velocity)
         return min(velocities)
-
-    @property
-    def length(self) -> float:
-        return self.track_node.length
-
-    @property
-    def sector(self) -> str:
-        return self.track_node.sector
-
-    @property
-    def lap_number(self) -> int:
-        return self.track_node.lap_number
 
     @property
     def initial_velocity(self) -> float:
@@ -98,6 +85,26 @@ class SolutionNode(object):
         return (self.final_velocity**2 - self.initial_velocity**2) / (
             2 * self.length
         )
+
+    @property
+    def trajectory(self) -> Trajectory:
+        return Trajectory(
+            curvature=self.track_node.curvature,
+            velocity=self.average_velocity,
+            ax=self.longitudinal_acceleration,
+        )
+
+    @property
+    def length(self) -> float:
+        return self.track_node.length
+
+    @property
+    def sector(self) -> str:
+        return self.track_node.sector
+
+    @property
+    def lap_number(self) -> int:
+        return self.track_node.lap_number
 
     @property
     def lateral_acceleration(self) -> float:

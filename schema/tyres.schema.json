@@ -9,62 +9,51 @@
       "description": "Printable name for the tyre",
       "type": "string"
     },
-    "unloaded_radius": {
-      "description": "Unloaded radius of the tyre, in metres",
+    "effective_radius": {
+      "description": "Effective radius of the tyre, in metres",
       "type": "number",
       "exclusiveMinimum": 0
     },
-    "tyre_model": {
-      "description": "Tyre model",
-      "type": "object",
-      "properties": {
-        "model_type": {
-          "description": "Type of tyre model described",
-          "enum": ["linear"]
-        },
-        "mu_x_peak": {
-          "description": "Peak longitudinal grip coefficient",
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "mu_x_load_sensitivity": {
-          "description": "Longitudinal load sensitivity",
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "mu_y_peak": {
-          "description": "Peak lateral grip coefficient",
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "mu_y_load_sensitivity": {
-          "description": "Lateral load sensitivity",
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "slip_stiffness": {
-          "description": "Slip stiffness of the tyre",
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "cornering_stiffness": {
-          "description": "Cornering stiffness of the tyre",
-          "type": "number",
-          "exclusiveMinimum": 0
-        }
-      },
-      "required": [
-        "model_type",
-        "mu_x_peak",
-        "mu_x_load_sensitivity",
-        "mu_y_peak",
-        "mu_y_load_sensitivity",
-        "slip_stiffness",
-        "cornering_stiffness"
-      ],
-      "additionalProperties": false
+    "mu_x_peak": {
+      "description": "Peak longitudinal grip coefficient",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "mu_x_sens": {
+      "description": "Longitudinal load sensitivity",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "mu_y_peak": {
+      "description": "Peak lateral grip coefficient",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "mu_y_sens": {
+      "description": "Lateral load sensitivity",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "slip_stiffness": {
+      "description": "Slip stiffness of the tyre",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "cornering_stiffness": {
+      "description": "Cornering stiffness of the tyre",
+      "type": "number",
+      "exclusiveMinimum": 0
     }
   },
-  "required": ["print_name", "unloaded_radius", "tyre_model"],
+  "required": [
+    "print_name",
+    "effective_radius",
+    "mu_x_peak",
+    "mu_x_sens",
+    "mu_y_peak",
+    "mu_y_sens",
+    "slip_stiffness",
+    "cornering_stiffness"
+  ],
   "additionalProperties": false
 }

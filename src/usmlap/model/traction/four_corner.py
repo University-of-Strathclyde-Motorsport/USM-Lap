@@ -2,14 +2,10 @@
 This module defines the four corner vehicle model.
 """
 
-import math
-
 from usmlap.model.context import NodeContext
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner, FrontRear
-from usmlap.vehicle.tyre import TyreAttitude
-from usmlap.vehicle.tyre.tyre_model import TyreModelInterface
 
 from .traction_model import TractionModel
 
@@ -24,36 +20,28 @@ class FourCornerModel(TractionModel):
 
     def lateral_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
 
         resistive_fx = sum(self.resistive_forces(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
         if min(normal_loads) < 0:
             raise WheelLiftError(normal_loads, trajectory.ax, trajectory.ay)
 
-        attitudes = FourCorner(
-            *(TyreAttitude(normal_load=load) for load in normal_loads)
-        )
-        tyres = self._tyres(ctx)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = self.get_tyres(ctx.vehicle)
 
-        max_rl_fx = tyres.rl.calculate_longitudinal_force(attitudes.rl)
-        max_rr_fx = tyres.rr.calculate_longitudinal_force(attitudes.rr)
-        required_fx = self._split_traction(
-            FourCorner(0, 0, max_rl_fx, max_rr_fx), resistive_fx
+        fx_max = self.fx_max(tyres, attitudes)
+        fy_max = self.fy_max(tyres, attitudes)
+        fx = self._split_traction(
+            FourCorner(0, 0, fx_max.rear_left, fx_max.rear_right), resistive_fx
         )
+        fy = self.fy_available(fx, fx_max, fy_max)
 
-        traction = FourCorner(
-            *(
-                tyre.calculate_lateral_force(attitude, required_fx=fx)
-                for tyre, attitude, fx in zip(tyres, attitudes, required_fx)
-            )
-        )
-
-        return sum(traction)
+        return fy
 
     def longitudinal_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
         required_fy = abs(self.required_fy(ctx, trajectory.velocity))
 
         normal_loads = self.normal_loads(ctx, trajectory)
@@ -62,64 +50,30 @@ class FourCornerModel(TractionModel):
                 normal_loads, ax=trajectory.ax, ay=trajectory.ay
             )
 
-        fl_attitude = TyreAttitude(normal_load=normal_loads.front_left)
-        fr_attitude = TyreAttitude(normal_load=normal_loads.front_right)
-        rl_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
-        rr_attitude = TyreAttitude(normal_load=normal_loads.rear_right)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = self.get_tyres(ctx.vehicle)
 
-        front_tyre = ctx.vehicle.tyres.front.tyre_model
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+        fx_max = self.fx_max(tyres, attitudes)
+        fy_max = self.fy_max(tyres, attitudes)
+        fy = self._split_traction(fy_max, required_fy)
+        fx = self.fx_available(fy, fx_max, fy_max)
 
-        fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
-        fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
-        front_fy = fl_fy + fr_fy
-
-        rear_fy = max(required_fy - front_fy, 0)
-        max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
-        max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
-
-        _, _, rl_fy, rr_fy = self._split_traction(
-            FourCorner(0, 0, max_rl_fy, max_rr_fy), rear_fy
-        )
-
-        rl_fx = rear_tyre.calculate_longitudinal_force(
-            rl_attitude, required_fy=rl_fy
-        )
-        rr_fx = rear_tyre.calculate_longitudinal_force(
-            rr_attitude, required_fy=rr_fy
-        )
-
-        return rl_fx + rr_fx
+        return FourCorner(0, 0, fx.rear_left, fx.rear_right)
 
     def braking_traction(
         self, ctx: NodeContext, trajectory: Trajectory
-    ) -> float:
+    ) -> FourCorner[float]:
         required_fy = abs(self.required_fy(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
-        fl_attitude = TyreAttitude(normal_load=normal_loads.front_left)
-        fr_attitude = TyreAttitude(normal_load=normal_loads.front_right)
-        rl_attitude = TyreAttitude(normal_load=normal_loads.rear_left)
-        rr_attitude = TyreAttitude(normal_load=normal_loads.rear_right)
+        attitudes = self.get_tyre_attitudes(normal_loads)
+        tyres = self.get_tyres(ctx.vehicle)
 
-        front_tyre = ctx.vehicle.tyres.front.tyre_model
-        rear_tyre = ctx.vehicle.tyres.rear.tyre_model
+        fx_max = self.fx_max(tyres, attitudes)
+        fy_max = self.fy_max(tyres, attitudes)
+        fy = self._split_traction(fy_max, required_fy)
+        fx = self.fx_available(fy, fx_max, fy_max)
 
-        max_fl_fy = front_tyre.calculate_lateral_force(fl_attitude)
-        max_fr_fy = front_tyre.calculate_lateral_force(fr_attitude)
-        max_rl_fy = rear_tyre.calculate_lateral_force(rl_attitude)
-        max_rr_fy = rear_tyre.calculate_lateral_force(rr_attitude)
-        maximum_fy = FourCorner(max_fl_fy, max_fr_fy, max_rl_fy, max_rr_fy)
-
-        fl_fy, fr_fy, rl_fy, rr_fy = self._split_traction(
-            maximum_fy, required_fy
-        )
-
-        fl_fx = front_tyre.calculate_longitudinal_force(fl_attitude, fl_fy)
-        fr_fx = front_tyre.calculate_longitudinal_force(fr_attitude, fr_fy)
-        rl_fx = rear_tyre.calculate_longitudinal_force(rl_attitude, rl_fy)
-        rr_fx = rear_tyre.calculate_longitudinal_force(rr_attitude, rr_fy)
-
-        return fl_fx + fr_fx + rl_fx + rr_fx
+        return fx
 
     def normal_loads(
         self, ctx: NodeContext, trajectory: Trajectory
@@ -195,14 +149,3 @@ class FourCornerModel(TractionModel):
             raise InsufficientTractionError(required, available)
         saturation = required / available  # Between 0 and 1
         return maximum * saturation
-
-    def _get_next_ax(self, ax: float, axs: list[float]) -> float:
-        if len(axs) < 2:
-            return ax
-        factor = math.exp(-0.05 * (len(axs) - 1))
-        return (factor * ax) + ((1 - factor) * axs[-1])
-
-    def _tyres(self, ctx: NodeContext) -> FourCorner[TyreModelInterface]:
-        front = ctx.vehicle.tyres.front.tyre_model
-        rear = ctx.vehicle.tyres.rear.tyre_model
-        return FourCorner(front, front, rear, rear)

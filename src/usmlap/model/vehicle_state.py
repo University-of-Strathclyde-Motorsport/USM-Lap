@@ -36,6 +36,13 @@ class Trajectory(object):
     def ay(self, value: float) -> None:
         self.velocity = math.sqrt(value / self.curvature)
 
+    def next_velocity(self, distance: float) -> float:
+        """Get the new velocity after travelling `distance` metres.
+
+        Distance is signed, positive for forwards and negative for backwards.
+        """
+        return math.sqrt(self.velocity**2 + 2 * self.ax * distance)
+
 
 @dataclass
 class TransientVariables(object):

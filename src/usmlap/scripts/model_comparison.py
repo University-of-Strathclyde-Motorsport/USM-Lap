@@ -7,6 +7,7 @@ import time
 from usmlap.competition.events import Acceleration, Autocross, Skidpad
 from usmlap.model import TractionModel
 from usmlap.model.traction import Bicycle, FourCornerModel, PointMass
+from usmlap.model.tyre.pure.constant import ConstantTyre
 from usmlap.plot import plot_channels, plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.simulation.channels import Channel
@@ -66,7 +67,7 @@ skidpad_results: dict[str, Solution] = {}
 autocross_results: dict[str, Solution] = {}
 
 for label, model in vehicle_models.items():
-    configuration.vehicle_model = model
+    configuration.vehicle_model.traction_model = model
 
     acceleration_solution = acceleration.simulate_event(vehicle, configuration)
     acceleration_results[label] = acceleration_solution
@@ -117,9 +118,9 @@ for label, solution in autocross_results.items():
 #     colours=plot_colours,
 # )
 
-# plot_gg(
-#     autocross_results,
-#     title="Model Comparison - Autocross",
-#     colours=plot_colours,
-#     marker_size=25,
-# )
+plot_gg(
+    autocross_results,
+    title="Model Comparison - Autocross",
+    colours=plot_colours,
+    marker_size=25,
+)

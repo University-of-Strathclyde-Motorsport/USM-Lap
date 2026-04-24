@@ -493,11 +493,11 @@ class FrontTyreRadius(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.front.unloaded_radius
+        return vehicle.tyres.front.effective_radius
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.front.unloaded_radius = value
+        vehicle.tyres.front.effective_radius = value
 
 
 class RearTyreRadius(
@@ -507,11 +507,11 @@ class RearTyreRadius(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.rear.unloaded_radius
+        return vehicle.tyres.rear.effective_radius
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.rear.unloaded_radius = value
+        vehicle.tyres.rear.effective_radius = value
 
 
 class FrontTyreLongGripPeak(
@@ -521,11 +521,11 @@ class FrontTyreLongGripPeak(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.front.tyre_model.mu_x_peak
+        return vehicle.tyres.front.mu_x_peak
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.front.tyre_model.mu_x_peak = value
+        vehicle.tyres.front.mu_x_peak = value
 
 
 class FrontTyreLongGripSens(
@@ -538,11 +538,11 @@ class FrontTyreLongGripSens(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.front.tyre_model.mu_x_load_sensitivity
+        return vehicle.tyres.front.mu_x_sens
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.front.tyre_model.mu_x_load_sensitivity = value
+        vehicle.tyres.front.mu_x_sens = value
 
 
 class FrontTyreLatGripPeak(
@@ -552,11 +552,11 @@ class FrontTyreLatGripPeak(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.front.tyre_model.mu_y_peak
+        return vehicle.tyres.front.mu_y_peak
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.front.tyre_model.mu_y_peak = value
+        vehicle.tyres.front.mu_y_peak = value
 
 
 class FrontTyreLatGripSens(
@@ -569,11 +569,11 @@ class FrontTyreLatGripSens(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.front.tyre_model.mu_y_load_sensitivity
+        return vehicle.tyres.front.mu_y_sens
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.front.tyre_model.mu_y_load_sensitivity = value
+        vehicle.tyres.front.mu_y_sens = value
 
 
 class RearTyreLongGripPeak(
@@ -583,11 +583,11 @@ class RearTyreLongGripPeak(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.rear.tyre_model.mu_x_peak
+        return vehicle.tyres.rear.mu_x_peak
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.rear.tyre_model.mu_x_peak = value
+        vehicle.tyres.rear.mu_x_peak = value
 
 
 class RearTyreLongGripSens(
@@ -600,11 +600,11 @@ class RearTyreLongGripSens(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.rear.tyre_model.mu_x_load_sensitivity
+        return vehicle.tyres.rear.mu_x_sens
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.rear.tyre_model.mu_x_load_sensitivity = value
+        vehicle.tyres.rear.mu_x_sens = value
 
 
 class RearTyreLatGripPeak(
@@ -614,11 +614,11 @@ class RearTyreLatGripPeak(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.rear.tyre_model.mu_y_peak
+        return vehicle.tyres.rear.mu_y_peak
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.rear.tyre_model.mu_y_peak = value
+        vehicle.tyres.rear.mu_y_peak = value
 
 
 class RearTyreLatGripSens(
@@ -631,11 +631,11 @@ class RearTyreLatGripSens(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.tyres.rear.tyre_model.mu_y_load_sensitivity
+        return vehicle.tyres.rear.mu_y_sens
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.tyres.rear.tyre_model.mu_y_load_sensitivity = value
+        vehicle.tyres.rear.mu_y_sens = value
 
 
 class CoolingCoefficient(

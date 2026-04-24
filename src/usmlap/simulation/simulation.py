@@ -31,9 +31,11 @@ def simulate(
     if initial_state is None:
         initial_state = TransientVariables.get_default()
 
-    vehicle_model = settings.vehicle_model()
+    vehicle_model = settings.vehicle_model.build_vehicle_model()
     global_context = settings.get_global_context(vehicle)
-    solver = settings.solver(vehicle_model, global_context)
+    solver = settings.solver(vehicle_model.traction, global_context)
 
-    solution = create_new_solution(track_mesh, vehicle_model, initial_state)
+    solution = create_new_solution(
+        track_mesh, vehicle_model.traction, initial_state
+    )
     return solver.solve(solution)

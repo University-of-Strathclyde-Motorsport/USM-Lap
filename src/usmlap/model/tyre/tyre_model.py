@@ -6,8 +6,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import NamedTuple
 
-from usmlap.model.tyre.combined import CombinedTyreModel
-from usmlap.model.tyre.pure import PureTyreModel
 from usmlap.vehicle import Tyre
 
 
@@ -20,6 +18,26 @@ class TyreAttitude(NamedTuple):
     camber: float = 0
 
 
+class PureTyreModel(ABC):
+    """Abstract base class for pure tyre models."""
+
+    @abstractmethod
+    def maximum_fx(self, tyre: Tyre, attitude: TyreAttitude) -> float: ...
+
+    @abstractmethod
+    def maximum_fy(self, tyre: Tyre, attitude: TyreAttitude) -> float: ...
+
+
+class CombinedTyreModel(ABC):
+    """Abstract base class for combined tyre models."""
+
+    @abstractmethod
+    def fx(self, fy: float, fx_max: float, fy_max: float) -> float: ...
+
+    @abstractmethod
+    def fy(self, fx: float, fx_max: float, fy_max: float) -> float: ...
+
+
 @dataclass
 class TyreModel(object):
     """Tyre model object."""
@@ -28,12 +46,14 @@ class TyreModel(object):
     lateral: PureTyreModel
     combined: CombinedTyreModel
 
-    @abstractmethod
-    def available_fx(
-        self, tyre: Tyre, tyre_attitude: TyreAttitude, required_fy: float = 0
-    ) -> float: ...
+    def fx_max(self, tyre: Tyre, attitude: TyreAttitude) -> float:
+        return self.longitudinal.maximum_fx(tyre, attitude)
 
-    @abstractmethod
-    def available_fy(
-        self, tyre: Tyre, tyre_attitude: TyreAttitude, required_fx: float = 0
-    ) -> float: ...
+    def fy_max(self, tyre: Tyre, attitude: TyreAttitude) -> float:
+        return self.lateral.maximum_fy(tyre, attitude)
+
+    def fx(self, fy: float, fx_max: float, fy_max: float) -> float:
+        return self.combined.fx(fy, fx_max, fy_max)
+
+    def fy(self, fx: float, fx_max: float, fy_max: float) -> float:
+        return self.combined.fy(fx, fx_max, fy_max)

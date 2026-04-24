@@ -5,8 +5,7 @@ This module implements the friction ellipse combined tyre model.
 import math
 
 from usmlap.model.errors import InsufficientTractionError
-
-from .combined_tyre_model import CombinedTyreModel
+from usmlap.model.tyre.tyre_model import CombinedTyreModel
 
 
 class FrictionEllipse(CombinedTyreModel):
