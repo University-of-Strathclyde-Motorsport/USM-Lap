@@ -10,10 +10,14 @@ from usmlap.competition import (
     CompetitionSolutions,
 )
 from usmlap.competition.events import Autocross
-from usmlap.plot import plot_channels, plot_gg, plot_points_bar_chart
+from usmlap.plot import plot_gg, plot_points_bar_chart
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import (
+from usmlap.plot.telemetry import plot_channels
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry import TelemetrySolution
+
+# from usmlap.simulation.channels import Channel
+from usmlap.telemetry.channel.library import (
     AccumulatorCurrent,
     Drag,
     LateralAcceleration,
@@ -21,18 +25,16 @@ from usmlap.simulation.channels.library import (
     MotorPower,
     Velocity,
 )
-from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.parameters import AerodynamicPackage
 
 QUALITY = QualityPresets.FAST_QSS
-CHANNELS: list[Channel] = [
-    Velocity(),
-    LongitudinalAcceleration(),
-    LateralAcceleration(),
-]
+# CHANNELS: list[Channel] = [
+#     Velocity(),
+#     LongitudinalAcceleration(),
+#     LateralAcceleration(),
+# ]
 
 # competition = Competition()
 baseline_vehicle = Vehicle.from_json("USM26")
@@ -49,15 +51,15 @@ packages = [AeroPackage.from_json(file) for file in aero_files.values()]
 vehicles = VehicleGenerator(baseline_vehicle, AerodynamicPackage, packages)
 autocross = Autocross(track_file="FS AutoX Germany 2012")
 
-solutions: dict[str, Solution] = {}
+solutions: dict[str, TelemetrySolution] = {}
 for label, vehicle in zip(aero_files.keys(), vehicles):
     solutions[label] = autocross.simulate_event(vehicle, QUALITY)
 
-# plot_channels(
-#     solutions,
-#     [Velocity(), Drag(), MotorPower(), AccumulatorCurrent()],
-#     title="Comparison of Aerodynamic Packages",
-# )
+plot_channels(
+    solutions,
+    [Velocity(), Drag(), MotorPower(), AccumulatorCurrent()],
+    title="Comparison of Aerodynamic Packages",
+)
 
 plot_gg(
     solutions,

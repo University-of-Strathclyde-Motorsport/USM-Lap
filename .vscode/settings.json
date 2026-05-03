@@ -88,6 +88,12 @@
                 "/data/tracks/**"
             ],
             "url": "./schema/track.schema.json"
+        },
+        {
+            "fileMatch": [
+                "/data/units/quantities/*"
+            ],
+            "url": "./schema/quantities.schema.json"
         }
     ],
     "cSpell.words": [

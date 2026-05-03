@@ -1,0 +1,36 @@
+{
+  "$schema": "https://spec.openapis.org/oas/3.1/meta/base",
+  "$id": "quantities",
+  "title": "Quantities",
+  "description": "A library of physical quantities",
+  "type": "object",
+  "properties": {
+    "print_name": {
+      "description": "Printable name of the quantity",
+      "type": "string"
+    },
+    "time": {
+      "type": "integer"
+    },
+    "length": {
+      "type": "integer"
+    },
+    "mass": {
+      "type": "integer"
+    },
+    "current": {
+      "type": "integer"
+    },
+    "temperature": {
+      "type": "integer"
+    },
+    "amount": {
+      "type": "integer"
+    },
+    "luminous_intensity": {
+      "type": "integer"
+    }
+  },
+  "required": ["print_name"],
+  "additionalProperties": false
+}

@@ -12,6 +12,19 @@ class SolverError(Exception):
 
 
 @dataclass
+class AlgorithmError(SolverError):
+    """
+    Error raised when the solver algorithm behaves unexpectedly.
+    This indicates that there is a bug in the code.
+    """
+
+    message: str
+
+    def __str__(self) -> str:
+        return f"Algorithm error: {self.message}"
+
+
+@dataclass
 class MaximumIterationsExceededError(SolverError):
     """
     Error raised when the maximum number of iterations is exceeded

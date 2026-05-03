@@ -24,3 +24,5 @@ def show_after_plotting(plot_function: PlotFunction) -> PlotFunction:
         plt.show()
 
     return wrapper
+
+

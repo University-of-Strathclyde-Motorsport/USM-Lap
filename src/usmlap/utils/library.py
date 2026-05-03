@@ -4,9 +4,10 @@ This module provides an interface for loading and saving objects from a library.
 
 from __future__ import annotations
 
+import json
 from abc import ABC
 from pathlib import Path
-from typing import Any, ClassVar, Generator, Self
+from typing import Any, ClassVar, Iterator, Self
 
 from pydantic import BaseModel, ConfigDict, ValidationError, model_validator
 
@@ -24,7 +25,9 @@ class LibraryNotFoundError(KeyError):
         path (Path): The path to the library.
     """
 
-    def __init__(self, library: type[HasLibrary], path: Path) -> None:
+    def __init__(
+        self, library: type[HasLibrary] | type[ArrayLibrary], path: Path
+    ) -> None:
         super().__init__(f"'{library.__name__}' library not found at {path}.")
         self.library = library
         self.path = path
@@ -142,7 +145,7 @@ class HasLibrary(ABC, BaseModel):
         return path
 
     @classmethod
-    def _iter_filepaths(cls) -> Generator[Path, None, None]:
+    def _iter_filepaths(cls) -> Iterator[Path]:
         return cls._get_library_path().iterdir()
 
     @classmethod
@@ -253,3 +256,60 @@ class HasLibrary(ABC, BaseModel):
         if isinstance(data, str):
             data = cls.get_item(data).model_dump()
         return data
+
+
+class ArrayLibrary(ABC, BaseModel):
+    """
+    Base class for libraries of arrays.
+    """
+
+    _library_path: ClassVar[Path]
+    _library: ClassVar[dict[str, Any]]
+    print_name: str
+
+    def __init_subclass__(cls: type[ArrayLibrary], path: Path) -> None:
+        super().__init_subclass__()
+        cls._library_path = path
+        cls._library = cls._load_library()
+
+    @classmethod
+    def _load_library(cls) -> dict[str, Self]:
+        """
+        Loads the library into a dictionary.
+
+        Any items that cannot be validated are skipped.
+
+        Returns:
+            library (dict[str, Self]): A dictionary of items.
+        """
+        print(f"Loading {cls.__name__} library...")
+        if not cls._library_path.is_file():
+            raise LibraryNotFoundError(library=cls, path=cls._library_path)
+        with open(cls._library_path, "r") as file:
+            data = json.load(file)
+            if not isinstance(data, list):
+                raise ValueError(
+                    f"Expected a list of items in {cls._library_path}, got {type(data)}"
+                )
+            library = {}
+            for item in data:
+                try:
+                    library[item["print_name"]] = cls.model_validate(item)
+                except ValidationError as error:
+                    raise FailedToValidateItem(
+                        item.get("print_name", str(item)), cls.__name__, error
+                    )
+            print(data)
+            print(type(data))
+            return library
+
+    @classmethod
+    def get_item(cls, name: str) -> Self:
+        """
+        Get an item from the library.
+        """
+        if name not in cls._library:
+            raise ItemNotFoundError(
+                name, cls.__name__, list(cls._library.keys())
+            )
+        return cls._library[name]

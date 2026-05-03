@@ -6,15 +6,15 @@ from usmlap.analysis import VehicleGenerator, sweep_vehicles
 from usmlap.competition.events import Endurance
 from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import (
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry.channel.channel import DataChannel
+from usmlap.telemetry.channel.library import (
     LapAvgCurrent,
     LapAvgSOC,
     LapAvgTemperature,
     LapMaxVelocity,
     LapTime,
 )
-from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 from usmlap.vehicle.parameters import ElectricalCell
 from usmlap.vehicle.powertrain import Cell
@@ -38,7 +38,7 @@ solutions = {
 # }
 
 
-channels: list[Channel] = [
+channels: list[DataChannel] = [
     LapTime(),
     LapMaxVelocity(),
     LapAvgCurrent(),

@@ -4,12 +4,7 @@ This module defines settings for a simulation.
 
 from dataclasses import dataclass, field
 
-from usmlap.model import (
-    Environment,
-    GlobalContext,
-    LambdaCoefficients,
-    TractionModel,
-)
+from usmlap.model import Environment, GlobalContext, LambdaCoefficients
 from usmlap.model.traction import FourCornerModel, PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS

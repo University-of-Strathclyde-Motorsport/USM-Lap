@@ -7,7 +7,7 @@ from dataclasses import InitVar, dataclass, field
 from rich.progress import Progress
 
 from usmlap.simulation import SimulationSettings
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.vehicle import Vehicle
 
 from .events.acceleration import Acceleration
@@ -21,7 +21,7 @@ DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012"
 DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
 
 
-type CompetitionSolutions = dict[str, Solution]
+type CompetitionSolutions = dict[str, TelemetrySolution]
 
 
 @dataclass

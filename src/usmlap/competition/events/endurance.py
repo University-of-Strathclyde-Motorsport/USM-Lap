@@ -6,7 +6,7 @@ from dataclasses import InitVar, dataclass, field
 from math import ceil
 
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle, get_new_vehicle
 from usmlap.vehicle.parameters import DischargeCurrentLimit
@@ -39,17 +39,17 @@ class Endurance(EventInterface, label="endurance"):
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> Solution:
+    ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         vehicle = _modify_vehicle_for_event(vehicle)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
-        self, solution: Solution, data: CompetitionData
+        self, solution: TelemetrySolution, data: CompetitionData
     ) -> CompetitionPoints:
 
-        t_team = solution.total_time
+        t_team = solution.solution.total_time
         t_min = data.endurance_t_min
         endurance_points = calculate_points(
             t_team, t_min, ENDURANCE_COEFFICIENTS
@@ -57,8 +57,8 @@ class Endurance(EventInterface, label="endurance"):
         points = {"endurance": endurance_points}
 
         if self.simulate_efficiency:
-            energy_used_kwh = solution.total_energy_used / 3.6e6
-            ef_team = energy_used_kwh * (solution.total_time**2)
+            energy_used_kwh = solution.solution.total_energy_used / 3.6e6
+            ef_team = energy_used_kwh * (solution.solution.total_time**2)
             ef_min = data.efficiency_ef_min
             efficiency_points = calculate_points(
                 ef_team, ef_min, EFFICIENCY_COEFFICIENTS

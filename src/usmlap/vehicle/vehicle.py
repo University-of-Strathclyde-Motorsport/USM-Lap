@@ -12,11 +12,11 @@ from .aero import AeroPackage
 from .brakes import Brakes
 from .driver import Driver
 from .inertia import Inertia
-from .new_tyre import Tyre
 from .powertrain import CellState, RWDPowertrain, StateOfCharge
 from .steering import Steering
 from .suspension import Suspension
 from .transmission import Transmission
+from .tyres import Tyre
 
 # from .tyre.tyre_model import Tyres
 

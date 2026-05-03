@@ -1,0 +1,35 @@
+[
+  { "print_name": "unitless" },
+  { "print_name": "time", "time": 1 },
+  { "print_name": "frequency", "time": -1 },
+  { "print_name": "length", "length": 1 },
+  { "print_name": "curvature", "length": -1 },
+  { "print_name": "velocity", "length": 1, "time": -1 },
+  { "print_name": "acceleration", "length": 1, "time": -2 },
+  { "print_name": "angle" },
+  { "print_name": "angular_velocity", "time": -1 },
+  { "print_name": "angular_acceleration", "time": -2 },
+  { "print_name": "mass", "mass": 1 },
+  { "print_name": "force", "mass": 1, "length": 1, "time": -2 },
+  { "print_name": "torque", "mass": 1, "length": 2, "time": -2 },
+  { "print_name": "pressure", "mass": 1, "length": -1, "time": -2 },
+  { "print_name": "energy", "mass": 1, "length": 2, "time": -2 },
+  { "print_name": "power", "mass": 1, "length": 2, "time": -3 },
+  { "print_name": "temperature", "temperature": 1 },
+  { "print_name": "current", "current": 1 },
+  { "print_name": "charge", "current": 1, "time": 1 },
+  {
+    "print_name": "voltage",
+    "mass": 1,
+    "length": 2,
+    "time": -3,
+    "current": -1
+  },
+  {
+    "print_name": "resistance",
+    "mass": 1,
+    "length": 2,
+    "time": -3,
+    "current": -2
+  }
+]

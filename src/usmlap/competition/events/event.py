@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from typing import NamedTuple, Optional
 
 from usmlap.simulation import SimulationSettings
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
@@ -47,9 +47,9 @@ class EventInterface(ABC):
     @abstractmethod
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> Solution: ...
+    ) -> TelemetrySolution: ...
 
     @abstractmethod
     def calculate_points(
-        self, solution: Solution, data: CompetitionData
+        self, solution: TelemetrySolution, data: CompetitionData
     ) -> CompetitionPoints: ...

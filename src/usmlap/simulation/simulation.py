@@ -7,8 +7,8 @@ from __future__ import annotations
 from pyparsing import Optional
 
 from usmlap.model import TransientVariables
-from usmlap.solver import Solution
 from usmlap.solver.solution import create_new_solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
 
@@ -20,7 +20,7 @@ def simulate(
     track_mesh: Mesh,
     settings: SimulationSettings,
     initial_state: Optional[TransientVariables] = None,
-) -> Solution:
+) -> TelemetrySolution:
     """
     Simulate a vehicle driving around a track.
 
@@ -38,4 +38,7 @@ def simulate(
     solution = create_new_solution(
         track_mesh, vehicle_model.traction, initial_state
     )
-    return solver.solve(solution)
+    solution = solver.solve(solution)
+    return TelemetrySolution(
+        vehicle=vehicle, solution=solution, solver=type(solver)
+    )

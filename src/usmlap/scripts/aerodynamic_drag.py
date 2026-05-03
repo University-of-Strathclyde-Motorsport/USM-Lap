@@ -4,9 +4,9 @@ This script shows the impact of aerodynamic drag on motor power.
 
 from usmlap.competition.events import Autocross
 from usmlap.plot import plot_channels
-from usmlap.simulation.channels.library import Drag, MotorPower, Velocity
 from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
+from usmlap.telemetry.channel.library import Drag, MotorPower, Velocity
 from usmlap.vehicle import Vehicle
 
 QUALITY = QualityPresets.FAST
@@ -18,7 +18,7 @@ vehicle_files: dict[str, str] = {
 
 autocross = Autocross(track_file="FS AutoX Germany 2012")
 
-results: dict[str, Solution] = {}
+results: dict[str, TelemetrySolution] = {}
 for label, vehicle_file in vehicle_files.items():
     vehicle = Vehicle.from_json(vehicle_file)
     solution = autocross.simulate_event(vehicle, settings=QUALITY)

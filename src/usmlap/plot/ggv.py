@@ -8,28 +8,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
-from usmlap.simulation.channels.library import (
+from usmlap.telemetry import DataChannel, TelemetrySolution
+from usmlap.telemetry.channel.library import (
     LateralAcceleration,
     LongitudinalAcceleration,
     Velocity,
 )
-from usmlap.solver import Solution
+
+VELOCITY: DataChannel = Velocity()
+LATERAL_ACCELERATION: DataChannel = LateralAcceleration()
+LONGITUDINAL_ACCELERATION: DataChannel = LongitudinalAcceleration()
 
 
-def plot_velocity_acceleration(solution: Solution) -> None:
+def plot_velocity_acceleration(solution: TelemetrySolution) -> None:
     """
     Create a scatter plot of velocity and longitudinal acceleration.
     """
 
     _, ax = plt.subplots()
 
-    velocity = Velocity().get_values(solution)
-    longitudinal = LongitudinalAcceleration().get_values(solution)
+    ax.scatter(
+        VELOCITY(solution),
+        LONGITUDINAL_ACCELERATION(solution),
+        color=USM_BLUE,
+        alpha=0.5,
+    )
 
-    ax.scatter(velocity, longitudinal, color=USM_BLUE, alpha=0.5)
-
-    ax.set_xlabel(Velocity.get_label())
-    ax.set_ylabel(LongitudinalAcceleration.get_label())
+    ax.set_xlabel(VELOCITY.label_with_unit())
+    ax.set_ylabel(LONGITUDINAL_ACCELERATION.label_with_unit())
     ax.set_title("Velocity - Acceleration")
     ax.grid()
 
@@ -38,7 +44,7 @@ def plot_velocity_acceleration(solution: Solution) -> None:
 
 
 def plot_gg(
-    solutions: dict[str, Solution],
+    solutions: dict[str, TelemetrySolution],
     *,
     title: str = "GG Plot",
     marker_size: float = 30,
@@ -64,16 +70,14 @@ def plot_gg(
     ax.axvline(0, color="black", linewidth=1)
 
     for label, solution in solutions.items():
-        lateral = LateralAcceleration().get_values(solution)
-        longitudinal = LongitudinalAcceleration().get_values(solution)
         if velocity_transparency:
-            velocity = Velocity().get_values(solution)
+            velocity = VELOCITY(solution)
             transparency = np.power(np.array(velocity) / max(velocity), 2)
         else:
             transparency = 1
         ax.scatter(
-            lateral,
-            longitudinal,
+            LATERAL_ACCELERATION(solution),
+            LONGITUDINAL_ACCELERATION(solution),
             color=next(colourmap),
             s=marker_size,
             label=label,
@@ -87,8 +91,8 @@ def plot_gg(
             alphas = np.repeat(1, len(solutions))
             lh.set_alpha(alphas)
 
-    ax.set_xlabel(LateralAcceleration.get_label(), fontsize=16)
-    ax.set_ylabel(LongitudinalAcceleration.get_label(), fontsize=16)
+    ax.set_xlabel(LATERAL_ACCELERATION.label_with_unit(), fontsize=16)
+    ax.set_ylabel(LONGITUDINAL_ACCELERATION.label_with_unit(), fontsize=16)
     ax.set_title(title, fontsize=20)
     ax.tick_params(axis="both", which="major", labelsize=16)
     ax.grid()
@@ -98,7 +102,7 @@ def plot_gg(
 
 
 def plot_ggv(
-    solutions: dict[str, Solution],
+    solutions: dict[str, TelemetrySolution],
     *,
     title: str = "GGV Plot",
     marker_size: float = 10,
@@ -121,16 +125,18 @@ def plot_ggv(
         show_legend = len(solutions) > 1
 
     for label, solution in solutions.items():
-        lateral = LateralAcceleration().get_values(solution)
-        longitudinal = LongitudinalAcceleration().get_values(solution)
-        velocity = Velocity().get_values(solution)
         ax.scatter(
-            lateral, longitudinal, velocity, color=next(colourmap), label=label
+            LATERAL_ACCELERATION(solution),
+            LONGITUDINAL_ACCELERATION(solution),
+            VELOCITY(solution),
+            color=next(colourmap),
+            s=marker_size,
+            label=label,
         )
 
-    ax.set_xlabel(LateralAcceleration.get_label())
-    ax.set_ylabel(LongitudinalAcceleration.get_label())
-    ax.set_zlabel(Velocity.get_label())
+    ax.set_xlabel(LATERAL_ACCELERATION.label_with_unit())
+    ax.set_ylabel(LONGITUDINAL_ACCELERATION.label_with_unit())
+    ax.set_zlabel(VELOCITY.label_with_unit())
     ax.set_title(title)
     ax.grid()
 

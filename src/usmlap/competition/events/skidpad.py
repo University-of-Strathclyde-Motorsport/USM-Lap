@@ -5,7 +5,7 @@ This module defines the skidpad event at Formula Student.
 from dataclasses import dataclass
 
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
@@ -32,18 +32,20 @@ class Skidpad(EventInterface, label="skidpad"):
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> Solution:
+    ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
-    def event_time(self, solution: Solution) -> float:
-        right_time = solution.get_sector_time(RIGHT_CIRCLE_TIMED_SECTOR)
-        left_time = solution.get_sector_time(LEFT_CIRCLE_TIMED_SECTOR)
+    def event_time(self, solution: TelemetrySolution) -> float:
+        right_time = solution.solution.get_sector_time(
+            RIGHT_CIRCLE_TIMED_SECTOR
+        )
+        left_time = solution.solution.get_sector_time(LEFT_CIRCLE_TIMED_SECTOR)
         return (right_time + left_time) / 2
 
     def calculate_points(
-        self, solution: Solution, data: CompetitionData
+        self, solution: TelemetrySolution, data: CompetitionData
     ) -> CompetitionPoints:
         t_team = self.event_time(solution)
         t_min = data.skidpad_t_min

@@ -5,7 +5,7 @@ This module defines the autocross event at Formula Student.
 from dataclasses import InitVar, dataclass, field
 
 from usmlap.simulation import SimulationSettings, simulate
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
@@ -32,15 +32,15 @@ class Autocross(EventInterface, label="autocross"):
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimulationSettings
-    ) -> Solution:
+    ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
-        self, solution: Solution, data: CompetitionData
+        self, solution: TelemetrySolution, data: CompetitionData
     ) -> CompetitionPoints:
-        t_team = solution.total_time
+        t_team = solution.solution.total_time
         t_min = data.autocross_t_min
         points = calculate_points(t_team, t_min, AUTOCROSS_COEFFICIENTS)[1]
         return {"autocross": points}

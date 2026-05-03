@@ -4,33 +4,40 @@ This module contains functions for plotting velocity profiles and apexes.
 
 import matplotlib.pyplot as plt
 
-from usmlap.simulation.channels.library import (
+from usmlap.telemetry import TelemetrySolution
+from usmlap.telemetry.channel import DataChannel
+from usmlap.telemetry.channel.library import (
     Curvature,
     MaximumVelocity,
     Position,
     Velocity,
 )
-from usmlap.solver import Solution
 
 from .style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 
+POSITION: DataChannel = Position()
+VELOCITY: DataChannel = Velocity()
+MAXIMUM_VELOCITY: DataChannel = MaximumVelocity()
+CURVATURE: DataChannel = Curvature()
 
-def plot_apexes(solution: Solution) -> None:
+
+def plot_apexes(solution: TelemetrySolution) -> None:
     """
     Plot a velocity profile, with apexes highlighted.
     """
+    position = POSITION(solution)
+    curvature = CURVATURE(solution)
+    velocity = VELOCITY(solution)
+    maximum_velocity = MAXIMUM_VELOCITY(solution)
+    sector_boundary_positions = (
+        solution.solution.get_sector_boundary_positions()
+    )
 
-    position = Position().get_values(solution)
-    curvature = Curvature().get_values(solution)
-    velocity = Velocity().get_values(solution)
-    maximum_velocity = MaximumVelocity().get_values(solution)
-    sector_boundary_positions = solution.get_sector_boundary_positions()
-
-    apex_indices = solution.get_sorted_apex_indices()
+    apex_indices = solution.solution.get_sorted_apex_indices()
     apex_solution = solution.get_subset(apex_indices)
 
-    apex_velocity = Velocity().get_values(apex_solution)
-    apex_position = Position().get_values(apex_solution)
+    apex_velocity = VELOCITY(apex_solution)
+    apex_position = POSITION(apex_solution)
 
     fig, (ax_curvature, ax_apex) = plt.subplots(
         nrows=2, height_ratios=[1, 2], sharex=True
@@ -63,9 +70,9 @@ def plot_apexes(solution: Solution) -> None:
     c = max(abs(a), abs(b))
     ax_curvature.set_ylim(-c, c)
 
-    ax_apex.set_xlabel(Position.get_label())
-    ax_apex.set_ylabel(Velocity.get_label())
-    ax_curvature.set_ylabel(Curvature.get_label())
+    ax_apex.set_xlabel(POSITION.label_with_unit())
+    ax_apex.set_ylabel(VELOCITY.label_with_unit())
+    ax_curvature.set_ylabel(CURVATURE.label_with_unit())
     fig.suptitle("Velocity Profile")
 
     ax_curvature.grid()

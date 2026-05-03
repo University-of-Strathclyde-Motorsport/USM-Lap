@@ -4,10 +4,9 @@ This script compares the solutions for multiple vehicles.
 
 from usmlap.competition.events import Autocross
 from usmlap.plot import plot_channels
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import MotorTorque, Velocity
 from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
+from usmlap.telemetry import TelemetryChannel, TelemetrySolution
+from usmlap.telemetry.channel.library import MotorTorque, Velocity
 from usmlap.vehicle import Vehicle, get_new_vehicle
 from usmlap.vehicle.parameters import FinalDriveRatio
 
@@ -16,7 +15,7 @@ TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
 SETTINGS = QualityPresets.HIGH_QUALITY
-CHANNELS: list[Channel] = [Velocity(), MotorTorque()]
+CHANNELS: list[TelemetryChannel] = [Velocity(), MotorTorque()]
 
 baseline = Vehicle.from_json(BASELINE_VEHICLE)
 vehicles: dict[str, Vehicle] = {}
@@ -26,7 +25,7 @@ for value in VALUES:
 event = Autocross(track_file=TRACK_FILE)
 
 
-solutions: dict[str, Solution] = {}
+solutions: dict[str, TelemetrySolution] = {}
 for value, vehicle in vehicles.items():
     solution = event.simulate_event(vehicle, SETTINGS)
     solutions[value] = solution

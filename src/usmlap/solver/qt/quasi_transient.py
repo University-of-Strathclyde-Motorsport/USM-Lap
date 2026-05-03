@@ -8,6 +8,7 @@ from rich.progress import Progress
 
 from usmlap.model.errors import OutOfChargeError
 from usmlap.solver.errors import (
+    AlgorithmError,
     BelowTargetSOCError,
     MaximumIterationsExceededError,
 )
@@ -106,6 +107,8 @@ class QuasiTransientSolver(SolverInterface):
             ctx = self.local_context(
                 previous_node.track_node, previous_node.transient_variables
             )
+            if previous_node.calculated_vehicle_state is None:
+                raise AlgorithmError("Previous vehicle state not calculated.")
             solution.nodes[i].transient_variables = update_transient_variables(
                 ctx=ctx,
                 initial_state=previous_node.transient_variables,
