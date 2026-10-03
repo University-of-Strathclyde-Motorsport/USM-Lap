@@ -1,6 +1,5 @@
 """
-This module contains code for calculating points from competition results.
-"""
+This module contains code for calculating points from competition results."""
 
 from dataclasses import dataclass
 
@@ -11,7 +10,8 @@ type CompetitionPoints = dict[str, float]
 
 
 def points_delta(
-    points: CompetitionPoints, baseline: CompetitionPoints
+    points: CompetitionPoints,
+    baseline: CompetitionPoints,
 ) -> CompetitionPoints:
     """
     Calculate the difference between two sets of points.
@@ -22,6 +22,7 @@ def points_delta(
 
     Returns:
         delta (CompetitionPoints): `points` - `baseline`.
+
     """
     return {event: points[event] - baseline[event] for event in points}
 
@@ -50,6 +51,7 @@ class PointsCoefficients:
         p_min (float): The minimum points awarded for completing the event.
         x_max_scalar (float): Multiplied by `x_min` to determine `x_max`.
             If `x_team` >= `x_max`, only the minimum points are awarded.
+
     """
 
     label: str
@@ -59,7 +61,9 @@ class PointsCoefficients:
 
 
 def calculate_points(
-    x_team: float, x_min: float, coefficients: PointsCoefficients
+    x_team: float,
+    x_min: float,
+    coefficients: PointsCoefficients,
 ) -> tuple[str, float]:
     """
     Calculate points scored in a competition event.
@@ -72,8 +76,8 @@ def calculate_points(
     Returns:
         label (str): Label for the event.
         points (float): Competition points scored in the event.
-    """
 
+    """
     p_max = coefficients.p_max
     p_min = coefficients.p_min
     x_min = min(x_team, x_min)
@@ -89,21 +93,36 @@ def calculate_points(
 
 
 ACCELERATION_COEFFICIENTS = PointsCoefficients(
-    "acceleration", p_max=75, p_min=3.5, x_max_scalar=1.7
+    "acceleration",
+    p_max=75,
+    p_min=3.5,
+    x_max_scalar=1.7,
 )
 
 SKIDPAD_COEFFICIENTS = PointsCoefficients(
-    "skidpad", p_max=75, p_min=3.5, x_max_scalar=1.35
+    "skidpad",
+    p_max=75,
+    p_min=3.5,
+    x_max_scalar=1.35,
 )
 
 AUTOCROSS_COEFFICIENTS = PointsCoefficients(
-    "autocross", p_max=100, p_min=5, x_max_scalar=1.4
+    "autocross",
+    p_max=100,
+    p_min=5,
+    x_max_scalar=1.4,
 )
 
 ENDURANCE_COEFFICIENTS = PointsCoefficients(
-    "endurance", p_max=325, p_min=25, x_max_scalar=1.5
+    "endurance",
+    p_max=325,
+    p_min=25,
+    x_max_scalar=1.5,
 )
 
 EFFICIENCY_COEFFICIENTS = PointsCoefficients(
-    "efficiency", p_max=100, p_min=0, x_max_scalar=2
+    "efficiency",
+    p_max=100,
+    p_min=0,
+    x_max_scalar=2,
 )

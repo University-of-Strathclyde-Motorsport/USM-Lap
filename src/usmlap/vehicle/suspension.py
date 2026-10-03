@@ -1,6 +1,5 @@
 """
-This module models the suspension of a vehicle.
-"""
+This module models the suspension of a vehicle."""
 
 from abc import ABC
 from dataclasses import dataclass
@@ -19,6 +18,7 @@ class SuspensionAxle(ABC, AbstractSubsystem):
     Attributes:
         track_width (float):
             The width of the track, measured between contact patches.
+
     """
 
     track_width: Annotated[PositiveFloat, Unit("m")]
@@ -73,6 +73,7 @@ class Suspension:
             measured between contact patches.
         centre_of_gravity_height (float):
             The height of the centre of gravity above the ground plane.
+
     """
 
     front: SuspensionImplementation

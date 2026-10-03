@@ -15,7 +15,7 @@ cells = [Cell.from_json("sony_VTC6"), Cell.from_json("molicel_P30b")]
 
 _, axs = plt.subplots(ncols=2)
 
-for cell, ax in zip(cells, axs):
+for cell, ax in zip(cells, axs, strict=True):
     _plot_resistance(cell, ax, title=cell.print_name, y_limits=(0, 30))
 
 plt.show()

@@ -1,4 +1,5 @@
-"""Unit tests for brake module."""
+"""
+Unit tests for brake module."""
 
 import math
 
@@ -17,14 +18,18 @@ from usmlap.vehicle.brakes import (
 @pytest.fixture
 def master_cylinder() -> MasterCylinder:
     return MasterCylinder(
-        print_name="Test Cylinder", piston_diameter=0.2, colour="red"
+        print_name="Test Cylinder",
+        piston_diameter=0.2,
+        colour="red",
     )
 
 
 @pytest.fixture
 def brake_caliper() -> BrakeCaliper:
     return BrakeCaliper(
-        print_name="Test Caliper", piston_count=2, piston_diameter=0.1
+        print_name="Test Caliper",
+        piston_count=2,
+        piston_diameter=0.1,
     )
 
 
@@ -36,7 +41,9 @@ def brake_disc() -> BrakeDisc:
 @pytest.fixture
 def brake_pad() -> BrakePad:
     return BrakePad(
-        print_name="Test Pad", height=0.02, coefficient_of_friction=0.5
+        print_name="Test Pad",
+        height=0.02,
+        coefficient_of_friction=0.5,
     )
 
 
@@ -58,7 +65,10 @@ def brake_line(
 @pytest.fixture
 def brakes(brake_line: BrakeLine) -> Brakes:
     return Brakes(
-        front=brake_line, rear=brake_line, pedal_ratio=3, front_brake_bias=0.5
+        front=brake_line,
+        rear=brake_line,
+        pedal_ratio=3,
+        front_brake_bias=0.5,
     )
 
 

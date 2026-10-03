@@ -1,6 +1,5 @@
 """
-This module defines a common interface for powertrain models.
-"""
+This module defines a common interface for powertrain models."""
 
 from abc import ABC, abstractmethod
 
@@ -14,7 +13,9 @@ class PowertrainModelInterface(ABC):
 
     @abstractmethod
     def required_torque(
-        self, ctx: NodeContext, drive_force: float
+        self,
+        ctx: NodeContext,
+        drive_force: float,
     ) -> float: ...
 
     @abstractmethod

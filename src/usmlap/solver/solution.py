@@ -1,6 +1,5 @@
 """
-This module contains code for representing the solution to a simulation.
-"""
+This module contains code for representing the solution to a simulation."""
 
 from __future__ import annotations
 
@@ -30,11 +29,13 @@ class SolutionNode:
         maximum_velocity (float): The maximum possible velocity at the node,
             obtained from the lateral vehicle model.
         acceleration (float): The longitudinal acceleration at the node.
-        transient_variables (TransientVariables): The transient variables at the node.
-        calculated_vehicle_state (CalculatedVehicleState): The state of the vehicle at the node.
-        next (Optional[SolutionNode]): The next node in the solution
+        transient_variables (TransientVariables):
+            The transient variables at the node.
+        calculated_vehicle_state (CalculatedVehicleState):
+            The state of the vehicle at the node.
+        next (SolutionNode | None): The next node in the solution
             (`None` if this is the final node).
-        previous (Optional[SolutionNode]): The previous node in the solution
+        previous (SolutionNode | None): The previous node in the solution
             (`None` if this is the first node).
         length (float): The length of the track segment.
         initial_velocity (float): The velocity at the start of the node.
@@ -45,6 +46,7 @@ class SolutionNode:
         lateral_acceleration (float): The lateral acceleration for the node.
         time (float): The time taken to drive this node.
         energy_used (float): The energy used to drive this node.
+
     """
 
     track_node: TrackNode
@@ -55,7 +57,7 @@ class SolutionNode:
     _initial_velocity_anchored: bool = False
     _final_velocity_anchored: bool = False
     transient_variables: TransientVariables = field(
-        default_factory=TransientVariables.get_default
+        default_factory=TransientVariables.get_default,
     )
     calculated_vehicle_state: CalculatedVehicleState | None = None
     next: SolutionNode | None = None
@@ -128,19 +130,18 @@ class SolutionNode:
 
         Returns:
             is_apex (bool): `True` is the node is an apex, otherwise `False`.
+
         """
         return self._apex
 
     def add_apex(self) -> None:
         """
-        Add the node as an apex.
-        """
+        Add the node as an apex."""
         self._apex = True
 
     def remove_apex(self) -> None:
         """
-        Remove the node as an apex.
-        """
+        Remove the node as an apex."""
         logger.debug("Removing apex")
         self._apex = False
 
@@ -151,6 +152,7 @@ class SolutionNode:
 
         Args:
             velocity (float): The initial velocity to be set.
+
         """
         if not self._initial_velocity_anchored:
             self._initial_velocity = velocity
@@ -162,6 +164,7 @@ class SolutionNode:
 
         Args:
             velocity (float): The final velocity to be set.
+
         """
         if not self._final_velocity_anchored:
             self._final_velocity = velocity
@@ -173,6 +176,7 @@ class SolutionNode:
 
         Args:
             velocity (float): The initial velocity to be set.
+
         """
         self.set_initial_velocity(velocity)
         self._initial_velocity_anchored = True
@@ -184,6 +188,7 @@ class SolutionNode:
 
         Args:
             velocity (float): The final velocity to be set.
+
         """
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
@@ -197,7 +202,7 @@ class SolutionNode:
         """
         if self.calculated_vehicle_state is None:
             raise ValueError(
-                "Calculated vehicle state has not been set for this node."
+                "Calculated vehicle state has not been set for this node.",
             )
         return self.calculated_vehicle_state
 
@@ -205,8 +210,7 @@ class SolutionNode:
 @dataclass
 class Solution:
     """
-    The solution to a simulation.
-    """
+    The solution to a simulation."""
 
     nodes: list[SolutionNode]
     vehicle_model: TractionModel
@@ -217,8 +221,7 @@ class Solution:
             self.nodes[i + 1].previous = self.nodes[i]
 
     def __iter__(self) -> Generator[SolutionNode]:
-        for node in self.nodes:
-            yield node
+        yield from self.nodes
 
     def __str__(self) -> str:
         return f"Total time: {self.total_time:.3f}s"
@@ -251,6 +254,7 @@ class Solution:
 
         Returns:
             sector_time (float): The sum of times for the nodes in the sector.
+
         """
         return sum([node.time for node in self if node.sector == sector])
 
@@ -260,6 +264,7 @@ class Solution:
 
         Returns:
             sector_boundary_positions (list[float]): List of positions.
+
         """
         sector = self.nodes[0].track_node.sector
         positions: list[float] = []
@@ -276,6 +281,7 @@ class Solution:
 
         Returns:
             apex_indices (list[int]): Indices of apexes.
+
         """
         return [i for i, node in enumerate(self.nodes) if node.is_apex()]
 
@@ -285,10 +291,14 @@ class Solution:
 
         Returns:
             sorted_apex_indices (list[int]): Indices of apexes.
+
         """
         indices = self.get_apex_indices()
         velocities = [self.nodes[i].apex_velocity for i in indices]
-        _, sorted_indices = zip(*sorted(zip(velocities, indices)))
+        _, sorted_indices = zip(
+            *sorted(zip(velocities, indices, strict=True)),
+            strict=True,
+        )
         return list(sorted_indices)
 
     def get_apexes(self) -> list[SolutionNode]:
@@ -297,6 +307,7 @@ class Solution:
 
         Returns:
             apexes (list[SolutionNode]): Solution nodes which are apexes.
+
         """
         return [node for node in self if node.is_apex()]
 
@@ -314,6 +325,7 @@ class Solution:
 
         Returns:
             new_solution (Solution): The new solution.
+
         """
         new_solution = copy(self)
         new_solution.nodes = [self.nodes[i] for i in indices]
@@ -321,8 +333,7 @@ class Solution:
 
     def get_lap_solutions(self) -> list[Solution]:
         """
-        Get a list of solutions separated by lap.
-        """
+        Get a list of solutions separated by lap."""
         laps = {node.lap_number for node in self.nodes}
         solutions: list[Solution] = []
         for lap in laps:
@@ -348,14 +359,18 @@ def create_new_solution(
 
     Returns:
         solution (Solution): A blank solution.
+
     """
     transient_variables = initialise_transient_variables(
-        track_mesh, initial_state
+        track_mesh,
+        initial_state,
     )
     solution_nodes = [
         SolutionNode(track_node=track_node, transient_variables=estimated_state)
         for track_node, estimated_state in zip(
-            track_mesh.nodes, transient_variables
+            track_mesh.nodes,
+            transient_variables,
+            strict=True,
         )
     ]
     solution = Solution(nodes=solution_nodes, vehicle_model=vehicle_model)
@@ -363,9 +378,9 @@ def create_new_solution(
 
 
 def initialise_transient_variables(
-    track_mesh: Mesh, initial_state: TransientVariables
+    track_mesh: Mesh,
+    initial_state: TransientVariables,
 ) -> list[TransientVariables]:
     """
-    Generate initial estimated state variables for a simulation.
-    """
+    Generate initial estimated state variables for a simulation."""
     return [initial_state for _ in range(track_mesh.node_count)]

@@ -1,6 +1,5 @@
 """
-This module contains functions shared throughout the plot package.
-"""
+This module contains functions shared throughout the plot package."""
 
 from collections.abc import Callable
 from functools import wraps
@@ -20,10 +19,9 @@ def show_after_plotting(plot_function: PlotFunction) -> PlotFunction:
 
     @wraps(plot_function)
     def wrapper(*args: tuple[Any, ...], **kwargs: dict[str, Any]) -> None:
-        """Wrapper function."""
+        """
+        Wrapper function."""
         plot_function(*args, **kwargs)
         plt.show()
 
     return wrapper
-
-

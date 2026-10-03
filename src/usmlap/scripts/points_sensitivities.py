@@ -33,7 +33,10 @@ for parameter in progress.track(parameters, "Evaluating parameters..."):
     if not parameter.uncertainty:
         continue
     sensitivity, deltas = points_sensitivity(
-        vehicle, QUALITY, competition, parameter
+        vehicle,
+        QUALITY,
+        competition,
+        parameter,
     )
     wrapped_name = "\n".join(wrap(parameter.name, 12))
     upper_value = parameter.append_unit(f"{deltas[1]:+}")

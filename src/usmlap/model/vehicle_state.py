@@ -22,6 +22,7 @@ class Trajectory:
         velocity (float): Longitudinal velocity.
         ax (float): Longitudinal acceleration (forwards +ve).
         ay (float): Lateral acceleration (left +ve).
+
     """
 
     curvature: float = 0
@@ -37,7 +38,8 @@ class Trajectory:
         self.velocity = math.sqrt(value / self.curvature)
 
     def next_velocity(self, distance: float) -> float:
-        """Get the new velocity after travelling `distance` metres.
+        """
+        Get the new velocity after travelling `distance` metres.
 
         Distance is signed, positive for forwards and negative for backwards.
         """
@@ -55,6 +57,7 @@ class TransientVariables:
     Attributes:
         soc (StateOfCharge): The state of charge of the accumulator.
             1 = fully charged, 0 = fully discharged (default = 1).
+
     """
 
     soc: StateOfCharge = DEFAULT_SOC
@@ -102,12 +105,14 @@ class CalculatedVehicleState:
 
     @property
     def long_lt(self) -> float:
-        """Longitudinal load transfer."""
+        """
+        Longitudinal load transfer."""
         return sum(self.normal_loads.front) - sum(self.normal_loads.rear)
 
     @property
     def lat_lt(self) -> float:
-        """Lateral load transfer."""
+        """
+        Lateral load transfer."""
         return sum(self.normal_loads.left) - sum(self.normal_loads.right)
 
 
@@ -120,6 +125,7 @@ class VehicleState:
         trajectory (Trajectory): Variables describing the vehicle's trajectory.
         transient (TransientVariables): The vehicle's transient variables.
         calculated (CalculatedVehicleState): Full state of the vehicle.
+
     """
 
     trajectory: Trajectory

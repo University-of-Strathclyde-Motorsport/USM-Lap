@@ -27,6 +27,7 @@ package = true
 [dependency-groups]
 dev = [
     "graphviz>=0.21",
+    "pre-commit>=4.6.2",
     "pylint>=4.0.4",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
@@ -47,13 +48,14 @@ skip_empty = true
 [tool.ruff]
 fix = true
 src = ["src"]
+line-length = 80
 
 [tool.ruff.lint]
-extend-select = ["I"]
-ignore = ["UP028"]
+extend-select = ["B", "I", "Q", "S", "C4", "E"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D", "INP001", "S101", "PLR2004", "PT011"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["analysis", "plot", "competition", "simulation", "track", "utils", "vehicle"]
 
-[tool.ruff.format]
-skip-magic-trailing-comma = true

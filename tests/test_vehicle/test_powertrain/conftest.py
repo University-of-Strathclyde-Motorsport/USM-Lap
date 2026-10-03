@@ -1,4 +1,5 @@
-"""Fixtures for powertrain module unit tests."""
+"""
+Fixtures for powertrain module unit tests."""
 
 import math
 
@@ -45,7 +46,7 @@ def cell() -> Cell:
                     _SOCResistanceLookup(state_of_charge=0, resistance=0.01),
                     _SOCResistanceLookup(state_of_charge=1, resistance=0.01),
                 ],
-            )
+            ),
         ],
         datasheet_url="test_url",
     )
@@ -63,7 +64,7 @@ def accumulator(cell: Cell) -> Accumulator:
             nodes=[
                 _ThermalDerateNode(temperature=0, current=1),
                 _ThermalDerateNode(temperature=100, current=1),
-            ]
+            ],
         ),
     )
 
@@ -86,13 +87,17 @@ def motor() -> Motor:
 @pytest.fixture
 def motor_controller() -> MotorController:
     return MotorController(
-        print_name="Test Motor Controller", resistance=0.2, efficiency=0.8
+        print_name="Test Motor Controller",
+        resistance=0.2,
+        efficiency=0.8,
     )
 
 
 @pytest.fixture
 def powertrain(
-    accumulator: Accumulator, motor: Motor, motor_controller: MotorController
+    accumulator: Accumulator,
+    motor: Motor,
+    motor_controller: MotorController,
 ) -> RWDPowertrain:
     return RWDPowertrain(
         accumulator=accumulator,

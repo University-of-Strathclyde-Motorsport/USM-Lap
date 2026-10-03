@@ -1,6 +1,5 @@
 """
-This module defines the bicycle vehicle model.
-"""
+This module defines the bicycle vehicle model."""
 
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner, FrontRear
@@ -19,7 +18,9 @@ class Bicycle(TractionModel):
     """
 
     def lateral_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]:
 
         resistive_fx = sum(self.resistive_forces(ctx, trajectory.velocity))
@@ -35,7 +36,9 @@ class Bicycle(TractionModel):
         return fy
 
     def longitudinal_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]:
         required_fy = abs(self.required_fy(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
@@ -50,7 +53,9 @@ class Bicycle(TractionModel):
         return FourCorner(0, 0, fx.rear_left, fx.rear_right)
 
     def braking_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]:
         required_fy = abs(self.required_fy(ctx, trajectory.velocity))
         normal_loads = self.normal_loads(ctx, trajectory)
@@ -65,7 +70,9 @@ class Bicycle(TractionModel):
         return fx
 
     def normal_loads(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]:
         body_fx, aero_fx = self.resistive_forces(ctx, trajectory.velocity)
         inertial_fx = ctx.vehicle.total_mass * trajectory.ax
@@ -85,14 +92,19 @@ class Bicycle(TractionModel):
         )
 
     def _split_normal_force(
-        self, ctx: NodeContext, inertial: float, aero: float
+        self,
+        ctx: NodeContext,
+        inertial: float,
+        aero: float,
     ) -> FrontRear[float]:
         split_inertial = ctx.vehicle.mass_distribution * inertial
         split_aero = ctx.vehicle.aero_distribution * aero
         return split_inertial + split_aero
 
     def _inertial_load_transfer(
-        self, ctx: NodeContext, inertial_fx: float
+        self,
+        ctx: NodeContext,
+        inertial_fx: float,
     ) -> FrontRear[float]:
         cog_height = ctx.vehicle.suspension.centre_of_gravity_height
         wheelbase = ctx.vehicle.suspension.wheelbase
@@ -100,7 +112,9 @@ class Bicycle(TractionModel):
         return FrontRear(-lt, lt)
 
     def _aero_load_transfer(
-        self, ctx: NodeContext, aero_fx: float
+        self,
+        ctx: NodeContext,
+        aero_fx: float,
     ) -> FrontRear[float]:
         cop_height = ctx.vehicle.aero.centre_of_pressure_height
         wheelbase = ctx.vehicle.suspension.wheelbase
@@ -108,7 +122,9 @@ class Bicycle(TractionModel):
         return FrontRear(-lt, lt)
 
     def _split_traction(
-        self, maximum: FourCorner[float], required: float
+        self,
+        maximum: FourCorner[float],
+        required: float,
     ) -> FourCorner[float]:
         available = sum(maximum)
         if required > available:

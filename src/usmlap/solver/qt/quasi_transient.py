@@ -1,6 +1,5 @@
 """
-This module implements a quasi-transient solver.
-"""
+This module implements a quasi-transient solver."""
 
 import logging
 
@@ -26,8 +25,7 @@ TASK_DESCRIPTION = "Solving transient simulation..."
 
 class QuasiTransientSolver(SolverInterface):
     """
-    Quasi-transient solver.
-    """
+    Quasi-transient solver."""
 
     target_soc: float = 0.2
 
@@ -65,7 +63,9 @@ class QuasiTransientSolver(SolverInterface):
                     return solution
 
         raise MaximumIterationsExceededError(
-            MAXIMUM_TRANSIENT_ITERATIONS, CONVERGENCE_TOLERANCE, times
+            MAXIMUM_TRANSIENT_ITERATIONS,
+            CONVERGENCE_TOLERANCE,
+            times,
         )
 
     def _decrease_discharge_limit(self, scaling_factor: float) -> None:
@@ -74,7 +74,8 @@ class QuasiTransientSolver(SolverInterface):
         new_limit = old_limit * scaling_factor
         powertrain.discharge_current_limit = new_limit
         logger.warning(
-            f"Discharge current limit decreased from {old_limit} to {new_limit}"
+            f"Discharge current limit decreased "
+            f"from {old_limit} to {new_limit}",
         )
 
     def _solve_next_iteration(self, previous_solution: Solution) -> Solution:
@@ -84,10 +85,12 @@ class QuasiTransientSolver(SolverInterface):
         This is done by calling the `QuasiSteadyStateSolver`.
 
         Args:
-            previous_solution (Solution): The previous iteration of the solution.
+            previous_solution (Solution):
+                The previous iteration of the solution.
 
         Returns:
             solution (Solution): The next iteration of the solution.
+
         """
         solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
@@ -103,11 +106,13 @@ class QuasiTransientSolver(SolverInterface):
 
         Returns:
             solution (Solution): The solution with updated state variables.
+
         """
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
             ctx = self.local_context(
-                previous_node.track_node, previous_node.transient_variables
+                previous_node.track_node,
+                previous_node.transient_variables,
             )
             if previous_node.calculated_vehicle_state is None:
                 raise AlgorithmError("Previous vehicle state not calculated.")
@@ -139,6 +144,7 @@ def _convergence_achieved(times: list[float], threshold: float) -> bool:
     Returns:
         converged (bool):
             `True` if the solution has converged, otherwise `False`.
+
     """
     if len(times) < 2:
         return False

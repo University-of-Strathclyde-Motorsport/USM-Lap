@@ -1,6 +1,5 @@
 """
-This module contains code shared by all vehicle components.
-"""
+This module contains code shared by all vehicle components."""
 
 from __future__ import annotations
 
@@ -21,7 +20,8 @@ class AbstractSubsystem(BaseModel):
     _subtypes: ClassVar[dict[str, type]] = {}
 
     def __init_subclass__(
-        cls: type[AbstractSubsystem], type: str | None = None
+        cls: type[AbstractSubsystem],
+        type: str | None = None,
     ) -> None:
         super().__init_subclass__()
         if type:

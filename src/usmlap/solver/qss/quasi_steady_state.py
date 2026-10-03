@@ -1,6 +1,5 @@
 """
-This module implements a quasi-steady-state solver.
-"""
+This module implements a quasi-steady-state solver."""
 
 import logging
 
@@ -80,6 +79,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             solution (Solution): The solution with maximum velocities solved.
+
         """
         previous_velocity = None
         for node in progress.track(
@@ -98,7 +98,9 @@ class QuasiSteadyStateSolver(SolverInterface):
         return solution
 
     def _propagate_forward(
-        self, solution: Solution, start_index: int
+        self,
+        solution: Solution,
+        start_index: int,
     ) -> Solution:
         """
         Propagate the solution forward.
@@ -109,6 +111,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             solution (Solution): The forward-propagated solution.
+
         """
         logger.debug(f"Forward propagating from apex {start_index}")
 
@@ -140,7 +143,9 @@ class QuasiSteadyStateSolver(SolverInterface):
         return solution
 
     def _propagate_backward(
-        self, solution: Solution, start_index: int
+        self,
+        solution: Solution,
+        start_index: int,
     ) -> Solution:
         """
         Propagate the solution backwards.
@@ -151,8 +156,8 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             solution (Solution): The backward-propagated solution.
-        """
 
+        """
         logger.debug(f"Backward propagating apex {start_index}")
 
         for node in solution.nodes[start_index::-1]:
@@ -174,7 +179,8 @@ class QuasiSteadyStateSolver(SolverInterface):
             )
 
             initial_velocity = min(
-                potential_velocity, node.previous.final_velocity
+                potential_velocity,
+                node.previous.final_velocity,
             )
 
             node.set_initial_velocity(initial_velocity)
@@ -195,6 +201,7 @@ def _find_apexes(solution: Solution) -> list[int]:
 
     Returns:
         apexes (list[int]): The indices of the apexes.
+
     """
     maximum_velocities = [-node.apex_velocity for node in solution]
     apex_indices, _ = find_peaks(maximum_velocities)

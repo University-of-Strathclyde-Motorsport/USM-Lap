@@ -16,13 +16,13 @@ class "Accumulator" as src.usmlap.vehicle.powertrain.accumulator.Accumulator {
   get_voltage(state_of_charge: float) -> float
 }
 class "AeroAttitude" as src.usmlap.vehicle.aero.AeroAttitude {
-  air_density : Optional[float]
-  front_ride_height : Optional[float]
-  pitch_angle : Optional[float]
-  rear_ride_height : Optional[float]
-  roll_angle : Optional[float]
-  velocity : Optional[float]
-  yaw_angle : Optional[float]
+  air_density : float | None
+  front_ride_height : float | None
+  pitch_angle : float | None
+  rear_ride_height : float | None
+  roll_angle : float | None
+  velocity : float | None
+  yaw_angle : float | None
 }
 class "AeroModelInterface" as src.usmlap.vehicle.aero.AeroModelInterface {
   {abstract}get_drag_coefficient(attitude: AeroAttitude) -> float
@@ -44,7 +44,7 @@ class "AligningCoefficients" as src.usmlap.vehicle.tyre.tir.AligningCoefficients
   QBZ3 : float
   QBZ4 : float
   QBZ5 : float
-  QBZ6 : Optional[float]
+  QBZ6 : float | None
   QBZ9 : float
   QCZ1 : float
   QDZ1 : float
@@ -166,28 +166,28 @@ class "Configuration" as src.usmlap.track.track_data.Configuration {
   name
 }
 class "ConstantAero" as src.usmlap.vehicle.aero.ConstantAero {
-  drag_coefficient : Optional[float]
-  lift_coefficient : Optional[float]
+  drag_coefficient : float | None
+  lift_coefficient : float | None
   model_type : Literal['constant']
   get_drag_coefficient(attitude: AeroAttitude) -> float
   get_lift_coefficient(attitude: AeroAttitude) -> float
 }
 class "ContactPatch" as src.usmlap.vehicle.tyre.tir.ContactPatch {
-  ELLIPS_HEIGHT : Optional[float]
-  ELLIPS_LENGTH : Optional[float]
-  ELLIPS_MAX_STEP : Optional[float]
-  ELLIPS_NLENGTH : Optional[float]
-  ELLIPS_NWIDTH : Optional[float]
-  ELLIPS_ORDER : Optional[float]
-  ELLIPS_SHIFT : Optional[float]
-  ENV_C1 : Optional[float]
-  ENV_C2 : Optional[float]
-  Q_A1 : Optional[float]
-  Q_A2 : Optional[float]
-  Q_RA1 : Optional[float]
-  Q_RA2 : Optional[float]
-  Q_RB1 : Optional[float]
-  Q_RB2 : Optional[float]
+  ELLIPS_HEIGHT : float | None
+  ELLIPS_LENGTH : float | None
+  ELLIPS_MAX_STEP : float | None
+  ELLIPS_NLENGTH : float | None
+  ELLIPS_NWIDTH : float | None
+  ELLIPS_ORDER : float | None
+  ELLIPS_SHIFT : float | None
+  ENV_C1 : float | None
+  ENV_C2 : float | None
+  Q_A1 : float | None
+  Q_A2 : float | None
+  Q_RA1 : float | None
+  Q_RA2 : float | None
+  Q_RB1 : float | None
+  Q_RB2 : float | None
 }
 class "Coordinate" as src.usmlap.utils.datatypes.Coordinate {
   x : float
@@ -214,11 +214,11 @@ class "DecoupledSuspension" as src.usmlap.vehicle.suspension.DecoupledSuspension
   suspension_type : Literal['decoupled']
 }
 class "Dimension" as src.usmlap.vehicle.tyre.tir.Dimension {
-  ASPECT_RATIO : Optional[float]
-  RIM_RADIUS : Optional[float]
-  RIM_WIDTH : Optional[float]
+  ASPECT_RATIO : float | None
+  RIM_RADIUS : float | None
+  RIM_WIDTH : float | None
   UNLOADED_RADIUS : float
-  WIDTH : Optional[float]
+  WIDTH : float | None
 }
 class "DirectActuationSuspension" as src.usmlap.vehicle.suspension.DirectActuationSuspension {
   suspension_type : Literal['direct_actuation']
@@ -263,8 +263,8 @@ class "GripFactorData" as src.usmlap.track.track_data.GripFactorData {
   value : list[Annotated[float, Field(gt=0)]]
 }
 class "InclinationAngleRange" as src.usmlap.vehicle.tyre.tir.InclinationAngleRange {
-  CAMMAX : Optional[float]
-  CAMMIN : Optional[float]
+  CAMMAX : float | None
+  CAMMIN : float | None
 }
 class "Inertia" as src.usmlap.vehicle.inertia.Inertia {
   centre_of_gravity_height : Annotated[PositiveFloat, Unit('m')]
@@ -275,17 +275,17 @@ class "Inertia" as src.usmlap.vehicle.inertia.Inertia {
   yaw_inertia : Annotated[PositiveFloat, Unit('kg.m^2')]
 }
 class "Inertia" as src.usmlap.vehicle.tyre.tir.Inertia {
-  BELT_IXX : Optional[float]
-  BELT_IYY : Optional[float]
-  BELT_MASS : Optional[float]
-  GRAVITY : Optional[float]
-  IXX : Optional[float]
-  IYY : Optional[float]
-  MASS : Optional[float]
+  BELT_IXX : float | None
+  BELT_IYY : float | None
+  BELT_MASS : float | None
+  GRAVITY : float | None
+  IXX : float | None
+  IYY : float | None
+  MASS : float | None
 }
 class "InflationPressureRange" as src.usmlap.vehicle.tyre.tir.InflationPressureRange {
-  PRESMAX : Optional[float]
-  PRESMIN : Optional[float]
+  PRESMAX : float | None
+  PRESMIN : float | None
 }
 class "LateralCoefficients" as src.usmlap.vehicle.tyre.tir.LateralCoefficients {
   PCY1 : float
@@ -352,8 +352,8 @@ class "LocationData" as src.usmlap.track.track_data.LocationData {
   interpolate(position: list[float]) -> list[float]
 }
 class "LongSlipRange" as src.usmlap.vehicle.tyre.tir.LongSlipRange {
-  KPUMAX : Optional[float]
-  KPUMIN : Optional[float]
+  KPUMAX : float | None
+  KPUMIN : float | None
 }
 class "LongitudinalCoefficients" as src.usmlap.vehicle.tyre.tir.LongitudinalCoefficients {
   PCX1 : float
@@ -512,8 +512,8 @@ class "Metadata" as src.usmlap.vehicle.vehicle.Metadata {
 class "Model" as src.usmlap.vehicle.tyre.tir.Model {
   FITTYP : int
   LONGVL : float
-  ROAD_DIRECTION : Optional[float]
-  ROAD_INCREMENT : Optional[float]
+  ROAD_DIRECTION : float | None
+  ROAD_INCREMENT : float | None
   TYRESIDE : str
   VXLOW : float
 }
@@ -565,15 +565,15 @@ class "Node" as src.usmlap.simulation.solution.Node {
   velocity : float
 }
 class "Node" as src.usmlap.track.mesh.Node {
-  banking : Optional[float]
+  banking : float | None
   curvature : float
   elevation : float
-  grip_factor : Optional[float]
-  inclination : Optional[float]
-  length : Optional[float]
-  position : Optional[float]
+  grip_factor : float | None
+  inclination : float | None
+  length : float | None
+  position : float | None
   radius : float
-  sector : Optional[int]
+  sector : int | None
 }
 class "OperatingConditions" as src.usmlap.vehicle.tyre.tir.OperatingConditions {
   INFLPRES : float
@@ -584,9 +584,9 @@ class "OverturningCoefficients" as src.usmlap.vehicle.tyre.tir.OverturningCoeffi
   QSX1 : float
   QSX10 : float
   QSX11 : float
-  QSX12 : Optional[float]
-  QSX13 : Optional[float]
-  QSX14 : Optional[float]
+  QSX12 : float | None
+  QSX13 : float | None
+  QSX14 : float | None
   QSX2 : float
   QSX3 : float
   QSX4 : float
@@ -664,7 +664,7 @@ class "ScalingCoefficients" as src.usmlap.vehicle.tyre.tir.ScalingCoefficients {
   LKY : float
   LKYC : float
   LKZC : float
-  LMP : Optional[float]
+  LMP : float | None
   LMUX : float
   LMUY : float
   LMX : float
@@ -716,8 +716,8 @@ class "SimulationSettings" as src.usmlap.simulation.simulation.SimulationSetting
   vehicle_model : type[TractionModel]
 }
 class "SlipAngleRange" as src.usmlap.vehicle.tyre.tir.SlipAngleRange {
-  ALPMAX : Optional[float]
-  ALPMIN : Optional[float]
+  ALPMAX : float | None
+  ALPMIN : float | None
 }
 class "Solution" as src.usmlap.simulation.solution.Solution {
   apexes : list[int]
@@ -749,28 +749,28 @@ class "Steering" as src.usmlap.vehicle.steering.Steering {
   get_wheel_angle(steering_wheel_angle: float) -> float
 }
 class "Structural" as src.usmlap.vehicle.tyre.tir.Structural {
-  DAMP_LAT : Optional[float]
-  DAMP_LONG : Optional[float]
-  DAMP_RESIDUAL : Optional[float]
-  DAMP_VLOW : Optional[float]
-  DAMP_WINDUP : Optional[float]
-  DAMP_YAW : Optional[float]
-  FREQ_LAT : Optional[float]
-  FREQ_LONG : Optional[float]
-  FREQ_WINDUP : Optional[float]
-  FREQ_YAW : Optional[float]
-  LATERAL_STIFFNESS : Optional[float]
-  LONGITUDINAL_STIFFNESS : Optional[float]
-  PCFX1 : Optional[float]
-  PCFX2 : Optional[float]
-  PCFX3 : Optional[float]
-  PCFY1 : Optional[float]
-  PCFY2 : Optional[float]
-  PCFY3 : Optional[float]
-  PCMZ1 : Optional[float]
-  Q_BVT : Optional[float]
-  Q_BVX : Optional[float]
-  YAW_STIFFNESS : Optional[float]
+  DAMP_LAT : float | None
+  DAMP_LONG : float | None
+  DAMP_RESIDUAL : float | None
+  DAMP_VLOW : float | None
+  DAMP_WINDUP : float | None
+  DAMP_YAW : float | None
+  FREQ_LAT : float | None
+  FREQ_LONG : float | None
+  FREQ_WINDUP : float | None
+  FREQ_YAW : float | None
+  LATERAL_STIFFNESS : float | None
+  LONGITUDINAL_STIFFNESS : float | None
+  PCFX1 : float | None
+  PCFX2 : float | None
+  PCFX3 : float | None
+  PCFY1 : float | None
+  PCFY2 : float | None
+  PCFY3 : float | None
+  PCMZ1 : float | None
+  Q_BVT : float | None
+  Q_BVX : float | None
+  YAW_STIFFNESS : float | None
 }
 class "Subsystem" as src.usmlap.vehicle.common.Subsystem {
   from_json(filepath: Path) -> Self
@@ -851,25 +851,25 @@ class "Transmission" as src.usmlap.vehicle.transmission.Transmission {
   final_drive_ratio
 }
 class "TurnslipCoefficients" as src.usmlap.vehicle.tyre.tir.TurnslipCoefficients {
-  PDXP1 : Optional[float]
-  PDXP2 : Optional[float]
-  PDXP3 : Optional[float]
-  PDYP1 : Optional[float]
-  PDYP2 : Optional[float]
-  PDYP3 : Optional[float]
-  PDYP4 : Optional[float]
-  PECP1 : Optional[float]
-  PECP2 : Optional[float]
-  PHYP1 : Optional[float]
-  PHYP2 : Optional[float]
-  PHYP3 : Optional[float]
-  PHYP4 : Optional[float]
-  PKYP1 : Optional[float]
-  QBRP1 : Optional[float]
-  QCRP1 : Optional[float]
-  QCRP2 : Optional[float]
-  QDRP1 : Optional[float]
-  QDTP1 : Optional[float]
+  PDXP1 : float | None
+  PDXP2 : float | None
+  PDXP3 : float | None
+  PDYP1 : float | None
+  PDYP2 : float | None
+  PDYP3 : float | None
+  PDYP4 : float | None
+  PECP1 : float | None
+  PECP2 : float | None
+  PHYP1 : float | None
+  PHYP2 : float | None
+  PHYP3 : float | None
+  PHYP4 : float | None
+  PKYP1 : float | None
+  QBRP1 : float | None
+  QCRP1 : float | None
+  QCRP2 : float | None
+  QDRP1 : float | None
+  QDTP1 : float | None
 }
 class "Tyre" as src.usmlap.vehicle.tyre.tyre_model.Tyre {
   tyre_model
@@ -960,40 +960,40 @@ class "TransientVariables" as src.usmlap.simulation.model.vehicle_model.Transien
   velocity : float
 }
 class "Vertical" as src.usmlap.vehicle.tyre.tir.Vertical {
-  BOTTOM_OFFST : Optional[float]
-  BOTTOM_STIFF : Optional[float]
-  BREFF : Optional[float]
-  DREFF : Optional[float]
+  BOTTOM_OFFST : float | None
+  BOTTOM_STIFF : float | None
+  BREFF : float | None
+  DREFF : float | None
   FNOMIN : float
-  FREFF : Optional[float]
-  MC_CONTOUR_A : Optional[float]
-  MC_CONTOUR_B : Optional[float]
-  PFZ1 : Optional[float]
-  Q_CAM : Optional[float]
-  Q_CAM1 : Optional[float]
-  Q_CAM2 : Optional[float]
-  Q_CAM3 : Optional[float]
-  Q_FCX : Optional[float]
-  Q_FCY : Optional[float]
-  Q_FCY2 : Optional[float]
-  Q_FYS1 : Optional[float]
-  Q_FYS2 : Optional[float]
-  Q_FYS3 : Optional[float]
-  Q_FZ2 : Optional[float]
-  Q_RE0 : Optional[float]
-  Q_V1 : Optional[float]
-  Q_V2 : Optional[float]
-  VERTICAL_DAMPING : Optional[float]
-  VERTICAL_STIFFNESS : Optional[float]
+  FREFF : float | None
+  MC_CONTOUR_A : float | None
+  MC_CONTOUR_B : float | None
+  PFZ1 : float | None
+  Q_CAM : float | None
+  Q_CAM1 : float | None
+  Q_CAM2 : float | None
+  Q_CAM3 : float | None
+  Q_FCX : float | None
+  Q_FCY : float | None
+  Q_FCY2 : float | None
+  Q_FYS1 : float | None
+  Q_FYS2 : float | None
+  Q_FYS3 : float | None
+  Q_FZ2 : float | None
+  Q_RE0 : float | None
+  Q_V1 : float | None
+  Q_V2 : float | None
+  VERTICAL_DAMPING : float | None
+  VERTICAL_STIFFNESS : float | None
 }
 class "VerticalForceRange" as src.usmlap.vehicle.tyre.tir.VerticalForceRange {
-  FZMAX : Optional[float]
-  FZMIN : Optional[float]
+  FZMAX : float | None
+  FZMIN : float | None
 }
 class "_ParameterGroup" as src.usmlap.vehicle.tyre.tir._ParameterGroup {
 }
 class "_TIRReader" as src.usmlap.vehicle.tyre.tir._TIRReader {
-  active_parameter_group : Optional[str]
+  active_parameter_group : str | None
   data : dict[str, dict[str, str]]
   read(filepath: str) -> dict[str, dict[str, str]]
 }

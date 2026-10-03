@@ -1,6 +1,5 @@
 """
-This module contains code for reading track data from an Excel file.
-"""
+This module contains code for reading track data from an Excel file."""
 
 from __future__ import annotations
 
@@ -24,8 +23,7 @@ UNKNOWN_LOCATION = "Unknown"
 
 class SectionType(IntEnum):
     """
-    Enum representing the type of section of track.
-    """
+    Enum representing the type of section of track."""
 
     STRAIGHT = 0
     LEFT = 1
@@ -40,6 +38,7 @@ class ShapeData(BaseModel):
         length (float): The length of the track section.
         curvature (float): The curvature of the track section.
             Positive for left, negative for right.
+
     """
 
     length: float = Field(gt=0)
@@ -55,6 +54,7 @@ class SectorData(BaseModel):
         label (str): An optional label for the sector (default = "").
             If left blank, labels will be automatically generated.
         timed (bool): Whether the sector should be timed (default = True).
+
     """
 
     start_position: float = Field(ge=0)
@@ -73,6 +73,7 @@ class ElevationData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         elevation (float): The elevation of the track at the position.
+
     """
 
     position: float = Field(ge=0)
@@ -91,6 +92,7 @@ class BankingData(BaseModel):
         position (float): The position that the data was recorded.
         angle (float): The banking angle of the track at the position.
         TODO: Sign convention?
+
     """
 
     position: float = Field(ge=0)
@@ -108,6 +110,7 @@ class GripFactorData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         grip_factor (float): The grip factor of the track at the position.
+
     """
 
     position: float = Field(ge=0)
@@ -148,8 +151,7 @@ class Configuration(Enum):
 
 class Direction(Enum):
     """
-    Enum representing the direction of driving.
-    """
+    Enum representing the direction of driving."""
 
     FORWARD = 1
     BACKWARD = -1
@@ -171,12 +173,13 @@ class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
         banking (list[BankingData]): Data describing the track banking.
         grip_factor (list[GripFactorData]): Grip factor data for the track.
         sector (list[SectorData]): Data specifying sectors of the track.
-        event (Optional[Event]): The type of event the track is suitable for.
+        event (Event | None): The type of event the track is suitable for.
             A warning will be issued if the track is used
             to simulate an unsuitable event.
         configuration (Configuration): The configuration of the track.
         # direction (Direction): The direction of driving (default = FORWARD).
         # mirror (bool): Whether the track should be mirrored (default = False).
+
     """
 
     print_name: str
@@ -218,36 +221,31 @@ class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
     def max_elevation(self) -> float:
         if self.elevation:
             return max(data.elevation for data in self.elevation)
-        else:
-            return ElevationData.default()
+        return ElevationData.default()
 
     @property
     def min_elevation(self) -> float:
         if self.elevation:
             return min(data.elevation for data in self.elevation)
-        else:
-            return ElevationData.default()
+        return ElevationData.default()
 
     @property
     def max_banking_angle(self) -> float:
         if self.banking:
             return math.degrees(max([abs(data.angle) for data in self.banking]))
-        else:
-            return BankingData.default()
+        return BankingData.default()
 
     @property
     def max_grip_factor(self) -> float:
         if self.grip_factor:
             return max(data.grip_factor for data in self.grip_factor)
-        else:
-            return GripFactorData.default()
+        return GripFactorData.default()
 
     @property
     def min_grip_factor(self) -> float:
         if self.grip_factor:
             return min(data.grip_factor for data in self.grip_factor)
-        else:
-            return GripFactorData.default()
+        return GripFactorData.default()
 
     @property
     def location(self) -> str:
@@ -288,6 +286,7 @@ def load_track_from_spreadsheet(filename: str) -> TrackData:
 
     Raises:
         FileNotFoundError: If the file does not exist.
+
     """
     try:
         filepath = TRACK_LIBRARY / "legacy" / filename
@@ -309,7 +308,7 @@ def load_track_from_spreadsheet(filename: str) -> TrackData:
             f"Unable to find '{filename}' in track library. "
             f"Available tracks: {AVAILABLE_TRACKS}"
         )
-        raise FileNotFoundError(error_message)
+        raise FileNotFoundError(error_message) from None
 
 
 class TrackReader:
@@ -318,6 +317,7 @@ class TrackReader:
 
     Attributes:
         workbook (pandas.ExcelFile): The Excel file containing the track data.
+
     """
 
     def __init__(self, filepath: Path) -> None:
@@ -326,6 +326,7 @@ class TrackReader:
 
         Args:
             filepath (Path): Path to the Excel file to be read.
+
         """
         self.workbook = pandas.ExcelFile(filepath, engine="openpyxl")
 
@@ -349,18 +350,19 @@ class TrackReader:
         return str(self._get_info().at["City", 1])
 
     def get_shape_data(self) -> list[ShapeData]:
-        """Returns the shape data for the track."""
+        """
+        Returns the shape data for the track."""
 
         def get_curvature(section_type: SectionType, radius: float) -> float:
-            """Calculate curvature from section type and corner radius."""
+            """
+            Calculate curvature from section type and corner radius."""
             if section_type == SectionType.STRAIGHT:
                 return 0
-            elif section_type == SectionType.LEFT:
+            if section_type == SectionType.LEFT:
                 return 1 / radius
-            elif section_type == SectionType.RIGHT:
+            if section_type == SectionType.RIGHT:
                 return -1 / radius
-            else:
-                raise ValueError(f"Invalid section type: {section_type}")
+            raise ValueError(f"Invalid section type: {section_type}")
 
         dataframe = pandas.read_excel(self.workbook, sheet_name="Shape")
         shape_data = [
@@ -376,18 +378,21 @@ class TrackReader:
         return shape_data
 
     def get_elevation_data(self) -> list[ElevationData]:
-        """Returns the elevation data for the track."""
+        """
+        Returns the elevation data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Elevation")
         elevation_data = [
             ElevationData(
-                position=row["Point [m]"], elevation=row["Elevation [m]"]
+                position=row["Point [m]"],
+                elevation=row["Elevation [m]"],
             )
             for _, row in dataframe.iterrows()
         ]
         return elevation_data
 
     def get_banking_data(self) -> list[BankingData]:
-        """Returns the banking data for the track."""
+        """
+        Returns the banking data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Banking")
         banking_data = [
             BankingData(
@@ -399,7 +404,8 @@ class TrackReader:
         return banking_data
 
     def get_grip_factor_data(self) -> list[GripFactorData]:
-        """Returns the grip factor data for the track."""
+        """
+        Returns the grip factor data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Grip Factors")
         grip_factor_data = [
             GripFactorData(
@@ -411,34 +417,40 @@ class TrackReader:
         return grip_factor_data
 
     def get_sector_data(self) -> list[SectorData]:
-        """Returns the sector data for the track."""
+        """
+        Returns the sector data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Sectors")
         sector_data = [
             SectorData(
-                start_position=row["Start Point [m]"], label=str(row["Sector"])
+                start_position=row["Start Point [m]"],
+                label=str(row["Sector"]),
             )
             for _, row in dataframe.iterrows()
         ]
         return sector_data
 
     def get_configuration(self) -> Configuration:
-        """Returns the configuration of the track."""
+        """
+        Returns the configuration of the track."""
         return Configuration[
             str(self._get_info().at["Configuration", 1]).upper()
         ]
 
     def get_direction(self) -> Direction:
-        """Returns the direction of driving."""
+        """
+        Returns the direction of driving."""
         return Direction[str(self._get_info().at["Direction", 1]).upper()]
 
     def get_mirror(self) -> bool:
-        """Returns whether the track should be mirrored."""
+        """
+        Returns whether the track should be mirrored."""
         mirror_str = str(self._get_info().at["Mirror", 1])
         return mirror_str.lower() in ["on", "yes", "true"]
 
 
 def save_track_data(track_data: TrackData, filename: str | None = None) -> None:
-    """Save track data to a JSON file."""
+    """
+    Save track data to a JSON file."""
     if filename is None:
         filename = track_data.print_name
 

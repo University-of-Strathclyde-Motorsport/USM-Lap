@@ -38,7 +38,9 @@ class Endurance(EventInterface, label="endurance"):
         self.track_data = TrackData.from_json(track_file)
 
     def simulate_event(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         vehicle = _modify_vehicle_for_event(vehicle)
@@ -46,13 +48,17 @@ class Endurance(EventInterface, label="endurance"):
         return solution
 
     def calculate_points(
-        self, solution: TelemetrySolution, data: CompetitionData
+        self,
+        solution: TelemetrySolution,
+        data: CompetitionData,
     ) -> CompetitionPoints:
 
         t_team = solution.solution.total_time
         t_min = data.endurance_t_min
         endurance_points = calculate_points(
-            t_team, t_min, ENDURANCE_COEFFICIENTS
+            t_team,
+            t_min,
+            ENDURANCE_COEFFICIENTS,
         )[1]
         points = {"endurance": endurance_points}
 
@@ -61,7 +67,9 @@ class Endurance(EventInterface, label="endurance"):
             ef_team = energy_used_kwh * (solution.solution.total_time**2)
             ef_min = data.efficiency_ef_min
             efficiency_points = calculate_points(
-                ef_team, ef_min, EFFICIENCY_COEFFICIENTS
+                ef_team,
+                ef_min,
+                EFFICIENCY_COEFFICIENTS,
             )[1]
             points["efficiency"] = efficiency_points
 
@@ -76,6 +84,7 @@ class Endurance(EventInterface, label="endurance"):
 
         Returns:
             mesh (Mesh): A mesh of the track.
+
         """
         base_mesh = generate_mesh(self.track_data, resolution)
 
@@ -90,5 +99,7 @@ def _modify_vehicle_for_event(vehicle: Vehicle) -> Vehicle:
     Modify a vehicle for the endurance event by updating parameters.
     """
     return get_new_vehicle(
-        vehicle, DischargeCurrentLimit, DEFAULT_DISCHARGE_LIMIT
+        vehicle,
+        DischargeCurrentLimit,
+        DEFAULT_DISCHARGE_LIMIT,
     )

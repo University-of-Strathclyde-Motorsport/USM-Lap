@@ -1,6 +1,5 @@
 """
-This module contains code for plotting telemetry data.
-"""
+This module contains code for plotting telemetry data."""
 
 from itertools import cycle
 from typing import Literal
@@ -44,19 +43,30 @@ def plot_channels(
     Plot traces of telemetry channels.
 
     Args:
-        solutions (TelemetrySolution | dict[str, TelemetrySolution]): The solutions to plot traces for.
-        channels (list[DataChannel]): The channels to plot.
-        x_axis (Literal["Position", "Time"]): The channel to plot on the x-axis (default = "Time").
-        title (Optional[str]): The title to display above the plot.
-        colours (Optional[list[str]]): The colours to use for the traces.
-        linestyle (LINESTYLES | list[LINESTYLES]): The linestyle to use for the traces.
-        show_legend (bool): Whether to show a legend (default = True).
-        legend_title (Optional[str]): The title to use for the legend (default = None).
-        y_label_rotation (Optional[Literal["vertical", "horizontal"]]): The rotation of the y-axis labels.
-        show_sectors (bool): Whether to show sector boundaries (default = False).
-        wrap_width (int): The width at which to wrap the y-axis labels (default = 20).
-    """
+        solutions (TelemetrySolution | dict[str, TelemetrySolution]):
+            The solutions to plot traces for.
+        channels (list[DataChannel]):
+            The channels to plot.
+        x_axis (Literal["Position", "Time"]):
+            The channel to plot on the x-axis (default = "Time").
+        title (str | None):
+            The title to display above the plot.
+        colours (Optional[list[str]]):
+            The colours to use for the traces.
+        linestyle (LINESTYLES | list[LINESTYLES]):
+            The linestyle to use for the traces.
+        show_legend (bool):
+            Whether to show a legend (default = True).
+        legend_title (str | None):
+            The title to use for the legend (default = None).
+        y_label_rotation (Optional[Literal["vertical", "horizontal"]]):
+            The rotation of the y-axis labels.
+        show_sectors (bool):
+            Whether to show sector boundaries (default = False).
+        wrap_width (int):
+            The width at which to wrap the y-axis labels (default = 20).
 
+    """
     if len(channels) == 0:
         raise NoChannelsError
 
@@ -112,9 +122,12 @@ def _create_axs(
     y_label_rotation: ROTATION_OPTIONS | None = None,
     wrap_width: int = 20,
 ) -> list[plt.Axes]:
-    """Construct a set of axes for plotting telemetry channels."""
+    """
+    Construct a set of axes for plotting telemetry channels."""
     _, axs = plt.subplots(
-        nrows=len(channels), sharex=True, layout="constrained"
+        nrows=len(channels),
+        sharex=True,
+        layout="constrained",
     )
     if isinstance(axs, plt.Axes):
         axs = [axs]
@@ -141,7 +154,8 @@ def _create_axs(
 
 
 def get_label_alignment(rotation: ROTATION_OPTIONS) -> str:
-    """Get the alignment of y-axis labels."""
+    """
+    Get the alignment of y-axis labels."""
     match rotation:
         case "vertical":
             return "center"
@@ -152,12 +166,17 @@ def get_label_alignment(rotation: ROTATION_OPTIONS) -> str:
 
 
 def draw_sector_boundaries(
-    axs: list[plt.Axes], solution: TelemetrySolution
+    axs: list[plt.Axes],
+    solution: TelemetrySolution,
 ) -> None:
-    """Draw vertical lines at sector boundaries."""
+    """
+    Draw vertical lines at sector boundaries."""
     sector_boundaries = solution.get_sector_boundary_positions()
     for ax in axs:
         for sector_boundary in sector_boundaries:
             ax.axvline(
-                sector_boundary, color="black", linewidth=1, linestyle="dashed"
+                sector_boundary,
+                color="black",
+                linewidth=1,
+                linestyle="dashed",
             )

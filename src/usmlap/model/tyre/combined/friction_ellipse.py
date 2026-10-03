@@ -1,6 +1,5 @@
 """
-This module implements the friction ellipse combined tyre model.
-"""
+This module implements the friction ellipse combined tyre model."""
 
 import math
 
@@ -9,7 +8,8 @@ from usmlap.model.tyre.tyre_model import CombinedTyreModel
 
 
 class FrictionEllipse(CombinedTyreModel):
-    """Friction ellipse for modelling combined tyre behaviour."""
+    """
+    Friction ellipse for modelling combined tyre behaviour."""
 
     def fx(self, fy: float, fx_max: float, fy_max: float) -> float:
         return fx_max * _get_scale_factor(fy, fy_max)
@@ -19,7 +19,8 @@ class FrictionEllipse(CombinedTyreModel):
 
 
 def _get_scale_factor(required: float, maximum: float) -> float:
-    """Calculate a scale factor for available grip."""
+    """
+    Calculate a scale factor for available grip."""
     if required > maximum:
         raise InsufficientTractionError(required, maximum)
     if maximum == 0:

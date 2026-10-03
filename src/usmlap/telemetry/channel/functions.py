@@ -1,5 +1,6 @@
 """
-This module defines channel functions which operate on each element of a telemetry channel.
+This module defines channel functions
+which operate on each element of a telemetry channel.
 """
 
 import math
@@ -13,11 +14,17 @@ from .channel import DataChannel, TelemetryChannel
 
 
 def negate(
-    channel: DataChannel, *, unit: Unit | None = None, label: str | None = None
+    channel: DataChannel,
+    *,
+    unit: Unit | None = None,
+    label: str | None = None,
 ) -> DataChannel:
-    """Negate the values of a data channel."""
+    """
+    Negate the values of a data channel."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         return [-v for v in channel(solution)]
 
     if unit is None:
@@ -30,12 +37,15 @@ def negate(
 
 
 def add(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
-    """Add the values of `channel_1` and `channel_2`."""
+    """
+    Add the values of `channel_1` and `channel_2`."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         data_1 = channel_1(solution)
         data_2 = channel_2(solution)
-        return [v1 + v2 for v1, v2 in zip(data_1, data_2)]
+        return [v1 + v2 for v1, v2 in zip(data_1, data_2, strict=True)]
 
     # Check units
     unit = channel_1.unit
@@ -45,18 +55,21 @@ def add(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
 
 
 def subtract(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
-    """Subtract the values of `channel_2` from `channel_1`."""
-
+    """
+    Subtract the values of `channel_2` from `channel_1`."""
     return add(channel_1, negate(channel_2))
 
 
 def product(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
-    """Calculate the element-wise product of two channels."""
+    """
+    Calculate the element-wise product of two channels."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values_1 = channel_1(solution)
         values_2 = channel_2(solution)
-        return [v1 * v2 for v1, v2 in zip(values_1, values_2)]
+        return [v1 * v2 for v1, v2 in zip(values_1, values_2, strict=True)]
 
     unit = channel_1.unit * channel_2.unit
     label = f"{channel_1.label} * {channel_2.label}"
@@ -65,12 +78,15 @@ def product(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
 
 
 def divide(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
-    """Perform element-wise division of two channels."""
+    """
+    Perform element-wise division of two channels."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         data_1 = channel_1(solution)
         data_2 = channel_2(solution)
-        return [v1 / v2 for v1, v2 in zip(data_1, data_2)]
+        return [v1 / v2 for v1, v2 in zip(data_1, data_2, strict=True)]
 
     unit = channel_1.unit / channel_2.unit
     label = f"{channel_1.label} / {channel_2.label}"
@@ -79,9 +95,12 @@ def divide(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
 
 
 def power(channel: DataChannel, exponent: float) -> DataChannel:
-    """Raise the values of a channel to a power."""
+    """
+    Raise the values of a channel to a power."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values = channel(solution)
         return [v**exponent for v in values]
 
@@ -92,14 +111,18 @@ def power(channel: DataChannel, exponent: float) -> DataChannel:
 
 
 def square(channel: DataChannel) -> DataChannel:
-    """Square the values of a channel."""
+    """
+    Square the values of a channel."""
     return power(channel, 2)
 
 
 def square_root(channel: DataChannel) -> DataChannel:
-    """Calculate the square root of the values of a channel."""
+    """
+    Calculate the square root of the values of a channel."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values = channel(solution)
         return [math.sqrt(v) for v in values]
 
@@ -118,9 +141,12 @@ def hypotenuse(channel_1: DataChannel, channel_2: DataChannel) -> DataChannel:
 
 
 def cumulative_sum(channel: DataChannel) -> DataChannel:
-    """Calculate the cumulative sum of a channel."""
+    """
+    Calculate the cumulative sum of a channel."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values = channel(solution)
         return list(accumulate(values))
 
@@ -138,7 +164,9 @@ def difference(channel: DataChannel) -> DataChannel:
     each value is the average of the forward and backward differences.
     """
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values = channel(solution)
         values.insert(0, 0)
         values.append(0)
@@ -150,19 +178,24 @@ def difference(channel: DataChannel) -> DataChannel:
 
 
 def derivative(channel: DataChannel, wrt: DataChannel) -> DataChannel:
-    """Compute the derivative of one channel with respect to another."""
+    """
+    Compute the derivative of one channel with respect to another."""
     return divide(difference(channel), wrt)
 
 
 def integral(channel: DataChannel, wrt: DataChannel) -> DataChannel:
-    """Compute the integral of one channel with respect to another."""
+    """
+    Compute the integral of one channel with respect to another."""
     return cumulative_sum(product(channel, wrt))
 
 
 def absolute(channel: DataChannel) -> DataChannel:
-    """Get the absolute value of every element of a channel."""
+    """
+    Get the absolute value of every element of a channel."""
 
-    def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+    def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        """
+        Channel function."""
         values = channel(solution)
         return [abs(v) for v in values]
 

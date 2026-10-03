@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 from abc import ABC
 from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, ClassVar, Self
 
@@ -22,10 +23,13 @@ class LibraryNotFoundError(KeyError):
     Args:
         library (type[HasLibrary]): The type for which no library can be found.
         path (Path): The path to the library.
+
     """
 
     def __init__(
-        self, library: type[HasLibrary | ArrayLibrary], path: Path
+        self,
+        library: type[HasLibrary | ArrayLibrary],
+        path: Path,
     ) -> None:
         super().__init__(f"'{library.__name__}' library not found at {path}.")
         self.library = library
@@ -40,18 +44,20 @@ class ItemNotFoundError(KeyError):
         item (str): The name of the item.
         library (str): The name of the library.
         available (list[str]): A list of available items.
+
     """
 
     def __init__(self, item: str, library: str, available: list[str]) -> None:
         super().__init__(
             f"Item '{item}' not found in {library} library. "
-            f"Available items: {available}"
+            f"Available items: {available}",
         )
         self.item = item
         self.library = library
         self.available = available
 
 
+@dataclass
 class FailedToValidateItem(Exception):
     """
     Raised if an item cannot be validated.
@@ -60,24 +66,23 @@ class FailedToValidateItem(Exception):
         item (str): The name of the item.
         library (str): The name of the library.
         validation_error (ValidationError): The validation error.
+
     """
 
-    def __init__(
-        self, item: str, library: str, validation_error: ValidationError
-    ) -> None:
-        super().__init__(
-            f"Failed to validate {item} in {library} library. "
-            f"Error: {validation_error}"
+    item: str
+    library: str
+    validation_error: ValidationError
+
+    def __str__(self) -> str:
+        return (
+            f"Failed to validate {self.item} in {self.library} library: "
+            f"{self.validation_error}"
         )
-        self.item = item
-        self.library = library
-        self.validation_error = validation_error
 
 
 class HasLibrary(ABC, BaseModel):
     """
-    Base class for objects that have a library.
-    """
+    Base class for objects that have a library."""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -109,11 +114,12 @@ class HasLibrary(ABC, BaseModel):
         Raises:
             FileNotFoundError: If the file is not found.
             ValidationError: If the object cannot be validated.
+
         """
         if isinstance(filepath, str):
             return cls._load_item(filepath)
 
-        with open(filepath, "r") as file:
+        with open(filepath) as file:
             data = file.read()
             return cls.model_validate_json(data)
 
@@ -123,6 +129,7 @@ class HasLibrary(ABC, BaseModel):
 
         Returns:
             str: JSON representation of the object.
+
         """
         return self.model_dump_json(indent=JSON_INDENT)
 
@@ -136,6 +143,7 @@ class HasLibrary(ABC, BaseModel):
 
         Returns:
             path (Path): Path to the library.
+
         """
         path = cls._library_path
         if not path.is_dir():
@@ -154,6 +162,7 @@ class HasLibrary(ABC, BaseModel):
 
         Returns:
             items (list[str]): Available item names.
+
         """
         return list(cls._files.keys())
 
@@ -164,6 +173,7 @@ class HasLibrary(ABC, BaseModel):
 
         Args:
             item (str): The name of the file containing the item (no extension).
+
         """
         return item in cls._files
 
@@ -177,12 +187,14 @@ class HasLibrary(ABC, BaseModel):
 
         Returns:
             item (Self): The loaded item.
-        """
 
+        """
         filepath = cls._files.get(name, None)
         if filepath is None:
             raise ItemNotFoundError(
-                name, cls._library_path.name, cls.list_items()
+                name,
+                cls._library_path.name,
+                cls.list_items(),
             )
         return cls.from_json(filepath)
 
@@ -200,13 +212,14 @@ class HasLibrary(ABC, BaseModel):
 
         Returns:
             library (dict[str, Self]): A dictionary of items.
+
         """
         print(f"Loading {cls.__name__} library...")
         for item in cls._files:
             try:
                 cls.get_item(item)
             except ValidationError as error:
-                raise FailedToValidateItem(item, cls.__name__, error)
+                raise FailedToValidateItem(item, cls.__name__, error) from None
                 # TODO: Log a warning here
                 continue
 
@@ -226,6 +239,7 @@ class HasLibrary(ABC, BaseModel):
         Returns:
             component (JSONDict):
                 A dictionary containing the component data.
+
         """
         if name not in cls._library:
             cls._library[name] = cls._load_item(name)
@@ -251,6 +265,7 @@ class HasLibrary(ABC, BaseModel):
         Raises:
             ComponentNotFoundError:
                 No suitable component cannot be found in the library.
+
         """
         if isinstance(data, str):
             data = cls.get_item(data).model_dump()
@@ -259,8 +274,7 @@ class HasLibrary(ABC, BaseModel):
 
 class ArrayLibrary(ABC, BaseModel):
     """
-    Base class for libraries of arrays.
-    """
+    Base class for libraries of arrays."""
 
     _library_path: ClassVar[Path]
     _library: ClassVar[dict[str, Any]]
@@ -280,15 +294,17 @@ class ArrayLibrary(ABC, BaseModel):
 
         Returns:
             library (dict[str, Self]): A dictionary of items.
+
         """
         print(f"Loading {cls.__name__} library...")
         if not cls._library_path.is_file():
             raise LibraryNotFoundError(library=cls, path=cls._library_path)
-        with open(cls._library_path, "r") as file:
+        with open(cls._library_path) as file:
             data = json.load(file)
             if not isinstance(data, list):
                 raise TypeError(
-                    f"Expected a list of items in {cls._library_path}, got {type(data)}"
+                    f"Expected a list of items in {cls._library_path}, "
+                    f"got {type(data)}",
                 )
             library = {}
             for item in data:
@@ -296,8 +312,10 @@ class ArrayLibrary(ABC, BaseModel):
                     library[item["print_name"]] = cls.model_validate(item)
                 except ValidationError as error:
                     raise FailedToValidateItem(
-                        item.get("print_name", str(item)), cls.__name__, error
-                    )
+                        item.get("print_name", str(item)),
+                        cls.__name__,
+                        error,
+                    ) from None
             print(data)
             print(type(data))
             return library
@@ -305,10 +323,11 @@ class ArrayLibrary(ABC, BaseModel):
     @classmethod
     def get_item(cls, name: str) -> Self:
         """
-        Get an item from the library.
-        """
+        Get an item from the library."""
         if name not in cls._library:
             raise ItemNotFoundError(
-                name, cls.__name__, list(cls._library.keys())
+                name,
+                cls.__name__,
+                list(cls._library.keys()),
             )
         return cls._library[name]

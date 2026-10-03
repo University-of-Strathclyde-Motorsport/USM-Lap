@@ -49,10 +49,12 @@ endurance_solutions: dict[str, TelemetrySolution] = {}
 for label, settings in configurations.items():
     vehicle.label = label
     endurance_solutions[label] = endurance.simulate_event(
-        vehicle, settings=settings
+        vehicle,
+        settings=settings,
     )
     autocross_solutions[label] = autocross.simulate_event(
-        vehicle, settings=settings
+        vehicle,
+        settings=settings,
     )
 
 plot_channels(

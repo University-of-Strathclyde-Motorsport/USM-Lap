@@ -1,6 +1,5 @@
 """
-This module defines custom datatypes used throughout the project.
-"""
+This module defines custom datatypes used throughout the project."""
 
 from __future__ import annotations
 
@@ -21,6 +20,7 @@ class FrontRear[T](NamedTuple):
     Attributes:
         front (T): Value for the front axle.
         rear (T): Value for the rear axle.
+
     """
 
     front: T
@@ -31,19 +31,17 @@ class FrontRear[T](NamedTuple):
 
     def __add__(self, other: Any) -> FrontRear[T]:
         if isinstance(other, FrontRear):
-            return FrontRear(*(a + b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return FrontRear(*(a + b for a, b in zip(self, other, strict=True)))
+        if isinstance(other, float | int):
             return FrontRear(*(a + other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def __mul__(self, other: Any) -> FrontRear[T]:
         if isinstance(other, FrontRear):
-            return FrontRear(*(a * b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return FrontRear(*(a * b for a, b in zip(self, other, strict=True)))
+        if isinstance(other, float | int):
             return FrontRear(*(a * other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def normalise(self) -> FrontRear[T]:
         total = sum(self)
@@ -61,6 +59,7 @@ class LeftRight[T](NamedTuple):
     Attributes:
         left (T): Value for the left hand side.
         rear (T): Value for the right hand side.
+
     """
 
     left: T
@@ -71,19 +70,17 @@ class LeftRight[T](NamedTuple):
 
     def __add__(self, other: Any) -> LeftRight[T]:
         if isinstance(other, LeftRight):
-            return LeftRight(*(a + b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return LeftRight(*(a + b for a, b in zip(self, other, strict=True)))
+        if isinstance(other, float | int):
             return LeftRight(*(a + other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def __mul__(self, other: Any) -> LeftRight[T]:
         if isinstance(other, LeftRight):
-            return LeftRight(*(a * b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return LeftRight(*(a * b for a, b in zip(self, other, strict=True)))
+        if isinstance(other, float | int):
             return LeftRight(*(a * other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def normalise(self) -> LeftRight[T]:
         total = sum(self)
@@ -101,6 +98,7 @@ class FourCorner[T](NamedTuple):
         front_right (T): Value for the front right corner.
         rear_left (T): Value for the rear left corner.
         rear_right (T): Value for the rear right corner.
+
     """
 
     front_left: T
@@ -150,19 +148,21 @@ class FourCorner[T](NamedTuple):
 
     def __add__(self, other: Any) -> FourCorner[T]:
         if isinstance(other, FourCorner):
-            return FourCorner(*(a + b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return FourCorner(
+                *(a + b for a, b in zip(self, other, strict=True)),
+            )
+        if isinstance(other, float | int):
             return FourCorner(*(a + other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def __mul__(self, other: Any) -> FourCorner[T]:
         if isinstance(other, FourCorner):
-            return FourCorner(*(a * b for a, b in zip(self, other)))
-        elif isinstance(other, float | int):
+            return FourCorner(
+                *(a * b for a, b in zip(self, other, strict=True)),
+            )
+        if isinstance(other, float | int):
             return FourCorner(*(a * other for a in self))
-        else:
-            return NotImplemented
+        return NotImplemented
 
 
 type Percentage = Annotated[float, Field(ge=0, le=1)]
@@ -176,6 +176,7 @@ class Coordinate(BaseModel):
         x (float): x component.
         y (float): y component.
         z (float): z component (default: 0).
+
     """
 
     x: float
@@ -195,6 +196,7 @@ class Vector3:
         x (float): x component.
         y (float): y component.
         z (float): z component.
+
     """
 
     x: float = 0
@@ -204,8 +206,7 @@ class Vector3:
     def __array__(self, dtype: np.dtype | None = None) -> np.ndarray:
         if dtype:
             return np.array([self.x, self.y, self.z], dtype=dtype)
-        else:
-            return np.array([self.x, self.y, self.z])
+        return np.array([self.x, self.y, self.z])
 
 
 # @dataclass

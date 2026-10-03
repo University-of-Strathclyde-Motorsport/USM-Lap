@@ -1,6 +1,5 @@
 """
-This module contains code for carrying out a 1D sweep of a parameter.
-"""
+This module contains code for carrying out a 1D sweep of a parameter."""
 
 import logging
 from collections.abc import Generator
@@ -25,6 +24,7 @@ class SweepSettings:
         start_value (float): The start value of the sweep.
         end_value (float): The end value of the sweep.
         number_of_steps (int): The number of steps in the sweep.
+
     """
 
     parameter: type[Parameter[float]]
@@ -44,7 +44,8 @@ class SweepSettings:
         return len(self.values)
 
     def get_vehicles(
-        self, baseline_vehicle: Vehicle
+        self,
+        baseline_vehicle: Vehicle,
     ) -> Generator[tuple[float, Vehicle]]:
         """
         Generate a list of vehicles for a sweep.
@@ -56,6 +57,7 @@ class SweepSettings:
             result (tuple[float, Vehicle]):
                 A tuple containing the modified parameter value
                 and the corresponding vehicle.
+
         """
         for value in self.values:
             vehicle = get_new_vehicle(baseline_vehicle, self.parameter, value)
@@ -105,6 +107,7 @@ def sweep_1d(
 
     Returns:
         sweep_results (SweepResults): The results of the sweep.
+
     """
     sweep_results: SweepResults = {}
 
@@ -115,7 +118,9 @@ def sweep_1d(
         total=sweep_settings.number_of_steps,
     ):
         logger.info(
-            f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
+            "Simulating vehicle with %s = %s",
+            sweep_settings.parameter.name,
+            value,
         )
         sim_results = competition.simulate(vehicle, simulation_settings)
         sweep_results[value] = sim_results.points

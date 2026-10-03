@@ -1,6 +1,5 @@
 """
-This module contains code for running a simulation.
-"""
+This module contains code for running a simulation."""
 
 from __future__ import annotations
 
@@ -25,6 +24,7 @@ def simulate(
     Args:
         vehicle (Vehicle): The vehicle to simulate.
         settings (SimulationSettings): Settings for the simulation.
+
     """
     if initial_state is None:
         initial_state = TransientVariables.get_default()
@@ -34,9 +34,13 @@ def simulate(
     solver = settings.solver(vehicle_model.traction, global_context)
 
     solution = create_new_solution(
-        track_mesh, vehicle_model.traction, initial_state
+        track_mesh,
+        vehicle_model.traction,
+        initial_state,
     )
     solution = solver.solve(solution)
     return TelemetrySolution(
-        vehicle=vehicle, solution=solution, solver=type(solver)
+        vehicle=vehicle,
+        solution=solution,
+        solver=type(solver),
     )

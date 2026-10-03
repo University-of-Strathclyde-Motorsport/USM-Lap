@@ -1,4 +1,5 @@
-"""Unit tests for transmission module."""
+"""
+Unit tests for transmission module."""
 
 import pytest
 

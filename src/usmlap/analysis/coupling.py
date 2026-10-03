@@ -28,6 +28,7 @@ class CouplingResults:
         data (dict[float, float]):
             A dictionary containing swept parameter values
             and the corresponding sensitivities of the coupled parameter.
+
     """
 
     sweep_parameter: type[Parameter[float]]
@@ -37,7 +38,8 @@ class CouplingResults:
     def plot(self) -> None:
         plt.plot(list(self.data.keys()), list(self.data.values()))
         plt.title(
-            f"Coupling - {self.sweep_parameter.name} and {self.coupled_parameter.name}"
+            f"Coupling - {self.sweep_parameter.name} "
+            f"and {self.coupled_parameter.name}",
         )
         plt.xlabel(self.sweep_parameter.get_name_with_unit())
         plt.ylabel(f"{self.coupled_parameter.name} Sensitivity")
@@ -70,6 +72,7 @@ def coupling(
     Returns:
         coupling_results (CouplingResults):
             The results of the coupling analysis.
+
     """
     coupling_results = CouplingResults(
         sweep_parameter=sweep_settings.parameter,

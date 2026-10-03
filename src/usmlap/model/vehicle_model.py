@@ -1,5 +1,6 @@
 """
-This module implements the vehicle model, which contains all the subsystem models.
+This module implements the vehicle model,
+which contains all the subsystem models.
 """
 
 from dataclasses import dataclass
@@ -17,7 +18,8 @@ from .tyre import (
 
 @dataclass
 class VehicleModel:
-    """Dataclass to store all the models used for modelling a vehicle."""
+    """
+    Dataclass to store all the models used for modelling a vehicle."""
 
     powertrain: PowertrainModelInterface
     traction: TractionModel
@@ -25,7 +27,8 @@ class VehicleModel:
 
 @dataclass
 class VehicleModelSettings:
-    """Configuration options for the vehicle model."""
+    """
+    Configuration options for the vehicle model."""
 
     powertrain: type[PowertrainModelInterface] = SingleMotorRWD
     traction_model: type[TractionModel] = FourCornerModel

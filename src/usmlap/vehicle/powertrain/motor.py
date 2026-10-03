@@ -1,6 +1,5 @@
 """
-This module models the motor of a vehicle.
-"""
+This module models the motor of a vehicle."""
 
 import math
 from functools import cached_property
@@ -26,6 +25,7 @@ class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
         maximum_rpm (float): Maximum rotational speed of the motor.
         rated_voltage (float): Rated voltage of the motor.
         datasheet_url (str): URL for the datasheet of the motor.
+
     """
 
     print_name: str
@@ -59,6 +59,7 @@ class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
 
         Returns:
             speed (float): Rotational speed of the motor.
+
         """
         return voltage * self.speed_per_volt
 
@@ -71,6 +72,7 @@ class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
 
         Returns:
             torque (float): Torque output of the motor.
+
         """
         return current * self.torque_per_amp
 
@@ -83,6 +85,7 @@ class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
 
         Returns:
             current (float): Current output of the motor.
+
         """
         return torque / self.torque_per_amp
 
@@ -96,6 +99,7 @@ def rpm_to_rads(rpm: float) -> float:
 
     Returns:
         speed (float): Speed in radians per second
+
     """
     return rpm * (math.pi / 30)
 
@@ -109,5 +113,6 @@ def rads_to_rpm(speed: float) -> float:
 
     Returns:
         rpm (float): Speed in revolutions per minute
+
     """
     return speed * (30 / math.pi)

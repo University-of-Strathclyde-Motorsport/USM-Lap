@@ -1,6 +1,5 @@
 """
-This module models the transmission of a vehicle.
-"""
+This module models the transmission of a vehicle."""
 
 from dataclasses import dataclass
 
@@ -20,6 +19,7 @@ class Transmission:
             A final drive ratio of 3
             means that the drive axle rotates once
             for every 3 revolutions of the motor.
+
     """
 
     final_drive_ratio: PositiveFloat

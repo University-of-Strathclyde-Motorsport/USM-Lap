@@ -1,6 +1,5 @@
 """
-This module defines the interface for simulation solvers.
-"""
+This module defines the interface for simulation solvers."""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -29,6 +28,8 @@ class SolverInterface(ABC):
     def solve(self, previous_solution: Solution) -> Solution: ...
 
     def local_context(
-        self, node: TrackNode, state: TransientVariables
+        self,
+        node: TrackNode,
+        state: TransientVariables,
     ) -> NodeContext:
         return self.global_context.get_local_context(node, state)

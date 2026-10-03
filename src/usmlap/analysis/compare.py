@@ -1,6 +1,5 @@
 """
-This module contains code for comparing two or more distinct vehicles.
-"""
+This module contains code for comparing two or more distinct vehicles."""
 
 from collections.abc import Generator
 
@@ -28,13 +27,13 @@ class ComparisonResults:
         Args:
             vehicle (Vehicle): The vehicle that was simulated.
             points (CompetitionPoints): Competition points for the vehicle.
+
         """
         self._vehicles.append(vehicle)
         self._points.append(points)
 
     def __iter__(self) -> Generator[tuple[Vehicle, CompetitionPoints]]:
-        for vehicle, points in zip(self._vehicles, self._points):
-            yield vehicle, points
+        yield from zip(self._vehicles, self._points, strict=True)
 
     def get_vehicles(self) -> list[Vehicle]:
         """
@@ -42,6 +41,7 @@ class ComparisonResults:
 
         Returns:
             vehicles (list[Vehicle]): The vehicles that were simulated.
+
         """
         return self._vehicles
 
@@ -51,6 +51,7 @@ class ComparisonResults:
 
         Returns:
             points (list[CompetitionPoints]): The results to the simulations.
+
         """
         return self._points
 
@@ -60,8 +61,8 @@ class ComparisonResults:
 
         Returns:
             labels (list[str]): The labels for the vehicles.
-        """
 
+        """
         return [vehicle.label for vehicle in self._vehicles]
 
 
@@ -73,7 +74,6 @@ def compare_vehicles(
     """
     Run simulations for a list of vehicles and return the results.
     """
-
     results = ComparisonResults()
 
     for vehicle in vehicles:

@@ -12,7 +12,9 @@ PRECISION = 1e-3
 
 
 def solve_braking(
-    vehicle_model: TractionModel, ctx: NodeContext, final_velocity: float
+    vehicle_model: TractionModel,
+    ctx: NodeContext,
+    final_velocity: float,
 ) -> float:
     """
     Calculate the velocity at the start of a node,
@@ -26,11 +28,14 @@ def solve_braking(
 
     Returns:
         initial_velocity (float): The velocity at the start of the node.
+
     """
     initial_ax = 0
 
     trajectory = Trajectory(
-        velocity=final_velocity, ax=initial_ax, curvature=ctx.node.curvature
+        velocity=final_velocity,
+        ax=initial_ax,
+        curvature=ctx.node.curvature,
     )
     axs: list[float] = []
 

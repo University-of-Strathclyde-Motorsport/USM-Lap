@@ -1,6 +1,5 @@
 """
-This module contains functions for plotting GG and GGV scatter plots.
-"""
+This module contains functions for plotting GG and GGV scatter plots."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,9 +19,7 @@ LONGITUDINAL_ACCELERATION: DataChannel = LongitudinalAcceleration()
 
 def plot_velocity_acceleration(solution: TelemetrySolution) -> None:
     """
-    Create a scatter plot of velocity and longitudinal acceleration.
-    """
-
+    Create a scatter plot of velocity and longitudinal acceleration."""
     _, ax = plt.subplots(layout="constrained")
 
     ax.scatter(
@@ -50,9 +47,7 @@ def plot_gg(
     velocity_transparency: bool = True,
 ) -> None:
     """
-    Create a scatter plot of lateral and longitudinal acceleration.
-    """
-
+    Create a scatter plot of lateral and longitudinal acceleration."""
     if colours is None:
         colourmap = COLOURMAP
     else:
@@ -108,7 +103,6 @@ def plot_ggv(
     """
     Create a 3D scatter plot of velocity, lateral and longitudinal acceleration.
     """
-
     fig = plt.figure(layout="constrained")
     ax = fig.add_subplot(111, projection="3d")
 

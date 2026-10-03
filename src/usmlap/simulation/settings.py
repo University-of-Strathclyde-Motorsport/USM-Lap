@@ -1,6 +1,5 @@
 """
-This module defines settings for a simulation.
-"""
+This module defines settings for a simulation."""
 
 from dataclasses import dataclass, field
 
@@ -26,11 +25,12 @@ class SimulationSettings:
         vehicle_model (TractionModel): The vehicle model to use.
         solver (SolverInterface): The solver to use.
         lambdas (LambdaCoefficients): Coefficients for the vehicle model.
+
     """
 
     mesh_resolution: Resolution = DEFAULT_RESOLUTION
     vehicle_model: VehicleModelSettings = field(
-        default_factory=VehicleModelSettings
+        default_factory=VehicleModelSettings,
     )
     solver: type[SolverInterface] = QT
     environment: Environment = field(default_factory=Environment)
@@ -38,7 +38,9 @@ class SimulationSettings:
 
     def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
         return GlobalContext(
-            environment=self.environment, lambdas=self.lambdas, vehicle=vehicle
+            environment=self.environment,
+            lambdas=self.lambdas,
+            vehicle=vehicle,
         )
 
 
@@ -50,6 +52,7 @@ class QualityPresets:
         DRAFT: Solves very quickly, but accuracy is low.
         FAST: Solves quickly, with decent accuracy.
         HIGH_QUALITY: Solves slowly, with high accuracy.
+
     """
 
     DRAFT: SimulationSettings = SimulationSettings(

@@ -1,6 +1,5 @@
 """
-This module models the brake system of a vehicle.
-"""
+This module models the brake system of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -15,7 +14,8 @@ from usmlap.utils.library import HasLibrary
 
 
 class MasterCylinder(
-    HasLibrary, path=LIBRARY_ROOT / "components" / "master_cylinders"
+    HasLibrary,
+    path=LIBRARY_ROOT / "components" / "master_cylinders",
 ):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
@@ -25,6 +25,7 @@ class MasterCylinder(
         piston_diameter (float): The diameter of the piston.
         colour (str): The colour of the master cylinder.
         piston_area (float): The area of the piston.
+
     """
 
     print_name: str
@@ -37,7 +38,8 @@ class MasterCylinder(
 
 
 class BrakeCaliper(
-    HasLibrary, path=LIBRARY_ROOT / "components" / "brake_calipers"
+    HasLibrary,
+    path=LIBRARY_ROOT / "components" / "brake_calipers",
 ):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
@@ -47,6 +49,7 @@ class BrakeCaliper(
         piston_count (int): The number of pistons in the caliper.
         piston_diameter (float): The diameter of the piston.
         piston_area (float): The total area of the pistons.
+
     """
 
     print_name: str
@@ -65,6 +68,7 @@ class BrakeDisc(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_discs"):
     Attributes:
         print_name (str): The printable name of the brake disc.
         outer_diameter (float): The outer diameter of the brake disc.
+
     """
 
     print_name: str
@@ -80,6 +84,7 @@ class BrakePad(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_pads"):
         height (float): The height of the brake pad.
         coefficient_of_friction (float):
             The coefficient of friction between the brake pad and brake disc.
+
     """
 
     print_name: str
@@ -97,6 +102,7 @@ class BrakeLine:
         caliper (BrakeCaliper): The brake caliper attached to the wheel.
         disc (BrakeDisc): The brake disc attached to the wheel.
         pad (BrakePad): The brake pad attached to the caliper.
+
     """
 
     cylinder: MasterCylinder
@@ -106,17 +112,20 @@ class BrakeLine:
 
     @property
     def area_scaling_factor(self) -> float:
-        """The force scaling factor between the cylinder and caliper."""
+        """
+        The force scaling factor between the cylinder and caliper."""
         return self.caliper.piston_area / self.cylinder.piston_area
 
     @property
     def effective_radius(self) -> float:
-        """The radius at which the braking force is applied to the wheel."""
+        """
+        The radius at which the braking force is applied to the wheel."""
         return 0.5 * (self.disc.outer_diameter - self.pad.height)
 
     @property
     def force_to_torque_scaling_factor(self) -> float:
-        """The ratio between braking torque and master cylinder force."""
+        """
+        The ratio between braking torque and master cylinder force."""
         return (
             self.area_scaling_factor
             * self.pad.coefficient_of_friction
@@ -132,6 +141,7 @@ class BrakeLine:
 
         Returns:
             brake_pressure (float): Gauge pressure of the brake fluid.
+
         """
         return cylinder_force / self.cylinder.piston_area
 
@@ -144,6 +154,7 @@ class BrakeLine:
 
         Returns:
             braking_torque (float): Torque applied to the wheel.
+
         """
         return cylinder_force * self.force_to_torque_scaling_factor
 
@@ -156,6 +167,7 @@ class BrakeLine:
 
         Returns:
             cylinder_force (float): Force required on the master cylinder.
+
         """
         return braking_torque / self.force_to_torque_scaling_factor
 
@@ -172,6 +184,7 @@ class Brakes:
         front_brake_bias (float):
             Proportion of force applied to the front master cylinder
             (value between 0 and 1).
+
     """
 
     front: BrakeLine
@@ -181,12 +194,14 @@ class Brakes:
 
     @property
     def brake_bias(self) -> FrontRear[float]:
-        """Tuple of brake biases for the front and rear wheels."""
+        """
+        Tuple of brake biases for the front and rear wheels."""
         return FrontRear(self.front_brake_bias, 1 - self.front_brake_bias)
 
     @property
     def brake_lines(self) -> FrontRear[BrakeLine]:
-        """Tuple of front and rear brake lines."""
+        """
+        Tuple of front and rear brake lines."""
         return FrontRear(self.front, self.rear)
 
     def _get_front_brake_balance(self) -> float:
@@ -204,19 +219,21 @@ class Brakes:
         Returns:
             cylinder_forces (FrontRear[float]):
                 Force applied to the master cylinders.
+
         """
         total_force = pedal_force * self.pedal_ratio
         return self.brake_bias * total_force
 
     def pedal_force_to_wheel_torque(
-        self, pedal_force: float
+        self,
+        pedal_force: float,
     ) -> FrontRear[float]:
         cylinder_forces = self._get_cylinder_forces(pedal_force)
         front_torque = self.brake_lines.front.force_to_torque(
-            cylinder_forces.front
+            cylinder_forces.front,
         )
         rear_torque = self.brake_lines.rear.force_to_torque(
-            cylinder_forces.rear
+            cylinder_forces.rear,
         )
         return FrontRear(front_torque, rear_torque)
 

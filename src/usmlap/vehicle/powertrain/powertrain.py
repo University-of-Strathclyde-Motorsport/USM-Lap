@@ -1,6 +1,5 @@
 """
-This module models the electric powertrain of a vehicle.
-"""
+This module models the electric powertrain of a vehicle."""
 
 from __future__ import annotations
 
@@ -17,8 +16,7 @@ COOLING_TEMPERATURE_THRESHOLD = 45
 
 class PowertrainInterface(ABC, BaseModel):
     """
-    Abstract base class for powertrain models.
-    """
+    Abstract base class for powertrain models."""
 
     # TODO: Why is BaseModel inheritance required?
 
@@ -34,6 +32,7 @@ class RWDPowertrain(PowertrainInterface):
         soc_current_derate_point (float):
             State of charge at which to begin derating current.
         discharge_current_limit (float): Scaling factor for the current limit.
+
     """
 
     accumulator: Accumulator
@@ -54,21 +53,23 @@ class RWDPowertrain(PowertrainInterface):
 
         Returns:
             current (float): Available discharge current.
+
         """
         maximum_discharge_current = self.accumulator.maximum_discharge_current(
-            cell_state
+            cell_state,
         )
         return maximum_discharge_current * self.discharge_current_limit
 
     def get_voltage_drop(self, cell_state: CellState, current: float) -> float:
         """
-        Calculate the voltage drop across the accumulator and motor controller.
+        Get the voltage drop across the accumulator and motor controller.
 
         Args:
             current (float): Current drawn from the accumulator.
 
         Returns:
             voltage_drop (float): Voltage drop.
+
         """
         resistance = (
             self.accumulator.resistance(cell_state)
@@ -86,6 +87,7 @@ class RWDPowertrain(PowertrainInterface):
 
         Returns:
             motor_voltage (float): Voltage across the motor.
+
         """
         accumulator_voltage = self.accumulator.get_voltage(cell_state.soc)
         voltage_drop = self.get_voltage_drop(cell_state, current)
@@ -99,11 +101,12 @@ class RWDPowertrain(PowertrainInterface):
 
         Args:
             state_of_charge (float): State of charge of the accumulator.
-            current (Optional[float]): Current drawn from the accumulator.
+            current (float | None): Current drawn from the accumulator.
                 If not provided, the maximum discharge current is used.
 
         Returns:
             knee_speed (float): Knee speed of the motor.
+
         """
         if current is None:
             current = self.get_discharge_current(cell_state)
@@ -121,6 +124,7 @@ class RWDPowertrain(PowertrainInterface):
 
         Returns:
             maximum_speed (float): Maximum speed of the motor.
+
         """
         return self.get_knee_speed(cell_state, current=0)
 

@@ -1,6 +1,5 @@
 """
-This module models the electric accumulator of a vehicle.
-"""
+This module models the electric accumulator of a vehicle."""
 
 from dataclasses import dataclass
 from functools import cached_property
@@ -19,14 +18,16 @@ NOMINAL_TEMPERATURE = 25
 
 @dataclass
 class _ThermalDerateNode:
-    """Node of a thermal derating curve."""
+    """
+    Node of a thermal derating curve."""
 
     temperature: float
     current: float
 
 
 class ThermalDerateCurve(
-    HasLibrary, path=LIBRARY_ROOT / "bms" / "thermal_derate"
+    HasLibrary,
+    path=LIBRARY_ROOT / "bms" / "thermal_derate",
 ):
     """
     Curve describing the thermal derating of the accumulator.
@@ -49,7 +50,8 @@ class ThermalDerateCurve(
 
 
 class Accumulator(
-    HasLibrary, path=LIBRARY_ROOT / "components" / "accumulators"
+    HasLibrary,
+    path=LIBRARY_ROOT / "components" / "accumulators",
 ):
     """
     An electric accumulator.
@@ -59,6 +61,7 @@ class Accumulator(
         cell (Cell): The cell used in the accumulator.
         cells_in_parallel (int): Number of cells in parallel.
         cells_in_series (int): Number of cells in series.
+
     """
 
     print_name: str
@@ -113,7 +116,8 @@ class Accumulator(
         return cell_current * self.cells_in_parallel * derate
 
     def get_voltage(self, state_of_charge: StateOfCharge) -> float:
-        """Get the voltage of the accumulator at a given state of charge."""
+        """
+        Get the voltage of the accumulator at a given state of charge."""
         return self.cell.get_voltage(state_of_charge) * self.cells_in_series
 
     def heating_power(self, cell_state: CellState, current: float) -> float:

@@ -26,7 +26,8 @@ SOLVER = QuasiTransientSolver
 
 @dataclass
 class MeshRefinementResult:
-    """Mesh refinement result."""
+    """
+    Mesh refinement result."""
 
     track_length: float
     resolution: float
@@ -41,8 +42,8 @@ class MeshRefinementResult:
 
 
 def mesh_refinement() -> list[MeshRefinementResult]:
-    """Run a mesh refinement simulation."""
-
+    """
+    Run a mesh refinement simulation."""
     track_data = TrackData.from_json(TRACK_SHEET)
     vehicle = Vehicle.from_json(VEHICLE)
     simulation_settings = SimulationSettings(solver=SOLVER)
@@ -66,15 +67,15 @@ def mesh_refinement() -> list[MeshRefinementResult]:
                 laptime=results.solution.total_time,
                 mesh_time=mesh_time,
                 simulation_time=simulation_time,
-            )
+            ),
         )
 
     return mesh_refinement_results
 
 
 def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
-    """Plot metrics from a mesh refinement simulation."""
-
+    """
+    Plot metrics from a mesh refinement simulation."""
     resolutions = [result.resolution for result in results]
     node_counts = [result.node_count for result in results]
     laptimes = [result.laptime for result in results]
@@ -122,7 +123,8 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
 
 
 def main() -> None:
-    """Main function."""
+    """
+    Main function."""
     results = mesh_refinement()
     plot_mesh_refinement(results)
 

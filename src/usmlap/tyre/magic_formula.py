@@ -54,6 +54,7 @@ class TyreAttitude(BaseModel):
             Camber angle.
         pressure:
             Inflation pressure.
+
     """
 
     Vx: float
@@ -78,6 +79,7 @@ class MagicFormula:
             Constant used in calculation of digressive friction factor.
         LMUV (float):
             Scaling factor with slip speed vs decaying friction.
+
     """
 
     def __init__(self, parameters: TIRParameters, tyre: TyreAttitude) -> None:
@@ -88,11 +90,11 @@ class MagicFormula:
         self.use_alpha_star = True
 
     @property
-    def Fz(self) -> float:  # noqa: S100
+    def Fz(self) -> float:
         return self.Fz
 
     @property
-    def R0(self) -> float:  # noqa: S100
+    def R0(self) -> float:
         return self.parameters.DIMENSION.UNLOADED_RADIUS
 
     @property
@@ -100,7 +102,7 @@ class MagicFormula:
         return self.tyre.pressure / self.parameters.OPERATING_CONDITIONS.NOMPRES
 
     @property  # (4.E1)
-    def Fz0_prime(self) -> float:  # noqa: S100
+    def Fz0_prime(self) -> float:
         nominal_load = self.parameters.VERTICAL.FNOMIN
         nominal_load_scaling_factor = self.parameters.SCALING_COEFFICIENTS.LFZO
         return nominal_load_scaling_factor * nominal_load
@@ -117,8 +119,7 @@ class MagicFormula:
     def alpha(self) -> float:
         if self.use_alpha_star:
             return tan(self.tyre.alpha) * sign(self.tyre.Vc.x)
-        else:
-            return self.tyre.alpha
+        return self.tyre.alpha
 
     @property  # (4.E4)
     def gamma(self) -> float:
@@ -153,9 +154,14 @@ class MagicFormula:
         return self.digressive_friction_factor(self.lmuy_star)
 
     @property  # (4.E9)
-    def Fx0(self) -> float:  # noqa: S100
+    def Fx0(self) -> float:
         return self.magic_formula(
-            self.Bx, self.Cx, self.Dx, self.Ex, self.kx, self.SVx
+            self.Bx,
+            self.Cx,
+            self.Dx,
+            self.Ex,
+            self.kx,
+            self.SVx,
         )
 
     @property  # (4.E10)
@@ -163,13 +169,13 @@ class MagicFormula:
         return self.kappa + self.SHx
 
     @property  # (4.E11)
-    def Cx(self) -> float:  # noqa: S100
+    def Cx(self) -> float:
         PCX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.PCX1
         LCX = self.parameters.SCALING_COEFFICIENTS.LCX
         return PCX1 * LCX
 
     @property  # (4.E12)
-    def Dx(self) -> float:  # noqa: S100
+    def Dx(self) -> float:
         return self.mux * self.Fz
 
     @property  # (4.E13)
@@ -185,7 +191,7 @@ class MagicFormula:
         return load_factor * pressure_factor * camber_factor * self.lmux_star
 
     @property  # (4.E14)
-    def Ex(self) -> float:  # noqa: S100
+    def Ex(self) -> float:
         PEX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.PEX1
         PEX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.PEX2
         PEX3 = self.parameters.LONGITUDINAL_COEFFICIENTS.PEX3
@@ -196,7 +202,7 @@ class MagicFormula:
         return load_factor * slip_factor * LEX
 
     @property  # (4.E15)
-    def Kxk(self) -> float:  # noqa: S100
+    def Kxk(self) -> float:
         PKX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.PKX1
         PKX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.PKX2
         PKX3 = self.parameters.LONGITUDINAL_COEFFICIENTS.PKX3
@@ -207,27 +213,32 @@ class MagicFormula:
         return load_factor * pressure_factor
 
     @property  # (4.E16)
-    def Bx(self) -> float:  # noqa: S100
+    def Bx(self) -> float:
         return self.Kxk / (self.Cx * self.Dx + EPSILON)
 
     @property  # (4.E17)
-    def SHx(self) -> float:  # noqa: S100
+    def SHx(self) -> float:
         PHX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.PHX1
         PHX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.PHX2
         LHX = self.parameters.SCALING_COEFFICIENTS.LHX
         return (PHX1 + PHX2 * self.dfz) * LHX
 
     @property  # (4.E18)
-    def SVx(self) -> float:  # noqa: S100
+    def SVx(self) -> float:
         PVX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.PVX1
         PVX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.PVX2
         LVX = self.parameters.SCALING_COEFFICIENTS.LVX
         return self.Fz * (PVX1 + PVX2 * self.dfz) * LVX * self.lmux_prime
 
     @property  # (4.E19)
-    def Fy0(self) -> float:  # noqa: S100
+    def Fy0(self) -> float:
         return self.magic_formula(
-            self.By, self.Cy, self.Dy, self.Ey, self.alpha_y, self.SVy
+            self.By,
+            self.Cy,
+            self.Dy,
+            self.Ey,
+            self.alpha_y,
+            self.SVy,
         )
 
     @property  # (4.E20)
@@ -235,13 +246,13 @@ class MagicFormula:
         return self.alpha + self.SHy
 
     @property  # (4.E21)
-    def Cy(self) -> float:  # noqa: S100
+    def Cy(self) -> float:
         PCY1 = self.parameters.LATERAL_COEFFICIENTS.PCY1
         LCY = self.parameters.SCALING_COEFFICIENTS.LCY
         return PCY1 * LCY
 
     @property  # (4.E22)
-    def Dy(self) -> float:  # noqa: S100
+    def Dy(self) -> float:
         return self.muy * self.Fz
 
     @property  # (4.E23)
@@ -257,7 +268,7 @@ class MagicFormula:
         return load_factor * pressure_factor * camber_factor * self.lmuy_star
 
     @property  # (4.E24)
-    def Ey(self) -> float:  # noqa: S100
+    def Ey(self) -> float:
         PEY1 = self.parameters.LATERAL_COEFFICIENTS.PEY1
         PEY2 = self.parameters.LATERAL_COEFFICIENTS.PEY2
         PEY3 = self.parameters.LATERAL_COEFFICIENTS.PEY3
@@ -269,7 +280,7 @@ class MagicFormula:
         return load_factor * (1 - camber_term + PEY5 * self.gamma**2) * LEY
 
     @property  # (4.E25)
-    def Kya(self) -> float:  # noqa: S100
+    def Kya(self) -> float:
         PKY1 = self.parameters.LATERAL_COEFFICIENTS.PKY1
         PKY2 = self.parameters.LATERAL_COEFFICIENTS.PKY2
         PKY3 = self.parameters.LATERAL_COEFFICIENTS.PKY3
@@ -287,11 +298,11 @@ class MagicFormula:
         return load_factor * pressure_factor * camber_factor * sine_factor * LKY
 
     @property  # (4.E26)
-    def By(self) -> float:  # noqa: S100
+    def By(self) -> float:
         return self.Kya / (self.Cy * self.Dy + EPSILON)
 
     @property  # (4.E27)
-    def SHy(self) -> float:  # noqa: S100
+    def SHy(self) -> float:
         PHY1 = self.parameters.LATERAL_COEFFICIENTS.PHY1
         PHY2 = self.parameters.LATERAL_COEFFICIENTS.PHY2
         LHY = self.parameters.SCALING_COEFFICIENTS.LHY
@@ -301,7 +312,7 @@ class MagicFormula:
         return nominal_shift + camber_shift
 
     @property  # (4.E28)
-    def SVyc(self) -> float:  # noqa: S100
+    def SVyc(self) -> float:
         PVY3 = self.parameters.LATERAL_COEFFICIENTS.PVY3
         PVY4 = self.parameters.LATERAL_COEFFICIENTS.PVY4
         LKYC = self.parameters.SCALING_COEFFICIENTS.LKYC
@@ -309,7 +320,7 @@ class MagicFormula:
         return load_factor * self.gamma * LKYC * self.lmuy_prime
 
     @property  # (4.E29)
-    def SVy(self) -> float:  # noqa: S100
+    def SVy(self) -> float:
         PVY1 = self.parameters.LATERAL_COEFFICIENTS.PVY1
         PVY2 = self.parameters.LATERAL_COEFFICIENTS.PVY2
         LVY = self.parameters.SCALING_COEFFICIENTS.LVY
@@ -317,7 +328,7 @@ class MagicFormula:
         return load_factor * LVY * self.lmuy_prime + self.SVyc
 
     @property  # (4.E30)
-    def Kyc0(self) -> float:  # noqa: S100
+    def Kyc0(self) -> float:
         PKY6 = self.parameters.LATERAL_COEFFICIENTS.PKY6
         PKY7 = self.parameters.LATERAL_COEFFICIENTS.PKY7
         PPY5 = self.parameters.LATERAL_COEFFICIENTS.PKY5
@@ -325,17 +336,22 @@ class MagicFormula:
         return self.Fz * (PKY6 + PKY7 * self.dfz) * (1 + PPY5 * self.dpi) * LKYC
 
     @property  # (4.E31)
-    def Mz0(self) -> float:  # noqa: S100
+    def Mz0(self) -> float:
         return self.Mz0_prime + self.Mzr0
 
     @property  # (4.E32)
-    def Mz0_prime(self) -> float:  # noqa: S100
+    def Mz0_prime(self) -> float:
         return -self.t0 * self.Fy0
 
     @property  # (4.E33)
     def t0(self) -> float:
         magic_factor = self.magic_formula(
-            self.Bt, self.Ct, self.Dt, self.Et, self.a_t, 0
+            self.Bt,
+            self.Ct,
+            self.Dt,
+            self.Et,
+            self.a_t,
+            0,
         )
         return magic_factor * self.cos_a
 
@@ -344,7 +360,7 @@ class MagicFormula:
         return self.alpha + self.SHt
 
     @property  # (4.E35)
-    def SHt(self) -> float:  # noqa: S100
+    def SHt(self) -> float:
         QHZ1 = self.parameters.ALIGNING_COEFFICIENTS.QHZ1
         QHZ2 = self.parameters.ALIGNING_COEFFICIENTS.QHZ2
         QHZ3 = self.parameters.ALIGNING_COEFFICIENTS.QHZ3
@@ -352,9 +368,13 @@ class MagicFormula:
         return QHZ1 + QHZ2 * self.dfz + (QHZ3 + QHZ4 * self.dfz) * self.gamma
 
     @property  # (4.E36)
-    def Mzr0(self) -> float:  # noqa: S100
+    def Mzr0(self) -> float:
         magic_factor = self.magic_formula_cosine(
-            self.Br, self.Cr, self.Dr, 0, self.a_r
+            self.Br,
+            self.Cr,
+            self.Dr,
+            0,
+            self.a_r,
         )
         return magic_factor * self.cos_a
 
@@ -363,11 +383,11 @@ class MagicFormula:
         return self.alpha + self.SHf
 
     @property  # (4.E38)
-    def SHf(self) -> float:  # noqa: S100
+    def SHf(self) -> float:
         return self.SHy + self.SVy / (self.Kya + EPSILON)
 
     @property  # (4.E40)
-    def Bt(self) -> float:  # noqa: S100
+    def Bt(self) -> float:
         # Note: QBZ6 is used in place of QBZ4 in Pacejka's book.
         # However, the 6.1.2 manual uses QBZ4.
         # The available tyre data also uses QBZ4, not QBZ6.
@@ -382,11 +402,11 @@ class MagicFormula:
         return load_factor * camber_factor * LKY / self.lmuy_prime
 
     @property  # (4.E41)
-    def Ct(self) -> float:  # noqa: S100
+    def Ct(self) -> float:
         return self.parameters.ALIGNING_COEFFICIENTS.QCZ1
 
     @property  # (4.E42)
-    def Dt0(self) -> float:  # noqa: S100
+    def Dt0(self) -> float:
         QDZ1 = self.parameters.ALIGNING_COEFFICIENTS.QDZ1
         QDZ2 = self.parameters.ALIGNING_COEFFICIENTS.QDZ2
         PPZ1 = self.parameters.ALIGNING_COEFFICIENTS.PPZ1
@@ -396,13 +416,13 @@ class MagicFormula:
         return self.Fz * load_factor * pressure_factor * LTR
 
     @property  # (4.E43)
-    def Dt(self) -> float:  # noqa: S100
+    def Dt(self) -> float:
         QDZ3 = self.parameters.ALIGNING_COEFFICIENTS.QDZ3
         QDZ4 = self.parameters.ALIGNING_COEFFICIENTS.QDZ4
         return self.Dt0 * (1 + QDZ3 * abs(self.gamma) + QDZ4 * self.gamma**2)
 
     @property  # (4.E44)
-    def Et(self) -> float:  # noqa: S100
+    def Et(self) -> float:
         QEZ1 = self.parameters.ALIGNING_COEFFICIENTS.QEZ1
         QEZ2 = self.parameters.ALIGNING_COEFFICIENTS.QEZ2
         QEZ3 = self.parameters.ALIGNING_COEFFICIENTS.QEZ3
@@ -414,18 +434,18 @@ class MagicFormula:
         return load_factor * (1 + camber_factor * shape_factor)
 
     @property  # (4.E45)
-    def Br(self) -> float:  # noqa: S100
+    def Br(self) -> float:
         QBZ9 = self.parameters.ALIGNING_COEFFICIENTS.QBZ9
         QBZ10 = self.parameters.ALIGNING_COEFFICIENTS.QBZ10
         LKY = self.parameters.SCALING_COEFFICIENTS.LKY
         return QBZ9 * LKY / self.lmuy_star + QBZ10 * self.By * self.Cy
 
     @property  # (4.E46)
-    def Cr(self) -> float:  # noqa: S100
+    def Cr(self) -> float:
         return 1
 
     @property  # (4.E47)
-    def Dr(self) -> float:  # noqa: S100
+    def Dr(self) -> float:
         align = self.parameters.ALIGNING_COEFFICIENTS
         LRES = self.parameters.SCALING_COEFFICIENTS.LRES
         LKZC = self.parameters.SCALING_COEFFICIENTS.LKZC
@@ -440,20 +460,28 @@ class MagicFormula:
         return self.Fz * self.R0 * camber_influence * direction * self.cos_a
 
     @property  # (4.E50)
-    def Fx(self) -> float:  # noqa: S100
+    def Fx(self) -> float:
         return self.Gxa * self.Fx0
 
     @property  # (4.E51)
-    def Gxa(self) -> float:  # noqa: S100
+    def Gxa(self) -> float:
         magic_factor = self.magic_formula_cosine(
-            self.Bxa, self.Cxa, 1, self.Exa, self.alpha_s
+            self.Bxa,
+            self.Cxa,
+            1,
+            self.Exa,
+            self.alpha_s,
         )
         return magic_factor / self.Gxa0
 
     @property  # (4.E52)
-    def Gxa0(self) -> float:  # noqa: S100
+    def Gxa0(self) -> float:
         return self.magic_formula_cosine(
-            self.Bxa, self.Cxa, 1, self.Exa, self.SHxa
+            self.Bxa,
+            self.Cxa,
+            1,
+            self.Exa,
+            self.SHxa,
         )
 
     @property  # (4.E53)
@@ -461,7 +489,7 @@ class MagicFormula:
         return self.alpha + self.SHxa
 
     @property  # (4.E54)
-    def Bxa(self) -> float:  # noqa: S100
+    def Bxa(self) -> float:
         RBX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.RBX1
         RBX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.RBX2
         RBX3 = self.parameters.LONGITUDINAL_COEFFICIENTS.RBX3
@@ -471,34 +499,42 @@ class MagicFormula:
         return camber_factor * slip_factor * LXAL
 
     @property  # (4.E55)
-    def Cxa(self) -> float:  # noqa: S100
+    def Cxa(self) -> float:
         return self.parameters.LONGITUDINAL_COEFFICIENTS.RCX1
 
     @property  # (4.E56)
-    def Exa(self) -> float:  # noqa: S100
+    def Exa(self) -> float:
         REX1 = self.parameters.LONGITUDINAL_COEFFICIENTS.REX1
         REX2 = self.parameters.LONGITUDINAL_COEFFICIENTS.REX2
         return REX1 + REX2 * self.dfz
 
     @property  # (4.E57)
-    def SHxa(self) -> float:  # noqa: S100
+    def SHxa(self) -> float:
         return self.parameters.LONGITUDINAL_COEFFICIENTS.RHX1
 
     @property  # (4.E58)
-    def Fy(self) -> float:  # noqa: S100
+    def Fy(self) -> float:
         return self.Gyk * self.Fy0 + self.SVyk
 
     @property  # (4.E59)
-    def Gyk(self) -> float:  # noqa: S100
+    def Gyk(self) -> float:
         magic_factor = self.magic_formula_cosine(
-            self.Byk, self.Cyk, 1, self.Eyk, self.k_s
+            self.Byk,
+            self.Cyk,
+            1,
+            self.Eyk,
+            self.k_s,
         )
         return magic_factor / self.Gyk0
 
     @property  # (4.E60)
-    def Gyk0(self) -> float:  # noqa: S100
+    def Gyk0(self) -> float:
         return self.magic_formula_cosine(
-            self.Byk, self.Cyk, 1, self.Eyk, self.SHyk
+            self.Byk,
+            self.Cyk,
+            1,
+            self.Eyk,
+            self.SHyk,
         )
 
     @property  # (4.E61)
@@ -506,7 +542,7 @@ class MagicFormula:
         return self.kappa + self.SHyk
 
     @property  # (4.E62)
-    def Byk(self) -> float:  # noqa: S100
+    def Byk(self) -> float:
         RBY1 = self.parameters.LATERAL_COEFFICIENTS.RBY1
         RBY2 = self.parameters.LATERAL_COEFFICIENTS.RBY2
         RBY3 = self.parameters.LATERAL_COEFFICIENTS.RBY3
@@ -517,30 +553,30 @@ class MagicFormula:
         return camber_factor * slip_factor * LYKA
 
     @property  # (4.E63)
-    def Cyk(self) -> float:  # noqa: S100
+    def Cyk(self) -> float:
         return self.parameters.LATERAL_COEFFICIENTS.RCY1
 
     @property  # (4.E64)
-    def Eyk(self) -> float:  # noqa: S100
+    def Eyk(self) -> float:
         REY1 = self.parameters.LATERAL_COEFFICIENTS.REY1
         REY2 = self.parameters.LATERAL_COEFFICIENTS.REY2
         return REY1 + REY2 * self.dfz
 
     @property  # (4.E65)
-    def SHyk(self) -> float:  # noqa: S100
+    def SHyk(self) -> float:
         RHY1 = self.parameters.LATERAL_COEFFICIENTS.RHY1
         RHY2 = self.parameters.LATERAL_COEFFICIENTS.RHY2
         return RHY1 + RHY2 * self.dfz
 
     @property  # (4.E66)
-    def SVyk(self) -> float:  # noqa: S100
+    def SVyk(self) -> float:
         RVY5 = self.parameters.LATERAL_COEFFICIENTS.RVY5
         RVY6 = self.parameters.LATERAL_COEFFICIENTS.RVY6
         LVYKA = self.parameters.SCALING_COEFFICIENTS.LVYKA
         return self.DVyk * sin(RVY5 * atan(RVY6 * self.kappa)) * LVYKA
 
     @property  # (4.E67)
-    def DVyk(self) -> float:  # noqa: S100
+    def DVyk(self) -> float:
         RVY1 = self.parameters.LATERAL_COEFFICIENTS.RVY1
         RVY2 = self.parameters.LATERAL_COEFFICIENTS.RVY2
         RVY3 = self.parameters.LATERAL_COEFFICIENTS.RVY3
@@ -550,7 +586,7 @@ class MagicFormula:
         return self.muy * self.Fz * load_factor * slip_factor
 
     @property  # (4.E69)
-    def Mx(self) -> float:  # noqa: S100
+    def Mx(self) -> float:
         q = self.parameters.OVERTURNING_COEFFICIENTS
         LVMX = self.parameters.SCALING_COEFFICIENTS.LVMX
         LMX = self.parameters.SCALING_COEFFICIENTS.LMX
@@ -568,7 +604,7 @@ class MagicFormula:
         return self.Fz * self.R0 * terms * LMX
 
     @property  # (4.E70)
-    def My(self) -> float:  # noqa: S100
+    def My(self) -> float:
         q = self.parameters.ROLLING_COEFFICIENTS
         nominal_load = self.parameters.VERTICAL.FNOMIN
         v_ratio = self.tyre.Vx / self.parameters.MODEL.LONGVL
@@ -583,28 +619,36 @@ class MagicFormula:
         return self.Fz * self.R0 * factor_a * factor_b * LMY
 
     @property  # (4.E71)
-    def Mz(self) -> float:  # noqa: S100
+    def Mz(self) -> float:
         return self.Mz_prime + self.Mzr + self.s * self.Fx
 
     @property  # (4.E72)
-    def Mz_prime(self) -> float:  # noqa: S100
+    def Mz_prime(self) -> float:
         return -self.t * self.Fy_prime
 
     @property  # (4.E73)
     def t(self) -> float:
         magic_factor = self.magic_formula_cosine(
-            self.Bt, self.Ct, self.Dt, self.Et, self.a_teq
+            self.Bt,
+            self.Ct,
+            self.Dt,
+            self.Et,
+            self.a_teq,
         )
         return magic_factor * self.cos_a
 
     @property  # (4.E74)
-    def Fy_prime(self) -> float:  # noqa: S100
+    def Fy_prime(self) -> float:
         return self.Gyk * self.Fy0
 
     @property  # (4.E75)
-    def Mzr(self) -> float:  # noqa: S100
+    def Mzr(self) -> float:
         magic_factor = self.magic_formula_cosine(
-            self.Br, self.Cr, self.Dr, 0, self.a_req
+            self.Br,
+            self.Cr,
+            self.Dr,
+            0,
+            self.a_req,
         )
         return magic_factor * self.cos_a
 
@@ -633,7 +677,12 @@ class MagicFormula:
 
     @staticmethod
     def magic_formula(
-        B: float, C: float, D: float, E: float, x: float, SV: float
+        B: float,
+        C: float,
+        D: float,
+        E: float,
+        x: float,
+        SV: float,
     ) -> float:
         """
         Implements the Pacejka Magic Formula.
@@ -652,13 +701,18 @@ class MagicFormula:
 
         Returns:
             Y (float): Output variable (either Fx, Fy, or Mz).
+
         """
         Bx = B * x
         return D * sin(C * atan(Bx - E * (Bx - atan(Bx)))) + SV
 
     @staticmethod
     def magic_formula_cosine(
-        B: float, C: float, D: float, E: float, x: float
+        B: float,
+        C: float,
+        D: float,
+        E: float,
+        x: float,
     ) -> float:
         """
         Implements the cosine version of the Pacejka Magic Formula.
@@ -673,6 +727,7 @@ class MagicFormula:
 
         Returns:
             Y (float): Output variable.
+
         """
         Bx = B * x
         return D * cos(C * atan(Bx - E * (Bx - atan(Bx))))

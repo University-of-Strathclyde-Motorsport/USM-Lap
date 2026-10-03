@@ -1,6 +1,5 @@
 """
-This module contains functions for working with arrays.
-"""
+This module contains functions for working with arrays."""
 
 import math
 from itertools import accumulate
@@ -20,8 +19,10 @@ def interp_previous[T](x: list[float], xp: list[float], yp: list[T]) -> list[T]:
 
     Returns:
         y (list[T]): The interpolated values. The same length as x.
+
     """
-    assert len(xp) == len(yp), "xp and yp must have the same length"
+    if len(xp) != len(yp):
+        raise ValueError("xp and yp must have the same length")
     xp.append(math.inf)
     yp.append(yp[-1])
 
@@ -46,8 +47,10 @@ def diff(x: list[float]) -> list[float]:
     Returns:
         y (list[float]): The difference between consecutive elements of x.
             y has one fewer elements than x.
+
     """
-    assert len(x) > 1, "x must have at least two elements"
+    if len(x) < 2:
+        raise ValueError("x must have at least two elements")
     return [x[i + 1] - x[i] for i in range(len(x) - 1)]
 
 
@@ -60,5 +63,6 @@ def cumsum(values: list[float]) -> list[float]:
 
     Returns:
         list[float]: The cumulative sum of values.
+
     """
     return list(accumulate(values))

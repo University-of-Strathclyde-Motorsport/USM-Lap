@@ -1,6 +1,5 @@
 """
-This module models the aerodynamics of a vehicle.
-"""
+This module models the aerodynamics of a vehicle."""
 
 from __future__ import annotations
 
@@ -29,6 +28,7 @@ class AeroAttitude(BaseModel):
         roll_angle (float): The roll angle of the vehicle.
         pitch_angle (float): The pitch angle of the vehicle.
         yaw_angle (float): The yaw angle of the vehicle.
+
     """
 
     air_density: float = Field(gt=0)
@@ -62,6 +62,7 @@ class ConstantAero(AeroModelInterface, type="constant"):
         model_type (Literal["constant"]): The type of aero model.
         lift_coefficient (float): The lift coefficient (positive).
         drag_coefficient (float): The drag coefficient (positive).
+
     """
 
     model_type: Literal["constant"]
@@ -80,7 +81,8 @@ AeroModel = Annotated[ConstantAero, Field(discriminator="model_type")]
 
 
 class AeroPackage(
-    HasLibrary, path=LIBRARY_ROOT / "components" / "aero_packages"
+    HasLibrary,
+    path=LIBRARY_ROOT / "components" / "aero_packages",
 ):
     """
     The aerodynamic package of a vehicle.
@@ -88,6 +90,7 @@ class AeroPackage(
     Attributes:
         frontal_area (float): The frontal area of the vehicle.
         aero_model (AeroModel): The aerodynamic model to use.
+
     """
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
@@ -104,7 +107,9 @@ class AeroPackage(
         return self.calculate_aero_force(drag_coefficient, attitude)
 
     def calculate_aero_force(
-        self, coefficient: float, attitude: AeroAttitude
+        self,
+        coefficient: float,
+        attitude: AeroAttitude,
     ) -> float:
         return (
             0.5

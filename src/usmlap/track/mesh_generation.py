@@ -1,6 +1,5 @@
 """
-This module contains code for generating a track mesh.
-"""
+This module contains code for generating a track mesh."""
 
 import math
 from typing import Any, Self
@@ -66,6 +65,7 @@ def generate_mesh(
 
     Returns:
         mesh (Mesh): A mesh of the track.
+
     """
     resolution = Resolution(resolution)
 
@@ -76,7 +76,9 @@ def generate_mesh(
 
     length = np.diff(np.append(position, track_length))
     curvature = _interpolate_curvature(
-        track_data.shape, position, smooth=smooth
+        track_data.shape,
+        position,
+        smooth=smooth,
     )
 
     elevation = _interpolate_elevation(track_data.elevation, position)
@@ -122,7 +124,9 @@ def generate_mesh(
 
 
 def _interpolate_curvature(
-    data: list[ShapeData], sample_position: NDArray, smooth: bool = True
+    data: list[ShapeData],
+    sample_position: NDArray,
+    smooth: bool = True,
 ) -> NDArray:
     """
     Interpolate the curvature of the track at a series of positions.
@@ -130,12 +134,13 @@ def _interpolate_curvature(
     Args:
         data (list[ShapeData]): Shape data for the track.
         sample_position (NDArray): The positions to interpolate at.
-        smooth (Optional[bool]): Whether to smooth the curvature
+        smooth (bool | None): Whether to smooth the curvature
             (default = `True`).
             If `True`, uses `np.interp` to interpolate the curvature.
             If `False`, uses `interp_previous` to interpolate the curvature
     Returns:
         curvature (NDArray): The interpolated curvature.
+
     """
     curvature = np.array([node.curvature for node in data])
     length = np.array([node.length for node in data])
@@ -145,14 +150,17 @@ def _interpolate_curvature(
     else:
         interpolated = np.array(
             interp_previous(
-                sample_position.tolist(), position.tolist(), curvature.tolist()
-            )
+                sample_position.tolist(),
+                position.tolist(),
+                curvature.tolist(),
+            ),
         )
     return interpolated
 
 
 def _interpolate_elevation(
-    data: list[ElevationData], sample_position: NDArray
+    data: list[ElevationData],
+    sample_position: NDArray,
 ) -> NDArray:
     """
     Interpolate the elevation of the track at a series of positions.
@@ -163,6 +171,7 @@ def _interpolate_elevation(
 
     Returns:
         elevation (NDArray): The interpolated elevation.
+
     """
     if not data:
         return np.full(len(sample_position), ElevationData.default())
@@ -172,7 +181,8 @@ def _interpolate_elevation(
 
 
 def _interpolate_banking(
-    data: list[BankingData], sample_position: NDArray
+    data: list[BankingData],
+    sample_position: NDArray,
 ) -> NDArray:
     """
     Interpolate the banking of the track at a series of positions.
@@ -183,6 +193,7 @@ def _interpolate_banking(
 
     Returns:
         banking (NDArray): The interpolated banking.
+
     """
     if not data:
         return np.full(len(sample_position), BankingData.default())
@@ -192,7 +203,8 @@ def _interpolate_banking(
 
 
 def _interpolate_grip_factor(
-    data: list[GripFactorData], sample_position: NDArray
+    data: list[GripFactorData],
+    sample_position: NDArray,
 ) -> NDArray:
     """
     Interpolate the grip factor of the track at a series of positions.
@@ -203,6 +215,7 @@ def _interpolate_grip_factor(
 
     Returns:
         grip_factor (NDArray): The interpolated grip factor.
+
     """
     if not data:
         return np.full(len(sample_position), GripFactorData.default())
@@ -212,7 +225,8 @@ def _interpolate_grip_factor(
 
 
 def _interpolate_sector(
-    data: list[SectorData], sample_position: NDArray
+    data: list[SectorData],
+    sample_position: NDArray,
 ) -> list[str]:
     """
     Interpolate the sector of the track at a series of positions.
@@ -223,6 +237,7 @@ def _interpolate_sector(
 
     Returns:
         sector (list[str]): The interpolated sector.
+
     """
     if not data:
         return [SectorData.default()] * len(sample_position)
@@ -241,6 +256,7 @@ def _calculate_inclination(position: NDArray, elevation: NDArray) -> NDArray:
 
     Returns:
         inclination (NDArray): The inclination at each position.
+
     """
     diff_position = np.diff(position)
     diff_elevation = np.diff(elevation)
@@ -253,7 +269,9 @@ def _calculate_inclination(position: NDArray, elevation: NDArray) -> NDArray:
 
 
 def _calculate_heading_angle(
-    length: NDArray, curvature: NDArray, initial_heading: float = 0
+    length: NDArray,
+    curvature: NDArray,
+    initial_heading: float = 0,
 ) -> NDArray:
     """
     Calculate the heading angle for each node of a track.
@@ -265,15 +283,16 @@ def _calculate_heading_angle(
 
     Returns:
         heading (NDArray): The heading angle for each node.
-    """
 
+    """
     swept_angle = curvature * length
     heading = initial_heading + np.cumsum(swept_angle) - swept_angle[0]
     return heading
 
 
 def _set_heading_angle(
-    nodes: list[TrackNode], initial_heading: float = 0
+    nodes: list[TrackNode],
+    initial_heading: float = 0,
 ) -> list[TrackNode]:
     """
     Set the heading angle of each node in a list.
@@ -284,8 +303,8 @@ def _set_heading_angle(
 
     Returns:
         nodes (list[TrackNode]): The updated nodes.
-    """
 
+    """
     curvature = np.array([node.curvature for node in nodes])
     length = np.array([node.length for node in nodes])
     heading = _calculate_heading_angle(length, curvature, initial_heading)
@@ -317,8 +336,8 @@ def _calculate_coordinates(
 
     Returns:
         coordinates (tuple[NDArray, NDArray]): Lists of x and y coordinates.
-    """
 
+    """
     x_0, y_0 = initial_coordinates
 
     swept_angle = curvature * length
@@ -337,7 +356,8 @@ def _calculate_coordinates(
 
 
 def _set_coordinates(
-    nodes: list[TrackNode], initial_coordinates: tuple[float, float] = (0, 0)
+    nodes: list[TrackNode],
+    initial_coordinates: tuple[float, float] = (0, 0),
 ) -> list[TrackNode]:
     """
     Set the heading angle and coordinates of each node in a list.
@@ -349,8 +369,8 @@ def _set_coordinates(
 
     Returns:
         nodes (list[TrackNode]): The updated nodes.
-    """
 
+    """
     length = np.array([node.length for node in nodes])
     curvature = np.array([node.curvature for node in nodes])
     x, y = _calculate_coordinates(length, curvature, initial_coordinates)
@@ -363,7 +383,8 @@ def _set_coordinates(
 
 
 def _correct_tangency(
-    nodes: list[TrackNode], iterations: int = MAX_TANGENCY_CORRECTION_ITERATIONS
+    nodes: list[TrackNode],
+    iterations: int = MAX_TANGENCY_CORRECTION_ITERATIONS,
 ) -> list[TrackNode]:
     """
     Adjust track curvature to correct the tangency of closed tracks.
@@ -377,12 +398,12 @@ def _correct_tangency(
 
     Returns:
         corrected_curvature (list[float]): Corrected curvature of each node.
-    """
 
+    """
     curvature = np.array([node.curvature for node in nodes])
     length = np.array([node.length for node in nodes])
 
-    for i in range(iterations):
+    for _ in range(iterations):
         heading_angle = _calculate_heading_angle(length, curvature, 0)
 
         heading_difference = heading_angle[-1] - heading_angle[0]
@@ -390,7 +411,7 @@ def _correct_tangency(
 
         if abs(tangency_error) < ACCEPTABLE_TANGENCY_ERROR:
             break
-        elif abs(tangency_error) < math.pi:  # 'Uncurl' the track
+        if abs(tangency_error) < math.pi:  # 'Uncurl' the track
             tangency_correction = -tangency_error
         else:  # 'Curl' the track
             tangency_correction = (
@@ -422,12 +443,13 @@ def _correct_displacement(
 
     Returns:
         corrected_nodes (list[TrackNode]): The corrected nodes.
+
     """
     original_length = sum([node.length for node in nodes])
     length = np.array([node.length for node in nodes])
     curvature = np.array([node.curvature for node in nodes])
 
-    for i in range(iterations):
+    for _ in range(iterations):
         x, y = _calculate_coordinates(length, curvature, (0, 0))
         coordinates = np.stack((x, y))
         error = coordinates[:, -1] - coordinates[:, 0]

@@ -1,6 +1,5 @@
 """
-This module contains code for sweeping through a list of vehicles.
-"""
+This module contains code for sweeping through a list of vehicles."""
 
 from collections.abc import Collection
 
@@ -13,9 +12,11 @@ from usmlap.vehicle import Vehicle
 
 
 def sweep_vehicles(
-    vehicles: Collection[Vehicle], settings: SimulationSettings
+    vehicles: Collection[Vehicle],
+    settings: SimulationSettings,
 ) -> dict[str, CompetitionResults]:
-    """Simulate a list of vehicles."""
+    """
+    Simulate a list of vehicles."""
     competition = Competition()
     results: dict[str, CompetitionResults] = {}
 

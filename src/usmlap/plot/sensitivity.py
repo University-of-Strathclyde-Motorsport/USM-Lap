@@ -1,6 +1,5 @@
 """
-This module contains functions for plotting points sensitivities.
-"""
+This module contains functions for plotting points sensitivities."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,6 +21,7 @@ def _transform_dictionary(data: list[CompetitionPoints]) -> PointsData:
 
     Returns:
         transformed (PointsData): Transformed points data.
+
     """
     events = sorted(set().union(*(d.keys() for d in data)))
     transformed: PointsData = {}
@@ -42,13 +42,15 @@ def plot_points_sensitivity(
         parameter (type[Parameter[float]]): The parameter being swept.
         data (dict[float, CompetitionPoints]):
             Dictionary of parameter values and corresponding points data.
-    """
 
+    """
     parameter_values = list(data.keys())
     event_data = _transform_dictionary(list(data.values()))
 
     fig, (ax_total, ax_event) = plt.subplots(
-        nrows=2, sharex=True, layout="constrained"
+        nrows=2,
+        sharex=True,
+        layout="constrained",
     )
 
     total_points = [sum(d.values()) for d in data.values()]

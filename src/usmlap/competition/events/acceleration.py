@@ -1,6 +1,5 @@
 """
-This module defines the acceleration event at Formula Student.
-"""
+This module defines the acceleration event at Formula Student."""
 
 from dataclasses import dataclass
 
@@ -29,14 +28,18 @@ class Acceleration(EventInterface, label="acceleration"):
     track_data = TrackData.from_json(ACCELERATION_TRACK)
 
     def simulate_event(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
-        self, solution: TelemetrySolution, data: CompetitionData
+        self,
+        solution: TelemetrySolution,
+        data: CompetitionData,
     ) -> CompetitionPoints:
         t_team = solution.solution.total_time
         t_min = data.acceleration_t_min
@@ -52,5 +55,6 @@ class Acceleration(EventInterface, label="acceleration"):
 
         Returns:
             mesh (Mesh): A mesh of the track.
+
         """
         return generate_mesh(self.track_data, resolution)

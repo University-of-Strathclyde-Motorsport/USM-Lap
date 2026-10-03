@@ -1,6 +1,5 @@
 """
-This module contains code for plotting cell maps.
-"""
+This module contains code for plotting cell maps."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,11 +29,11 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
 
     Args:
         cell (Cell): The cell to plot.
-        derate_soc (float): The state of charge at which to begin derating current.
+        derate_soc (float): The SOC at which to begin derating current.
         t_min (float): The minimum temperature to plot.
         t_max (float): The maximum temperature to plot.
-    """
 
+    """
     fig, axs = plt.subplots(2, 2, layout="constrained")
     ((ax_voltage, ax_soc_derate), (ax_resistance, ax_thermal_derate)) = axs
 
@@ -49,7 +48,8 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
 
 
 def _plot_voltage(cell: Cell, ax: plt.Axes) -> None:
-    """Plot voltage against state of charge."""
+    """
+    Plot voltage against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     voltage = [cell.get_voltage(soc) for soc in state_of_charge]
     ax.plot(state_of_charge * 100, voltage, color=USM_BLUE)
@@ -67,7 +67,8 @@ def _plot_resistance(
     title: str = "Resistance",
     y_limits: tuple[float, float] | None = None,
 ) -> None:
-    """Plot resistance against state of charge."""
+    """
+    Plot resistance against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     for temperature in REFERENCE_TEMPERATURES:
         resistances = []
@@ -91,7 +92,8 @@ def _plot_resistance(
 
 
 def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
-    """Plot current against state of charge."""
+    """
+    Plot current against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     derate = [accumulator.soc_derate(soc) for soc in state_of_charge]
     ax.plot(state_of_charge * 100, derate, color=USM_BLUE)
@@ -103,7 +105,8 @@ def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
 
 
 def _plot_thermal_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
-    """Plot current against temperature."""
+    """
+    Plot current against temperature."""
     temperature = np.linspace(T_MIN, T_MAX, RESOLUTION)
     derate = [accumulator.thermal_derate(t) for t in temperature]
     ax.plot(temperature, derate, color=USM_BLUE)

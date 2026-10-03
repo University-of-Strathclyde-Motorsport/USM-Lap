@@ -1,6 +1,5 @@
 """
-This module models electrical cells.
-"""
+This module models electrical cells."""
 
 from dataclasses import dataclass
 from functools import cached_property, lru_cache
@@ -42,6 +41,7 @@ class CellState:
     Attributes:
         soc (StateOfCharge): State of charge of the cell.
         temperature (float): Temperature of the cell.
+
     """
 
     soc: StateOfCharge
@@ -50,7 +50,8 @@ class CellState:
 
 @dataclass
 class _CellVoltageLookup:
-    """Value from cell voltage lookup table."""
+    """
+    Value from cell voltage lookup table."""
 
     state_of_charge: float
     voltage: float
@@ -58,7 +59,8 @@ class _CellVoltageLookup:
 
 @dataclass
 class _SOCResistanceLookup:
-    """Value from SOC - resistance lookup table."""
+    """
+    Value from SOC - resistance lookup table."""
 
     state_of_charge: float
     resistance: float
@@ -66,7 +68,8 @@ class _SOCResistanceLookup:
 
 @dataclass
 class _TemperatureResistanceLookup:
-    """Row from temperature - resistance lookup table."""
+    """
+    Row from temperature - resistance lookup table."""
 
     temperature: float
     lookup: list[_SOCResistanceLookup]
@@ -86,6 +89,7 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
         datasheet_url (str): URL to the datasheet of the cell.
         voltage_offset (float): Add or subtract a constant voltage
             to the cell voltage (default = 0).
+
     """
 
     print_name: str
@@ -136,6 +140,7 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
 
         Returns:
             voltage (float): Voltage of the cell.
+
         """
         if state_of_charge < 0 or state_of_charge > 1:
             raise ValueError("State of charge must be between 0 and 1.")
@@ -158,11 +163,14 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
                         node.state_of_charge,
                         temperature.temperature,
                         node.resistance,
-                    )
+                    ),
                 )
 
-        soc, temperature, resistance = zip(*values)
-        return LinearNDInterpolator(list(zip(soc, temperature)), resistance)
+        soc, temperature, resistance = zip(*values, strict=True)
+        return LinearNDInterpolator(
+            list(zip(soc, temperature, strict=True)),
+            resistance,
+        )
 
     @cached_property
     def _min_temp(self) -> float:
@@ -173,11 +181,13 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
         return max([node.temperature for node in self.resistance_lookup])
 
     def resistance(self, cell_state: CellState) -> float:
-        """Get the resistance of the cell for a given cell state."""
+        """
+        Get the resistance of the cell for a given cell state."""
         return calculate_resistance(self, cell_state)
 
     def discharge_current(self, cell_state: CellState) -> float:
-        """Get the available  discharge current for a given cell state.."""
+        """
+        Get the available  discharge current for a given cell state.."""
         return self.max_discharge_current
 
 
@@ -192,9 +202,12 @@ def calculate_resistance(cell: Cell, cell_state: CellState) -> float:
 
     Returns:
         resistance (float): The resistance of the cell.
+
     """
     temperature = clamp(
-        cell_state.temperature, minimum=cell._min_temp, maximum=cell._max_temp
+        cell_state.temperature,
+        minimum=cell._min_temp,
+        maximum=cell._max_temp,
     )
     resistance = cell._resistance_interpolator((cell_state.soc, temperature))
     return float(resistance) + cell.resistance_offset

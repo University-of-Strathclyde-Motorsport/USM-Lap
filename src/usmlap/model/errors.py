@@ -1,6 +1,5 @@
 """
-This module defines exceptions raised by vehicle models.
-"""
+This module defines exceptions raised by vehicle models."""
 
 from dataclasses import dataclass
 

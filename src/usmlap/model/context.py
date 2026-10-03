@@ -24,6 +24,7 @@ class GlobalContext:
         environment (Environment): Environmental variables for the simulation.
         vehicle (Vehicle): The vehicle being simulated.
         lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
+
     """
 
     environment: Environment
@@ -31,7 +32,9 @@ class GlobalContext:
     lambdas: LambdaCoefficients
 
     def get_local_context(
-        self, node: TrackNode, state: TransientVariables
+        self,
+        node: TrackNode,
+        state: TransientVariables,
     ) -> NodeContext:
         return NodeContext(
             environment=self.environment,
@@ -53,6 +56,7 @@ class NodeContext(GlobalContext):
         state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to evaluate.
         lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
+
     """
 
     state: TransientVariables

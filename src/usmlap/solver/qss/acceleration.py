@@ -12,7 +12,9 @@ PRECISION = 1e-3
 
 
 def solve_acceleration(
-    model: TractionModel, ctx: NodeContext, initial_velocity: float
+    model: TractionModel,
+    ctx: NodeContext,
+    initial_velocity: float,
 ) -> float:
     """
     Calculate the velocity at the end of a node,
@@ -26,10 +28,13 @@ def solve_acceleration(
 
     Returns:
         final_velocity (float): The velocity at the end of the node.
+
     """
     initial_ax = 0
     trajectory = Trajectory(
-        velocity=initial_velocity, ax=initial_ax, curvature=ctx.node.curvature
+        velocity=initial_velocity,
+        ax=initial_ax,
+        curvature=ctx.node.curvature,
     )
 
     resistive_fx = sum(model.resistive_forces(ctx, initial_velocity))

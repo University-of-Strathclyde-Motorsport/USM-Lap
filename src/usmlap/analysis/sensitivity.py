@@ -1,6 +1,5 @@
 """
-This module contains code for points sensitivity analysis.
-"""
+This module contains code for points sensitivity analysis."""
 
 from rich.progress import Progress
 
@@ -38,12 +37,12 @@ def points_sensitivity(
         sensitivity (float): The points sensitivity of the parameter.
         delta (tuple[float, float]):
             The range over which the sensitivity was evaluated.
-    """
 
+    """
     if not delta:
         if not parameter.uncertainty:
             raise ValueError(
-                "Parameter has no uncertainty, unable to analyse sensitivity."
+                "Parameter has no uncertainty, unable to analyse sensitivity.",
             )
         delta = (-parameter.uncertainty, parameter.uncertainty)
 

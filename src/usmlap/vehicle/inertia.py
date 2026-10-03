@@ -1,6 +1,5 @@
 """
-This module models the inertia of a vehicle.
-"""
+This module models the inertia of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -20,6 +19,7 @@ class UnsprungMass:
         mass (float): Mass of the unsprung mass.
         centre_of_gravity_height (float):
             Height of the centre of gravity above the ground plane.
+
     """
 
     mass: Annotated[PositiveFloat, Unit("kg")]
@@ -37,6 +37,7 @@ class Inertia:
         yaw_inertia (float): Yaw inertia of the vehicle.
         front_unsprung_mass (UnsprungMass): Unsprung mass for the front axle.
         rear_unsprung_mass (UnsprungMass): Unsprung mass for the rear axle.
+
     """
 
     curb_mass: Annotated[PositiveFloat, Unit("kg")]

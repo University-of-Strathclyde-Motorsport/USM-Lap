@@ -1,7 +1,5 @@
 """
-This module contains utility functions for matplotlib.
-"""
-
+This module contains utility functions for matplotlib."""
 
 from matplotlib.axes import Axes
 
@@ -12,6 +10,7 @@ def combined_legend(*args: Axes) -> None:
 
     Args:
         *args (Axes): The axes to create a legend for.
+
     """
     combined_handles = []
     combined_labels: list[str] = []
@@ -28,7 +27,6 @@ def outside_legend(axs: Axes | list[Axes], title: str | None = None) -> None:
     """
     Add a legend outside the plot.
     """
-
     if isinstance(axs, Axes):
         axs = [axs]
 

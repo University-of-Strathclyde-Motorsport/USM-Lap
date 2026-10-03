@@ -1,6 +1,5 @@
 """
-This module models the steering system of a vehicle.
-"""
+This module models the steering system of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -23,6 +22,7 @@ class Steering:
         steering_wheel_radius (float):
             The radius of the steering wheel.
             Used for calculating steering torque.
+
     """
 
     steering_ratio: PositiveFloat
@@ -41,6 +41,7 @@ class Steering:
             steering_wheel_angle (float):
                 Angular displacement of the steering wheel from neutral
                 (clockwise positive).
+
         """
         return wheel_angle * self.steering_ratio
 
@@ -57,5 +58,6 @@ class Steering:
             wheel_angle (float):
                 Angular displacement of the wheels from static
                 (clockwise positive).
+
         """
         return steering_wheel_angle / self.steering_ratio

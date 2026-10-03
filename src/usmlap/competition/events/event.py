@@ -1,6 +1,5 @@
 """
-This module defines the interface for Formula Student events.
-"""
+This module defines the interface for Formula Student events."""
 
 from __future__ import annotations
 
@@ -29,6 +28,7 @@ class EventInterface(ABC):
 
     Attributes:
         label (str): Name of the event.
+
     """
 
     def __init_subclass__(cls: type[EventInterface], label: str) -> None:
@@ -46,10 +46,14 @@ class EventInterface(ABC):
 
     @abstractmethod
     def simulate_event(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> TelemetrySolution: ...
 
     @abstractmethod
     def calculate_points(
-        self, solution: TelemetrySolution, data: CompetitionData
+        self,
+        solution: TelemetrySolution,
+        data: CompetitionData,
     ) -> CompetitionPoints: ...

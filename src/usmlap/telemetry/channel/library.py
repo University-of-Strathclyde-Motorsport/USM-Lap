@@ -1,5 +1,6 @@
 """
-This module defines primitive telemetry channels which extract values from a telemetry solution.
+This module defines primitive telemetry channels
+which extract values from a telemetry solution.
 """
 
 from pint import UnitRegistry
@@ -14,9 +15,12 @@ ureg = UnitRegistry()
 
 
 class Velocity(
-    PrimitiveDataChannel, unit=ureg.meter / ureg.second, label="Velocity"
+    PrimitiveDataChannel,
+    unit=ureg.meter / ureg.second,
+    label="Velocity",
 ):
-    """Velocity of the vehicle."""
+    """
+    Velocity of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -28,7 +32,8 @@ class MaximumVelocity(
     unit=ureg.meter / ureg.second,
     label="Maximum Velocity",
 ):
-    """Maximum velocity of the vehicle."""
+    """
+    Maximum velocity of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -36,7 +41,8 @@ class MaximumVelocity(
 
 
 class Position(PrimitiveDataChannel, unit=ureg.meter, label="Position"):
-    """Position of the vehicle."""
+    """
+    Position of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -44,7 +50,8 @@ class Position(PrimitiveDataChannel, unit=ureg.meter, label="Position"):
 
 
 class NodeTime(PrimitiveDataChannel, unit=ureg.millisecond, label="Node Time"):
-    """Time taken to traverse the node."""
+    """
+    Time taken to traverse the node."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -52,7 +59,8 @@ class NodeTime(PrimitiveDataChannel, unit=ureg.millisecond, label="Node Time"):
 
 
 class Time(DerivedDataChannel, unit=ureg.second, label="Time"):
-    """Cumulative time."""
+    """
+    Cumulative time."""
 
     @classmethod
     def channel_fcn(cls, solution: TelemetrySolution) -> list[float]:
@@ -60,7 +68,8 @@ class Time(DerivedDataChannel, unit=ureg.second, label="Time"):
 
 
 class Curvature(PrimitiveDataChannel, unit=1 / ureg.meter, label="Curvature"):
-    """Curvature of the track."""
+    """
+    Curvature of the track."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -72,7 +81,8 @@ class LateralAcceleration(
     unit=ureg.meter / ureg.second**2,
     label="Lateral Acceleration",
 ):
-    """Lateral acceleration of the vehicle."""
+    """
+    Lateral acceleration of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -84,7 +94,8 @@ class LongitudinalAcceleration(
     unit=ureg.meter / ureg.second**2,
     label="Longitudinal Acceleration",
 ):
-    """Longitudinal acceleration of the vehicle."""
+    """
+    Longitudinal acceleration of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -92,7 +103,8 @@ class LongitudinalAcceleration(
 
 
 class Drag(PrimitiveDataChannel, unit=ureg.newton, label="Drag"):
-    """Aerodynamic drag force."""
+    """
+    Aerodynamic drag force."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -100,9 +112,12 @@ class Drag(PrimitiveDataChannel, unit=ureg.newton, label="Drag"):
 
 
 class StateOfCharge(
-    PrimitiveDataChannel, unit=ureg.dimensionless, label="State of Charge"
+    PrimitiveDataChannel,
+    unit=ureg.dimensionless,
+    label="State of Charge",
 ):
-    """State of charge of the battery."""
+    """
+    State of charge of the battery."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -110,9 +125,12 @@ class StateOfCharge(
 
 
 class CellTemperature(
-    PrimitiveDataChannel, unit=ureg.degree_celsius, label="Cell Temperature"
+    PrimitiveDataChannel,
+    unit=ureg.degree_celsius,
+    label="Cell Temperature",
 ):
-    """Temperature of the battery cells."""
+    """
+    Temperature of the battery cells."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -120,9 +138,12 @@ class CellTemperature(
 
 
 class AccumulatorCurrent(
-    PrimitiveDataChannel, unit=ureg.ampere, label="Accumulator Current"
+    PrimitiveDataChannel,
+    unit=ureg.ampere,
+    label="Accumulator Current",
 ):
-    """Current drawn from the accumulator."""
+    """
+    Current drawn from the accumulator."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -130,9 +151,12 @@ class AccumulatorCurrent(
 
 
 class MotorTorque(
-    PrimitiveDataChannel, unit=ureg.newton * ureg.meter, label="Motor Torque"
+    PrimitiveDataChannel,
+    unit=ureg.newton * ureg.meter,
+    label="Motor Torque",
 ):
-    """Torque output of the motor."""
+    """
+    Torque output of the motor."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -140,7 +164,8 @@ class MotorTorque(
 
 
 class MotorPower(PrimitiveDataChannel, unit=ureg.kilowatt, label="Motor Power"):
-    """Power output of the motor."""
+    """
+    Power output of the motor."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -148,9 +173,12 @@ class MotorPower(PrimitiveDataChannel, unit=ureg.kilowatt, label="Motor Power"):
 
 
 class CoolingPower(
-    PrimitiveDataChannel, unit=ureg.kilowatt, label="Cooling Power"
+    PrimitiveDataChannel,
+    unit=ureg.kilowatt,
+    label="Cooling Power",
 ):
-    """Power output of the cooling system."""
+    """
+    Power output of the cooling system."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -158,9 +186,12 @@ class CoolingPower(
 
 
 class HeatingPower(
-    PrimitiveDataChannel, unit=ureg.kilowatt, label="Heating Power"
+    PrimitiveDataChannel,
+    unit=ureg.kilowatt,
+    label="Heating Power",
 ):
-    """Heating power of the cells."""
+    """
+    Heating power of the cells."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -168,9 +199,12 @@ class HeatingPower(
 
 
 class NetHeatingPower(
-    PrimitiveDataChannel, unit=ureg.kilowatt, label="Net Heating Power"
+    PrimitiveDataChannel,
+    unit=ureg.kilowatt,
+    label="Net Heating Power",
 ):
-    """Net heating power of the cells."""
+    """
+    Net heating power of the cells."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -182,7 +216,8 @@ class LongLT(
     unit=ureg.meter / ureg.second**2,
     label="Longitudinal LT",
 ):
-    """Longitudinal load transfer of the vehicle."""
+    """
+    Longitudinal load transfer of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
@@ -190,9 +225,12 @@ class LongLT(
 
 
 class LatLT(
-    PrimitiveDataChannel, unit=ureg.meter / ureg.second**2, label="Lateral LT"
+    PrimitiveDataChannel,
+    unit=ureg.meter / ureg.second**2,
+    label="Lateral LT",
 ):
-    """Lateral load transfer of the vehicle."""
+    """
+    Lateral load transfer of the vehicle."""
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:

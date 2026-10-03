@@ -35,7 +35,7 @@ def solve_apex_velocity(
         vehicle_model (TractionModel):
             The vehicle model to use.
         ctx (NodeContext): The simulation context.
-        velocity_estimate (Optional[float]):
+        velocity_estimate (float | None):
             The initial velocity estimate, used to speed up calculation.
             If unspecified, defaults to the maximum velocity of the vehicle.
         precision (float):
@@ -51,6 +51,7 @@ def solve_apex_velocity(
         MaximumIterationsExceededError:
             If the maximum number of iterations is exceeded
             without converging on a solution.
+
     """
     maximum_velocity = ctx.vehicle.maximum_velocity
     if ctx.node.curvature == 0:
@@ -60,7 +61,9 @@ def solve_apex_velocity(
         velocity_estimate = maximum_velocity
 
     trajectory = Trajectory(
-        velocity=velocity_estimate, ax=0, curvature=ctx.node.curvature
+        velocity=velocity_estimate,
+        ax=0,
+        curvature=ctx.node.curvature,
     )
 
     velocities: list[float] = []
@@ -76,7 +79,8 @@ def solve_apex_velocity(
             # TODO: Make this more robust
             scale_factor = 1 - (2 * e.max_wheel_lift) / e.lateral_load_transfer
             clamped_scale_factor = min(
-                max(scale_factor, MIN_ERROR_SF), MAX_ERROR_SF
+                max(scale_factor, MIN_ERROR_SF),
+                MAX_ERROR_SF,
             )
             trajectory.ay *= clamped_scale_factor * scale_factor
             continue
@@ -88,5 +92,7 @@ def solve_apex_velocity(
             return maximum_velocity
 
     raise MaximumIterationsExceededError(
-        maximum_iterations, precision, velocities
+        maximum_iterations,
+        precision,
+        velocities,
     )

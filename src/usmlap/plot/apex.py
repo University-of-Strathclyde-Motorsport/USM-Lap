@@ -1,6 +1,5 @@
 """
-This module contains functions for plotting velocity profiles and apexes.
-"""
+This module contains functions for plotting velocity profiles and apexes."""
 
 import matplotlib.pyplot as plt
 
@@ -40,7 +39,10 @@ def plot_apexes(solution: TelemetrySolution) -> None:
     apex_position = POSITION(apex_solution)
 
     fig, (ax_curvature, ax_apex) = plt.subplots(
-        nrows=2, height_ratios=[1, 2], sharex=True, layout="constrained"
+        nrows=2,
+        height_ratios=[1, 2],
+        sharex=True,
+        layout="constrained",
     )
 
     ax_curvature.plot(position, curvature, color=USM_BLUE, zorder=2)
@@ -48,7 +50,10 @@ def plot_apexes(solution: TelemetrySolution) -> None:
 
     for sector_boundary in sector_boundary_positions:
         ax_curvature.axvline(
-            sector_boundary, color="black", linewidth=1, linestyle="dashed"
+            sector_boundary,
+            color="black",
+            linewidth=1,
+            linestyle="dashed",
         )
 
     ax_apex.plot(

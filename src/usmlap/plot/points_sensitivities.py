@@ -20,6 +20,7 @@ class PointsSensitivityData:
 
     Attributes:
         label (str): Label for the bar.
+
     """
 
     label: str
@@ -38,12 +39,12 @@ class PointsSensitivityData:
     def bar_colour(self) -> str:
         return get_bar_colour(self.value)
 
-    def __eq__(self, other: object) -> bool:  # noqa: S6542
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, PointsSensitivityData):
             return NotImplemented
         return abs(self.value) == abs(other.value)
 
-    def __lt__(self, other: Any) -> bool:  # noqa: S6542
+    def __lt__(self, other: Any) -> bool:
         if not isinstance(other, PointsSensitivityData):
             return NotImplemented
         return abs(self.value) < abs(other.value)
@@ -56,14 +57,16 @@ def plot_points_sensitivities(
     max_results: int | None = None,
 ) -> None:
     """
-    This function plots the relative magnitudes of a list of points sensitivities.
+    This function plots the relative magnitudes
+    of a list of points sensitivities.
 
     Args:
         data (dict[str, float]): Bar labels and corresponding sensitivities.
         title (str): Title for the plot (default = "Points Sensitivities").
-        x_label (Optional[str]): Label for the x-axis (default = None).
-        max_results (Optional[int]): Maximum number of bars to plot.
+        x_label (str | None): Label for the x-axis (default = None).
+        max_results (int | None): Maximum number of bars to plot.
             If None, plot all results (default = None).
+
     """
     data = sorted(data, reverse=True)
     if max_results is not None:
@@ -80,7 +83,11 @@ def plot_points_sensitivities(
     bars = ax.bar(labels, sensitivities, color=bar_colours, zorder=3)
     ax.bar_label(bars, labels=bar_labels, padding=3, zorder=3)
     ax.bar_label(
-        bars, labels=bar_text, label_type="center", color="white", zorder=3
+        bars,
+        labels=bar_text,
+        label_type="center",
+        color="white",
+        zorder=3,
     )
 
     ax.grid(which="both", axis="y", zorder=0)
@@ -104,8 +111,7 @@ def get_bar_colour(sensitivity: float) -> str:
     """
     if sensitivity > 0:
         return USM_BLUE
-    else:
-        return USM_RED
+    return USM_RED
 
 
 def get_bar_text_colour(sensitivity: float) -> str:
@@ -117,8 +123,7 @@ def get_bar_text_colour(sensitivity: float) -> str:
     """
     if sensitivity > 0:
         return "white"
-    else:
-        return "black"
+    return "black"
 
 
 def create_legend(ax: plt.Axes) -> None:

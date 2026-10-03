@@ -1,6 +1,5 @@
 """
-This module defines a format for storing the solution of a simulation.
-"""
+This module defines a format for storing the solution of a simulation."""
 
 from __future__ import annotations
 
@@ -12,7 +11,8 @@ from usmlap.vehicle import Vehicle
 
 @dataclass(frozen=True)
 class TelemetrySolution:
-    """A solution object."""
+    """
+    A solution object."""
 
     vehicle: Vehicle
     solution: Solution

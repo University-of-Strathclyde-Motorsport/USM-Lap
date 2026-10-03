@@ -1,6 +1,5 @@
 """
-This module defines a common interface for vehicle models.
-"""
+This module defines a common interface for vehicle models."""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -36,7 +35,8 @@ class TractionModel(ABC):
     @staticmethod
     def aero_attitude(ctx: NodeContext, velocity: float) -> AeroAttitude:
         return AeroAttitude(
-            velocity=velocity, air_density=ctx.environment.air_density
+            velocity=velocity,
+            air_density=ctx.environment.air_density,
         )
 
     def required_fy(self, ctx: NodeContext, velocity: float) -> float:
@@ -45,7 +45,9 @@ class TractionModel(ABC):
         return ctx.node.y_to_y(centripetal_force) - ctx.node.z_to_y(weight)
 
     def resistive_forces(
-        self, ctx: NodeContext, velocity: float
+        self,
+        ctx: NodeContext,
+        velocity: float,
     ) -> tuple[float, float]:
         """
         Get the total resistive forces acting on the vehicle.
@@ -60,6 +62,7 @@ class TractionModel(ABC):
                 The resistive force acting through the centre of mass.
             aero_force (float):
                 The resistive force acting through the centre of pressure.
+
         """
         weight = self.weight(ctx)
         body_force = ctx.node.z_to_x(weight)
@@ -70,7 +73,9 @@ class TractionModel(ABC):
         return body_force, aero_force
 
     def normal_forces(
-        self, ctx: NodeContext, velocity: float
+        self,
+        ctx: NodeContext,
+        velocity: float,
     ) -> tuple[float, float]:
         """
         Get the total normal forces acting on the tyres.
@@ -85,12 +90,12 @@ class TractionModel(ABC):
                 The normal force acting through the centre of mass.
             aero_force (float):
                 The normal force acting through the centre of pressure.
-        """
 
+        """
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, velocity)
         body_force = ctx.node.z_to_z(weight) + ctx.node.y_to_z(
-            centripetal_force
+            centripetal_force,
         )
 
         aero_attitude = self.aero_attitude(ctx, velocity)
@@ -100,33 +105,44 @@ class TractionModel(ABC):
 
     @abstractmethod
     def normal_loads(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]: ...
 
     @abstractmethod
     def lateral_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]: ...
 
     @abstractmethod
     def longitudinal_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]: ...
 
     @abstractmethod
     def braking_traction(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> FourCorner[float]: ...
 
     def evaluate_full_vehicle_state(
-        self, ctx: NodeContext, trajectory: Trajectory
+        self,
+        ctx: NodeContext,
+        trajectory: Trajectory,
     ) -> CalculatedVehicleState:
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, trajectory.velocity)
         body_fz, aero_fz = self.normal_forces(ctx, trajectory.velocity)
         body_fx, aero_fx = self.resistive_forces(ctx, trajectory.velocity)
         drive_force = max(
-            body_fx + aero_fx + trajectory.ax * ctx.vehicle.equivalent_mass, 0
+            body_fx + aero_fx + trajectory.ax * ctx.vehicle.equivalent_mass,
+            0,
         )
         normal_loads = self.normal_loads(ctx, trajectory)
         motor_speed = ctx.vehicle.velocity_to_motor_speed(trajectory.velocity)
@@ -138,14 +154,16 @@ class TractionModel(ABC):
         accu_current = (
             accu_power
             / ctx.vehicle.powertrain.accumulator.get_voltage(
-                ctx.state.cell_state.soc
+                ctx.state.cell_state.soc,
             )
         )
         heating_power = ctx.vehicle.powertrain.accumulator.heating_power(
-            ctx.state.cell_state, accu_current
+            ctx.state.cell_state,
+            accu_current,
         )
         cooling_power = ctx.vehicle.powertrain.cooling_rate(
-            ctx.state.cell_temperature, ctx.environment.ambient_temperature
+            ctx.state.cell_temperature,
+            ctx.environment.ambient_temperature,
         )
 
         return CalculatedVehicleState(
@@ -169,13 +187,14 @@ class TractionModel(ABC):
         )
 
     def get_tyre_attitudes(
-        self, normal_loads: FourCorner[float]
+        self,
+        normal_loads: FourCorner[float],
     ) -> FourCorner[TyreAttitude]:
         return FourCorner(
             *(
                 TyreAttitude(normal_load=normal_load)
                 for normal_load in normal_loads
-            )
+            ),
         )
 
     def get_tyres(self, vehicle: Vehicle) -> FourCorner[Tyre]:
@@ -187,23 +206,27 @@ class TractionModel(ABC):
         )
 
     def fx_max(
-        self, tyres: FourCorner[Tyre], attitudes: FourCorner[TyreAttitude]
+        self,
+        tyres: FourCorner[Tyre],
+        attitudes: FourCorner[TyreAttitude],
     ) -> FourCorner[float]:
         return FourCorner(
             *(
                 self.tyre_model.fx_max(tyre, attitude)
-                for tyre, attitude in zip(tyres, attitudes)
-            )
+                for tyre, attitude in zip(tyres, attitudes, strict=True)
+            ),
         )
 
     def fy_max(
-        self, tyres: FourCorner[Tyre], attitudes: FourCorner[TyreAttitude]
+        self,
+        tyres: FourCorner[Tyre],
+        attitudes: FourCorner[TyreAttitude],
     ) -> FourCorner[float]:
         return FourCorner(
             *(
                 self.tyre_model.fy_max(tyre, attitude)
-                for tyre, attitude in zip(tyres, attitudes)
-            )
+                for tyre, attitude in zip(tyres, attitudes, strict=True)
+            ),
         )
 
     def fy_available(
@@ -215,8 +238,8 @@ class TractionModel(ABC):
         return FourCorner(
             *(
                 self.tyre_model.fy(fx=fx, fx_max=fx_max, fy_max=fy_max)
-                for fx, fx_max, fy_max in zip(fx, fx_max, fy_max)
-            )
+                for fx, fx_max, fy_max in zip(fx, fx_max, fy_max, strict=True)
+            ),
         )
 
     def fx_available(
@@ -228,6 +251,6 @@ class TractionModel(ABC):
         return FourCorner(
             *(
                 self.tyre_model.fx(fy=fy, fx_max=fx_max, fy_max=fy_max)
-                for fy, fx_max, fy_max in zip(fy, fx_max, fy_max)
-            )
+                for fy, fx_max, fy_max in zip(fy, fx_max, fy_max, strict=True)
+            ),
         )

@@ -1,6 +1,5 @@
 """
-This module defines the skidpad event at Formula Student.
-"""
+This module defines the skidpad event at Formula Student."""
 
 from dataclasses import dataclass
 
@@ -31,7 +30,9 @@ class Skidpad(EventInterface, label="skidpad"):
     track_data = TrackData.from_json(SKIDPAD_TRACK)
 
     def simulate_event(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         solution = simulate(vehicle, mesh, settings)
@@ -39,13 +40,15 @@ class Skidpad(EventInterface, label="skidpad"):
 
     def event_time(self, solution: TelemetrySolution) -> float:
         right_time = solution.solution.get_sector_time(
-            RIGHT_CIRCLE_TIMED_SECTOR
+            RIGHT_CIRCLE_TIMED_SECTOR,
         )
         left_time = solution.solution.get_sector_time(LEFT_CIRCLE_TIMED_SECTOR)
         return (right_time + left_time) / 2
 
     def calculate_points(
-        self, solution: TelemetrySolution, data: CompetitionData
+        self,
+        solution: TelemetrySolution,
+        data: CompetitionData,
     ) -> CompetitionPoints:
         t_team = self.event_time(solution)
         t_min = data.skidpad_t_min
@@ -68,6 +71,6 @@ class Skidpad(EventInterface, label="skidpad"):
 
         Returns:
             mesh (Mesh): A mesh of the skidpad track.
-        """
 
+        """
         return generate_mesh(self.track_data, resolution, smooth=False)

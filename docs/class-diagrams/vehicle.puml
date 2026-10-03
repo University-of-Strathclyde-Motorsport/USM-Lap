@@ -73,8 +73,8 @@ class "AeroPackage" as src.usmlap.vehicle.aero.AeroPackage {
 }
 
 class "ConstantAero" as src.usmlap.vehicle.aero.ConstantAero {
-  drag_coefficient : Optional[float]
-  lift_coefficient : Optional[float]
+  drag_coefficient : float | None
+  lift_coefficient : float | None
   model_type : Literal['constant']
   get_drag_coefficient(attitude: AeroAttitude) -> float
   get_lift_coefficient(attitude: AeroAttitude) -> float

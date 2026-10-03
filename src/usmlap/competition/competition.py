@@ -1,6 +1,5 @@
 """
-This module contains code for simulating a Formula Student competition.
-"""
+This module contains code for simulating a Formula Student competition."""
 
 from dataclasses import InitVar, dataclass, field
 
@@ -26,7 +25,8 @@ type CompetitionSolutions = dict[str, TelemetrySolution]
 
 @dataclass
 class CompetitionResults:
-    """Results of simulating a Formula Student competition."""
+    """
+    Results of simulating a Formula Student competition."""
 
     points: CompetitionPoints
     solutions: CompetitionSolutions
@@ -39,7 +39,8 @@ class Competition:
 
     Attributes:
         autocross_track (str): Track to use for autocross and endurance events.
-        simulate_acceleration (bool): Whether to simulate the acceleration event.
+        simulate_acceleration (bool):
+            Whether to simulate the acceleration event.
         simulate_skidpad (bool): Whether to simulate the skidpad event.
         simulate_autocross (bool): Whether to simulate the autocross event.
         simulate_endurance (bool): Whether to simulate the endurance event.
@@ -47,6 +48,7 @@ class Competition:
         dataset (str): Dataset to use for points calculation.
         competition_data (CompetitionData): Data loaded from `dataset`.
         events: List of events to simulate.
+
     """
 
     autocross_track: str = DEFAULT_AUTOCROSS_TRACK
@@ -70,7 +72,6 @@ class Competition:
         """
         Create competition events.
         """
-
         with Progress(transient=True) as progress:
             task = progress.add_task("Setting up events...")
 
@@ -98,7 +99,9 @@ class Competition:
                 self._add_event(endurance)
 
     def simulate(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> CompetitionResults:
         """
         Simulate a Formula Student competition.
@@ -110,20 +113,22 @@ class Competition:
         Returns:
             competition_points (CompetitionPoints):
                 Dictionary of points scored in all simulated events.
-        """
 
+        """
         competition_results: CompetitionSolutions = {}
         competition_points: CompetitionPoints = {}
         data = self.competition_data
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
-                "Simulating competition...", total=len(self.events)
+                "Simulating competition...",
+                total=len(self.events),
             )
 
             for event in self.events:
                 progress.update(
-                    task, description=f"Simulating {event.label}..."
+                    task,
+                    description=f"Simulating {event.label}...",
                 )
 
                 event_solution = event.simulate_event(vehicle, settings)

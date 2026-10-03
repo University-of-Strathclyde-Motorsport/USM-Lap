@@ -1,11 +1,10 @@
 """
-Code for profiling the performance of the simulation.
-"""
+Code for profiling the performance of the simulation."""
 
 import cProfile
 import pstats
 
-from usmlap.simulation import SimulationSettings, simulate  # noqa: F401, S1128
+from usmlap.simulation import SimulationSettings, simulate  # noqa: F401
 from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle

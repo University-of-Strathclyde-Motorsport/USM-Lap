@@ -1,6 +1,5 @@
 """
-This script displays a velocity profile from a simulation.
-"""
+This script displays a velocity profile from a simulation."""
 
 from usmlap.plot import plot_apexes
 from usmlap.simulation import simulate
@@ -16,8 +15,8 @@ QUALITY = QualityPresets.DRAFT
 
 
 def main() -> None:
-    """Main function."""
-
+    """
+    Main function."""
     track_data = TrackData.from_json(TRACK_SHEET)
     mesh = generate_mesh(track_data, resolution=0.1)
     vehicle = Vehicle.from_json(VEHICLE_FILE)

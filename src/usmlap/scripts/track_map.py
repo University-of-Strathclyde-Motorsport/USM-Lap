@@ -1,6 +1,5 @@
 """
-This script plots a map of a track.
-"""
+This script plots a map of a track."""
 
 from dataclasses import dataclass
 
@@ -16,7 +15,8 @@ MESH_RESOLUTION = 0.1
 
 @dataclass
 class MeshConfiguration:
-    """Configuration details for generating and plotting a track mesh."""
+    """
+    Configuration details for generating and plotting a track mesh."""
 
     label: str
     colour: str

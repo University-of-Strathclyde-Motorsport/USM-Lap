@@ -45,7 +45,7 @@ vehicles = VehicleGenerator(baseline_vehicle, AerodynamicPackage, packages)
 autocross = Autocross(track_file="FS AutoX Germany 2012")
 
 solutions: dict[str, TelemetrySolution] = {}
-for label, vehicle in zip(aero_files.keys(), vehicles):
+for label, vehicle in zip(aero_files.keys(), vehicles, strict=True):
     solutions[label] = autocross.simulate_event(vehicle, QUALITY)
 
 plot_channels(

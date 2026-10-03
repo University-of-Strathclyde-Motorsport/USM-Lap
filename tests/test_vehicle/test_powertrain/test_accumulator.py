@@ -1,4 +1,5 @@
-"""Unit tests for accumulator module."""
+"""
+Unit tests for accumulator module."""
 
 import pytest
 

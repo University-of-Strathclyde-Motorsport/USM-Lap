@@ -1,6 +1,5 @@
 """
-This module defines nodes and meshes for a track.
-"""
+This module defines nodes and meshes for a track."""
 
 from __future__ import annotations
 
@@ -25,9 +24,11 @@ class TrackNode(BaseModel):
         Curvature (float): The curvature of the track section (left +ve).
         Elevation (float): The elevation of the track section.
         Inclination (float): The inclination angle of the track section.
-        Banking (float): The banking angle of the track section (+ve slope right to left).
+        Banking (float): The banking angle of the track section
+            (+ve slope right to left).
         GripFactor (float): The grip factor of the track section.
         Sector (int): The sector of the track section.
+
     """
 
     position: float = Field(ge=0)
@@ -55,8 +56,7 @@ class TrackNode(BaseModel):
     def chord_length(self) -> float:
         if self.curvature == 0:
             return self.length
-        else:
-            return 2 * self.radius * math.sin(self.swept_angle / 2)
+        return 2 * self.radius * math.sin(self.swept_angle / 2)
 
     def y_to_y(self, value: float) -> float:
         return value * math.cos(self.banking)
@@ -84,6 +84,7 @@ class Mesh:
         configuration (Configuration): The configuration of the track
             (OPEN or CLOSED).
         track_name (str): The name of the track.
+
     """
 
     nodes: list[TrackNode]
@@ -97,8 +98,7 @@ class Mesh:
         self.calculate_positions()
 
     def __iter__(self) -> Generator[TrackNode]:
-        for node in self.nodes:
-            yield node
+        yield from self.nodes
 
     @property
     def node_count(self) -> int:
@@ -127,8 +127,8 @@ class Mesh:
 
         Returns:
             mesh (Mesh): A new mesh that repeats the track a number of times.
-        """
 
+        """
         repeating_nodes: list[TrackNode] = []
         for lap in range(1, number_of_laps + 1):
             new_nodes = copy.deepcopy(self.nodes)

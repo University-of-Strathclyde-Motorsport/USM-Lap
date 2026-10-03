@@ -1,6 +1,5 @@
 """
-This module defines an interface for telemetry channels.
-"""
+This module defines an interface for telemetry channels."""
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -18,9 +17,11 @@ class TelemetryChannel[T](NamedTuple):
     A telemetry channel.
 
     Args:
-        channel_fcn (Callable[[TelemetrySolution], T]): Extracts a value or series of values from a solution.
+        channel_fcn (Callable[[TelemetrySolution], T]):
+            Extracts a value or series of values from a solution.
         unit (Unit): The physical unit for the channel.
         label (str): A label for the channel.
+
     """
 
     channel_fcn: Callable[[TelemetrySolution], T]
@@ -42,11 +43,12 @@ class TelemetryChannel[T](NamedTuple):
         If the unit is None, the label is in the format *"{name}"*.
 
         Args:
-            wrap_width (Optional[int]): The width to wrap the label to.
+            wrap_width (int | None): The width to wrap the label to.
                 To disable wrapping, set to None.
 
         Returns:
             label (str): A label with the name and unit of the channel.
+
         """
         label = f"{self.label} ({self.unit:~P})"
 
@@ -83,9 +85,11 @@ class PrimitiveDataChannel(ABC):
     def read_value(cls, node: SolutionNode) -> float: ...
 
     def __new__(
-        cls, unit: Unit | None = None, label: str | None = None
+        cls,
+        unit: Unit | None = None,
+        label: str | None = None,
     ) -> TelemetryChannel[list[float]]:
-        def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
+        def channel_fcn(solution: TelemetrySolution) -> list[float]:
             return [cls.read_value(node) for node in solution.nodes]
 
         if not unit:
@@ -99,8 +103,7 @@ class PrimitiveDataChannel(ABC):
 
 class DerivedDataChannel(ABC):
     """
-    Base class for derived telemetry data channels.
-    """
+    Base class for derived telemetry data channels."""
 
     unit: ClassVar[Unit]
     label: ClassVar[str]
@@ -116,7 +119,9 @@ class DerivedDataChannel(ABC):
     def channel_fcn(cls, solution: TelemetrySolution) -> list[float]: ...
 
     def __new__(
-        cls, unit: Unit | None = None, label: str | None = None
+        cls,
+        unit: Unit | None = None,
+        label: str | None = None,
     ) -> TelemetryChannel[list[float]]:
 
         if not unit:

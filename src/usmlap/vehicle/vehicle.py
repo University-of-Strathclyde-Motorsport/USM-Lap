@@ -1,6 +1,5 @@
 """
-This module models the full vehicle.
-"""
+This module models the full vehicle."""
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.datatypes import FrontRear
@@ -34,6 +33,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
         suspension (Suspension): The suspension of the vehicle.
         transmission (Transmission): The transmission of the vehicle.
         tyres (Tyres): The tyres of the vehicle.
+
     """
 
     print_name: str
@@ -62,7 +62,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     def maximum_velocity(self) -> float:
         cell_state = CellState(soc=StateOfCharge(1))
         maximum_motor_speed = self.powertrain.get_maximum_motor_speed(
-            cell_state
+            cell_state,
         )
         return self.motor_speed_to_velocity(maximum_motor_speed)
 

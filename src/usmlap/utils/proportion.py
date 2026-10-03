@@ -1,6 +1,5 @@
 """
-This module contains utility functions for working with proportions.
-"""
+This module contains utility functions for working with proportions."""
 
 
 def split(total: float, proportions: tuple[float, ...]):
@@ -14,6 +13,7 @@ def split(total: float, proportions: tuple[float, ...]):
     Returns:
         split_value (tuple[float, ...]):
             Total split proportionally according to proportions
+
     """
     return tuple(p * total / sum(proportions) for p in proportions)
 
@@ -28,6 +28,7 @@ def with_complement(proportion: float) -> tuple[float, float]:
     Returns:
         proportion_with_complement (tuple[float, float]):
             Tuple of proportion and (1 - proportion)
+
     """
     complement = 1 - proportion
     return proportion, complement
@@ -44,6 +45,7 @@ def normalise(values: tuple[float, ...]):
 
     Returns:
         normalised_values (tuple[float, float]): Tuple of normalised values
+
     """
     total = sum(values)
     return tuple(v / total for v in values)

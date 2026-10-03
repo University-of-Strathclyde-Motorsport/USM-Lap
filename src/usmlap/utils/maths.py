@@ -1,7 +1,5 @@
 """
-This module contains functions for mathematical operations.
-"""
-
+This module contains functions for mathematical operations."""
 
 
 def clamp(

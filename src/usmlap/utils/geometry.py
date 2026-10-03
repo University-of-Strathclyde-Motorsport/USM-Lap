@@ -15,5 +15,6 @@ def area_of_circle(diameter: float) -> float:
 
     Returns:
         area (float): Area of the circle.
+
     """
     return pow(diameter, 2) * (pi / 4)

@@ -18,9 +18,7 @@ from pydantic import BaseModel
 
 class _ParameterGroup(ABC, BaseModel):
     """
-    Base class for parameter groups.
-    """
-
+    Base class for parameter groups."""
 
 
 class Units(_ParameterGroup):
@@ -33,6 +31,7 @@ class Units(_ParameterGroup):
         ANGLE: Angle units (default: "radians").
         MASS: Mass units (default: "kg").
         TIME: Time units (default: "second").
+
     """
 
     LENGTH: str
@@ -52,9 +51,10 @@ class Model(_ParameterGroup):
             "LEFT" or "RIGHT" (default = "LEFT").
         LONGVL (float): Reference speed.
         VXLOW (float): Lower boundary velocity in slip calculation.
-        ROAD_INCREMENT (Optional[float]): Increment in road sampling.
-        ROAD_DIRECTION (Optional[float]): Direction of travelled distance.
+        ROAD_INCREMENT (float | None): Increment in road sampling.
+        ROAD_DIRECTION (float | None): Direction of travelled distance.
             1 = default, -1 = reverse (default = 1)
+
     """
 
     FITTYP: int
@@ -71,10 +71,11 @@ class Dimension(_ParameterGroup):
 
     Attributes:
         UNLOADED_RADIUS (float): Free tyre radius.
-        WIDTH (Optional[float]): Nominal section width of the tyre.
-        RIM_RADIUS (Optional[float]): Nominal rim radius.
-        RIM_WIDTH (Optional[float]): Rim width.
-        ASPECT_RATIO (Optional[float]): Nominal aspect ratio.
+        WIDTH (float | None): Nominal section width of the tyre.
+        RIM_RADIUS (float | None): Nominal rim radius.
+        RIM_WIDTH (float | None): Rim width.
+        ASPECT_RATIO (float | None): Nominal aspect ratio.
+
     """
 
     UNLOADED_RADIUS: float
@@ -91,6 +92,7 @@ class OperatingConditions(_ParameterGroup):
     Attributes:
         INFLPRES (float): Tyre inflation pressure.
         NOMPRES (float): Nominal pressure used in Magic Formula equations.
+
     """
 
     INFLPRES: float
@@ -102,13 +104,14 @@ class Inertia(_ParameterGroup):
     Mass and inertia properties of the tyre and tyre belt.
 
     Attributes:
-        MASS (Optional[float]): Tyre mass.
-        IXX (Optional[float]): Tyre diametral moment of inertia.
-        IYY (Optional[float]): Tyre polar moment of inertia.
-        BELT_MASS (Optional[float]): Belt mass.
-        BELT_IXX (Optional[float]): Belt diametral moment of inertia.
-        BELT_IYY (Optional[float]): Belt polar moment of inertia.
-        GRAVITY (Optional[float]): Gravity acting on belt in Z direction.
+        MASS (float | None): Tyre mass.
+        IXX (float | None): Tyre diametral moment of inertia.
+        IYY (float | None): Tyre polar moment of inertia.
+        BELT_MASS (float | None): Belt mass.
+        BELT_IXX (float | None): Belt diametral moment of inertia.
+        BELT_IYY (float | None): Belt polar moment of inertia.
+        GRAVITY (float | None): Gravity acting on belt in Z direction.
+
     """
 
     MASS: float | None = None
@@ -126,41 +129,42 @@ class Vertical(_ParameterGroup):
 
     Attributes:
         FNOMIN (float): Nominal wheel load.
-        VERTICAL_STIFFNESS (Optional[float]): tyre vertical stiffness.
-        VERTICAL_DAMPING (Optional[float]): tyre vertical damping.
-        MC_CONTOUR_A (Optional[float]): Motorcycle contour ellipse A.
-        MC_CONTOUR_B (Optional[float]): Motorcycle contour ellipse B.
-        BREFF (Optional[float]): Low load stiffness of effective rolling radius.
-        DREFF (Optional[float]): Peak value of effective rolling radius.
-        FREFF (Optional[float]):
+        VERTICAL_STIFFNESS (float | None): tyre vertical stiffness.
+        VERTICAL_DAMPING (float | None): tyre vertical damping.
+        MC_CONTOUR_A (float | None): Motorcycle contour ellipse A.
+        MC_CONTOUR_B (float | None): Motorcycle contour ellipse B.
+        BREFF (float | None): Low load stiffness of effective rolling radius.
+        DREFF (float | None): Peak value of effective rolling radius.
+        FREFF (float | None):
             High load stiffness of effective rolling radius.
-        Q_RE0 (Optional[float]):
+        Q_RE0 (float | None):
             Ratio of free tyre radius with nominal tyre radius.
-        Q_V1 (Optional[float]): tyre radius increase with speed.
-        Q_V2 (Optional[float]): Vertical stiffness increase with speed.
-        Q_FZ2 (Optional[float]): Quadratic term in load vs. deflection.
-        Q_FCX (Optional[float]):
+        Q_V1 (float | None): tyre radius increase with speed.
+        Q_V2 (float | None): Vertical stiffness increase with speed.
+        Q_FZ2 (float | None): Quadratic term in load vs. deflection.
+        Q_FCX (float | None):
             Longitudinal force influence on vertical stiffness.
-        Q_FCY (Optional[float]): Lateral force influence on vertical stiffness.
-        Q_FCY2 (Optional[float]): Explicit load dependency for including
+        Q_FCY (float | None): Lateral force influence on vertical stiffness.
+        Q_FCY2 (float | None): Explicit load dependency for including
             the lateral force influence on vertical stiffness.
-        Q_CAM (Optional[float]): Stiffness reduction due to camber.
-        Q_CAM1 (Optional[float]): Linear load dependent camber angle
+        Q_CAM (float | None): Stiffness reduction due to camber.
+        Q_CAM1 (float | None): Linear load dependent camber angle
             influence on vertical stiffness.
-        Q_CAM2 (Optional[float]): Quadratic load dependent camber angle
+        Q_CAM2 (float | None): Quadratic load dependent camber angle
             influence on vertical stiffness.
-        Q_CAM3 (Optional[float]): Linear load and camber angle dependent
+        Q_CAM3 (float | None): Linear load and camber angle dependent
             reduction on vertical stiffness.
-        Q_FYS1 (Optional[float]): Combined camber angle and side slip angle
+        Q_FYS1 (float | None): Combined camber angle and side slip angle
             effect on vertical stiffness (constant).
-        Q_FYS2 (Optional[float]): Combined camber angle and side slip angle
+        Q_FYS2 (float | None): Combined camber angle and side slip angle
             linear effect on vertical stiffness.
-        Q_FYS3 (Optional[float]): Combined camber angle and side slip angle
+        Q_FYS3 (float | None): Combined camber angle and side slip angle
             quadratic effect on vertical stiffness.
-        PFZ1 (Optional[float]): Pressure effect on vertical stiffness.
-        BOTTOM_OFFST (Optional[float]):
+        PFZ1 (float | None): Pressure effect on vertical stiffness.
+        BOTTOM_OFFST (float | None):
             Distance to rim when bottoming starts to occur.
-        BOTTOM_STIFF (Optional[float]): Vertical stiffness of bottomed tyre.
+        BOTTOM_STIFF (float | None): Vertical stiffness of bottomed tyre.
+
     """
 
     FNOMIN: float
@@ -195,41 +199,42 @@ class Structural(_ParameterGroup):
     Tyre stiffness, damping, and eigenfrequencies.
 
     Attributes:
-        LONGITUDINAL_STIFFNESS (Optional[float]):
+        LONGITUDINAL_STIFFNESS (float | None):
             Tyre overall longitudinal stiffness.
-        LATERAL_STIFFNESS (Optional[float]): Tyre overall lateral stiffness.
-        YAW_STIFFNESS (Optional[float]): Tyre overall yaw stiffness.
-        FREQ_LONG (Optional[float]):
+        LATERAL_STIFFNESS (float | None): Tyre overall lateral stiffness.
+        YAW_STIFFNESS (float | None): Tyre overall yaw stiffness.
+        FREQ_LONG (float | None):
             Undamped frequency fore/aft and vertical mode.
-        FREQ_LAT (Optional[float]): Undamped frequency lateral mode.
-        FREQ_YAW (Optional[float]): Undamped frequency yaw and camber mode.
-        FREQ_WINDUP (Optional[float]): Undamped frequency wind-up mode.
-        DAMP_LONG (Optional[float]):
+        FREQ_LAT (float | None): Undamped frequency lateral mode.
+        FREQ_YAW (float | None): Undamped frequency yaw and camber mode.
+        FREQ_WINDUP (float | None): Undamped frequency wind-up mode.
+        DAMP_LONG (float | None):
             Dimensionless damping fore/aft and vertical mode.
-        DAMP_LAT (Optional[float]): Dimensionless damping lateral mode.
-        DAMP_YAW (Optional[float]): Dimensionless damping yaw and camber mode.
-        DAMP_WINDUP (Optional[float]): Dimensionless damping wind-up mode.
-        DAMP_RESIDUAL (Optional[float]):
+        DAMP_LAT (float | None): Dimensionless damping lateral mode.
+        DAMP_YAW (float | None): Dimensionless damping yaw and camber mode.
+        DAMP_WINDUP (float | None): Dimensionless damping wind-up mode.
+        DAMP_RESIDUAL (float | None):
             Residual damping (proportional to stiffness).
-        DAMP_VLOW (Optional[float]):
+        DAMP_VLOW (float | None):
             Additional low speed damping (proportional to stiffness).
-        Q_BVX (Optional[float]):
+        Q_BVX (float | None):
             Load and speed influence on in-plane translation stiffness.
-        Q_BVT (Optional[float]):
+        Q_BVT (float | None):
             Load and speed influence on in-plane rotation stiffness.
-        PCFX1 (Optional[float]): Tyre overall longitudinal stiffness
+        PCFX1 (float | None): Tyre overall longitudinal stiffness
             vertical deflection dependency linear term.
-        PCFX2 (Optional[float]): Tyre overall longitudinal stiffness
+        PCFX2 (float | None): Tyre overall longitudinal stiffness
             vertical deflection dependency quadratic term.
-        PCFX3 (Optional[float]):
+        PCFX3 (float | None):
             Tyre overall longitudinal stiffness pressure dependency.
-        PCFY1 (Optional[float]): Tyre overall lateral stiffness
+        PCFY1 (float | None): Tyre overall lateral stiffness
             vertical deflection dependency linear term.
-        PCFY2 (Optional[float]): Tyre overall lateral stiffness
+        PCFY2 (float | None): Tyre overall lateral stiffness
             vertical deflection dependency quadratic term.
-        PCFY3 (Optional[float]):
+        PCFY3 (float | None):
             Tyre overall lateral stiffness pressure dependency.
-        PCMZ1 (Optional[float]): Tyre overall yaw stiffness pressure dependency.
+        PCMZ1 (float | None): Tyre overall yaw stiffness pressure dependency.
+
     """
 
     LONGITUDINAL_STIFFNESS: float | None = None
@@ -261,23 +266,24 @@ class ContactPatch(_ParameterGroup):
     Contact length and obstacle enveloping parameters.
 
     Attributes:
-        Q_RA1 (Optional[float]): Square root term in contact length equation.
-        Q_RA2 (Optional[float]): Linear term in contact length equation.
-        Q_RB1 (Optional[float]): Root term in contact width equation.
-        Q_RB2 (Optional[float]): Linear term in contact width equation.
-        ELLIPS_SHIFT (Optional[float]):
+        Q_RA1 (float | None): Square root term in contact length equation.
+        Q_RA2 (float | None): Linear term in contact length equation.
+        Q_RB1 (float | None): Root term in contact width equation.
+        Q_RB2 (float | None): Linear term in contact width equation.
+        ELLIPS_SHIFT (float | None):
             Scaling of distance between front and rear ellipsoid.
-        ELLIPS_LENGTH (Optional[float]): Semimajor axis of ellipsoid.
-        ELLIPS_HEIGHT (Optional[float]): Semiminor axis of ellipsoid.
-        ELLIPS_ORDER (Optional[float]): Order of ellipsoid.
-        ELLIPS_MAX_STEP (Optional[float]): Maximum height of road step.
-        ELLIPS_NWIDTH (Optional[float]): Number of parallel ellipsoids.
-        ELLIPS_NLENGTH (Optional[float]):
+        ELLIPS_LENGTH (float | None): Semimajor axis of ellipsoid.
+        ELLIPS_HEIGHT (float | None): Semiminor axis of ellipsoid.
+        ELLIPS_ORDER (float | None): Order of ellipsoid.
+        ELLIPS_MAX_STEP (float | None): Maximum height of road step.
+        ELLIPS_NWIDTH (float | None): Number of parallel ellipsoids.
+        ELLIPS_NLENGTH (float | None):
             Number of ellipsoids at sides of contact patch.
-        ENV_C1 (Optional[float]): Effective height attenuation.
-        ENV_C2 (Optional[float]): Effective plane angle attenuation.
-        Q_A2 (Optional[float]): Linear load term in contact length.
-        Q_A1 (Optional[float]): Square root load term in contact length.
+        ENV_C1 (float | None): Effective height attenuation.
+        ENV_C2 (float | None): Effective plane angle attenuation.
+        Q_A2 (float | None): Linear load term in contact length.
+        Q_A1 (float | None): Square root load term in contact length.
+
     """
 
     Q_RA1: float | None = None
@@ -302,8 +308,9 @@ class InflationPressureRange(_ParameterGroup):
     Minimum and maximum allowed inflation pressures.
 
     Attributes:
-        PRESMIN (Optional[float]): Minimum allowed inflation pressure.
-        PRESMAX (Optional[float]): Maximum allowed inflation pressure.
+        PRESMIN (float | None): Minimum allowed inflation pressure.
+        PRESMAX (float | None): Maximum allowed inflation pressure.
+
     """
 
     PRESMIN: float | None = None
@@ -315,8 +322,9 @@ class VerticalForceRange(_ParameterGroup):
     Minimum and maximum allowed wheel loads.
 
     Attributes:
-        FZMIN (Optional[float]): Minimum allowed wheel load.
-        FZMAX (Optional[float]): Maximum allowed wheel load.
+        FZMIN (float | None): Minimum allowed wheel load.
+        FZMAX (float | None): Maximum allowed wheel load.
+
     """
 
     FZMIN: float | None = None
@@ -328,8 +336,9 @@ class LongSlipRange(_ParameterGroup):
     Minimum and maximum valid longitudinal slips.
 
     Attributes:
-        KPUMIN (Optional[float]): Minimum valid wheel slip.
-        KPUMAX (Optional[float]): Maximum valid wheel slip.
+        KPUMIN (float | None): Minimum valid wheel slip.
+        KPUMAX (float | None): Maximum valid wheel slip.
+
     """
 
     KPUMIN: float | None = None
@@ -341,8 +350,9 @@ class SlipAngleRange(_ParameterGroup):
     Minimum and maximum valid sideslip angles.
 
     Attributes:
-        ALPMIN (Optional[float]): Minimum valid slip angle.
-        ALPMAX (Optional[float]): Maximum valid slip angle.
+        ALPMIN (float | None): Minimum valid slip angle.
+        ALPMAX (float | None): Maximum valid slip angle.
+
     """
 
     ALPMIN: float | None = None
@@ -354,8 +364,9 @@ class InclinationAngleRange(_ParameterGroup):
     Minimum and maximum valid inclination angles.
 
     Attributes:
-        CAMMIN (Optional[float]): Minimum valid camber angle.
-        CAMMAX (Optional[float]): Maximum valid camber angle.
+        CAMMIN (float | None): Minimum valid camber angle.
+        CAMMAX (float | None): Maximum valid camber angle.
+
     """
 
     CAMMIN: float | None = None
@@ -391,7 +402,8 @@ class ScalingCoefficients(_ParameterGroup):
         LMX (float): Scale factor of overturning moment.
         LVMX (float): Scale factor of Mx vertical shift.
         LMY (float): Scale factor of rolling resistance torque.
-        LMP (Optional[float]): Scale factor of parking moment.
+        LMP (float | None): Scale factor of parking moment.
+
     """
 
     LFZO: float = 1
@@ -452,6 +464,7 @@ class LongitudinalCoefficients(_ParameterGroup):
         PPX2 (float): Quadratic pressure effect on slip stiffness.
         PPX3 (float): Linear pressure effect on longitudinal friction.
         PPX4 (float): Quadratic pressure effect on longitudinal friction.
+
     """
 
     PCX1: float
@@ -498,10 +511,12 @@ class OverturningCoefficients(_ParameterGroup):
         QSX9 (float): B-factor of lateral force with load on Mx.
         QSX10 (float): Vertical force with camber on Mx.
         QSX11 (float): B-factor of vertical force with camber on Mx.
-        QSX12 (Optional[float]): Camber squared induced overturning moment.
-        QSX13 (Optional[float]): Lateral force induced overturning moment.
-        QSX14 (Optional[float]): Lateral force induced overturning moment with camber.
+        QSX12 (float | None): Camber squared induced overturning moment.
+        QSX13 (float | None): Lateral force induced overturning moment.
+        QSX14 (float | None):
+            Lateral force induced overturning moment with camber.
         PPMX1 (float): Influence of inflation pressure on overturning moment.
+
     """
 
     QSX1: float
@@ -568,6 +583,7 @@ class LateralCoefficients(_ParameterGroup):
         PPY3 (float): Linear pressure effect on lateral friction.
         PPY4 (float): Quadratic pressure effect on lateral friction.
         PPY5 (float): Influence of inflation pressure on camber stiffness.
+
     """
 
     PCY1: float
@@ -622,11 +638,14 @@ class RollingCoefficients(_ParameterGroup):
         QSY1 (float): Rolling resistance torque coefficient.
         QSY2 (float): Rolling resistance torque depending on Fx.
         QSY3 (float): Rolling resistance torque depending on speed.
-        QSY4 (float): Rolling resistance torque depending on the fourth power of speed.
+        QSY4 (float):
+            Rolling resistance torque depending on the fourth power of speed.
         QSY5 (float): Rolling resistance torque depending on camber squared.
-        QSY6 (float): Rolling resistance torque depending on load and camber squared.
+        QSY6 (float):
+            Rolling resistance torque depending on load and camber squared.
         QSY7 (float): Rolling resistance torque coefficient load dependency.
         QSY8 (float): Rolling resistance torque coefficient pressure dependency.
+
     """
 
     QSY1: float
@@ -649,7 +668,7 @@ class AligningCoefficients(_ParameterGroup):
         QBZ3 (float): Variation of slope Bpt with load squared.
         QBZ4 (float): Variation of slope Bpt with camber.
         QBZ5 (float): Variation of slope Bpt with absolute camber.
-        QBZ6 (Optional[float]): Variation of slope Bpt with camber squared.
+        QBZ6 (float | None): Variation of slope Bpt with camber squared.
         QBZ9 (float): Slope factor Br of residual torque Mzr.
         QBZ10 (float): Slope factor Br of residual torque Mzr.
         QCZ1 (float): Shape factor Cpt for pneumatic trail.
@@ -677,7 +696,9 @@ class AligningCoefficients(_ParameterGroup):
         SSZ3 (float): Variation of distance s/R0 with camber.
         SSZ4 (float): Variation of distance s/R0 with load and camber.
         PPZ1 (float): Linear pressure effect on pneumatic trail.
-        PPZ2 (float): Influence of inflation pressure on residual aligning torque.
+        PPZ2 (float):
+            Influence of inflation pressure on residual aligning torque.
+
     """
 
     QBZ1: float
@@ -721,26 +742,45 @@ class TurnslipCoefficients(_ParameterGroup):
     Coefficients for turn slip, affecting all forces and moments.
 
     Attributes:
-        PDXP1 (Optional[float]): Peak Fx reduction due to spin parameter.
-        PDXP2 (Optional[float]): Peak Fx reduction due to spin with varying load parameter.
-        PDXP3 (Optional[float]): Peak Fx reduction due to spin with kappa parameter.
-        PKYP1 (Optional[float]): Cornering stiffness reduction due to spin.
-        PDYP1 (Optional[float]): Peak Fy reduction due to spin parameter.
-        PDYP2 (Optional[float]): Peak Fy reduction due to spin with varying load parameter.
-        PDYP3 (Optional[float]): Peak Fy reduction due to spin with alpha parameter.
-        PDYP4 (Optional[float]): Peak Fy reduction due to square root of spin parameter.
-        PHYP1 (Optional[float]): Fy-alpha curve lateral shift limitation.
-        PHYP2 (Optional[float]): Fy-alpha curve maximum lateral shift parameter.
-        PHYP3 (Optional[float]): Fy-alpha curve maximum lateral shift varying with load parameter.
-        PHYP4 (Optional[float]): Fy-alpha curve maximum lateral shift parameter.
-        PECP1 (Optional[float]): Camber w.r.t. spin reduction factor parameter in camber stiffness.
-        PECP2 (Optional[float]): Camber w.r.t. spin reduction factor
+        PDXP1 (float | None):
+            Peak Fx reduction due to spin parameter.
+        PDXP2 (float | None):
+            Peak Fx reduction due to spin with varying load parameter.
+        PDXP3 (float | None):
+            Peak Fx reduction due to spin with kappa parameter.
+        PKYP1 (float | None):
+            Cornering stiffness reduction due to spin.
+        PDYP1 (float | None):
+            Peak Fy reduction due to spin parameter.
+        PDYP2 (float | None):
+            Peak Fy reduction due to spin with varying load parameter.
+        PDYP3 (float | None):
+            Peak Fy reduction due to spin with alpha parameter.
+        PDYP4 (float | None):
+            Peak Fy reduction due to square root of spin parameter.
+        PHYP1 (float | None):
+            Fy-alpha curve lateral shift limitation.
+        PHYP2 (float | None):
+            Fy-alpha curve maximum lateral shift parameter.
+        PHYP3 (float | None):
+            Fy-alpha curve maximum lateral shift varying with load parameter.
+        PHYP4 (float | None):
+            Fy-alpha curve maximum lateral shift parameter.
+        PECP1 (float | None):
+            Camber w.r.t. spin reduction factor parameter in camber stiffness.
+        PECP2 (float | None):
+            Camber w.r.t. spin reduction factor
             varying with load parameter in camber stiffness.
-        QDTP1 (Optional[float]): Pneumatic trail reduction factor due to turn slip parameter.
-        QCRP1 (Optional[float]): Turning moment at constant turning and zero forward speed parameter.
-        QCRP2 (Optional[float]): Turn slip moment (at alpha=90deg) parameter for increase with spin.
-        QBRP1 (Optional[float]): Residual (spin) torque reduction factor parameter due to side slip.
-        QDRP1 (Optional[float]): Turn slip moment peak magnitude parameter.
+        QDTP1 (float | None):
+            Pneumatic trail reduction factor due to turn slip parameter.
+        QCRP1 (float | None):
+            Turning moment at constant turning and zero forward speed parameter.
+        QCRP2 (float | None):
+            Turn slip moment (at alpha=90deg) parameter for increase with spin.
+        QBRP1 (float | None):
+            Residual (spin) torque reduction factor parameter due to side slip.
+        QDRP1 (float | None): Turn slip moment peak magnitude parameter.
+
     """
 
     PDXP1: float | None = None
@@ -820,6 +860,7 @@ class TIRParameters(BaseModel):
 
         >>> tir_parameters = TIRParameters.from_file("Example Tyre.tir")
         >>> inflation_pressure = tir_parameters.OPERATING_CONDITIONS.INFLPRES
+
     """
 
     UNITS: Units
@@ -870,6 +911,7 @@ class TIRParameters(BaseModel):
             ValidationError:
                 If the data cannot be converted
                 into a valid `TIRParameters` object.
+
         """
         tir_data = _TIRReader().read(filepath)
         return cls.model_validate(tir_data)
@@ -877,8 +919,7 @@ class TIRParameters(BaseModel):
 
 class _TIRReader:
     """
-    Reads and parses .TIR files.
-    """
+    Reads and parses .TIR files."""
 
     def read(self, filepath: str) -> dict[str, dict[str, str]]:
         """
@@ -898,6 +939,7 @@ class _TIRReader:
                 If the file is not found.
             ValueError:
                 If an error occurs while parsing the .TIR file.
+
         """
         self.active_parameter_group: str | None = None
         self.data: dict[str, dict[str, str]] = {}
@@ -909,11 +951,8 @@ class _TIRReader:
 
     @staticmethod
     def _read_lines(filepath: str) -> list[str]:
-        try:
-            with open(filepath, "r") as file:
-                return file.readlines()
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Unable to find file '{filepath}'")
+        with open(filepath) as file:
+            return file.readlines()
 
     def _parse_line(self, line: str) -> None:
         """
@@ -921,6 +960,7 @@ class _TIRReader:
 
         Args:
             line (str): A line from the .TIR file.
+
         """
         line = line.strip()
         if line.startswith(("$", "!")):
@@ -945,6 +985,7 @@ class _TIRReader:
         Raises:
             ValueError:
                 If the group name cannot be parsed.
+
         """
         match = re.search(r"\[([A-Z_]+)\]", line)
         if not match:
@@ -967,13 +1008,15 @@ class _TIRReader:
             ValueError:
                 If no parameter group is currently active,
                 then the line cannot be parsed.
+
         """
         match = re.search(r"([A-Z0-9_]+)\s*=\s*([^\n\r\$]+)", line)
         if not match:
             return
         parameter, value = match.group(1, 2)
         if not self.active_parameter_group:
-            raise ValueError(
+            msg = (
                 f"Cannot parse parameter {parameter}; no active parameter group"
             )
+            raise ValueError(msg)
         self.data[self.active_parameter_group][parameter] = value.strip(" '")

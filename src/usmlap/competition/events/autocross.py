@@ -1,6 +1,5 @@
 """
-This module defines the autocross event at Formula Student.
-"""
+This module defines the autocross event at Formula Student."""
 
 from dataclasses import InitVar, dataclass, field
 
@@ -31,14 +30,18 @@ class Autocross(EventInterface, label="autocross"):
         self.track_data = TrackData.from_json(track_file)
 
     def simulate_event(
-        self, vehicle: Vehicle, settings: SimulationSettings
+        self,
+        vehicle: Vehicle,
+        settings: SimulationSettings,
     ) -> TelemetrySolution:
         mesh = self.get_mesh(settings.mesh_resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
     def calculate_points(
-        self, solution: TelemetrySolution, data: CompetitionData
+        self,
+        solution: TelemetrySolution,
+        data: CompetitionData,
     ) -> CompetitionPoints:
         t_team = solution.solution.total_time
         t_min = data.autocross_t_min
@@ -54,5 +57,6 @@ class Autocross(EventInterface, label="autocross"):
 
         Returns:
             mesh (Mesh): A mesh of the track.
+
         """
         return generate_mesh(self.track_data, resolution)

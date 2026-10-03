@@ -1,6 +1,5 @@
 """
-This module defines the parameters of a tyre.
-"""
+This module defines the parameters of a tyre."""
 
 from pydantic import PositiveFloat
 
@@ -16,6 +15,7 @@ class Tyre(HasLibrary, path=LIBRARY_ROOT / "components" / "tyres"):
         print_name (str): Printable name of the tyre.
         unloaded_radius (float): The unloaded radius of the tyre.
         tyre_model (TyreModel): The tyre model.
+
     """
 
     print_name: str
