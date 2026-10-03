@@ -2,9 +2,7 @@
 This module models the full vehicle.
 """
 
-from typing import Optional
-
-from usmlap.filepath import LIBRARY_ROOT
+from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.datatypes import FrontRear
 from usmlap.utils.library import HasLibrary
 
@@ -50,7 +48,7 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     tyres: FrontRear[Tyre]
     label: str = ""
     description: str = ""
-    year: Optional[int] = None
+    year: int | None = None
 
     @property
     def total_mass(self) -> float:

@@ -2,14 +2,14 @@
 This module contains code for comparing two or more distinct vehicles.
 """
 
-from typing import Generator
+from collections.abc import Generator
 
 from usmlap.competition import Competition, CompetitionPoints
 from usmlap.simulation import SimulationSettings
 from usmlap.vehicle import Vehicle
 
 
-class ComparisonResults(object):
+class ComparisonResults:
     """
     Data structure containing the results of a comparison simulation.
     """
@@ -77,7 +77,7 @@ def compare_vehicles(
     results = ComparisonResults()
 
     for vehicle in vehicles:
-        points, _ = competition.simulate(vehicle, simulation_settings)
-        results.add_result(vehicle, points)
+        sim_results = competition.simulate(vehicle, simulation_settings)
+        results.add_result(vehicle, sim_results.points)
 
     return results

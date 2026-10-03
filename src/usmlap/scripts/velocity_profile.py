@@ -2,11 +2,9 @@
 This script displays a velocity profile from a simulation.
 """
 
-from usmlap.model.traction import Bicycle
 from usmlap.plot import plot_apexes
-from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation import simulate
 from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

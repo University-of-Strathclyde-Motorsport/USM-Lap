@@ -2,17 +2,23 @@
 
 import pytest
 
-from usmlap.vehicle.powertrain import Accumulator, Cell
+from usmlap.vehicle.powertrain import Accumulator, Cell, StateOfCharge
+
+
+def test_state_of_charge() -> None:
+    assert StateOfCharge(1) == 1
+    assert StateOfCharge(0) == 0
+    assert StateOfCharge(0.5) == 0.5
+    with pytest.raises(ValueError):
+        StateOfCharge(2)
+    with pytest.raises(ValueError):
+        StateOfCharge(-1)
 
 
 def test_cell_voltage(cell: Cell) -> None:
-    assert cell.get_voltage(state_of_charge=1) == pytest.approx(4.2)
-    assert cell.get_voltage(state_of_charge=0) == pytest.approx(2.5)
-    assert cell.get_voltage(state_of_charge=0.5) == pytest.approx(3.35)
-    with pytest.raises(ValueError):
-        cell.get_voltage(state_of_charge=2)
-    with pytest.raises(ValueError):
-        cell.get_voltage(state_of_charge=-1)
+    assert cell.get_voltage(StateOfCharge(1)) == pytest.approx(4.2)
+    assert cell.get_voltage(StateOfCharge(0)) == pytest.approx(2.5)
+    assert cell.get_voltage(StateOfCharge(0.5)) == pytest.approx(3.35)
 
 
 def test_cell_count(accumulator: Accumulator) -> None:
@@ -40,10 +46,6 @@ def test_maximum_discharge_current(accumulator: Accumulator) -> None:
 
 
 def test_accumulator_voltage(accumulator: Accumulator) -> None:
-    assert accumulator.get_voltage(state_of_charge=1) == 420
-    assert accumulator.get_voltage(state_of_charge=0) == 250
-    assert accumulator.get_voltage(state_of_charge=0.5) == 335
-    with pytest.raises(ValueError):
-        accumulator.get_voltage(state_of_charge=2)
-    with pytest.raises(ValueError):
-        accumulator.get_voltage(state_of_charge=-1)
+    assert accumulator.get_voltage(StateOfCharge(1)) == 420
+    assert accumulator.get_voltage(StateOfCharge(0)) == 250
+    assert accumulator.get_voltage(StateOfCharge(0.5)) == 335

@@ -4,7 +4,7 @@ This module defines the parameters of a tyre.
 
 from pydantic import PositiveFloat
 
-from usmlap.filepath import LIBRARY_ROOT
+from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.library import HasLibrary
 
 

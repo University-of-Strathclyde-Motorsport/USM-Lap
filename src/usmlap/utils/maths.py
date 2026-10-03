@@ -2,14 +2,13 @@
 This module contains functions for mathematical operations.
 """
 
-from typing import Optional
 
 
 def clamp(
     value: float,
     *,
-    minimum: Optional[float] = None,
-    maximum: Optional[float] = None,
+    minimum: float | None = None,
+    maximum: float | None = None,
 ) -> float:
     """
     Clamp a value to a range.

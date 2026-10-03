@@ -10,7 +10,7 @@ AMBIENT_TEMPERATURE = 32
 
 
 @dataclass
-class Environment(object):
+class Environment:
     """
     Environmental variables for the simulation.
 

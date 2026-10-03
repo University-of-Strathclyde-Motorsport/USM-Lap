@@ -8,7 +8,7 @@ from pydantic import PositiveFloat
 
 
 @dataclass
-class Transmission(object):
+class Transmission:
     """
     The transmission of the vehicle.
 

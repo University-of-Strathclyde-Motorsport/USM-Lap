@@ -8,7 +8,7 @@
 # from enum import Enum
 # from math import pi
 
-# from usmlap.filepath import LIBRARY_ROOT
+# from usmlap.core.filepath import LIBRARY_ROOT
 # from usmlap.utils.library import ArrayLibrary
 
 

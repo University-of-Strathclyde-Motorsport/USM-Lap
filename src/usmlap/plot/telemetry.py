@@ -3,7 +3,7 @@ This module contains code for plotting telemetry data.
 """
 
 from itertools import cycle
-from typing import Literal, Optional
+from typing import Literal
 
 import matplotlib.pyplot as plt
 
@@ -31,12 +31,12 @@ def plot_channels(
     channels: list[DataChannel],
     *,
     x_axis: X_AXIS_OPTIONS = "Position",
-    title: Optional[str] = None,
-    colours: Optional[list[str]] = None,
+    title: str | None = None,
+    colours: list[str] | None = None,
     linestyle: LINESTYLES | list[LINESTYLES] = "solid",
     show_legend: bool = True,
-    legend_title: Optional[str] = None,
-    y_label_rotation: Optional[ROTATION_OPTIONS] = None,
+    legend_title: str | None = None,
+    y_label_rotation: ROTATION_OPTIONS | None = None,
     show_sectors: bool = False,
     wrap_width: int = 20,
 ) -> None:
@@ -95,7 +95,7 @@ def plot_channels(
             )
 
     if show_sectors and x_axis == "Position":
-        draw_sector_boundaries(axs, list(solutions.values())[0])
+        draw_sector_boundaries(axs, next(iter(solutions.values())))
 
     if title is not None:
         plt.suptitle(title)
@@ -103,18 +103,19 @@ def plot_channels(
     if show_legend:
         outside_legend(axs, title=legend_title)
 
-    plt.tight_layout()
     plt.show()
 
 
 def _create_axs(
     channels: list[TelemetryChannel],
     x_channel: TelemetryChannel,
-    y_label_rotation: Optional[ROTATION_OPTIONS] = None,
+    y_label_rotation: ROTATION_OPTIONS | None = None,
     wrap_width: int = 20,
 ) -> list[plt.Axes]:
     """Construct a set of axes for plotting telemetry channels."""
-    _, axs = plt.subplots(nrows=len(channels), sharex=True)
+    _, axs = plt.subplots(
+        nrows=len(channels), sharex=True, layout="constrained"
+    )
     if isinstance(axs, plt.Axes):
         axs = [axs]
 

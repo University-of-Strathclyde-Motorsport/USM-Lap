@@ -25,7 +25,7 @@ SOLVER = QuasiTransientSolver
 
 
 @dataclass
-class MeshRefinementResult(object):
+class MeshRefinementResult:
     """Mesh refinement result."""
 
     track_length: float
@@ -63,7 +63,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
                 track_length=mesh.track_length,
                 resolution=resolution,
                 node_count=mesh.node_count,
-                laptime=results.total_time,
+                laptime=results.solution.total_time,
                 mesh_time=mesh_time,
                 simulation_time=simulation_time,
             )
@@ -81,7 +81,7 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
     mesh_times = [result.mesh_time for result in results]
     simulation_times = [result.simulation_time for result in results]
 
-    _, ax_laptime = plt.subplots()
+    _, ax_laptime = plt.subplots(layout="constrained")
     ax_comptime = ax_laptime.twinx()
 
     ax_laptime.xaxis.set_inverted(True)
@@ -118,7 +118,6 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
 
     ax_laptime.grid()
     combined_legend(ax_laptime, ax_comptime)
-    plt.tight_layout()
     plt.show()
 
 

@@ -2,7 +2,6 @@
 This module contains functions for plotting track maps.
 """
 
-from typing import Optional
 
 from matplotlib import pyplot as plt
 
@@ -12,10 +11,10 @@ from usmlap.track import Mesh
 
 def plot_map(
     mesh: Mesh,
-    ax: Optional[plt.Axes] = None,
+    ax: plt.Axes | None = None,
     draw_start_arrow: bool = True,
     colour: str = USM_BLUE,
-    label: Optional[str] = None,
+    label: str | None = None,
     show_legend: bool = False,
 ) -> plt.Axes:
     """

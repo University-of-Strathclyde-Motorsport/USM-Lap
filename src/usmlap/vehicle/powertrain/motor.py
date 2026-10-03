@@ -5,7 +5,8 @@ This module models the motor of a vehicle.
 import math
 from functools import cached_property
 
-from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 
 class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):

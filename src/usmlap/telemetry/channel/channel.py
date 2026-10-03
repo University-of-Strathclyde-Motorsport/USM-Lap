@@ -5,7 +5,7 @@ This module defines an interface for telemetry channels.
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from textwrap import wrap
-from typing import ClassVar, NamedTuple, Optional
+from typing import ClassVar, NamedTuple
 
 from pint.facets.plain import PlainUnit as Unit
 
@@ -33,7 +33,7 @@ class TelemetryChannel[T](NamedTuple):
         print(self.channel_fcn)
         return self.channel_fcn(solution)
 
-    def label_with_unit(self, wrap_width: Optional[int] = 25) -> str:
+    def label_with_unit(self, wrap_width: int | None = 25) -> str:
         """
         Get a label for a graph.
         Long labels will be formatted into multiple lines.
@@ -83,7 +83,7 @@ class PrimitiveDataChannel(ABC):
     def read_value(cls, node: SolutionNode) -> float: ...
 
     def __new__(
-        cls, unit: Optional[Unit] = None, label: Optional[str] = None
+        cls, unit: Unit | None = None, label: str | None = None
     ) -> TelemetryChannel[list[float]]:
         def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
             return [cls.read_value(node) for node in solution.nodes]
@@ -116,7 +116,7 @@ class DerivedDataChannel(ABC):
     def channel_fcn(cls, solution: TelemetrySolution) -> list[float]: ...
 
     def __new__(
-        cls, unit: Optional[Unit] = None, label: Optional[str] = None
+        cls, unit: Unit | None = None, label: str | None = None
     ) -> TelemetryChannel[list[float]]:
 
         if not unit:

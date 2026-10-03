@@ -7,14 +7,11 @@ from functools import cached_property, lru_cache
 from typing import Any, Self
 
 import numpy as np
-from scipy.interpolate import (
-    LinearNDInterpolator,
-    NearestNDInterpolator,
-    RegularGridInterpolator,
-)
+from scipy.interpolate import LinearNDInterpolator
 
+from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils import clamp
-from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+from usmlap.utils.library import HasLibrary
 
 NOMINAL_TEMPERATURE = 25
 
@@ -38,7 +35,7 @@ class StateOfCharge(float):
 
 
 @dataclass(frozen=True, eq=True)
-class CellState(object):
+class CellState:
     """
     The state of a cell in the accumulator.
 
@@ -52,7 +49,7 @@ class CellState(object):
 
 
 @dataclass
-class _CellVoltageLookup(object):
+class _CellVoltageLookup:
     """Value from cell voltage lookup table."""
 
     state_of_charge: float
@@ -60,7 +57,7 @@ class _CellVoltageLookup(object):
 
 
 @dataclass
-class _SOCResistanceLookup(object):
+class _SOCResistanceLookup:
     """Value from SOC - resistance lookup table."""
 
     state_of_charge: float
@@ -68,7 +65,7 @@ class _SOCResistanceLookup(object):
 
 
 @dataclass
-class _TemperatureResistanceLookup(object):
+class _TemperatureResistanceLookup:
     """Row from temperature - resistance lookup table."""
 
     temperature: float
@@ -112,7 +109,7 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
     def __hash__(self) -> int:
         return hash(self.__key())
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Cell):
             return NotImplemented
         return self.__key() == other.__key()
@@ -175,18 +172,29 @@ class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
     def _max_temp(self) -> float:
         return max([node.temperature for node in self.resistance_lookup])
 
-    @lru_cache(maxsize=100000)
     def resistance(self, cell_state: CellState) -> float:
         """Get the resistance of the cell for a given cell state."""
-        soc = cell_state.soc
-        temperature = clamp(
-            cell_state.temperature,
-            minimum=self._min_temp,
-            maximum=self._max_temp,
-        )
-        resistance = self._resistance_interpolator((soc, temperature))
-        return resistance + self.resistance_offset
+        return calculate_resistance(self, cell_state)
 
     def discharge_current(self, cell_state: CellState) -> float:
         """Get the available  discharge current for a given cell state.."""
         return self.max_discharge_current
+
+
+@lru_cache(maxsize=100000)
+def calculate_resistance(cell: Cell, cell_state: CellState) -> float:
+    """
+    Calculate the resistance of a cell for a given cell state.
+
+    Args:
+        cell (Cell): The cell to calculate the resistance for.
+        cell_state (CellState): The state of the cell.
+
+    Returns:
+        resistance (float): The resistance of the cell.
+    """
+    temperature = clamp(
+        cell_state.temperature, minimum=cell._min_temp, maximum=cell._max_temp
+    )
+    resistance = cell._resistance_interpolator((cell_state.soc, temperature))
+    return float(resistance) + cell.resistance_offset

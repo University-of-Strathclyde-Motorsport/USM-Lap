@@ -8,16 +8,14 @@ import math
 import os
 from enum import Enum, IntEnum
 from pathlib import Path
-from typing import Optional
 
 import pandas
 from pydantic import BaseModel, Field
 
-from usmlap import filepath
-from usmlap.filepath import LIBRARY_ROOT
+from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.library import HasLibrary
 
-TRACK_LIBRARY = filepath.LIBRARY_ROOT / "tracks"
+TRACK_LIBRARY = LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
 
 
@@ -182,10 +180,10 @@ class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
     """
 
     print_name: str
-    country: Optional[str] = None
-    city: Optional[str] = None
+    country: str | None = None
+    city: str | None = None
     configuration: Configuration
-    event: Optional[Event] = None
+    event: Event | None = None
     shape: list[ShapeData]
     elevation: list[ElevationData] = Field(default_factory=list)
     banking: list[BankingData] = Field(default_factory=list)
@@ -200,7 +198,7 @@ class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
             f"Name: {self.print_name}\n"
             f"Location: {self.location}\n\n"
             f"Total length: {self.total_length} m\n"
-            f"Configuration: {str(self.configuration)}\n"
+            f"Configuration: {self.configuration!s}\n"
             f"Shape data: {len(self.shape)} segments\n"
             f"Elevation: "
             f"high = {self.max_elevation} m, low = {self.min_elevation} m\n"
@@ -314,7 +312,7 @@ def load_track_from_spreadsheet(filename: str) -> TrackData:
         raise FileNotFoundError(error_message)
 
 
-class TrackReader(object):
+class TrackReader:
     """
     Reads track data from an OpenLAP Excel spreadsheet.
 
@@ -436,12 +434,10 @@ class TrackReader(object):
     def get_mirror(self) -> bool:
         """Returns whether the track should be mirrored."""
         mirror_str = str(self._get_info().at["Mirror", 1])
-        return True if mirror_str.lower() in ["on", "yes", "true"] else False
+        return mirror_str.lower() in ["on", "yes", "true"]
 
 
-def save_track_data(
-    track_data: TrackData, filename: Optional[str] = None
-) -> None:
+def save_track_data(track_data: TrackData, filename: str | None = None) -> None:
     """Save track data to a JSON file."""
     if filename is None:
         filename = track_data.print_name

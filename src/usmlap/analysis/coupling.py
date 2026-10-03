@@ -16,7 +16,7 @@ from .sweep_1d import SweepSettings
 
 
 @dataclass
-class CouplingResults(object):
+class CouplingResults:
     """
     The results of a coupling analysis.
 
@@ -32,7 +32,7 @@ class CouplingResults(object):
 
     sweep_parameter: type[Parameter[float]]
     coupled_parameter: type[Parameter[float]]
-    data: dict[float, float] = field(default_factory=lambda: {})
+    data: dict[float, float] = field(default_factory=dict)
 
     def plot(self) -> None:
         plt.plot(list(self.data.keys()), list(self.data.values()))

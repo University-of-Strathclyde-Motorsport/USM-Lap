@@ -96,7 +96,27 @@ class Drag(PrimitiveDataChannel, unit=ureg.newton, label="Drag"):
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
-        return node.calculated_vehicle_state.drag
+        return node.get_calculated_vehicle_state().drag
+
+
+class StateOfCharge(
+    PrimitiveDataChannel, unit=ureg.dimensionless, label="State of Charge"
+):
+    """State of charge of the battery."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.transient_variables.cell_state.soc
+
+
+class CellTemperature(
+    PrimitiveDataChannel, unit=ureg.degree_celsius, label="Cell Temperature"
+):
+    """Temperature of the battery cells."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.transient_variables.cell_state.temperature
 
 
 class AccumulatorCurrent(
@@ -106,7 +126,7 @@ class AccumulatorCurrent(
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
-        return node.calculated_vehicle_state.accumulator_current
+        return node.get_calculated_vehicle_state().accumulator_current
 
 
 class MotorTorque(
@@ -116,7 +136,7 @@ class MotorTorque(
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
-        return node.calculated_vehicle_state.motor_torque
+        return node.get_calculated_vehicle_state().motor_torque
 
 
 class MotorPower(PrimitiveDataChannel, unit=ureg.kilowatt, label="Motor Power"):
@@ -124,4 +144,56 @@ class MotorPower(PrimitiveDataChannel, unit=ureg.kilowatt, label="Motor Power"):
 
     @classmethod
     def read_value(cls, node: SolutionNode) -> float:
-        return node.calculated_vehicle_state.motor_power
+        return node.get_calculated_vehicle_state().motor_power
+
+
+class CoolingPower(
+    PrimitiveDataChannel, unit=ureg.kilowatt, label="Cooling Power"
+):
+    """Power output of the cooling system."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.get_calculated_vehicle_state().cooling_power
+
+
+class HeatingPower(
+    PrimitiveDataChannel, unit=ureg.kilowatt, label="Heating Power"
+):
+    """Heating power of the cells."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.get_calculated_vehicle_state().heating_power
+
+
+class NetHeatingPower(
+    PrimitiveDataChannel, unit=ureg.kilowatt, label="Net Heating Power"
+):
+    """Net heating power of the cells."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.get_calculated_vehicle_state().net_heating_power
+
+
+class LongLT(
+    PrimitiveDataChannel,
+    unit=ureg.meter / ureg.second**2,
+    label="Longitudinal LT",
+):
+    """Longitudinal load transfer of the vehicle."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.get_calculated_vehicle_state().long_lt
+
+
+class LatLT(
+    PrimitiveDataChannel, unit=ureg.meter / ureg.second**2, label="Lateral LT"
+):
+    """Lateral load transfer of the vehicle."""
+
+    @classmethod
+    def read_value(cls, node: SolutionNode) -> float:
+        return node.get_calculated_vehicle_state().lat_lt

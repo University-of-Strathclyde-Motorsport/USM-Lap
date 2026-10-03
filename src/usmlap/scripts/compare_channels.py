@@ -14,7 +14,7 @@ BASELINE_VEHICLE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
-SETTINGS = QualityPresets.HIGH_QUALITY
+SETTINGS = QualityPresets.FAST
 CHANNELS: list[TelemetryChannel] = [Velocity(), MotorTorque()]
 
 baseline = Vehicle.from_json(BASELINE_VEHICLE)

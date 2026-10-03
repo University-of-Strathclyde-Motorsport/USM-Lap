@@ -12,7 +12,7 @@ from usmlap.utils.datatypes import Percentage
 
 
 @dataclass
-class UnsprungMass(object):
+class UnsprungMass:
     """
     Unsprung mass properties for a vehicle.
 
@@ -27,7 +27,7 @@ class UnsprungMass(object):
 
 
 @dataclass
-class Inertia(object):
+class Inertia:
     """
     Inertia properties for a vehicle.
 

@@ -6,19 +6,19 @@ from usmlap.competition.events import Autocross, Endurance
 from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.simulation import SimulationSettings
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import (
-    LapAvgMotorTorque,
-    LapAvgSOC,
-    LapAvgTemperature,
-    LapAvgVelocity,
-    LapTime,
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry import TelemetrySolution
+from usmlap.telemetry.channel.channel import TelemetryChannel
+from usmlap.telemetry.channel.library import (
+    # LapAvgMotorTorque,
+    # LapAvgSOC,
+    # LapAvgTemperature,
+    # LapAvgVelocity,
+    # LapTime,
     MotorTorque,
     StateOfCharge,
     Velocity,
 )
-from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
 configurations: dict[str, SimulationSettings] = {
@@ -26,21 +26,26 @@ configurations: dict[str, SimulationSettings] = {
     "QT": QualityPresets.FAST,
 }
 
-autocross_channels: list[Channel] = [Velocity(), MotorTorque(), StateOfCharge()]
-endurance_channels: list[Channel] = [
-    LapTime(),
-    LapAvgVelocity(),
-    LapAvgMotorTorque(),
-    LapAvgSOC(),
-    LapAvgTemperature(),
+autocross_channels: list[TelemetryChannel] = [
+    Velocity(),
+    MotorTorque(),
+    StateOfCharge(),
 ]
+# endurance_channels: list[TelemetryChannel] = [
+#     LapTime(),
+#     LapAvgVelocity(),
+#     LapAvgMotorTorque(),
+#     LapAvgSOC(),
+#     LapAvgTemperature(),
+# ]
+endurance_channels: list[TelemetryChannel] = []
 
 vehicle = Vehicle.from_json("USM26")
 autocross = Autocross(track_file="FS AutoX Germany 2012")
 endurance = Endurance(track_file="FS AutoX Germany 2012")
 
-autocross_solutions: dict[str, Solution] = {}
-endurance_solutions: dict[str, Solution] = {}
+autocross_solutions: dict[str, TelemetrySolution] = {}
+endurance_solutions: dict[str, TelemetrySolution] = {}
 for label, settings in configurations.items():
     vehicle.label = label
     endurance_solutions[label] = endurance.simulate_event(

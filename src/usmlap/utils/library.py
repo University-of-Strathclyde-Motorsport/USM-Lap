@@ -6,12 +6,11 @@ from __future__ import annotations
 
 import json
 from abc import ABC
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, ClassVar, Iterator, Self
+from typing import Any, ClassVar, Self
 
 from pydantic import BaseModel, ConfigDict, ValidationError, model_validator
-
-from usmlap.filepath import LIBRARY_ROOT as LIBRARY_ROOT  # noqa: S1128
 
 JSON_INDENT = 2  # Number of spaces to indent JSON files
 
@@ -26,7 +25,7 @@ class LibraryNotFoundError(KeyError):
     """
 
     def __init__(
-        self, library: type[HasLibrary] | type[ArrayLibrary], path: Path
+        self, library: type[HasLibrary | ArrayLibrary], path: Path
     ) -> None:
         super().__init__(f"'{library.__name__}' library not found at {path}.")
         self.library = library
@@ -288,7 +287,7 @@ class ArrayLibrary(ABC, BaseModel):
         with open(cls._library_path, "r") as file:
             data = json.load(file)
             if not isinstance(data, list):
-                raise ValueError(
+                raise TypeError(
                     f"Expected a list of items in {cls._library_path}, got {type(data)}"
                 )
             library = {}

@@ -4,7 +4,8 @@ This script simulates the skidpad event.
 
 from usmlap.competition.events import Endurance
 from usmlap.plot import plot_channels
-from usmlap.simulation.channels.library import (
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry.channel.library import (
     AccumulatorCurrent,
     CellTemperature,
     CoolingPower,
@@ -14,7 +15,6 @@ from usmlap.simulation.channels.library import (
     StateOfCharge,
     Velocity,
 )
-from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 
 QUALITY = QualityPresets.FAST

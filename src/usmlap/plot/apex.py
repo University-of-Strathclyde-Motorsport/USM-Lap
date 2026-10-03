@@ -40,7 +40,7 @@ def plot_apexes(solution: TelemetrySolution) -> None:
     apex_position = POSITION(apex_solution)
 
     fig, (ax_curvature, ax_apex) = plt.subplots(
-        nrows=2, height_ratios=[1, 2], sharex=True
+        nrows=2, height_ratios=[1, 2], sharex=True, layout="constrained"
     )
 
     ax_curvature.plot(position, curvature, color=USM_BLUE, zorder=2)
@@ -78,5 +78,4 @@ def plot_apexes(solution: TelemetrySolution) -> None:
     ax_curvature.grid()
     ax_apex.grid()
     ax_apex.legend()
-    plt.tight_layout()
     plt.show()

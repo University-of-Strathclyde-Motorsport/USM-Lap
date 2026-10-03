@@ -9,7 +9,8 @@ from typing import Annotated
 import numpy as np
 from pydantic import BeforeValidator
 
-from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 from .cell import Cell, CellState, StateOfCharge
 
@@ -17,7 +18,7 @@ NOMINAL_TEMPERATURE = 25
 
 
 @dataclass
-class _ThermalDerateNode(object):
+class _ThermalDerateNode:
     """Node of a thermal derating curve."""
 
     temperature: float

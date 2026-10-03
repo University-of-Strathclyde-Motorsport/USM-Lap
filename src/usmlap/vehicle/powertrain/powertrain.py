@@ -5,7 +5,6 @@ This module models the electric powertrain of a vehicle.
 from __future__ import annotations
 
 from abc import ABC
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -22,8 +21,6 @@ class PowertrainInterface(ABC, BaseModel):
     """
 
     # TODO: Why is BaseModel inheritance required?
-
-    ...
 
 
 class RWDPowertrain(PowertrainInterface):
@@ -95,7 +92,7 @@ class RWDPowertrain(PowertrainInterface):
         return accumulator_voltage - voltage_drop
 
     def get_knee_speed(
-        self, cell_state: CellState, current: Optional[float] = None
+        self, cell_state: CellState, current: float | None = None
     ) -> float:
         """
         Calculate the knee speed of the motor.

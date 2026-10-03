@@ -2,19 +2,20 @@
 This script compares the performance of different cells.
 """
 
-from usmlap.analysis import VehicleGenerator, sweep_vehicles
+from usmlap.analysis import VehicleGenerator
 from usmlap.competition.events import Endurance
 from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry.channel.channel import DataChannel
-from usmlap.telemetry.channel.library import (
-    LapAvgCurrent,
-    LapAvgSOC,
-    LapAvgTemperature,
-    LapMaxVelocity,
-    LapTime,
-)
+
+# from usmlap.telemetry.channel.library import (
+#     LapAvgCurrent,
+#     LapAvgSOC,
+#     LapAvgTemperature,
+#     LapMaxVelocity,
+#     LapTime,
+# )
 from usmlap.vehicle import Vehicle
 from usmlap.vehicle.parameters import ElectricalCell
 from usmlap.vehicle.powertrain import Cell
@@ -39,11 +40,12 @@ solutions = {
 
 
 channels: list[DataChannel] = [
-    LapTime(),
-    LapMaxVelocity(),
-    LapAvgCurrent(),
-    LapAvgSOC(),
-    LapAvgTemperature(),
+    # TODO
+    # LapTime(),
+    # LapMaxVelocity(),
+    # LapAvgCurrent(),
+    # LapAvgSOC(),
+    # LapAvgTemperature(),
 ]
 
 plot_channels(

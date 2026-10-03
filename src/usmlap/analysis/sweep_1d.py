@@ -3,19 +3,20 @@ This module contains code for carrying out a 1D sweep of a parameter.
 """
 
 import logging
+from collections.abc import Generator
 from dataclasses import dataclass
-from typing import Generator
 
-import numpy as np
 from rich import progress
 
 from usmlap.competition import Competition, CompetitionPoints
 from usmlap.simulation import SimulationSettings
 from usmlap.vehicle import Parameter, Vehicle, get_new_vehicle
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
-class SweepSettings(object):
+class SweepSettings:
     """
     Settings for a 1D sweep of a parameter.
 
@@ -113,10 +114,10 @@ def sweep_1d(
         transient=True,
         total=sweep_settings.number_of_steps,
     ):
-        logging.info(
+        logger.info(
             f"Simulating vehicle with {sweep_settings.parameter.name} = {value}"
         )
-        points, _ = competition.simulate(vehicle, simulation_settings)
-        sweep_results[value] = points
+        sim_results = competition.simulate(vehicle, simulation_settings)
+        sweep_results[value] = sim_results.points
 
     return sweep_results

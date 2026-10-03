@@ -13,9 +13,11 @@ from usmlap.solver import SolverInterface
 from usmlap.track.mesh_generation import Resolution
 from usmlap.vehicle import Vehicle
 
+DEFAULT_RESOLUTION = Resolution(0.1)
+
 
 @dataclass()
-class SimulationSettings(object):
+class SimulationSettings:
     """
     Settings for a simulation.
 
@@ -26,7 +28,7 @@ class SimulationSettings(object):
         lambdas (LambdaCoefficients): Coefficients for the vehicle model.
     """
 
-    mesh_resolution: Resolution = Resolution(0.1)
+    mesh_resolution: Resolution = DEFAULT_RESOLUTION
     vehicle_model: VehicleModelSettings = field(
         default_factory=VehicleModelSettings
     )
@@ -40,7 +42,7 @@ class SimulationSettings(object):
         )
 
 
-class QualityPresets(object):
+class QualityPresets:
     """
     Simulation setting quality presets.
 

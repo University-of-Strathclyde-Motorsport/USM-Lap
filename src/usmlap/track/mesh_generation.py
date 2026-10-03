@@ -20,9 +20,7 @@ from .track_data import (
     TrackData,
 )
 
-type NDArray = np.ndarray[tuple[Any, ...], np.dtype[np.float64]]
-
-type Array = np.ndarray[tuple[int], np.dtype[np.float64]]
+type NDArray = np.ndarray[tuple[int], np.dtype[np.float64]]
 
 MAX_TANGENCY_CORRECTION_ITERATIONS = 100
 ACCEPTABLE_TANGENCY_ERROR = 1e-4
@@ -74,7 +72,7 @@ def generate_mesh(
     track_length = track_data.total_length
     node_count = round(track_length / resolution)
     spacing = track_length / (node_count - 1)
-    position = np.arange(0, track_length, spacing)
+    position = np.arange(0, track_length, spacing).astype(np.float64)
 
     length = np.diff(np.append(position, track_length))
     curvature = _interpolate_curvature(
@@ -214,7 +212,7 @@ def _interpolate_grip_factor(
 
 
 def _interpolate_sector(
-    data: list[SectorData], sample_position: list[float]
+    data: list[SectorData], sample_position: NDArray
 ) -> list[str]:
     """
     Interpolate the sector of the track at a series of positions.
@@ -230,7 +228,7 @@ def _interpolate_sector(
         return [SectorData.default()] * len(sample_position)
     label = [node.label for node in data]
     start_position = [node.start_position for node in data]
-    return interp_previous(sample_position, start_position, label)
+    return interp_previous(list(sample_position), start_position, label)
 
 
 def _calculate_inclination(position: NDArray, elevation: NDArray) -> NDArray:

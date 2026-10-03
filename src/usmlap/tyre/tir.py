@@ -11,7 +11,7 @@ in section 5.3.
 
 import re
 from abc import ABC
-from typing import Optional, Self
+from typing import Self
 
 from pydantic import BaseModel
 
@@ -21,7 +21,6 @@ class _ParameterGroup(ABC, BaseModel):
     Base class for parameter groups.
     """
 
-    pass
 
 
 class Units(_ParameterGroup):
@@ -62,8 +61,8 @@ class Model(_ParameterGroup):
     TYRESIDE: str = "LEFT"
     LONGVL: float
     VXLOW: float
-    ROAD_INCREMENT: Optional[float] = None
-    ROAD_DIRECTION: Optional[float] = 1
+    ROAD_INCREMENT: float | None = None
+    ROAD_DIRECTION: float | None = 1
 
 
 class Dimension(_ParameterGroup):
@@ -79,10 +78,10 @@ class Dimension(_ParameterGroup):
     """
 
     UNLOADED_RADIUS: float
-    WIDTH: Optional[float] = None
-    RIM_RADIUS: Optional[float] = None
-    RIM_WIDTH: Optional[float] = None
-    ASPECT_RATIO: Optional[float] = None
+    WIDTH: float | None = None
+    RIM_RADIUS: float | None = None
+    RIM_WIDTH: float | None = None
+    ASPECT_RATIO: float | None = None
 
 
 class OperatingConditions(_ParameterGroup):
@@ -112,13 +111,13 @@ class Inertia(_ParameterGroup):
         GRAVITY (Optional[float]): Gravity acting on belt in Z direction.
     """
 
-    MASS: Optional[float] = None
-    IXX: Optional[float] = None
-    IYY: Optional[float] = None
-    BELT_MASS: Optional[float] = None
-    BELT_IXX: Optional[float] = None
-    BELT_IYY: Optional[float] = None
-    GRAVITY: Optional[float] = None
+    MASS: float | None = None
+    IXX: float | None = None
+    IYY: float | None = None
+    BELT_MASS: float | None = None
+    BELT_IXX: float | None = None
+    BELT_IYY: float | None = None
+    GRAVITY: float | None = None
 
 
 class Vertical(_ParameterGroup):
@@ -165,30 +164,30 @@ class Vertical(_ParameterGroup):
     """
 
     FNOMIN: float
-    VERTICAL_STIFFNESS: Optional[float] = None
-    VERTICAL_DAMPING: Optional[float] = None
-    MC_CONTOUR_A: Optional[float] = None
-    MC_CONTOUR_B: Optional[float] = None
-    BREFF: Optional[float] = None
-    DREFF: Optional[float] = None
-    FREFF: Optional[float] = None
-    Q_RE0: Optional[float] = None
-    Q_V1: Optional[float] = None
-    Q_V2: Optional[float] = None
-    Q_FZ2: Optional[float] = None
-    Q_FCX: Optional[float] = None
-    Q_FCY: Optional[float] = None
-    Q_FCY2: Optional[float] = None
-    Q_CAM: Optional[float] = None
-    Q_CAM1: Optional[float] = None
-    Q_CAM2: Optional[float] = None
-    Q_CAM3: Optional[float] = None
-    Q_FYS1: Optional[float] = None
-    Q_FYS2: Optional[float] = None
-    Q_FYS3: Optional[float] = None
-    PFZ1: Optional[float] = None
-    BOTTOM_OFFST: Optional[float] = None
-    BOTTOM_STIFF: Optional[float] = None
+    VERTICAL_STIFFNESS: float | None = None
+    VERTICAL_DAMPING: float | None = None
+    MC_CONTOUR_A: float | None = None
+    MC_CONTOUR_B: float | None = None
+    BREFF: float | None = None
+    DREFF: float | None = None
+    FREFF: float | None = None
+    Q_RE0: float | None = None
+    Q_V1: float | None = None
+    Q_V2: float | None = None
+    Q_FZ2: float | None = None
+    Q_FCX: float | None = None
+    Q_FCY: float | None = None
+    Q_FCY2: float | None = None
+    Q_CAM: float | None = None
+    Q_CAM1: float | None = None
+    Q_CAM2: float | None = None
+    Q_CAM3: float | None = None
+    Q_FYS1: float | None = None
+    Q_FYS2: float | None = None
+    Q_FYS3: float | None = None
+    PFZ1: float | None = None
+    BOTTOM_OFFST: float | None = None
+    BOTTOM_STIFF: float | None = None
 
 
 class Structural(_ParameterGroup):
@@ -233,28 +232,28 @@ class Structural(_ParameterGroup):
         PCMZ1 (Optional[float]): Tyre overall yaw stiffness pressure dependency.
     """
 
-    LONGITUDINAL_STIFFNESS: Optional[float] = None
-    LATERAL_STIFFNESS: Optional[float] = None
-    YAW_STIFFNESS: Optional[float] = None
-    FREQ_LONG: Optional[float] = None
-    FREQ_LAT: Optional[float] = None
-    FREQ_YAW: Optional[float] = None
-    FREQ_WINDUP: Optional[float] = None
-    DAMP_LONG: Optional[float] = None
-    DAMP_LAT: Optional[float] = None
-    DAMP_YAW: Optional[float] = None
-    DAMP_WINDUP: Optional[float] = None
-    DAMP_RESIDUAL: Optional[float] = None
-    DAMP_VLOW: Optional[float] = None
-    Q_BVX: Optional[float] = None
-    Q_BVT: Optional[float] = None
-    PCFX1: Optional[float] = None
-    PCFX2: Optional[float] = None
-    PCFX3: Optional[float] = None
-    PCFY1: Optional[float] = None
-    PCFY2: Optional[float] = None
-    PCFY3: Optional[float] = None
-    PCMZ1: Optional[float] = None
+    LONGITUDINAL_STIFFNESS: float | None = None
+    LATERAL_STIFFNESS: float | None = None
+    YAW_STIFFNESS: float | None = None
+    FREQ_LONG: float | None = None
+    FREQ_LAT: float | None = None
+    FREQ_YAW: float | None = None
+    FREQ_WINDUP: float | None = None
+    DAMP_LONG: float | None = None
+    DAMP_LAT: float | None = None
+    DAMP_YAW: float | None = None
+    DAMP_WINDUP: float | None = None
+    DAMP_RESIDUAL: float | None = None
+    DAMP_VLOW: float | None = None
+    Q_BVX: float | None = None
+    Q_BVT: float | None = None
+    PCFX1: float | None = None
+    PCFX2: float | None = None
+    PCFX3: float | None = None
+    PCFY1: float | None = None
+    PCFY2: float | None = None
+    PCFY3: float | None = None
+    PCMZ1: float | None = None
 
 
 class ContactPatch(_ParameterGroup):
@@ -281,21 +280,21 @@ class ContactPatch(_ParameterGroup):
         Q_A1 (Optional[float]): Square root load term in contact length.
     """
 
-    Q_RA1: Optional[float] = None
-    Q_RA2: Optional[float] = None
-    Q_RB1: Optional[float] = None
-    Q_RB2: Optional[float] = None
-    ELLIPS_SHIFT: Optional[float] = None
-    ELLIPS_LENGTH: Optional[float] = None
-    ELLIPS_HEIGHT: Optional[float] = None
-    ELLIPS_ORDER: Optional[float] = None
-    ELLIPS_MAX_STEP: Optional[float] = None
-    ELLIPS_NWIDTH: Optional[float] = None
-    ELLIPS_NLENGTH: Optional[float] = None
-    ENV_C1: Optional[float] = None
-    ENV_C2: Optional[float] = None
-    Q_A2: Optional[float] = None
-    Q_A1: Optional[float] = None
+    Q_RA1: float | None = None
+    Q_RA2: float | None = None
+    Q_RB1: float | None = None
+    Q_RB2: float | None = None
+    ELLIPS_SHIFT: float | None = None
+    ELLIPS_LENGTH: float | None = None
+    ELLIPS_HEIGHT: float | None = None
+    ELLIPS_ORDER: float | None = None
+    ELLIPS_MAX_STEP: float | None = None
+    ELLIPS_NWIDTH: float | None = None
+    ELLIPS_NLENGTH: float | None = None
+    ENV_C1: float | None = None
+    ENV_C2: float | None = None
+    Q_A2: float | None = None
+    Q_A1: float | None = None
 
 
 class InflationPressureRange(_ParameterGroup):
@@ -307,8 +306,8 @@ class InflationPressureRange(_ParameterGroup):
         PRESMAX (Optional[float]): Maximum allowed inflation pressure.
     """
 
-    PRESMIN: Optional[float] = None
-    PRESMAX: Optional[float] = None
+    PRESMIN: float | None = None
+    PRESMAX: float | None = None
 
 
 class VerticalForceRange(_ParameterGroup):
@@ -320,8 +319,8 @@ class VerticalForceRange(_ParameterGroup):
         FZMAX (Optional[float]): Maximum allowed wheel load.
     """
 
-    FZMIN: Optional[float] = None
-    FZMAX: Optional[float] = None
+    FZMIN: float | None = None
+    FZMAX: float | None = None
 
 
 class LongSlipRange(_ParameterGroup):
@@ -333,8 +332,8 @@ class LongSlipRange(_ParameterGroup):
         KPUMAX (Optional[float]): Maximum valid wheel slip.
     """
 
-    KPUMIN: Optional[float] = None
-    KPUMAX: Optional[float] = None
+    KPUMIN: float | None = None
+    KPUMAX: float | None = None
 
 
 class SlipAngleRange(_ParameterGroup):
@@ -346,8 +345,8 @@ class SlipAngleRange(_ParameterGroup):
         ALPMAX (Optional[float]): Maximum valid slip angle.
     """
 
-    ALPMIN: Optional[float] = None
-    ALPMAX: Optional[float] = None
+    ALPMIN: float | None = None
+    ALPMAX: float | None = None
 
 
 class InclinationAngleRange(_ParameterGroup):
@@ -359,8 +358,8 @@ class InclinationAngleRange(_ParameterGroup):
         CAMMAX (Optional[float]): Maximum valid camber angle.
     """
 
-    CAMMIN: Optional[float] = None
-    CAMMAX: Optional[float] = None
+    CAMMIN: float | None = None
+    CAMMAX: float | None = None
 
 
 class ScalingCoefficients(_ParameterGroup):
@@ -419,7 +418,7 @@ class ScalingCoefficients(_ParameterGroup):
     LMX: float = 1
     LVMX: float = 1
     LMY: float = 1
-    LMP: Optional[float] = None
+    LMP: float | None = None
 
 
 class LongitudinalCoefficients(_ParameterGroup):
@@ -516,9 +515,9 @@ class OverturningCoefficients(_ParameterGroup):
     QSX9: float
     QSX10: float
     QSX11: float
-    QSX12: Optional[float] = None
-    QSX13: Optional[float] = None
-    QSX14: Optional[float] = None
+    QSX12: float | None = None
+    QSX13: float | None = None
+    QSX14: float | None = None
     PPMX1: float
 
 
@@ -686,7 +685,7 @@ class AligningCoefficients(_ParameterGroup):
     QBZ3: float
     QBZ4: float
     QBZ5: float
-    QBZ6: Optional[float] = None
+    QBZ6: float | None = None
     QBZ9: float
     QBZ10: float
     QCZ1: float
@@ -744,25 +743,25 @@ class TurnslipCoefficients(_ParameterGroup):
         QDRP1 (Optional[float]): Turn slip moment peak magnitude parameter.
     """
 
-    PDXP1: Optional[float] = None
-    PDXP2: Optional[float] = None
-    PDXP3: Optional[float] = None
-    PKYP1: Optional[float] = None
-    PDYP1: Optional[float] = None
-    PDYP2: Optional[float] = None
-    PDYP3: Optional[float] = None
-    PDYP4: Optional[float] = None
-    PHYP1: Optional[float] = None
-    PHYP2: Optional[float] = None
-    PHYP3: Optional[float] = None
-    PHYP4: Optional[float] = None
-    PECP1: Optional[float] = None
-    PECP2: Optional[float] = None
-    QDTP1: Optional[float] = None
-    QCRP1: Optional[float] = None
-    QCRP2: Optional[float] = None
-    QBRP1: Optional[float] = None
-    QDRP1: Optional[float] = None
+    PDXP1: float | None = None
+    PDXP2: float | None = None
+    PDXP3: float | None = None
+    PKYP1: float | None = None
+    PDYP1: float | None = None
+    PDYP2: float | None = None
+    PDYP3: float | None = None
+    PDYP4: float | None = None
+    PHYP1: float | None = None
+    PHYP2: float | None = None
+    PHYP3: float | None = None
+    PHYP4: float | None = None
+    PECP1: float | None = None
+    PECP2: float | None = None
+    QDTP1: float | None = None
+    QCRP1: float | None = None
+    QCRP2: float | None = None
+    QBRP1: float | None = None
+    QDRP1: float | None = None
 
 
 class TIRParameters(BaseModel):
@@ -876,7 +875,7 @@ class TIRParameters(BaseModel):
         return cls.model_validate(tir_data)
 
 
-class _TIRReader(object):
+class _TIRReader:
     """
     Reads and parses .TIR files.
     """
@@ -900,7 +899,7 @@ class _TIRReader(object):
             ValueError:
                 If an error occurs while parsing the .TIR file.
         """
-        self.active_parameter_group: Optional[str] = None
+        self.active_parameter_group: str | None = None
         self.data: dict[str, dict[str, str]] = {}
 
         for line in self._read_lines(filepath):

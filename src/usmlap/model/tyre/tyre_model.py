@@ -39,7 +39,7 @@ class CombinedTyreModel(ABC):
 
 
 @dataclass
-class TyreModel(object):
+class TyreModel:
     """Tyre model object."""
 
     longitudinal: PureTyreModel

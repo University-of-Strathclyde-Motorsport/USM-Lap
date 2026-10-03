@@ -15,7 +15,7 @@ MESH_RESOLUTION = 0.1
 
 
 @dataclass
-class MeshConfiguration(object):
+class MeshConfiguration:
     """Configuration details for generating and plotting a track mesh."""
 
     label: str

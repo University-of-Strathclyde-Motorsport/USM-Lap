@@ -67,7 +67,7 @@ class TyreAttitude(BaseModel):
     pressure: float
 
 
-class MagicFormula(object):
+class MagicFormula:
     """
     Contains the Pacejka Magic Formula equations.
 

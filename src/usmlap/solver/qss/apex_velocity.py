@@ -5,7 +5,6 @@ assuming zero longitudinal acceleration.
 """
 
 import math
-from typing import Optional
 
 from usmlap.model import NodeContext, TractionModel
 from usmlap.model.errors import WheelLiftError
@@ -22,7 +21,7 @@ MAX_ERROR_SF = 0.9
 def solve_apex_velocity(
     vehicle_model: TractionModel,
     ctx: NodeContext,
-    velocity_estimate: Optional[float] = None,
+    velocity_estimate: float | None = None,
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
 ) -> float:

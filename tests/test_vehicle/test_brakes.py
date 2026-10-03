@@ -56,7 +56,7 @@ def brake_line(
 
 
 @pytest.fixture
-def brakes(brake_line: BrakeLine) -> Brakes:  # noqa S1720
+def brakes(brake_line: BrakeLine) -> Brakes:
     return Brakes(
         front=brake_line, rear=brake_line, pedal_ratio=3, front_brake_bias=0.5
     )
@@ -82,5 +82,5 @@ def test_brake_line_force_to_torque_scaling(brake_line: BrakeLine) -> None:
     assert brake_line.force_to_torque_scaling_factor == pytest.approx(0.035)
 
 
-def test_brake_balance(brakes: Brakes) -> None:  # noqa S1720
+def test_brake_balance(brakes: Brakes) -> None:
     assert brakes.brake_bias == pytest.approx((0.5, 0.5))

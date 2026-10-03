@@ -3,8 +3,7 @@ This module defines channel functions which operate on each element of a telemet
 """
 
 import math
-from itertools import accumulate
-from typing import Optional
+from itertools import accumulate, pairwise
 
 from pint.facets.plain import PlainUnit as Unit
 
@@ -14,10 +13,7 @@ from .channel import DataChannel, TelemetryChannel
 
 
 def negate(
-    channel: DataChannel,
-    *,
-    unit: Optional[Unit] = None,
-    label: Optional[str] = None,
+    channel: DataChannel, *, unit: Unit | None = None, label: str | None = None
 ) -> DataChannel:
     """Negate the values of a data channel."""
 
@@ -146,10 +142,8 @@ def difference(channel: DataChannel) -> DataChannel:
         values = channel(solution)
         values.insert(0, 0)
         values.append(0)
-        difference = [
-            0.5 * (right - left) for left, right in zip(values[:-1], values[1:])
-        ]
-        return difference
+        difference = [0.5 * (right - left) for left, right in pairwise(values)]
+        return [0.5 * (right + left) for left, right in pairwise(difference)]
 
     label = f"Delta {channel.label}"
     return TelemetryChannel(channel_fcn, channel.unit, label)

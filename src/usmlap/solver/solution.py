@@ -5,9 +5,9 @@ This module contains code for representing the solution to a simulation.
 from __future__ import annotations
 
 import logging
+from collections.abc import Generator
 from copy import copy
 from dataclasses import dataclass, field
-from typing import Generator, Optional
 
 from usmlap.model import (
     CalculatedVehicleState,
@@ -17,9 +17,11 @@ from usmlap.model import (
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.track import Mesh, TrackNode
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
-class SolutionNode(object):
+class SolutionNode:
     """
     The solution at a single node.
 
@@ -55,9 +57,9 @@ class SolutionNode(object):
     transient_variables: TransientVariables = field(
         default_factory=TransientVariables.get_default
     )
-    calculated_vehicle_state: Optional[CalculatedVehicleState] = None
-    next: Optional[SolutionNode] = None
-    previous: Optional[SolutionNode] = None
+    calculated_vehicle_state: CalculatedVehicleState | None = None
+    next: SolutionNode | None = None
+    previous: SolutionNode | None = None
 
     @property
     def apex_velocity(self) -> float:
@@ -139,7 +141,7 @@ class SolutionNode(object):
         """
         Remove the node as an apex.
         """
-        logging.debug("Removing apex")
+        logger.debug("Removing apex")
         self._apex = False
 
     def set_initial_velocity(self, velocity: float) -> None:
@@ -186,9 +188,22 @@ class SolutionNode(object):
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
 
+    def get_calculated_vehicle_state(self) -> CalculatedVehicleState:
+        """
+        Get the calculated vehicle state for this node.
+
+        TODO: This is a temporary fix to get rid of downstream type errors!
+        The entire system will be overhauled.
+        """
+        if self.calculated_vehicle_state is None:
+            raise ValueError(
+                "Calculated vehicle state has not been set for this node."
+            )
+        return self.calculated_vehicle_state
+
 
 @dataclass
-class Solution(object):
+class Solution:
     """
     The solution to a simulation.
     """

@@ -7,7 +7,7 @@ from __future__ import annotations
 import uuid
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 from usmlap.vehicle.aero import AeroPackage
 
@@ -22,14 +22,14 @@ class Parameter[T](ABC):
 
     _REGISTRY: ClassVar[dict[str, type[Parameter[Any]]]] = {}
     name: ClassVar[str]
-    unit: ClassVar[Optional[str]] = None
+    unit: ClassVar[str | None] = None
     uncertainty: ClassVar[float] = 0
     implemented: ClassVar[bool] = True
 
     def __init_subclass__(
         cls: type[Parameter[T]],
         name: str,
-        unit: Optional[str] = None,
+        unit: str | None = None,
         uncertainty: float = 0,
         implemented: bool = True,
     ) -> None:
@@ -116,15 +116,12 @@ class Parameter[T](ABC):
         """
         ...
 
-    def __str__(self) -> str:
-        return f"Test({super().get_type()})"
-
 
 def get_new_vehicle[T](
     baseline: Vehicle,
     parameter: type[Parameter[T]],
     value: T,
-    label: Optional[str] = None,
+    label: str | None = None,
 ) -> Vehicle:
     """
     Generate a new vehicle with a modified parameter value.

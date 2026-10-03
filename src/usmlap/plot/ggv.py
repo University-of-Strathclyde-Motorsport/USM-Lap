@@ -2,8 +2,6 @@
 This module contains functions for plotting GG and GGV scatter plots.
 """
 
-from typing import Optional
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -25,7 +23,7 @@ def plot_velocity_acceleration(solution: TelemetrySolution) -> None:
     Create a scatter plot of velocity and longitudinal acceleration.
     """
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(layout="constrained")
 
     ax.scatter(
         VELOCITY(solution),
@@ -39,7 +37,6 @@ def plot_velocity_acceleration(solution: TelemetrySolution) -> None:
     ax.set_title("Velocity - Acceleration")
     ax.grid()
 
-    plt.tight_layout()
     plt.show()
 
 
@@ -48,8 +45,8 @@ def plot_gg(
     *,
     title: str = "GG Plot",
     marker_size: float = 30,
-    colours: Optional[list[str]] = None,
-    show_legend: Optional[bool] = None,
+    colours: list[str] | None = None,
+    show_legend: bool | None = None,
     velocity_transparency: bool = True,
 ) -> None:
     """
@@ -64,7 +61,7 @@ def plot_gg(
     if show_legend is None:
         show_legend = len(solutions) > 1
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(layout="constrained")
 
     ax.axhline(0, color="black", linewidth=1)
     ax.axvline(0, color="black", linewidth=1)
@@ -97,7 +94,6 @@ def plot_gg(
     ax.tick_params(axis="both", which="major", labelsize=16)
     ax.grid()
 
-    plt.tight_layout()
     plt.show()
 
 
@@ -106,14 +102,14 @@ def plot_ggv(
     *,
     title: str = "GGV Plot",
     marker_size: float = 10,
-    colours: Optional[list[str]] = None,
-    show_legend: Optional[bool] = None,
+    colours: list[str] | None = None,
+    show_legend: bool | None = None,
 ) -> None:
     """
     Create a 3D scatter plot of velocity, lateral and longitudinal acceleration.
     """
 
-    fig = plt.figure()
+    fig = plt.figure(layout="constrained")
     ax = fig.add_subplot(111, projection="3d")
 
     if colours is None:
@@ -143,5 +139,4 @@ def plot_ggv(
     if show_legend:
         ax.legend()
 
-    plt.tight_layout()
     plt.show()

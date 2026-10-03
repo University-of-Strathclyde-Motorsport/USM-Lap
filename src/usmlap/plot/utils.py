@@ -2,7 +2,6 @@
 This module contains utility functions for matplotlib.
 """
 
-from typing import Optional
 
 from matplotlib.axes import Axes
 
@@ -25,7 +24,7 @@ def combined_legend(*args: Axes) -> None:
     args[0].legend(combined_handles, combined_labels)
 
 
-def outside_legend(axs: Axes | list[Axes], title: Optional[str] = None) -> None:
+def outside_legend(axs: Axes | list[Axes], title: str | None = None) -> None:
     """
     Add a legend outside the plot.
     """

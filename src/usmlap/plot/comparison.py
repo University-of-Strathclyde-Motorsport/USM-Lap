@@ -2,8 +2,6 @@
 This module contains functions for plotting comparisons between vehicles.
 """
 
-from typing import Optional
-
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator
@@ -38,7 +36,7 @@ def plot_competition_bar_chart(
     comparison_results: ComparisonResults,
     title: str = "Comparison Results",
     bar_width: float = 0.8,
-    padding: Optional[float] = None,
+    padding: float | None = None,
 ) -> None:
     """
     Plot a bar chart of points for a list of vehicles.
@@ -57,7 +55,7 @@ def plot_competition_bar_chart(
     vehicle_count = len(points_data)
     vehicle_labels = comparison_results.get_vehicle_labels()
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(layout="constrained")
 
     bottom = np.zeros(vehicle_count)
     for event, points in plot_data.items():
@@ -90,7 +88,6 @@ def plot_competition_bar_chart(
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 
-    plt.tight_layout
     plt.show()
 
 
@@ -136,11 +133,10 @@ def plot_points_bar_chart(
     x = np.arange(simulation_count)
     bar_width = width / event_count
     label_position = x + (bar_width * (event_count - 1) / 2)
-    multiplier = 0
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(layout="constrained")
 
-    for event, points in points_data.items():
+    for multiplier, (event, points) in enumerate(points_data.items()):
         offset = bar_width * multiplier
         rects = ax.bar(
             x + offset,
@@ -151,7 +147,6 @@ def plot_points_bar_chart(
             zorder=4,
         )
         ax.bar_label(rects, fmt="%.1f", padding=3, zorder=4)
-        multiplier += 1
 
     total_points = [sum(points.values()) for points in data.values()]
     total_bars = ax.bar(
@@ -175,5 +170,4 @@ def plot_points_bar_chart(
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 
-    plt.tight_layout
     plt.show()

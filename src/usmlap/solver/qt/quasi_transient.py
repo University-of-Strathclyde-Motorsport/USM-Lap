@@ -17,6 +17,8 @@ from usmlap.solver.qt.transient_variable import update_transient_variables
 from usmlap.solver.solution import Solution
 from usmlap.solver.solver_interface import SolverInterface
 
+logger = logging.getLogger(__name__)
+
 MAXIMUM_TRANSIENT_ITERATIONS = 100
 CONVERGENCE_TOLERANCE = 1e-4
 TASK_DESCRIPTION = "Solving transient simulation..."
@@ -56,10 +58,10 @@ class QuasiTransientSolver(SolverInterface):
                         self._decrease_discharge_limit(1 / scaling_factor)
 
                 times.append(solution.total_time)
-                logging.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
+                logger.info(f"Iteration {i}, time: {solution.total_time:.3f}s")
 
                 if _convergence_achieved(times, CONVERGENCE_TOLERANCE):
-                    logging.info(f"Converged after {i} iterations.")
+                    logger.info(f"Converged after {i} iterations.")
                     return solution
 
         raise MaximumIterationsExceededError(
@@ -71,7 +73,7 @@ class QuasiTransientSolver(SolverInterface):
         old_limit = powertrain.discharge_current_limit
         new_limit = old_limit * scaling_factor
         powertrain.discharge_current_limit = new_limit
-        logging.warning(
+        logger.warning(
             f"Discharge current limit decreased from {old_limit} to {new_limit}"
         )
 
@@ -113,7 +115,7 @@ class QuasiTransientSolver(SolverInterface):
                 ctx=ctx,
                 initial_state=previous_node.transient_variables,
                 dt=previous_node.time,
-                vehicle_state=previous_node.calculated_vehicle_state,  # noqa
+                vehicle_state=previous_node.calculated_vehicle_state,
             )
 
         final_soc = solution.nodes[-1].transient_variables.soc

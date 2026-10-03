@@ -2,7 +2,8 @@
 This module models the driver of the vehicle.
 """
 
-from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 
 class Driver(HasLibrary, path=LIBRARY_ROOT / "drivers"):

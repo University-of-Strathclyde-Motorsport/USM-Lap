@@ -10,7 +10,7 @@ from pydantic import PositiveFloat
 
 
 @dataclass
-class Steering(object):
+class Steering:
     """
     The steering system of the vehicle.
 

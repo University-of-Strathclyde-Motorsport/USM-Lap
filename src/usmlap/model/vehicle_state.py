@@ -13,7 +13,7 @@ from usmlap.vehicle.powertrain import CellState, StateOfCharge
 
 
 @dataclass(slots=True)
-class Trajectory(object):
+class Trajectory:
     """
     Variables describing the trajectory of the vehicle.
 
@@ -44,8 +44,11 @@ class Trajectory(object):
         return math.sqrt(self.velocity**2 + 2 * self.ax * distance)
 
 
+DEFAULT_SOC = StateOfCharge(1)
+
+
 @dataclass
-class TransientVariables(object):
+class TransientVariables:
     """
     Transient variables of the vehicle at a single instant.
 
@@ -54,7 +57,7 @@ class TransientVariables(object):
             1 = fully charged, 0 = fully discharged (default = 1).
     """
 
-    soc: StateOfCharge = StateOfCharge(1)
+    soc: StateOfCharge = DEFAULT_SOC
     cell_temperature: float = AMBIENT_TEMPERATURE
 
     @property
@@ -70,7 +73,7 @@ class TransientVariables(object):
 
 
 @dataclass
-class CalculatedVehicleState(object):
+class CalculatedVehicleState:
     """
     The full state of the vehicle at a point.
     """
@@ -109,7 +112,7 @@ class CalculatedVehicleState(object):
 
 
 @dataclass
-class VehicleState(object):
+class VehicleState:
     """
     Container for variables describing a vehicle's state.
 

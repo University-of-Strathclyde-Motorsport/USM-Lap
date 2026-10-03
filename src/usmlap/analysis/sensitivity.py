@@ -2,8 +2,6 @@
 This module contains code for points sensitivity analysis.
 """
 
-from typing import Optional
-
 from rich.progress import Progress
 
 from usmlap.competition import Competition
@@ -19,7 +17,7 @@ def points_sensitivity(
     settings: SimulationSettings,
     competition: Competition,
     parameter: type[Parameter],
-    delta: Optional[tuple[float, float]] = None,
+    delta: tuple[float, float] | None = None,
     normalise: bool = False,
 ) -> tuple[float, tuple[float, float]]:
     """
@@ -59,8 +57,8 @@ def points_sensitivity(
             progress.update(task, description=f"{TASK_DESCRIPTION} ({i + 1}/2)")
             new_value = baseline_value + value
             modified_vehicle = get_new_vehicle(vehicle, parameter, new_value)
-            points, _ = competition.simulate(modified_vehicle, settings)
-            results[label] = sum(points.values())
+            sim_results = competition.simulate(modified_vehicle, settings)
+            results[label] = sum(sim_results.points.values())
 
     sensitivity = results["increased"] - results["decreased"]
     if normalise:

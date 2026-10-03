@@ -4,7 +4,8 @@ This module contains code for calculating points from competition results.
 
 from dataclasses import dataclass
 
-from usmlap.utils.library import LIBRARY_ROOT, HasLibrary
+from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.utils.library import HasLibrary
 
 type CompetitionPoints = dict[str, float]
 
@@ -39,7 +40,7 @@ class CompetitionData(HasLibrary, path=LIBRARY_ROOT / "competition"):
 
 
 @dataclass
-class PointsCoefficients(object):
+class PointsCoefficients:
     """
     Coefficients for points formula.
 

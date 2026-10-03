@@ -16,7 +16,7 @@ from .vehicle_state import TransientVariables
 
 
 @dataclass
-class GlobalContext(object):
+class GlobalContext:
     """
     Global context object storing data for an entire simulation.
 

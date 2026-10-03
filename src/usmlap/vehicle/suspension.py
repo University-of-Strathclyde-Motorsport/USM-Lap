@@ -4,7 +4,7 @@ This module models the suspension of a vehicle.
 
 from abc import ABC
 from dataclasses import dataclass
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
@@ -47,13 +47,13 @@ class DirectActuationSuspension(SuspensionAxle, type="direct_actuation"):
 
 
 SuspensionImplementation = Annotated[
-    Union[DecoupledSuspension, DirectActuationSuspension],
+    DecoupledSuspension | DirectActuationSuspension,
     Field(discriminator="suspension_type"),
 ]
 
 
 @dataclass
-class Suspension(object):
+class Suspension:
     """
     The suspension system of a vehicle.
 

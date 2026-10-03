@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import copy
 import math
+from collections.abc import Generator
 from dataclasses import dataclass
-from typing import Generator
 
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, Field
@@ -75,7 +75,7 @@ class TrackNode(BaseModel):
 
 
 @dataclass
-class Mesh(object):
+class Mesh:
     """
     A mesh of a track.
 
@@ -168,11 +168,10 @@ class Mesh(object):
         fig.suptitle("Track Mesh Parameters")
         axs[-1].set_xlabel("Position")
 
-        i = 0
-        for label, ydata in data.items():
+        for i, (label, ydata) in enumerate(data.items()):
             axs[i].plot(position, ydata)
             axs[i].set_title(label)
             axs[i].set_ylabel(label)
             axs[i].grid()
-            i += 1
+
         plt.show()

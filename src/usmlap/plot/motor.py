@@ -29,7 +29,9 @@ def plot_motor_curve(
             Defaults to [1, 0.8, 0.6, 0.4, 0.2].
         resolution (int, optional): Number of points to generate. Defaults to 1000.
     """
-    fig, (ax_torque, ax_power) = plt.subplots(nrows=2, sharex=True)
+    fig, (ax_torque, ax_power) = plt.subplots(
+        nrows=2, sharex=True, layout="constrained"
+    )
 
     for soc in state_of_charge:
         cell_state = CellState(soc=soc, temperature=25)
@@ -55,12 +57,11 @@ def plot_motor_curve(
         ax.legend(loc="best")
         ax.grid(True)
 
-    plt.tight_layout()
     plt.show()
 
 
 @dataclass
-class _MotorCurveNode(object):
+class _MotorCurveNode:
     """
     A node of a motor performance curve.
 

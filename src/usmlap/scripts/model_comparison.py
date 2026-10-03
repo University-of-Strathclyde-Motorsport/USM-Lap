@@ -7,11 +7,12 @@ import time
 from usmlap.competition.events import Acceleration, Autocross, Skidpad
 from usmlap.model import TractionModel
 from usmlap.model.traction import Bicycle, FourCornerModel, PointMass
-from usmlap.model.tyre.pure.constant import ConstantTyre
-from usmlap.plot import plot_channels, plot_gg
+from usmlap.plot import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import (
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry import TelemetrySolution
+from usmlap.telemetry.channel.channel import TelemetryChannel
+from usmlap.telemetry.channel.library import (
     Curvature,
     LateralAcceleration,
     LatLT,
@@ -21,8 +22,6 @@ from usmlap.simulation.channels.library import (
     MotorTorque,
     Velocity,
 )
-from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
 
 configuration = QualityPresets.FAST
@@ -35,21 +34,21 @@ vehicle_models: dict[str, type[TractionModel]] = {
 
 plot_colours = [USM_RED, USM_LIGHT_BLUE, USM_BLUE]
 
-acceleration_channels: list[Channel] = [
+acceleration_channels: list[TelemetryChannel] = [
     Velocity(),
     LongitudinalAcceleration(),
     LongLT(),
     MotorTorque(),
     MotorPower(),
 ]
-skidpad_channels: list[Channel] = [
+skidpad_channels: list[TelemetryChannel] = [
     Curvature(),
     Velocity(),
     LateralAcceleration(),
     LatLT(),
 ]
 
-autocross_channels: list[Channel] = [
+autocross_channels: list[TelemetryChannel] = [
     Curvature(),
     Velocity(),
     LongitudinalAcceleration(),
@@ -62,9 +61,9 @@ acceleration = Acceleration()
 skidpad = Skidpad()
 autocross = Autocross(track_file="FS AutoX Germany 2012")
 
-acceleration_results: dict[str, Solution] = {}
-skidpad_results: dict[str, Solution] = {}
-autocross_results: dict[str, Solution] = {}
+acceleration_results: dict[str, TelemetrySolution] = {}
+skidpad_results: dict[str, TelemetrySolution] = {}
+autocross_results: dict[str, TelemetrySolution] = {}
 
 for label, model in vehicle_models.items():
     configuration.vehicle_model.traction_model = model
@@ -83,7 +82,7 @@ for label, model in vehicle_models.items():
 
 print("Acceleration times:")
 for label, solution in acceleration_results.items():
-    print(f"{label} {solution.total_time}")
+    print(f"{label} {solution.solution.total_time}")
 
 print("Skidpad times:")
 for label, solution in skidpad_results.items():
@@ -91,7 +90,7 @@ for label, solution in skidpad_results.items():
 
 print("Autocross times:")
 for label, solution in autocross_results.items():
-    print(f"{label} {solution.total_time}")
+    print(f"{label} {solution.solution.total_time}")
 
 # plot_channels(
 #     acceleration_results,

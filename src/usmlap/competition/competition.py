@@ -25,7 +25,7 @@ type CompetitionSolutions = dict[str, TelemetrySolution]
 
 
 @dataclass
-class CompetitionResults(object):
+class CompetitionResults:
     """Results of simulating a Formula Student competition."""
 
     points: CompetitionPoints
@@ -33,7 +33,7 @@ class CompetitionResults(object):
 
 
 @dataclass
-class Competition(object):
+class Competition:
     """
     Class for simulating a Formula Student competition.
 

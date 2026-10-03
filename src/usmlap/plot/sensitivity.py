@@ -47,7 +47,9 @@ def plot_points_sensitivity(
     parameter_values = list(data.keys())
     event_data = _transform_dictionary(list(data.values()))
 
-    fig, (ax_total, ax_event) = plt.subplots(nrows=2, sharex=True)
+    fig, (ax_total, ax_event) = plt.subplots(
+        nrows=2, sharex=True, layout="constrained"
+    )
 
     total_points = [sum(d.values()) for d in data.values()]
     ax_total.plot(parameter_values, total_points, label="total", color=USM_BLUE)
@@ -72,5 +74,4 @@ def plot_points_sensitivity(
     fig.suptitle(f"Points Sensitivity of {parameter.name}")
 
     ax_event.legend()
-    plt.tight_layout()
     plt.show()

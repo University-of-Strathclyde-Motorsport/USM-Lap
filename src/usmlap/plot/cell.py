@@ -2,8 +2,6 @@
 This module contains code for plotting cell maps.
 """
 
-from typing import Optional
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -37,7 +35,7 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
         t_max (float): The maximum temperature to plot.
     """
 
-    fig, axs = plt.subplots(2, 2)
+    fig, axs = plt.subplots(2, 2, layout="constrained")
     ((ax_voltage, ax_soc_derate), (ax_resistance, ax_thermal_derate)) = axs
 
     _plot_voltage(accumulator.cell, ax_voltage)
@@ -47,7 +45,6 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
 
     fig.suptitle(f"Cell Characteristics\n{accumulator.cell.print_name}")
 
-    plt.tight_layout()
     plt.show()
 
 
@@ -68,7 +65,7 @@ def _plot_resistance(
     ax: plt.Axes,
     *,
     title: str = "Resistance",
-    y_limits: Optional[tuple[float, float]] = None,
+    y_limits: tuple[float, float] | None = None,
 ) -> None:
     """Plot resistance against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)

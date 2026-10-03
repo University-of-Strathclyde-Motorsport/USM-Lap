@@ -4,8 +4,6 @@ This module contains code for running a simulation.
 
 from __future__ import annotations
 
-from pyparsing import Optional
-
 from usmlap.model import TransientVariables
 from usmlap.solver.solution import create_new_solution
 from usmlap.telemetry import TelemetrySolution
@@ -19,7 +17,7 @@ def simulate(
     vehicle: Vehicle,
     track_mesh: Mesh,
     settings: SimulationSettings,
-    initial_state: Optional[TransientVariables] = None,
+    initial_state: TransientVariables | None = None,
 ) -> TelemetrySolution:
     """
     Simulate a vehicle driving around a track.

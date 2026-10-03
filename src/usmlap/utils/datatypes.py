@@ -187,7 +187,7 @@ class Coordinate(BaseModel):
 
 
 @dataclass
-class Vector3(object):
+class Vector3:
     """
     Represents a 3D vector with x, y, and z components.
 

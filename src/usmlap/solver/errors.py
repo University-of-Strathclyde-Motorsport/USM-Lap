@@ -8,7 +8,6 @@ from dataclasses import dataclass
 class SolverError(Exception):
     """Base class for solver errors."""
 
-    pass
 
 
 @dataclass

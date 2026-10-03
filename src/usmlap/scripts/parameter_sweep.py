@@ -2,29 +2,22 @@
 This script runs a one-dimensional sweep of a vehicle parameter.
 """
 
-import numpy as np
-
-from usmlap.analysis import (
-    SweepSettings,
-    VehicleGenerator,
-    sweep_1d,
-    sweep_vehicles,
-)
-from usmlap.competition import Competition, CompetitionData, CompetitionPoints
-from usmlap.competition.events import Acceleration, Autocross
-from usmlap.plot import plot_channels, plot_points_sensitivity
-from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE, USM_RED
-from usmlap.simulation.channels import Channel
-from usmlap.simulation.channels.library import (
+from usmlap.analysis import VehicleGenerator
+from usmlap.competition import CompetitionData, CompetitionPoints
+from usmlap.competition.events import Autocross
+from usmlap.plot import plot_channels
+from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
+from usmlap.simulation.settings import QualityPresets
+from usmlap.telemetry import TelemetrySolution
+from usmlap.telemetry.channel.channel import TelemetryChannel
+from usmlap.telemetry.channel.library import (
     LongitudinalAcceleration,
     MotorPower,
     MotorTorque,
     Velocity,
 )
-from usmlap.simulation.settings import QualityPresets
-from usmlap.solver import Solution
 from usmlap.vehicle import Vehicle
-from usmlap.vehicle.parameters import CoolingCoefficient, FinalDriveRatio
+from usmlap.vehicle.parameters import FinalDriveRatio
 
 BASELINE_VEHICLE = "USM26"
 PARAMETER = FinalDriveRatio
@@ -41,7 +34,7 @@ NUMBER_OF_STEPS = 30
 VALUES = [2.8, 3.3, 3.8]
 QUALITY = QualityPresets.FAST
 baseline_vehicle = Vehicle.from_json(BASELINE_VEHICLE)
-channels: list[Channel] = [
+channels: list[TelemetryChannel] = [
     Velocity(),
     LongitudinalAcceleration(),
     MotorTorque(),
@@ -55,7 +48,7 @@ dataset = CompetitionData.from_json("FSG 2025 Hybrid")
 
 
 all_points: dict[float, CompetitionPoints] = {}
-results: dict[str, Solution] = {}
+results: dict[str, TelemetrySolution] = {}
 for vehicle in vehicles:
     fdr = vehicle.transmission.final_drive_ratio
     result = event.simulate_event(vehicle, QUALITY)

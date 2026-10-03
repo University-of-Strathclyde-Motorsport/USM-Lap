@@ -4,7 +4,7 @@ This module plots the relative magnitudes of a list of points sensitivities.
 
 from dataclasses import dataclass
 from functools import total_ordering
-from typing import Any, Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -14,7 +14,7 @@ from usmlap.plot.style import USM_BLUE, USM_RED
 
 @total_ordering
 @dataclass
-class PointsSensitivityData(object):
+class PointsSensitivityData:
     """
     Dataclass for storing points sensitivity data.
 
@@ -38,7 +38,7 @@ class PointsSensitivityData(object):
     def bar_colour(self) -> str:
         return get_bar_colour(self.value)
 
-    def __eq__(self, other: Any) -> bool:  # noqa: S6542
+    def __eq__(self, other: object) -> bool:  # noqa: S6542
         if not isinstance(other, PointsSensitivityData):
             return NotImplemented
         return abs(self.value) == abs(other.value)
@@ -52,8 +52,8 @@ class PointsSensitivityData(object):
 def plot_points_sensitivities(
     data: list[PointsSensitivityData],
     title: str = "Points Sensitivities",
-    x_label: Optional[str] = None,
-    max_results: Optional[int] = None,
+    x_label: str | None = None,
+    max_results: int | None = None,
 ) -> None:
     """
     This function plots the relative magnitudes of a list of points sensitivities.
@@ -69,7 +69,7 @@ def plot_points_sensitivities(
     if max_results is not None:
         data = data[:max_results]
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(layout="constrained")
 
     labels = [sensitivity.label for sensitivity in data]
     sensitivities = [sensitivity.abs_value for sensitivity in data]
@@ -92,7 +92,6 @@ def plot_points_sensitivities(
     ax.set_title(title)
 
     create_legend(ax)
-    plt.tight_layout()
     plt.show()
 
 

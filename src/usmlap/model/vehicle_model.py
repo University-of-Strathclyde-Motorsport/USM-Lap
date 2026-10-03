@@ -16,7 +16,7 @@ from .tyre import (
 
 
 @dataclass
-class VehicleModel(object):
+class VehicleModel:
     """Dataclass to store all the models used for modelling a vehicle."""
 
     powertrain: PowertrainModelInterface
@@ -24,7 +24,7 @@ class VehicleModel(object):
 
 
 @dataclass
-class VehicleModelSettings(object):
+class VehicleModelSettings:
     """Configuration options for the vehicle model."""
 
     powertrain: type[PowertrainModelInterface] = SingleMotorRWD

@@ -4,9 +4,8 @@ This script plots the parameters of a cell.
 
 import matplotlib.pyplot as plt
 
-from usmlap.plot import plot_cell_parameters
 from usmlap.plot.cell import _plot_resistance
-from usmlap.vehicle.powertrain import Accumulator, Cell
+from usmlap.vehicle.powertrain import Cell
 
 # accumulator = Accumulator.from_json("USM26")
 # plot_cell_parameters(accumulator)

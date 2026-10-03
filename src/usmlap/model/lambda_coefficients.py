@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class LambdaCoefficients(object):
+class LambdaCoefficients:
     """
     Lambda coefficients for a simulation.
 

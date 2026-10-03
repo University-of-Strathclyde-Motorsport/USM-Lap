@@ -2,8 +2,9 @@
 This module contains functions shared throughout the plot package.
 """
 
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable
+from typing import Any
 
 import matplotlib.pyplot as plt
 

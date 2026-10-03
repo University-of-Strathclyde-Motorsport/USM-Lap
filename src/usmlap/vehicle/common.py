@@ -4,7 +4,7 @@ This module contains code shared by all vehicle components.
 
 from __future__ import annotations
 
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 from pydantic import BaseModel
 
@@ -21,7 +21,7 @@ class AbstractSubsystem(BaseModel):
     _subtypes: ClassVar[dict[str, type]] = {}
 
     def __init_subclass__(
-        cls: type[AbstractSubsystem], type: Optional[str] = None
+        cls: type[AbstractSubsystem], type: str | None = None
     ) -> None:
         super().__init_subclass__()
         if type:

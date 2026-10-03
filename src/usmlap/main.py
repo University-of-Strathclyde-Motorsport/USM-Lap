@@ -2,10 +2,9 @@
 Main entry point for the program.
 """
 
-import logging
+# import logging
 
 from usmlap.utils.datatypes import FrontRear
-from usmlap.vehicle.powertrain import Accumulator, Cell
 
 CHANNELS = [
     "Velocity",
@@ -15,13 +14,13 @@ CHANNELS = [
     "State of Charge",
 ]
 
-logging.basicConfig(
-    level=logging.WARN,
-    format="{asctime} {levelname}: {message}",
-    style="{",
-    datefmt="%H:%M:%S",
-)
-logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
+# logging.basicConfig(
+#     level=logging.WARNING,
+#     format="{asctime} {levelname}: {message}",
+#     style="{",
+#     datefmt="%H:%M:%S",
+# )
+# logging.getLogger("simulation.model.point_mass").setLevel(logging.DEBUG)
 
 a = FrontRear(700, 700)
 print(a)

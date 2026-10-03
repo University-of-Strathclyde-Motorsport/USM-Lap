@@ -4,12 +4,9 @@ This module contains functions for working with arrays.
 
 import math
 from itertools import accumulate
-from typing import TypeVar
-
-T = TypeVar("T")
 
 
-def interp_previous(x: list[float], xp: list[float], yp: list[T]) -> list[T]:
+def interp_previous[T](x: list[float], xp: list[float], yp: list[T]) -> list[T]:
     """
     Interpolate a list of values by choosing the previous value.
 
