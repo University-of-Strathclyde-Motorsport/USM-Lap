@@ -3,7 +3,7 @@ disable_existing_loggers: true
 
 formatters:
   brief:
-    format: "%(levelname)s - %(message)s"
+    format: "%(message)s"
   default:
     format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     datefmt: "%Y-%m-%d %H:%M:%S"
@@ -11,10 +11,10 @@ formatters:
 handlers:
   console:
     class: rich.logging.RichHandler
-    formatter: default
+    formatter: brief
     level: INFO
 
 root:
-  level: INFO
+  level: NOTSET
   handlers: [console]
   propagate: yes
