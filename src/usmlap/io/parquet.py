@@ -7,16 +7,15 @@ from pathlib import Path
 
 import polars
 
-from usmlap.core.types import Array1D
-from usmlap.solver.solution_channels import ChannelId, SolutionDataFrame
+from usmlap.solver.solution_channels import SolutionDataFrame
 
 logger = logging.getLogger(__name__)
 
 
-def write_parquet(data: dict[ChannelId, Array1D], filepath: Path) -> None:
+def write_parquet(data: SolutionDataFrame, filepath: Path) -> None:
     """Write a list of channels to a parquet file."""
-    logger.info("Writing %i channels to '%s'", len(data), filepath)
-    polars.DataFrame(data).write_parquet(filepath)
+    logger.info("Writing %i channels to '%s'", data.channel_count, filepath)
+    data.df.write_parquet(filepath)
 
 
 def read_parquet(filepath: Path) -> SolutionDataFrame:

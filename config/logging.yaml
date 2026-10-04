@@ -18,6 +18,7 @@ handlers:
     formatter: default
     level: DEBUG
     filename: TODO
+    mode: w
 
 root:
   level: NOTSET

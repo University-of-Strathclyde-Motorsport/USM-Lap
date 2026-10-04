@@ -9,11 +9,13 @@ from pathlib import Path
 from usmlap.core.filepath import OUTPUT_ROOT
 from usmlap.core.log import log_to_file
 from usmlap.io.filemap import FileMap
+from usmlap.io.parquet import write_parquet
 from usmlap.io.pydantic_io import save_object_to_json
 from usmlap.io.sim_folder import make_new_sim_folder
 from usmlap.model import TransientVariables
 from usmlap.simulation.settings import SimulationSettings
 from usmlap.solver.solution import create_new_solution
+from usmlap.solver.solution_channels import SolutionDataFrame
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle
@@ -61,7 +63,7 @@ def run_simulation(
     settings: SimulationSettings,
     initial_state: TransientVariables | None = None,
     output_path: Path = OUTPUT_ROOT,
-) -> None:
+) -> FileMap:
     """Run a simulation and save the results to a file."""
     sim_folder = make_new_sim_folder(output_path)
     filemap = FileMap(sim_folder)
@@ -69,9 +71,13 @@ def run_simulation(
         save_object_to_json(vehicle, filemap.vehicle_file)
         save_object_to_json(settings, filemap.settings_file)
         logger.info("Running simulation")
-        simulate(
+        solution = simulate(
             vehicle=vehicle,
             track_mesh=track_mesh,
             settings=settings,
             initial_state=initial_state,
         )
+        df_sol = SolutionDataFrame.from_solution(solution.solution)
+        write_parquet(df_sol, filemap.parquet_file)
+
+    return filemap

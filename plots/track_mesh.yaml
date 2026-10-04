@@ -16,4 +16,4 @@ axes:
 
   - ylabel: Banking
     channels:
-      - channel_id: heading_angle
+      - channel_id: banking

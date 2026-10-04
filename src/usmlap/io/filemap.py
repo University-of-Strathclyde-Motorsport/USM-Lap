@@ -29,6 +29,11 @@ class FileMap:
         return self.root / "logs.log"
 
     @property
+    def parquet_file(self) -> Path:
+        """The path to the parquet file."""
+        return self.root / "channels.prq"
+
+    @property
     def plots_folder(self) -> Path:
         """The path to the plots folder."""
         return self.root / "plots"
