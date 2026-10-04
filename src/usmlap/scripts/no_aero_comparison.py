@@ -5,7 +5,7 @@ with and without the aerodynamic package.
 
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition.events import Autocross
-from usmlap.plot import plot_gg
+from usmlap.plot.ggv import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets

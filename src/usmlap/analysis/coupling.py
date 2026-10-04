@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from rich import progress
 
 from usmlap.competition import Competition
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.vehicle import Parameter, Vehicle
 
 from .sensitivity import points_sensitivity

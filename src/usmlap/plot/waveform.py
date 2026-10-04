@@ -7,13 +7,13 @@ import logging
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
-from usmlap.plot.config import PlotConfig
+from usmlap.plot.config import WaveformConfig
 from usmlap.solver.solution_channels import SolutionDataFrame
 
 logger = logging.getLogger(__name__)
 
 
-def plot_waveform(data: SolutionDataFrame, config: PlotConfig) -> Figure:
+def plot_waveform(data: SolutionDataFrame, config: WaveformConfig) -> Figure:
     """Plot a waveform."""
     if not config.axes:
         raise ValueError("Must provide at least one axes configuration")
@@ -41,7 +41,7 @@ def plot_waveform(data: SolutionDataFrame, config: PlotConfig) -> Figure:
     return fig
 
 
-def _get_subplots(config: PlotConfig) -> tuple[Figure, list[plt.Axes]]:
+def _get_subplots(config: WaveformConfig) -> tuple[Figure, list[plt.Axes]]:
     """Construct a matplotlib figure and subplots."""
     fig, axs = plt.subplots(
         nrows=len(config.axes), sharex=True, layout="constrained"

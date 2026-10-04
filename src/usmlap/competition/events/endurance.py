@@ -5,7 +5,8 @@ This module defines the endurance and efficiency events at Formula Student.
 from dataclasses import InitVar, dataclass, field
 from math import ceil
 
-from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle, get_new_vehicle

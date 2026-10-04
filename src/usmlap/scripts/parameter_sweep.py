@@ -5,8 +5,8 @@ This script runs a one-dimensional sweep of a vehicle parameter.
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition import CompetitionData, CompetitionPoints
 from usmlap.competition.events import Autocross
-from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
+from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.channel import TelemetryChannel

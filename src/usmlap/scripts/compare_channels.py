@@ -3,7 +3,7 @@ This script compares the solutions for multiple vehicles.
 """
 
 from usmlap.competition.events import Autocross
-from usmlap.plot import plot_channels
+from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry import TelemetryChannel, TelemetrySolution
 from usmlap.telemetry.channel.library import MotorTorque, Velocity

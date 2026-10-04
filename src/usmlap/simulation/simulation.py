@@ -13,6 +13,7 @@ from usmlap.io.parquet import write_parquet
 from usmlap.io.pydantic_io import save_object_to_json
 from usmlap.io.sim_folder import make_new_sim_folder
 from usmlap.model import TransientVariables
+from usmlap.plot.generate_plots import generate_plots
 from usmlap.simulation.settings import SimulationSettings
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
@@ -79,5 +80,7 @@ def run_simulation(
         )
         df_sol = SolutionDataFrame.from_solution(solution.solution)
         write_parquet(df_sol, filemap.parquet_file)
+
+        generate_plots(filemap, df_sol)
 
     return filemap

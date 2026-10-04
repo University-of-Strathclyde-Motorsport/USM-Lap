@@ -4,7 +4,8 @@ Code for profiling the performance of the simulation."""
 import cProfile
 import pstats
 
-from usmlap.simulation import SimulationSettings, simulate  # noqa: F401
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate  # noqa: F401
 from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle

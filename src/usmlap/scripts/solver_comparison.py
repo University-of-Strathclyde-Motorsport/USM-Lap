@@ -3,10 +3,9 @@ This module compares the performance of the QSS and QT solvers.
 """
 
 from usmlap.competition.events import Autocross, Endurance
-from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
-from usmlap.simulation import SimulationSettings
-from usmlap.simulation.settings import QualityPresets
+from usmlap.plot.telemetry import plot_channels
+from usmlap.simulation.settings import QualityPresets, SimulationSettings
 from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (

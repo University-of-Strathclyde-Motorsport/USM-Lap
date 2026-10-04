@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 
-from usmlap.plot import plot_map
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
+from usmlap.plot.track_map import plot_map
 from usmlap.track import TrackData, generate_mesh
 
 TRACK_SHEET = "FS AutoX Germany 2012"

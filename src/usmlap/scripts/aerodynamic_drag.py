@@ -3,7 +3,7 @@ This script shows the impact of aerodynamic drag on motor power.
 """
 
 from usmlap.competition.events import Autocross
-from usmlap.plot import plot_channels
+from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.library import Drag, MotorPower, Velocity

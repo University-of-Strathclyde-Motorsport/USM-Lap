@@ -4,8 +4,8 @@ This script compares the performance of different cells.
 
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition.events import Endurance
-from usmlap.plot import plot_channels
 from usmlap.plot.style import USM_BLUE, USM_RED
+from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry.channel.channel import DataChannel
 

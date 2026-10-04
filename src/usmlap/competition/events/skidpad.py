@@ -3,7 +3,8 @@ This module defines the skidpad event at Formula Student."""
 
 from dataclasses import dataclass
 
-from usmlap.simulation import SimulationSettings, simulate
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
 from usmlap.vehicle import Vehicle

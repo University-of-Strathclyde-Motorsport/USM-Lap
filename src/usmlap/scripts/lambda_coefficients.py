@@ -4,8 +4,8 @@ This script evaluates the impact of changing the lambda coefficients.
 
 from usmlap.competition import Competition, CompetitionPoints, points_delta
 from usmlap.model import LambdaCoefficients
-from usmlap.plot import plot_points_bar_chart
-from usmlap.simulation import SimulationSettings
+from usmlap.plot.comparison import plot_points_bar_chart
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.vehicle import Vehicle
 

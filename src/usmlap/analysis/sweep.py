@@ -7,7 +7,7 @@ from rich.progress import Progress
 
 from usmlap.competition import Competition
 from usmlap.competition.competition import CompetitionResults
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.vehicle import Vehicle
 
 

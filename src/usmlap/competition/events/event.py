@@ -6,7 +6,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh
 from usmlap.vehicle import Vehicle

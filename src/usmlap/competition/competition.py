@@ -5,7 +5,7 @@ from dataclasses import InitVar, dataclass, field
 
 from rich.progress import Progress
 
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.telemetry import TelemetrySolution
 from usmlap.vehicle import Vehicle
 

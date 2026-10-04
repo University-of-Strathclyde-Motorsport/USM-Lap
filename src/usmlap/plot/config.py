@@ -12,7 +12,7 @@ from usmlap.io.pydantic_io import read_object_from_yaml
 from usmlap.solver.solution_channels import ChannelId
 
 
-class PlotConfig(BaseModel):
+class WaveformConfig(BaseModel):
     """Configuration options for a plot."""
 
     title: str
@@ -52,11 +52,6 @@ class XAxisConfig(BaseModel):
         return self.provided_label or self.channel_id
 
 
-def load_plot_config(filepath: Path) -> PlotConfig:
+def load_waveform_config(filepath: Path) -> WaveformConfig:
     """Load plot config options from a .yaml file."""
-    return read_object_from_yaml(PlotConfig, filepath)
-
-
-if __name__ == "__main__":
-    config = load_plot_config(Path(r"plots/track_mesh.yaml"))
-    print(config)
+    return read_object_from_yaml(WaveformConfig, filepath)

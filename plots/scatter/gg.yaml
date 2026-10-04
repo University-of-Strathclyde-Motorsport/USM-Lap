@@ -1,0 +1,9 @@
+title: "GG Plot"
+xaxis:
+  channel_id: accelLat
+yaxis:
+  channel_id: accelLong
+caxis:
+  channel_id: vCar
+alpha: 1
+show_grid: True

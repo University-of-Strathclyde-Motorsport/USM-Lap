@@ -1,9 +1,9 @@
 """
 This script displays a velocity profile from a simulation."""
 
-from usmlap.plot import plot_apexes
-from usmlap.simulation import simulate
+from usmlap.plot.apex import plot_apexes
 from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.simulation import simulate
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 

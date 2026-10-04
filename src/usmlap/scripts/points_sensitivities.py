@@ -8,8 +8,10 @@ from rich import progress
 
 from usmlap.analysis import points_sensitivity
 from usmlap.competition import Competition
-from usmlap.plot import plot_points_sensitivities
-from usmlap.plot.points_sensitivities import PointsSensitivityData
+from usmlap.plot.points_sensitivities import (
+    PointsSensitivityData,
+    plot_points_sensitivities,
+)
 from usmlap.simulation.settings import QualityPresets
 from usmlap.vehicle import Vehicle
 from usmlap.vehicle.parameters import list_all_parameters

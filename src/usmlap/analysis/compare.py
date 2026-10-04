@@ -4,7 +4,7 @@ This module contains code for comparing two or more distinct vehicles."""
 from collections.abc import Generator
 
 from usmlap.competition import Competition, CompetitionPoints
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.vehicle import Vehicle
 
 

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from rich import progress
 
 from usmlap.competition import Competition, CompetitionPoints
-from usmlap.simulation import SimulationSettings
+from usmlap.simulation.settings import SimulationSettings
 from usmlap.vehicle import Parameter, Vehicle, get_new_vehicle
 
 logger = logging.getLogger(__name__)
