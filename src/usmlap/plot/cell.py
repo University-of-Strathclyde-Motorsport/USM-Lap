@@ -5,7 +5,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
-from usmlap.vehicle.powertrain import Accumulator, Cell, CellState
+from usmlap.vehicle.powertrain import (
+    Accumulator,
+    Cell,
+    CellState,
+    StateOfCharge,
+)
 
 RESOLUTION = 1000
 NOMINAL_TEMPERATURE = 25
@@ -51,7 +56,7 @@ def _plot_voltage(cell: Cell, ax: plt.Axes) -> None:
     """
     Plot voltage against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
-    voltage = [cell.get_voltage(soc) for soc in state_of_charge]
+    voltage = [cell.get_voltage(StateOfCharge(soc)) for soc in state_of_charge]
     ax.plot(state_of_charge * 100, voltage, color=USM_BLUE)
     ax.set_xlabel(AXIS_LABELS["soc"])
     ax.set_ylabel(AXIS_LABELS["voltage"])
@@ -73,7 +78,7 @@ def _plot_resistance(
     for temperature in REFERENCE_TEMPERATURES:
         resistances = []
         for soc in state_of_charge:
-            cell_state = CellState(soc, temperature)
+            cell_state = CellState(StateOfCharge(soc), temperature)
             resistances.append(cell.resistance(cell_state) * 1000)
         ax.plot(
             state_of_charge * 100,
@@ -95,7 +100,9 @@ def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
     """
     Plot current against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
-    derate = [accumulator.soc_derate(soc) for soc in state_of_charge]
+    derate = [
+        accumulator.soc_derate(StateOfCharge(soc)) for soc in state_of_charge
+    ]
     ax.plot(state_of_charge * 100, derate, color=USM_BLUE)
     ax.set_xlabel(AXIS_LABELS["soc"])
     ax.set_ylabel(AXIS_LABELS["derate"])
