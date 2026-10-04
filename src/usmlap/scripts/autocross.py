@@ -11,7 +11,7 @@ autocross = Autocross(track_file="FS AutoX Germany 2012")
 
 vehicle = Vehicle.from_json("USM26")
 
-simulation_settings = QualityPresets.FAST
+simulation_settings = QualityPresets.FAST_QSS
 
 solution = autocross.simulate_event(vehicle, simulation_settings)
 # plot_gg(solution)

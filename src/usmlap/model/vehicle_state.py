@@ -49,7 +49,7 @@ class Trajectory:
 DEFAULT_SOC = StateOfCharge(1)
 
 
-@dataclass
+@dataclass(frozen=True)
 class TransientVariables:
     """
     Transient variables of the vehicle at a single instant.

@@ -126,7 +126,7 @@ class StateOfCharge(
 
 class CellTemperature(
     PrimitiveDataChannel,
-    unit=ureg.degree_celsius,
+    unit=ureg.degC,
     label="Cell Temperature",
 ):
     """

@@ -30,8 +30,6 @@ class TelemetryChannel[T](NamedTuple):
 
     def __call__(self, solution: TelemetrySolution) -> T:
         # TODO: unit conversion
-        print("Calling telemetry channel")
-        print(self.channel_fcn)
         return self.channel_fcn(solution)
 
     def label_with_unit(self, wrap_width: int | None = 25) -> str:
@@ -89,7 +87,7 @@ class PrimitiveDataChannel(ABC):
         unit: Unit | None = None,
         label: str | None = None,
     ) -> TelemetryChannel[list[float]]:
-        def channel_fcn(solution: TelemetrySolution) -> list[float]:
+        def channel_fcn(solution: TelemetrySolution) -> list[float]:  # noqa: S1720
             return [cls.read_value(node) for node in solution.nodes]
 
         if not unit:

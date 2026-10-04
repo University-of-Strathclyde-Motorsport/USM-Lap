@@ -1,0 +1,51 @@
+presets:
+  draft:
+    resolution: 1
+    solver: quasi-steady-state
+    vehicle-model:
+      traction: point-mass
+      powertrain: single-motor-rwd
+      tyre:
+        longitudinal: linear
+        lateral: linear
+        combined: friction-ellipse
+  draft-qt:
+    resolution: 1
+    solver: quasi-transient
+    vehicle-model:
+      traction: point-mass
+      powertrain: single-motor-rwd
+      tyre:
+        longitudinal: linear
+        lateral: linear
+        combined: friction-ellipse
+  fast:
+    resolution: 0.5
+    solver: quasi-transient
+    vehicle-model:
+      traction: four-corner
+      powertrain: single-motor-rwd
+      tyre:
+        longitudinal: linear
+        lateral: linear
+        combined: friction-ellipse
+  fast-qss:
+    resolution: 0.5
+    solver: quasi-transient
+    vehicle-model:
+      traction: four-corner
+      powertrain: single-motor-rwd
+      tyre:
+        longitudinal: linear
+        lateral: linear
+        combined: friction-ellipse
+  high-quality:
+    resolution: 0.1
+    solver: quasi-transient
+    vehicle-model:
+      traction: four-corner
+      powertrain: single-motor-rwd
+      tyre:
+        longitudinal: linear
+        lateral: linear
+        combined: friction-ellipse

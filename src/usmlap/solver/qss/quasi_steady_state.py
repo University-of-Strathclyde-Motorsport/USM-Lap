@@ -17,7 +17,7 @@ from .braking import solve_braking
 logger = logging.getLogger(__name__)
 
 
-class QuasiSteadyStateSolver(SolverInterface):
+class QuasiSteadyStateSolver(SolverInterface, id="quasi-steady-state"):
     """
     Quasi-steady-state solver.
     """

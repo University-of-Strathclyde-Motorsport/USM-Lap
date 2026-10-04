@@ -2,7 +2,6 @@
 This module contains code for generating a track mesh."""
 
 import math
-from typing import Any, Self
 
 import numpy as np
 
@@ -27,22 +26,9 @@ MAX_DISPLACEMENT_CORRECTION_ITERATIONS = 200
 ACCEPTABLE_DISPLACEMENT_ERROR = 1e-3
 
 
-class Resolution(float):
-    """
-    Resolution of a track mesh, in metres.
-    Must be a positive number.
-    """
-
-    def __new__(cls, value: Any) -> Self:
-        value = float(value)
-        if value <= 0:
-            raise ValueError("Resolution must be greater than 0")
-        return super().__new__(cls, value)
-
-
 def generate_mesh(
     track_data: TrackData,
-    resolution: float | Resolution,
+    resolution: float,
     *,
     smooth: bool = True,
     initial_heading: float = 0,
@@ -55,7 +41,7 @@ def generate_mesh(
 
     Args:
         track_data (TrackData): The track data object.
-        resolution (Resolution): The resolut     ion of the mesh, in metres.
+        resolution (float): The resolution of the mesh, in metres.
         smooth (bool): Whether to smooth the curvature data (default = `True`).
         correct_tangency (bool): Whether to apply tangency correction
             to the track (default = `True`).
@@ -67,8 +53,6 @@ def generate_mesh(
         mesh (Mesh): A mesh of the track.
 
     """
-    resolution = Resolution(resolution)
-
     track_length = track_data.total_length
     node_count = round(track_length / resolution)
     spacing = track_length / (node_count - 1)

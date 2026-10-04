@@ -19,6 +19,11 @@ class FileMap:
         return self.root / "vehicle.json"
 
     @property
+    def settings_file(self) -> Path:
+        """The path of the simulation settings."""
+        return self.root / "settings.json"
+
+    @property
     def log_file(self) -> Path:
         """The path to the log file."""
         return self.root / "logs.log"
