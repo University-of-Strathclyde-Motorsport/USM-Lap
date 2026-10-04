@@ -1,0 +1,19 @@
+title: "Track Mesh"
+xaxis:
+  channel_id: sLap
+axes:
+  - ylabel: Curvature
+    channels:
+      - channel_id: curvature
+
+  - ylabel: Elevation
+    channels:
+      - channel_id: elevation
+
+  - ylabel: Inclination
+    channels:
+      - channel_id: inclination
+
+  - ylabel: Banking
+    channels:
+      - channel_id: heading_angle

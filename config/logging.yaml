@@ -17,6 +17,7 @@ handlers:
     class: logging.FileHandler
     formatter: default
     level: DEBUG
+    filename: TODO
 
 root:
   level: NOTSET

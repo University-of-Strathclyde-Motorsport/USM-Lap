@@ -5,6 +5,7 @@ import math
 
 import numpy as np
 
+from usmlap.core.types import Array1D
 from usmlap.utils.array import interp_previous
 
 from .mesh import Mesh, TrackNode
@@ -17,8 +18,6 @@ from .track_data import (
     ShapeData,
     TrackData,
 )
-
-type NDArray = np.ndarray[tuple[int], np.dtype[np.float64]]
 
 MAX_TANGENCY_CORRECTION_ITERATIONS = 100
 ACCEPTABLE_TANGENCY_ERROR = 1e-4
@@ -109,21 +108,21 @@ def generate_mesh(
 
 def _interpolate_curvature(
     data: list[ShapeData],
-    sample_position: NDArray,
+    sample_position: Array1D,
     smooth: bool = True,
-) -> NDArray:
+) -> Array1D:
     """
     Interpolate the curvature of the track at a series of positions.
 
     Args:
         data (list[ShapeData]): Shape data for the track.
-        sample_position (NDArray): The positions to interpolate at.
+        sample_position (Array1D): The positions to interpolate at.
         smooth (bool | None): Whether to smooth the curvature
             (default = `True`).
             If `True`, uses `np.interp` to interpolate the curvature.
             If `False`, uses `interp_previous` to interpolate the curvature
     Returns:
-        curvature (NDArray): The interpolated curvature.
+        curvature (Array1D): The interpolated curvature.
 
     """
     curvature = np.array([node.curvature for node in data])
@@ -144,17 +143,17 @@ def _interpolate_curvature(
 
 def _interpolate_elevation(
     data: list[ElevationData],
-    sample_position: NDArray,
-) -> NDArray:
+    sample_position: Array1D,
+) -> Array1D:
     """
     Interpolate the elevation of the track at a series of positions.
 
     Args:
         data (list[ElevationData]): Elevation data for the track.
-        sample_position (NDArray): The positions to interpolate at.
+        sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        elevation (NDArray): The interpolated elevation.
+        elevation (Array1D): The interpolated elevation.
 
     """
     if not data:
@@ -166,17 +165,17 @@ def _interpolate_elevation(
 
 def _interpolate_banking(
     data: list[BankingData],
-    sample_position: NDArray,
-) -> NDArray:
+    sample_position: Array1D,
+) -> Array1D:
     """
     Interpolate the banking of the track at a series of positions.
 
     Args:
         data (list[BankingData]): Banking data for the track.
-        sample_position (NDArray): The positions to interpolate at.
+        sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        banking (NDArray): The interpolated banking.
+        banking (Array1D): The interpolated banking.
 
     """
     if not data:
@@ -188,17 +187,17 @@ def _interpolate_banking(
 
 def _interpolate_grip_factor(
     data: list[GripFactorData],
-    sample_position: NDArray,
-) -> NDArray:
+    sample_position: Array1D,
+) -> Array1D:
     """
     Interpolate the grip factor of the track at a series of positions.
 
     Args:
         data (list[GripFactorData]): Grip factor data for the track.
-        sample_position (NDArray): The positions to interpolate at.
+        sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        grip_factor (NDArray): The interpolated grip factor.
+        grip_factor (Array1D): The interpolated grip factor.
 
     """
     if not data:
@@ -210,7 +209,7 @@ def _interpolate_grip_factor(
 
 def _interpolate_sector(
     data: list[SectorData],
-    sample_position: NDArray,
+    sample_position: Array1D,
 ) -> list[str]:
     """
     Interpolate the sector of the track at a series of positions.
@@ -230,16 +229,16 @@ def _interpolate_sector(
     return interp_previous(list(sample_position), start_position, label)
 
 
-def _calculate_inclination(position: NDArray, elevation: NDArray) -> NDArray:
+def _calculate_inclination(position: Array1D, elevation: Array1D) -> Array1D:
     """
     Calculate the inclination of the track.
 
     Args:
-        position (NDArray): A list of positions.
-        elevation (NDArray): The elevation at each position.
+        position (Array1D): A list of positions.
+        elevation (Array1D): The elevation at each position.
 
     Returns:
-        inclination (NDArray): The inclination at each position.
+        inclination (Array1D): The inclination at each position.
 
     """
     diff_position = np.diff(position)
@@ -253,20 +252,20 @@ def _calculate_inclination(position: NDArray, elevation: NDArray) -> NDArray:
 
 
 def _calculate_heading_angle(
-    length: NDArray,
-    curvature: NDArray,
+    length: Array1D,
+    curvature: Array1D,
     initial_heading: float = 0,
-) -> NDArray:
+) -> Array1D:
     """
     Calculate the heading angle for each node of a track.
 
     Args:
-        length (NDArray): The length of each node.
-        curvature (NDArray): The curvature of each node.
+        length (Array1D): The length of each node.
+        curvature (Array1D): The curvature of each node.
         initial_heading (float): The initial heading angle (default = 0).
 
     Returns:
-        heading (NDArray): The heading angle for each node.
+        heading (Array1D): The heading angle for each node.
 
     """
     swept_angle = curvature * length
@@ -300,10 +299,10 @@ def _set_heading_angle(
 
 
 def _calculate_coordinates(
-    length: NDArray,
-    curvature: NDArray,
+    length: Array1D,
+    curvature: Array1D,
     initial_coordinates: tuple[float, float] = (0, 0),
-) -> tuple[NDArray, NDArray]:
+) -> tuple[Array1D, Array1D]:
     """
     Calculate the coordinates for each node of a track.
 
@@ -313,13 +312,13 @@ def _calculate_coordinates(
     The second to final elements are the end coordinates of each node.
 
     Args:
-        length (NDArray): The length of each node.
-        curvature (NDArray): The curvature of each node.
+        length (Array1D): The length of each node.
+        curvature (Array1D): The curvature of each node.
         initial_coordinates (tuple[float, float]):
             The initial x and y coordinates (default = (0, 0)).
 
     Returns:
-        coordinates (tuple[NDArray, NDArray]): Lists of x and y coordinates.
+        coordinates (tuple[Array1D, Array1D]): Lists of x and y coordinates.
 
     """
     x_0, y_0 = initial_coordinates

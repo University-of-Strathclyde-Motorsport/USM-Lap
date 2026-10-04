@@ -36,6 +36,7 @@ def save_object_to_json(
 
 def read_object_from_yaml[T: BaseModel](type_: type[T], filepath: Path) -> T:
     """Read a Pydantic object from a .yaml file."""
+    logger.info("Loading %s from '%s'", type_.__name__, filepath)
     with open(filepath, "r", encoding="utf-8") as file:
         data = yaml.safe_load(file)
     return type_.model_validate(data)
