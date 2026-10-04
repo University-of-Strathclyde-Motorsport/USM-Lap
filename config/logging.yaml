@@ -20,6 +20,12 @@ handlers:
     filename: TODO
     mode: w
 
+loggers:
+  matplotlib:
+    level: WARNING
+  PIL:
+    level: WARNING
+
 root:
   level: NOTSET
   handlers: [console]
