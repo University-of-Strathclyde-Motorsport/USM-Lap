@@ -16,8 +16,7 @@ from usmlap.model.traction import FourCornerModel, PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
-from usmlap.solver import SolverInterface
-from usmlap.solver.solver_interface import get_solver
+from usmlap.solver import SolverInterface, SolverRegistry
 from usmlap.vehicle import Vehicle
 
 
@@ -41,8 +40,8 @@ class SimulationSettings(BaseModel):
     )
     solver: Annotated[
         type[SolverInterface],
-        BeforeValidator(get_solver),
-        PlainSerializer(lambda x: x.id, return_type=str),
+        BeforeValidator(SolverRegistry.get),
+        PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
     environment: Environment = Field(default_factory=Environment)
     lambdas: LambdaCoefficients = Field(default_factory=LambdaCoefficients)
@@ -92,3 +91,13 @@ class QualityPresets:
         vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
         solver=QT,
     )
+
+
+class SimSettings(BaseModel):
+    """Settings for a single simulation."""
+
+    solver: Annotated[
+        type[SolverInterface],
+        BeforeValidator(SolverRegistry.get),
+        PlainSerializer(SolverRegistry.get_key, return_type=str),
+    ] = QT

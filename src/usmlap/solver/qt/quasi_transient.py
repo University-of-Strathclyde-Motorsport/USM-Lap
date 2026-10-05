@@ -23,7 +23,7 @@ CONVERGENCE_TOLERANCE = 1e-4
 TASK_DESCRIPTION = "Solving transient simulation..."
 
 
-class QuasiTransientSolver(SolverInterface, id="quasi-transient"):
+class QuasiTransientSolver(SolverInterface):
     """Quasi-transient solver."""
 
     target_soc: float = 0.2
