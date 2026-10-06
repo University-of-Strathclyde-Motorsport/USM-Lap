@@ -7,10 +7,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from usmlap.model.environment import EnvironmentSettings
 from usmlap.track import TrackNode
 from usmlap.vehicle import Vehicle
 
-from .environment import Environment
 from .lambda_coefficients import LambdaCoefficients
 from .vehicle_state import TransientVariables
 
@@ -21,13 +21,14 @@ class GlobalContext:
     Global context object storing data for an entire simulation.
 
     Attributes:
-        environment (Environment): Environmental variables for the simulation.
+        environment (EnvironmentSettings):
+            Environmental variables for the simulation.
         vehicle (Vehicle): The vehicle being simulated.
         lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
 
     """
 
-    environment: Environment
+    environment: EnvironmentSettings
     vehicle: Vehicle
     lambdas: LambdaCoefficients
 
@@ -51,11 +52,8 @@ class NodeContext(GlobalContext):
     Context at a node of the track.
 
     Attributes:
-        environment (Environment): Environmental variables for the simulation.
-        vehicle (Vehicle): The vehicle being simulated.
         state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to evaluate.
-        lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
 
     """
 

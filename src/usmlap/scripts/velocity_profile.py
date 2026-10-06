@@ -1,10 +1,12 @@
 """
 This script displays a velocity profile from a simulation."""
 
+from pathlib import Path
+
 from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.settings import QualityPresets
-from usmlap.simulation.simulation import simulate
-from usmlap.track import TrackData, generate_mesh
+from usmlap.simulation.settings import QualityPresets, SimSettings
+from usmlap.simulation.simulation import get_initial_state, simulate
+from usmlap.track import generate_mesh
 from usmlap.vehicle import Vehicle
 
 TRACK_SHEET = "FS AutoX Germany 2012"
@@ -12,19 +14,21 @@ VEHICLE_FILE = "USM26"
 QUALITY = QualityPresets.DRAFT
 # SOLVER = QuasiTransientSolver
 # VEHICLE_MODEL = Bicycle
+settings = SimSettings.from_file(
+    Path(r"data/tracks/FS AutoX Germany 2012.json")
+)
 
 
 def main() -> None:
     """
     Main function."""
-    track_data = TrackData.from_json(TRACK_SHEET)
-    mesh = generate_mesh(track_data, resolution=0.1)
+    mesh = generate_mesh(settings.track)
     vehicle = Vehicle.from_json(VEHICLE_FILE)
     # simulation_settings = SimulationSettings(
     #     solver=SOLVER, vehicle_model=VEHICLE_MODEL
     # )
 
-    results = simulate(vehicle, mesh, QUALITY)
+    results = simulate(vehicle, mesh, QUALITY, get_initial_state(settings))
     plot_apexes(results)
 
 

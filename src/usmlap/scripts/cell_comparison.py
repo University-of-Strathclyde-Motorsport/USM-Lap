@@ -2,6 +2,8 @@
 This script compares the performance of different cells.
 """
 
+from pathlib import Path
+
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition.events import Endurance
 from usmlap.plot.style import USM_BLUE, USM_RED
@@ -26,7 +28,7 @@ baseline_vehicle = Vehicle.from_json("USM26")
 cells = list(Cell.library().values())
 
 vehicles = VehicleGenerator(baseline_vehicle, ElectricalCell, cells)
-endurance = Endurance("FS AutoX Germany 2012")
+endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 solutions = {
     vehicle.label: endurance.simulate_event(vehicle, settings=QUALITY)
     for vehicle in vehicles

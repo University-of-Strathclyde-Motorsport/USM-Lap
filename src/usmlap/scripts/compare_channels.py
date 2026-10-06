@@ -2,6 +2,8 @@
 This script compares the solutions for multiple vehicles.
 """
 
+from pathlib import Path
+
 from usmlap.competition.events import Autocross
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
@@ -22,7 +24,7 @@ vehicles: dict[str, Vehicle] = {}
 for value in VALUES:
     vehicles[str(value)] = get_new_vehicle(baseline, PARAMETER, value)
 
-event = Autocross(track_file=TRACK_FILE)
+event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 
 solutions: dict[str, TelemetrySolution] = {}

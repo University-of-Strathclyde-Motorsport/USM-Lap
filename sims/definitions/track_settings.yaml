@@ -1,0 +1,26 @@
+default_mesh_settings: &default_mesh_settings
+  resolution: 0.1
+  smooth: true
+  initial_heading: 0
+  initial_coordinates: [0, 0]
+  correct_tangency: true
+  correct_displacement: true
+
+default_autocross_track: &default_autocross_track "data/tracks/FS Endurance Germany 2010.json"
+
+acceleration:
+  <<: *default_mesh_settings
+  track_file: "data/tracks/FSAE Acceleration.json"
+
+skidpad:
+  <<: *default_mesh_settings
+  track_file: "data/tracks/FSAE Skidpad.json"
+
+autocross: &autocross
+  <<: *default_mesh_settings
+  track_file: *default_autocross_track
+
+endurance:
+  <<: *default_mesh_settings
+  track_file: *default_autocross_track
+  resolution: 1

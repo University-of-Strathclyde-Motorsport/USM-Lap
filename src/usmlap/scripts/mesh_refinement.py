@@ -8,21 +8,23 @@ are plotted against the resolution.
 
 import time
 from dataclasses import dataclass
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.utils import combined_legend
-from usmlap.simulation.settings import SimulationSettings
-from usmlap.simulation.simulation import simulate
+from usmlap.simulation.settings import SimSettings, SimulationSettings
+from usmlap.simulation.simulation import get_initial_state, simulate
 from usmlap.solver import QuasiTransientSolver
-from usmlap.track import TrackData, generate_mesh
+from usmlap.track import generate_mesh
 from usmlap.vehicle import Vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 TRACK_SHEET = "FS AutoX Germany 2012"
 VEHICLE = "USM23 Baseline"
 SOLVER = QuasiTransientSolver
+settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 
 
 @dataclass
@@ -45,7 +47,6 @@ class MeshRefinementResult:
 def mesh_refinement() -> list[MeshRefinementResult]:
     """
     Run a mesh refinement simulation."""
-    track_data = TrackData.from_json(TRACK_SHEET)
     vehicle = Vehicle.from_json(VEHICLE)
     simulation_settings = SimulationSettings(solver=SOLVER)
 
@@ -53,11 +54,13 @@ def mesh_refinement() -> list[MeshRefinementResult]:
 
     for resolution in RESOLUTIONS:
         mesh_start_time = time.time()
-        mesh = generate_mesh(track_data, resolution=resolution)
+        mesh = generate_mesh(settings.track)
         mesh_time = time.time() - mesh_start_time
 
         simulation_start_time = time.time()
-        results = simulate(vehicle, mesh, simulation_settings)
+        results = simulate(
+            vehicle, mesh, simulation_settings, get_initial_state(settings)
+        )
         simulation_time = time.time() - simulation_start_time
 
         mesh_refinement_results.append(

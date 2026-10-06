@@ -2,6 +2,7 @@
 This module contains code for simulating a Formula Student competition."""
 
 from dataclasses import InitVar, dataclass, field
+from pathlib import Path
 
 from rich.progress import Progress
 
@@ -16,7 +17,7 @@ from .events.event import EventInterface
 from .events.skidpad import Skidpad
 from .points import CompetitionData, CompetitionPoints
 
-DEFAULT_AUTOCROSS_TRACK = "FS AutoX Germany 2012"
+DEFAULT_AUTOCROSS_TRACK = Path(r"data\tracks\FS AutoX Germany 2012.json")
 DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
 
 
@@ -51,7 +52,7 @@ class Competition:
 
     """
 
-    autocross_track: str = DEFAULT_AUTOCROSS_TRACK
+    autocross_track: Path = DEFAULT_AUTOCROSS_TRACK
     simulate_acceleration: bool = True
     simulate_skidpad: bool = True
     simulate_autocross: bool = True

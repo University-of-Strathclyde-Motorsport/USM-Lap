@@ -1,12 +1,14 @@
 """
 This module defines the autocross event at Formula Student."""
 
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass
+from pathlib import Path
 
 from usmlap.simulation.settings import SimulationSettings
 from usmlap.simulation.simulation import simulate
 from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh, TrackData, generate_mesh
+from usmlap.track import Mesh, generate_mesh
+from usmlap.track.settings import TrackSettings
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -24,11 +26,7 @@ class Autocross(EventInterface, label="autocross"):
     Autocross event at Formula Student.
     """
 
-    track_file: InitVar[str]
-    track_data: TrackData = field(init=False)
-
-    def __post_init__(self, track_file: str) -> None:
-        self.track_data = TrackData.from_json(track_file)
+    track_file: Path
 
     def simulate_event(
         self,
@@ -60,4 +58,6 @@ class Autocross(EventInterface, label="autocross"):
             mesh (Mesh): A mesh of the track.
 
         """
-        return generate_mesh(self.track_data, resolution)
+        return generate_mesh(
+            TrackSettings(track_file=self.track_file, resolution=resolution)
+        )

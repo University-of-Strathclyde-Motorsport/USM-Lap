@@ -3,6 +3,8 @@ This script compares the performance of the vehicle
 with and without the aerodynamic package.
 """
 
+from pathlib import Path
+
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition.events import Autocross
 from usmlap.plot.ggv import plot_gg
@@ -42,7 +44,7 @@ aero_files: dict[str, str] = {
 
 packages = [AeroPackage.from_json(file) for file in aero_files.values()]
 vehicles = VehicleGenerator(baseline_vehicle, AerodynamicPackage, packages)
-autocross = Autocross(track_file="FS AutoX Germany 2012")
+autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 solutions: dict[str, TelemetrySolution] = {}
 for label, vehicle in zip(aero_files.keys(), vehicles, strict=True):

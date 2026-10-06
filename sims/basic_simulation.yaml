@@ -1,0 +1,10 @@
+simulation:
+  solver: quasi-steady-state
+  track:
+    track_file: "data/tracks/FS Endurance Germany 2010.json"
+    resolution: 0.1
+    smooth: true
+    initial_heading: 0
+    initial_coordinates: [0, 0]
+    correct_tangency: true
+    correct_displacement: true

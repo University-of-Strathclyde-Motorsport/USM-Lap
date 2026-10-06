@@ -2,6 +2,8 @@
 This script is used for testing the telemetry module.
 """
 
+from pathlib import Path
+
 from pint import UnitRegistry
 
 from usmlap.competition.events import Autocross
@@ -12,7 +14,7 @@ from usmlap.telemetry.channel.library import NodeTime, Position, Velocity
 from usmlap.vehicle import Vehicle
 
 vehicle = Vehicle.from_json("USM26")
-event = Autocross(track_file="FS AutoX Germany 2012")
+event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 settings = QualityPresets.DRAFT
 telemetry_solution = event.simulate_event(vehicle, settings)
 

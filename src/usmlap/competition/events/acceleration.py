@@ -7,6 +7,7 @@ from usmlap.simulation.settings import SimulationSettings
 from usmlap.simulation.simulation import simulate
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
+from usmlap.track.settings import TrackSettings
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -17,7 +18,7 @@ from ..points import (
 )
 from .event import EventInterface
 
-ACCELERATION_TRACK = "FSAE Acceleration"
+ACCELERATION_TRACK = r"data\tracks\FSAE Acceleration.json"
 
 
 @dataclass
@@ -58,4 +59,6 @@ class Acceleration(EventInterface, label="acceleration"):
             mesh (Mesh): A mesh of the track.
 
         """
-        return generate_mesh(self.track_data, resolution)
+        return generate_mesh(
+            TrackSettings(track_file=ACCELERATION_TRACK, resolution=resolution)
+        )

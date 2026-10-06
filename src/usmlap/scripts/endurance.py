@@ -2,6 +2,8 @@
 This script simulates the skidpad event.
 """
 
+from pathlib import Path
+
 from usmlap.competition.events import Endurance
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
@@ -19,7 +21,7 @@ from usmlap.vehicle import Vehicle
 
 QUALITY = QualityPresets.FAST
 
-endurance = Endurance(track_file="FS AutoX Germany 2012")
+endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 vehicle = Vehicle.from_json("USM26")
 

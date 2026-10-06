@@ -3,6 +3,7 @@ This module compares the accuracy of different vehicle models.
 """
 
 import time
+from pathlib import Path
 
 from usmlap.competition.events import Acceleration, Autocross, Skidpad
 from usmlap.model import TractionModel
@@ -59,7 +60,7 @@ vehicle = Vehicle.from_json("USM26")
 
 acceleration = Acceleration()
 skidpad = Skidpad()
-autocross = Autocross(track_file="FS AutoX Germany 2012")
+autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 acceleration_results: dict[str, TelemetrySolution] = {}
 skidpad_results: dict[str, TelemetrySolution] = {}

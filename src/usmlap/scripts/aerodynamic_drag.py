@@ -2,6 +2,8 @@
 This script shows the impact of aerodynamic drag on motor power.
 """
 
+from pathlib import Path
+
 from usmlap.competition.events import Autocross
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
@@ -16,7 +18,9 @@ vehicle_files: dict[str, str] = {
     "USM25": "USM26 with USM25 Aero",
 }
 
-autocross = Autocross(track_file="FS AutoX Germany 2012")
+autocross = Autocross(
+    track_file=Path(r"data\tracks\FS AutoX Germany 2012.json")
+)
 
 results: dict[str, TelemetrySolution] = {}
 for label, vehicle_file in vehicle_files.items():

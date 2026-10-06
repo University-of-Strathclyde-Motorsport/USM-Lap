@@ -1,8 +1,13 @@
 """
 This module defines settings for a simulation."""
 
+from __future__ import annotations
+
+from pathlib import Path
+from pprint import pprint
 from typing import Annotated
 
+import yaml
 from pydantic import (
     BaseModel,
     BeforeValidator,
@@ -11,12 +16,15 @@ from pydantic import (
     PlainSerializer,
 )
 
-from usmlap.model import Environment, GlobalContext, LambdaCoefficients
+from usmlap.core.filepath import OUTPUT_ROOT
+from usmlap.model import GlobalContext, LambdaCoefficients
+from usmlap.model.environment import EnvironmentSettings
 from usmlap.model.traction import FourCornerModel, PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface, SolverRegistry
+from usmlap.track.settings import TrackSettings
 from usmlap.vehicle import Vehicle
 
 
@@ -40,10 +48,12 @@ class SimulationSettings(BaseModel):
     )
     solver: Annotated[
         type[SolverInterface],
-        BeforeValidator(SolverRegistry.get),
+        BeforeValidator(SolverRegistry.ensure_value),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
-    environment: Environment = Field(default_factory=Environment)
+    environment: EnvironmentSettings = Field(
+        default_factory=EnvironmentSettings
+    )
     lambdas: LambdaCoefficients = Field(default_factory=LambdaCoefficients)
 
     def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
@@ -101,3 +111,52 @@ class SimSettings(BaseModel):
         BeforeValidator(SolverRegistry.get),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
+    track: TrackSettings
+    output_path: Path = OUTPUT_ROOT
+    vehicle: VehicleSettings
+    boundary_conditions: BoundaryConditionSettings
+    environment: EnvironmentSettings
+
+    def get_legacy_settings(self) -> SimulationSettings:
+        """Convert to legacy settings object.
+        TODO: remove this after finishing migration.
+        """
+        return SimulationSettings(
+            mesh_resolution=self.track.resolution,
+            vehicle_model=self.vehicle.vehicle_model,
+            solver=self.solver,
+            environment=self.environment,
+            lambdas=LambdaCoefficients(),
+        )
+
+    @staticmethod
+    def from_file(filepath: Path) -> SimSettings:
+        with open(filepath) as file:
+            data = yaml.safe_load(file)
+        return SimSettings.model_validate(data)
+
+
+class VehicleSettings(BaseModel):
+    """Settings for the vehicle and vehicle model."""
+
+    vehicle_file: Path
+    vehicle_model: VehicleModelSettings = Field(
+        default_factory=VehicleModelSettings, exclude=True
+    )
+    environment: EnvironmentSettings
+
+
+class BoundaryConditionSettings(BaseModel):
+    """Boundary conditions for the simulation."""
+
+    initial_soc: float = Field(gt=0, le=1, default=1)
+    initial_cell_temperature: float | None = None  # default to TAmbient
+    initial_velocity: float = 0
+
+
+if __name__ == "__main__":
+    filepath = Path(r"sims/basic_simulation.yaml")
+    with open(filepath) as file:
+        data = yaml.safe_load(file)
+
+    pprint(data)

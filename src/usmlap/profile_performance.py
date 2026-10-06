@@ -3,15 +3,17 @@ Code for profiling the performance of the simulation."""
 
 import cProfile
 import pstats
+from pathlib import Path
 
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings, SimulationSettings
 from usmlap.simulation.simulation import simulate  # noqa: F401
 from usmlap.solver import QuasiTransientSolver
 from usmlap.track import TrackData, generate_mesh
 from usmlap.vehicle import Vehicle
 
 track_data = TrackData.from_json("FS AutoX Germany 2012")
-mesh = generate_mesh(track_data, resolution=0.1)
+settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
+mesh = generate_mesh(settings.track)
 
 vehicle = Vehicle.from_json("USM23 Baseline")
 simulation_settings = SimulationSettings(solver=QuasiTransientSolver)

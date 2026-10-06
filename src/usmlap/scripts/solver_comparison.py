@@ -2,6 +2,8 @@
 This module compares the performance of the QSS and QT solvers.
 """
 
+from pathlib import Path
+
 from usmlap.competition.events import Autocross, Endurance
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
@@ -40,8 +42,8 @@ autocross_channels: list[TelemetryChannel] = [
 endurance_channels: list[TelemetryChannel] = []
 
 vehicle = Vehicle.from_json("USM26")
-autocross = Autocross(track_file="FS AutoX Germany 2012")
-endurance = Endurance(track_file="FS AutoX Germany 2012")
+autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
+endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 autocross_solutions: dict[str, TelemetrySolution] = {}
 endurance_solutions: dict[str, TelemetrySolution] = {}

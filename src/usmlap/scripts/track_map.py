@@ -2,12 +2,14 @@
 This script plots a map of a track."""
 
 from dataclasses import dataclass
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.track_map import plot_map
 from usmlap.track import TrackData, generate_mesh
+from usmlap.track.settings import TrackSettings
 
 TRACK_SHEET = "FS AutoX Germany 2012"
 MESH_RESOLUTION = 0.1
@@ -44,12 +46,10 @@ track_data = TrackData.from_json(TRACK_SHEET)
 #         mesh, ax, colour=config.colour, label=config.label, show_legend=True
 #     )
 
-mesh = generate_mesh(
-    track_data,
-    resolution=MESH_RESOLUTION,
-    correct_tangency=True,
-    correct_displacement=True,
+settings = TrackSettings.from_yaml(
+    Path(r"data/tracks/FS AutoX Germany 2012.json")
 )
+mesh = generate_mesh(settings)
 plot_map(mesh, ax, colour=USM_BLUE)
 
 plt.show()

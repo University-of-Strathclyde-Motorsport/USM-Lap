@@ -2,6 +2,8 @@
 This script runs a one-dimensional sweep of a vehicle parameter.
 """
 
+from pathlib import Path
+
 from usmlap.analysis import VehicleGenerator
 from usmlap.competition import CompetitionData, CompetitionPoints
 from usmlap.competition.events import Autocross
@@ -42,7 +44,7 @@ channels: list[TelemetryChannel] = [
 ]
 
 vehicles = VehicleGenerator(baseline_vehicle, FinalDriveRatio, VALUES)
-event = Autocross("FS AutoX Germany 2012")
+event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 dataset = CompetitionData.from_json("FSG 2025 Hybrid")
 # results = sweep_vehicles(vehicles, QUALITY)
 

@@ -6,6 +6,7 @@ import math
 import numpy as np
 
 from usmlap.core.types import Array1D
+from usmlap.track.settings import TrackSettings
 from usmlap.utils.array import interp_previous
 
 from .mesh import Mesh, TrackNode
@@ -19,22 +20,8 @@ from .track_data import (
     TrackData,
 )
 
-MAX_TANGENCY_CORRECTION_ITERATIONS = 100
-ACCEPTABLE_TANGENCY_ERROR = 1e-4
-MAX_DISPLACEMENT_CORRECTION_ITERATIONS = 200
-ACCEPTABLE_DISPLACEMENT_ERROR = 1e-3
 
-
-def generate_mesh(
-    track_data: TrackData,
-    resolution: float,
-    *,
-    smooth: bool = True,
-    initial_heading: float = 0,
-    initial_coordinates: tuple[float, float] = (0, 0),
-    correct_tangency: bool = True,
-    correct_displacement: bool = True,
-) -> Mesh:
+def generate_mesh(settings: TrackSettings) -> Mesh:
     """
     Generate a track mesh from track data.
 
@@ -52,16 +39,15 @@ def generate_mesh(
         mesh (Mesh): A mesh of the track.
 
     """
+    track_data = TrackData.from_json(settings.track_file)
     track_length = track_data.total_length
-    node_count = round(track_length / resolution)
+    node_count = round(track_length / settings.resolution)
     spacing = track_length / (node_count - 1)
     position = np.arange(0, track_length, spacing).astype(np.float64)
 
     length = np.diff(np.append(position, track_length))
     curvature = _interpolate_curvature(
-        track_data.shape,
-        position,
-        smooth=smooth,
+        track_data.shape, position, smooth=settings.smooth
     )
 
     elevation = _interpolate_elevation(track_data.elevation, position)
@@ -84,25 +70,23 @@ def generate_mesh(
         for i in range(len(position))
     ]
 
-    if correct_tangency and track_data.configuration == Configuration.CLOSED:
-        nodes = _correct_tangency(nodes)
+    if track_data.configuration == Configuration.CLOSED:
+        if settings.correct_tangency:
+            nodes = _correct_tangency(nodes, settings)
 
-    if (
-        correct_displacement
-        and track_data.configuration == Configuration.CLOSED
-    ):
-        nodes = _correct_displacement(nodes)
+        if settings.correct_displacement:
+            nodes = _correct_displacement(nodes, settings)
 
-    nodes = _set_heading_angle(nodes, initial_heading)
-    nodes = _set_coordinates(nodes, initial_coordinates)
+    nodes = _set_heading_angle(nodes, settings.initial_heading)
+    nodes = _set_coordinates(nodes, settings.initial_coordinates)
 
     return Mesh(
         nodes=nodes,
         configuration=track_data.configuration,
         track_name=track_data.print_name,
         location=track_data.location,
-        initial_heading=initial_heading,
-        initial_coordinates=initial_coordinates,
+        initial_heading=settings.initial_heading,
+        initial_coordinates=settings.initial_coordinates,
     )
 
 
@@ -366,8 +350,7 @@ def _set_coordinates(
 
 
 def _correct_tangency(
-    nodes: list[TrackNode],
-    iterations: int = MAX_TANGENCY_CORRECTION_ITERATIONS,
+    nodes: list[TrackNode], settings: TrackSettings
 ) -> list[TrackNode]:
     """
     Adjust track curvature to correct the tangency of closed tracks.
@@ -386,13 +369,13 @@ def _correct_tangency(
     curvature = np.array([node.curvature for node in nodes])
     length = np.array([node.length for node in nodes])
 
-    for _ in range(iterations):
+    for _ in range(settings.tangency_correction_maximum_iterations):
         heading_angle = _calculate_heading_angle(length, curvature, 0)
 
         heading_difference = heading_angle[-1] - heading_angle[0]
         tangency_error = math.remainder(heading_difference, 2 * math.pi)
 
-        if abs(tangency_error) < ACCEPTABLE_TANGENCY_ERROR:
+        if abs(tangency_error) < settings.tangency_correction_acceptable_error:
             break
         if abs(tangency_error) < math.pi:  # 'Uncurl' the track
             tangency_correction = -tangency_error
@@ -413,8 +396,7 @@ def _correct_tangency(
 
 
 def _correct_displacement(
-    nodes: list[TrackNode],
-    iterations: int = MAX_DISPLACEMENT_CORRECTION_ITERATIONS,
+    nodes: list[TrackNode], settings: TrackSettings
 ) -> list[TrackNode]:
     """
     Adjust the length and curvature of each node
@@ -432,14 +414,14 @@ def _correct_displacement(
     length = np.array([node.length for node in nodes])
     curvature = np.array([node.curvature for node in nodes])
 
-    for _ in range(iterations):
+    for _ in range(settings.displacement_correction_maximum_iterations):
         x, y = _calculate_coordinates(length, curvature, (0, 0))
         coordinates = np.stack((x, y))
         error = coordinates[:, -1] - coordinates[:, 0]
         error_magnitude = np.linalg.norm(error)
         unit_error = error / error_magnitude
 
-        if error_magnitude < ACCEPTABLE_DISPLACEMENT_ERROR:
+        if error_magnitude < settings.displacement_correction_acceptable_error:
             break
 
         displacements = np.diff(coordinates, axis=1)

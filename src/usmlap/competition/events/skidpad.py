@@ -7,6 +7,7 @@ from usmlap.simulation.settings import SimulationSettings
 from usmlap.simulation.simulation import simulate
 from usmlap.telemetry import TelemetrySolution
 from usmlap.track import Mesh, TrackData, generate_mesh
+from usmlap.track.settings import TrackSettings
 from usmlap.vehicle import Vehicle
 
 from ..points import (
@@ -17,7 +18,7 @@ from ..points import (
 )
 from .event import EventInterface
 
-SKIDPAD_TRACK = "FSAE Skidpad"
+SKIDPAD_TRACK = r"data\tracks\FSAE Skidpad.json"
 RIGHT_CIRCLE_TIMED_SECTOR = "Right Circle 2"
 LEFT_CIRCLE_TIMED_SECTOR = "Left Circle 2"
 
@@ -74,4 +75,8 @@ class Skidpad(EventInterface, label="skidpad"):
             mesh (Mesh): A mesh of the skidpad track.
 
         """
-        return generate_mesh(self.track_data, resolution, smooth=False)
+        return generate_mesh(
+            TrackSettings(
+                track_file=SKIDPAD_TRACK, resolution=resolution, smooth=False
+            )
+        )

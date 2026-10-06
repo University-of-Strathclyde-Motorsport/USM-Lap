@@ -7,7 +7,6 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from usmlap.model.environment import AMBIENT_TEMPERATURE
 from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.powertrain import CellState, StateOfCharge
 
@@ -60,19 +59,16 @@ class TransientVariables:
 
     """
 
-    soc: StateOfCharge = DEFAULT_SOC
-    cell_temperature: float = AMBIENT_TEMPERATURE
+    soc: StateOfCharge
+    cell_temperature: float
 
     @property
     def cell_state(self) -> CellState:
         return CellState(soc=self.soc, temperature=self.cell_temperature)
 
     @staticmethod
-    def get_default() -> TransientVariables:
-        """
-        Get a state variable object with default values.
-        """
-        return TransientVariables()
+    def get_default() -> TransientVariables:  # TODO: remove this
+        return TransientVariables(soc=StateOfCharge(1), cell_temperature=32)
 
 
 @dataclass

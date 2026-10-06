@@ -54,6 +54,15 @@ class Registry[KT, VT]:
             return self._store[key]
         raise KeyError(f"Key '{key}' not found in registry.")
 
+    def ensure_value(self, key_or_value: KT | VT) -> VT:
+        if key_or_value in self._store:
+            return self.get(key_or_value)  # type: ignore
+        elif key_or_value in self._store.values():
+            return key_or_value  # type: ignore
+        raise ValueError(
+            f"'{key_or_value}' is neither a key or value in the registry."
+        )
+
     def get_key(self, value: VT) -> KT:
         """Get the first key corresponding to a value in the registry.
 
