@@ -6,16 +6,15 @@ from pathlib import Path
 
 from rich.progress import Progress
 
+from usmlap.competition.events.acceleration import Acceleration
+from usmlap.competition.events.autocross import Autocross
+from usmlap.competition.events.endurance import Endurance
+from usmlap.competition.events.event import EventInterface
+from usmlap.competition.events.skidpad import Skidpad
+from usmlap.competition.points import CompetitionData, CompetitionPoints
 from usmlap.simulation.settings import SimulationSettings
-from usmlap.telemetry import TelemetrySolution
-from usmlap.vehicle import Vehicle
-
-from .events.acceleration import Acceleration
-from .events.autocross import Autocross
-from .events.endurance import Endurance
-from .events.event import EventInterface
-from .events.skidpad import Skidpad
-from .points import CompetitionData, CompetitionPoints
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.vehicle.vehicle import Vehicle
 
 DEFAULT_AUTOCROSS_TRACK = Path(r"data\tracks\FS AutoX Germany 2012.json")
 DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"

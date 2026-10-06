@@ -8,8 +8,9 @@ from pathlib import Path
 from usmlap.simulation.settings import SimSettings, SimulationSettings
 from usmlap.simulation.simulation import simulate  # noqa: F401
 from usmlap.solver import QuasiTransientSolver
-from usmlap.track import TrackData, generate_mesh
-from usmlap.vehicle import Vehicle
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.track.track_data import TrackData
+from usmlap.vehicle.vehicle import Vehicle
 
 track_data = TrackData.from_json("FS AutoX Germany 2012")
 settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))

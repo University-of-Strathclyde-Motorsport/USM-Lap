@@ -6,15 +6,14 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from usmlap.model import (
+from usmlap.model.context import (
     GlobalContext,
     NodeContext,
-    TractionModel,
     TransientVariables,
 )
-from usmlap.track import TrackNode
-
-from .solution import Solution
+from usmlap.model.traction.traction_model import TractionModel
+from usmlap.solver.solution import Solution
+from usmlap.track.mesh import TrackNode
 
 
 @dataclass

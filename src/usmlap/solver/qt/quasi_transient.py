@@ -11,7 +11,7 @@ from usmlap.solver.errors import (
     BelowTargetSOCError,
     MaximumIterationsExceededError,
 )
-from usmlap.solver.qss import QuasiSteadyStateSolver
+from usmlap.solver.qss.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.solver.qt.transient_variable import update_transient_variables
 from usmlap.solver.solution import Solution
 from usmlap.solver.solver_interface import SolverInterface

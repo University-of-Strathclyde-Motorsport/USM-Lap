@@ -4,20 +4,20 @@ This module defines the autocross event at Formula Student."""
 from dataclasses import dataclass
 from pathlib import Path
 
-from usmlap.simulation.settings import SimulationSettings
-from usmlap.simulation.simulation import simulate
-from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh, generate_mesh
-from usmlap.track.settings import TrackSettings
-from usmlap.vehicle import Vehicle
-
-from ..points import (
+from usmlap.competition.events.event import EventInterface
+from usmlap.competition.points import (
     AUTOCROSS_COEFFICIENTS,
     CompetitionData,
     CompetitionPoints,
     calculate_points,
 )
-from .event import EventInterface
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.track.mesh import Mesh
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.track.settings import TrackSettings
+from usmlap.vehicle.vehicle import Vehicle
 
 
 @dataclass

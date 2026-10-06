@@ -12,8 +12,7 @@ from pydantic import BaseModel, Field
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.library import HasLibrary
-
-from .common import AbstractSubsystem
+from usmlap.vehicle.common import AbstractSubsystem
 
 
 class AeroAttitude(BaseModel):

@@ -1,9 +1,13 @@
 """
 This module contains code for updating the vehicle state."""
 
-from usmlap.model import CalculatedVehicleState, NodeContext, TransientVariables
+from usmlap.model.context import NodeContext
 from usmlap.model.errors import OutOfChargeError
-from usmlap.vehicle.powertrain import StateOfCharge
+from usmlap.model.vehicle_state import (
+    CalculatedVehicleState,
+    TransientVariables,
+)
+from usmlap.vehicle.powertrain.cell import StateOfCharge
 
 
 def update_transient_variables(

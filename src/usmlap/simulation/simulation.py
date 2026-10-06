@@ -10,7 +10,7 @@ from usmlap.io.filemap import FileMap
 from usmlap.io.parquet import write_parquet
 from usmlap.io.pydantic_io import save_object_to_json
 from usmlap.io.sim_folder import make_new_sim_folder
-from usmlap.model import TransientVariables
+from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
 from usmlap.simulation.settings import (
     SimSettings,
@@ -19,10 +19,11 @@ from usmlap.simulation.settings import (
 )
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
-from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh, generate_mesh
-from usmlap.vehicle import Vehicle
-from usmlap.vehicle.powertrain import StateOfCharge
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.track.mesh import Mesh
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.vehicle.powertrain.cell import StateOfCharge
+from usmlap.vehicle.vehicle import Vehicle
 
 logger = logging.getLogger(__name__)
 

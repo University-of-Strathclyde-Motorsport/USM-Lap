@@ -3,20 +3,21 @@ This module defines the skidpad event at Formula Student."""
 
 from dataclasses import dataclass
 
-from usmlap.simulation.settings import SimulationSettings
-from usmlap.simulation.simulation import simulate
-from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh, TrackData, generate_mesh
-from usmlap.track.settings import TrackSettings
-from usmlap.vehicle import Vehicle
-
-from ..points import (
+from usmlap.competition.events.event import EventInterface
+from usmlap.competition.points import (
     SKIDPAD_COEFFICIENTS,
     CompetitionData,
     CompetitionPoints,
     calculate_points,
 )
-from .event import EventInterface
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.track.mesh import Mesh
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.track.settings import TrackSettings
+from usmlap.track.track_data import TrackData
+from usmlap.vehicle.vehicle import Vehicle
 
 SKIDPAD_TRACK = r"data\tracks\FSAE Skidpad.json"
 RIGHT_CIRCLE_TIMED_SECTOR = "Right Circle 2"

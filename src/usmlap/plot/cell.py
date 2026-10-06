@@ -5,12 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
-from usmlap.vehicle.powertrain import (
-    Accumulator,
-    Cell,
-    CellState,
-    StateOfCharge,
-)
+from usmlap.vehicle.powertrain.accumulator import Accumulator
+from usmlap.vehicle.powertrain.cell import Cell, CellState, StateOfCharge
 
 RESOLUTION = 1000
 NOMINAL_TEMPERATURE = 25

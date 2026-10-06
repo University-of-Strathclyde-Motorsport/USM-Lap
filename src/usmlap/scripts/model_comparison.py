@@ -5,13 +5,16 @@ This module compares the accuracy of different vehicle models.
 import time
 from pathlib import Path
 
-from usmlap.competition.events import Acceleration, Autocross, Skidpad
-from usmlap.model import TractionModel
-from usmlap.model.traction import Bicycle, FourCornerModel, PointMass
+from usmlap.competition.events.acceleration import Acceleration
+from usmlap.competition.events.autocross import Autocross
+from usmlap.competition.events.skidpad import Skidpad
+from usmlap.model.traction.bicycle import Bicycle
+from usmlap.model.traction.four_corner import FourCornerModel
+from usmlap.model.traction.point_mass import PointMass
+from usmlap.model.traction.traction_model import TractionModel
 from usmlap.plot.ggv import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.simulation.settings import QualityPresets
-from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     Curvature,
@@ -23,7 +26,8 @@ from usmlap.telemetry.channel.library import (
     MotorTorque,
     Velocity,
 )
-from usmlap.vehicle import Vehicle
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.vehicle.vehicle import Vehicle
 
 configuration = QualityPresets.FAST
 

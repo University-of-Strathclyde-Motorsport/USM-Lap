@@ -17,15 +17,17 @@ from pydantic import (
 )
 
 from usmlap.core.filepath import OUTPUT_ROOT
-from usmlap.model import GlobalContext, LambdaCoefficients
+from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
-from usmlap.model.traction import FourCornerModel, PointMass
+from usmlap.model.lambda_coefficients import LambdaCoefficients
+from usmlap.model.traction.four_corner import FourCornerModel
+from usmlap.model.traction.point_mass import PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface, SolverRegistry
 from usmlap.track.settings import TrackSettings
-from usmlap.vehicle import Vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 
 class SimulationSettings(BaseModel):

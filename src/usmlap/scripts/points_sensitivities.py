@@ -6,15 +6,15 @@ from textwrap import wrap
 
 from rich import progress
 
-from usmlap.analysis import points_sensitivity
-from usmlap.competition import Competition
+from usmlap.analysis.sensitivity import points_sensitivity
+from usmlap.competition.competition import Competition
 from usmlap.plot.points_sensitivities import (
     PointsSensitivityData,
     plot_points_sensitivities,
 )
 from usmlap.simulation.settings import QualityPresets
-from usmlap.vehicle import Vehicle
 from usmlap.vehicle.parameters import list_all_parameters
+from usmlap.vehicle.vehicle import Vehicle
 
 BASELINE_VEHICLE = "USM26"
 QUALITY = QualityPresets.DRAFT

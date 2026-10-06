@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import NamedTuple
 
-from usmlap.vehicle import Tyre
+from usmlap.vehicle.tyres import Tyre
 
 
 class TyreAttitude(NamedTuple):

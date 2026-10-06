@@ -3,8 +3,9 @@ This module implements the braking solver,
 which calculates the maximum possible braking at a node.
 """
 
-from usmlap.model import NodeContext, TractionModel
+from usmlap.model.context import NodeContext
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
+from usmlap.model.traction.traction_model import TractionModel
 from usmlap.model.vehicle_state import Trajectory
 
 MAXIMUM_ITERATIONS = 100

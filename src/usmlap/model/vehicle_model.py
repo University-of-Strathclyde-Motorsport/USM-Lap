@@ -5,12 +5,14 @@ which contains all the subsystem models.
 
 from dataclasses import dataclass
 
-from .powertrain import PowertrainModelInterface, SingleMotorRWD
-from .traction import FourCornerModel, TractionModel
-from .tyre import (
+from usmlap.model.powertrain.interface import PowertrainModelInterface
+from usmlap.model.powertrain.single_motor_rwd import SingleMotorRWD
+from usmlap.model.traction.four_corner import FourCornerModel
+from usmlap.model.traction.traction_model import TractionModel
+from usmlap.model.tyre.combined.friction_ellipse import FrictionEllipse
+from usmlap.model.tyre.pure.linear import LinearTyre
+from usmlap.model.tyre.tyre_model import (
     CombinedTyreModel,
-    FrictionEllipse,
-    LinearTyre,
     PureTyreModel,
     TyreModel,
 )

@@ -3,7 +3,7 @@ Unit tests for motor module."""
 
 import pytest
 
-from usmlap.vehicle.powertrain import Motor
+from usmlap.vehicle.powertrain.motor import Motor
 
 
 def test_maximum_speed(motor: Motor) -> None:

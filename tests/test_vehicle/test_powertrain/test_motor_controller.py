@@ -3,7 +3,7 @@ Unit tests for motor controller module."""
 
 import pytest
 
-from usmlap.vehicle.powertrain import MotorController
+from usmlap.vehicle.powertrain.motor_controller import MotorController
 
 
 @pytest.fixture

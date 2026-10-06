@@ -3,11 +3,10 @@ This module defines the point mass vehicle model."""
 
 import logging
 
+from usmlap.model.context import NodeContext
+from usmlap.model.traction.traction_model import TractionModel
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner
-
-from ..context import NodeContext
-from .traction_model import TractionModel
 
 logger = logging.getLogger(__name__)
 

@@ -5,8 +5,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from usmlap.solver import Solution, SolutionNode, SolverInterface
-from usmlap.vehicle import Vehicle
+from usmlap.solver.solution import Solution, SolutionNode
+from usmlap.solver.solver_interface import SolverInterface
+from usmlap.vehicle.vehicle import Vehicle
 
 
 @dataclass(frozen=True)

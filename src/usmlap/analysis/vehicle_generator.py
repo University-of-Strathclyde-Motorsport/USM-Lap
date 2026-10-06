@@ -6,7 +6,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from usmlap.vehicle import Parameter, Vehicle, get_new_vehicle
+from usmlap.vehicle.parameters import Parameter, get_new_vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 
 def linspace(start: float, end: float, steps: int) -> list[float]:

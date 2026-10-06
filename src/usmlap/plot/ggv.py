@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from usmlap.plot.style import COLOURMAP, USM_BLUE
-from usmlap.telemetry import DataChannel, TelemetrySolution
+from usmlap.telemetry.channel.channel import DataChannel
 from usmlap.telemetry.channel.library import (
     LateralAcceleration,
     LongitudinalAcceleration,
     Velocity,
 )
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 VELOCITY: DataChannel = Velocity()
 LATERAL_ACCELERATION: DataChannel = LateralAcceleration()

@@ -3,7 +3,8 @@ Unit tests for powertrain module."""
 
 import pytest
 
-from usmlap.vehicle.powertrain import CellState, RWDPowertrain
+from usmlap.vehicle.powertrain.cell import CellState
+from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
 
 
 def test_voltage_drop(powertrain: RWDPowertrain, cell_state: CellState) -> None:

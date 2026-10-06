@@ -4,11 +4,11 @@ This module compares the performance of the QSS and QT solvers.
 
 from pathlib import Path
 
-from usmlap.competition.events import Autocross, Endurance
+from usmlap.competition.events.autocross import Autocross
+from usmlap.competition.events.endurance import Endurance
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets, SimulationSettings
-from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     # LapAvgMotorTorque,
@@ -20,7 +20,8 @@ from usmlap.telemetry.channel.library import (
     StateOfCharge,
     Velocity,
 )
-from usmlap.vehicle import Vehicle
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.vehicle.vehicle import Vehicle
 
 configurations: dict[str, SimulationSettings] = {
     "QSS": QualityPresets.FAST_QSS,

@@ -1,8 +1,8 @@
 """
 This module defines a single-motor, rear-wheel drive powertrain."""
 
-from ..context import NodeContext
-from .interface import PowertrainModelInterface
+from usmlap.model.context import NodeContext
+from usmlap.model.powertrain.interface import PowertrainModelInterface
 
 
 class SingleMotorRWD(PowertrainModelInterface):

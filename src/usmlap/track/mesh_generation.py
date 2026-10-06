@@ -6,11 +6,9 @@ import math
 import numpy as np
 
 from usmlap.core.types import Array1D
+from usmlap.track.mesh import Mesh, TrackNode
 from usmlap.track.settings import TrackSettings
-from usmlap.utils.array import interp_previous
-
-from .mesh import Mesh, TrackNode
-from .track_data import (
+from usmlap.track.track_data import (
     BankingData,
     Configuration,
     ElevationData,
@@ -19,6 +17,7 @@ from .track_data import (
     ShapeData,
     TrackData,
 )
+from usmlap.utils.array import interp_previous
 
 
 def generate_mesh(settings: TrackSettings) -> Mesh:

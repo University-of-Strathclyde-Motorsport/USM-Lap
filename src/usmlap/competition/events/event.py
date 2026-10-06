@@ -6,12 +6,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
+from usmlap.competition.points import CompetitionData, CompetitionPoints
 from usmlap.simulation.settings import SimulationSettings
-from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh
-from usmlap.vehicle import Vehicle
-
-from ..points import CompetitionData, CompetitionPoints
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.track.mesh import Mesh
+from usmlap.vehicle.vehicle import Vehicle
 
 
 class EventTuple[T](NamedTuple):

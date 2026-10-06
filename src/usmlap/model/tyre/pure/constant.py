@@ -6,8 +6,8 @@ This tyre model is unsuitable for real simulation,
 and strictly for testing purposes.
 """
 
-from usmlap.model.tyre import PureTyreModel, TyreAttitude
-from usmlap.vehicle import Tyre
+from usmlap.model.tyre.tyre_model import PureTyreModel, TyreAttitude
+from usmlap.vehicle.tyres import Tyre
 
 
 class ConstantTyre(PureTyreModel):

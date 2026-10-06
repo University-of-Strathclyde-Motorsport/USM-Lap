@@ -8,9 +8,8 @@ from itertools import accumulate, pairwise
 
 from pint.facets.plain import PlainUnit as Unit
 
-from usmlap.telemetry import TelemetrySolution
-
-from .channel import DataChannel, TelemetryChannel
+from usmlap.telemetry.channel.channel import DataChannel, TelemetryChannel
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 
 def negate(

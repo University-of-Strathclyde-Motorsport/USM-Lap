@@ -5,10 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator
 
-from usmlap.analysis import ComparisonResults
-from usmlap.competition import CompetitionPoints
-
-from .style import COLOURMAP
+from usmlap.analysis.compare import ComparisonResults
+from usmlap.competition.points import CompetitionPoints
+from usmlap.plot.style import COLOURMAP
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 

@@ -4,13 +4,12 @@ This script runs a one-dimensional sweep of a vehicle parameter.
 
 from pathlib import Path
 
-from usmlap.analysis import VehicleGenerator
-from usmlap.competition import CompetitionData, CompetitionPoints
-from usmlap.competition.events import Autocross
+from usmlap.analysis.vehicle_generator import VehicleGenerator
+from usmlap.competition.competition import CompetitionData, CompetitionPoints
+from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
-from usmlap.telemetry import TelemetrySolution
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     LongitudinalAcceleration,
@@ -18,8 +17,9 @@ from usmlap.telemetry.channel.library import (
     MotorTorque,
     Velocity,
 )
-from usmlap.vehicle import Vehicle
+from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.parameters import FinalDriveRatio
+from usmlap.vehicle.vehicle import Vehicle
 
 BASELINE_VEHICLE = "USM26"
 PARAMETER = FinalDriveRatio

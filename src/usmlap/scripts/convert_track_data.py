@@ -2,8 +2,7 @@
 This script converts track data from Excel to JSON.
 """
 
-from usmlap.track import save_track_data
-from usmlap.track.track_data import load_track_from_spreadsheet
+from usmlap.track.track_data import load_track_from_spreadsheet, save_track_data
 
 EXCEL_TRACK_FILE = "FS AutoX Germany 2012.xlsx"
 

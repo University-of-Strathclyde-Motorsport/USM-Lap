@@ -3,7 +3,8 @@ Unit tests for accumulator module."""
 
 import pytest
 
-from usmlap.vehicle.powertrain import Accumulator, Cell, StateOfCharge
+from usmlap.vehicle.powertrain.accumulator import Accumulator
+from usmlap.vehicle.powertrain.cell import Cell, StateOfCharge
 
 
 def test_state_of_charge() -> None:

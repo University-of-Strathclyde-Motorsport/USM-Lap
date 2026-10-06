@@ -11,7 +11,7 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, Field
 
-from .track_data import Configuration
+from usmlap.track.track_data import Configuration
 
 
 class TrackNode(BaseModel):

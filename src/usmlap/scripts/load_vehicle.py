@@ -2,7 +2,7 @@
 Functions for testing loading vehicles from JSON files.
 """
 
-from usmlap.vehicle import Vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 VEHICLE = "USM23 Baseline"
 

@@ -4,10 +4,9 @@ This module contains functions for plotting points sensitivities."""
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.competition import CompetitionPoints
-from usmlap.vehicle import Parameter
-
-from .style import COLOURMAP, USM_BLUE
+from usmlap.competition.points import CompetitionPoints
+from usmlap.plot.style import COLOURMAP, USM_BLUE
+from usmlap.vehicle.parameters import Parameter
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 

@@ -8,8 +8,8 @@ from typing import ClassVar, NamedTuple
 
 from pint.facets.plain import PlainUnit as Unit
 
-from usmlap.solver import SolutionNode
-from usmlap.telemetry.data import TelemetrySolution
+from usmlap.solver.solution import SolutionNode
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 
 class TelemetryChannel[T](NamedTuple):

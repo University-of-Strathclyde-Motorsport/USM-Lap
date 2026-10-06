@@ -9,9 +9,8 @@ from copy import deepcopy
 from typing import Any, ClassVar
 
 from usmlap.vehicle.aero import AeroPackage
-
-from .powertrain.accumulator import Cell
-from .vehicle import Vehicle
+from usmlap.vehicle.powertrain.accumulator import Cell
+from usmlap.vehicle.vehicle import Vehicle
 
 
 class Parameter[T](ABC):

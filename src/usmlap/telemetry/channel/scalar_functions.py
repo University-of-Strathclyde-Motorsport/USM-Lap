@@ -2,7 +2,7 @@
 # This module defines scalar functions which can operate on telemetry channels.
 # """
 
-# from usmlap.telemetry import TelemetrySolution
+# from usmlap.telemetry.data.solution import TelemetrySolution
 
 # # from .channel import DataChannel, ScalarChannel, ScalarValue
 

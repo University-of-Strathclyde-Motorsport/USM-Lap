@@ -4,7 +4,7 @@ This module contains functions for plotting track maps."""
 from matplotlib import pyplot as plt
 
 from usmlap.plot.style import USM_BLUE, USM_RED
-from usmlap.track import Mesh
+from usmlap.track.mesh import Mesh
 
 
 def plot_map(

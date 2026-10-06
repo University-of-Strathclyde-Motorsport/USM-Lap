@@ -6,8 +6,9 @@ assuming zero longitudinal acceleration.
 
 import math
 
-from usmlap.model import NodeContext, TractionModel
+from usmlap.model.context import NodeContext
 from usmlap.model.errors import WheelLiftError
+from usmlap.model.traction.traction_model import TractionModel
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.solver.errors import MaximumIterationsExceededError
 

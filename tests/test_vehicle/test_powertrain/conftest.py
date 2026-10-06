@@ -5,24 +5,22 @@ import math
 
 import pytest
 
-from usmlap.vehicle.powertrain import (
-    Accumulator,
-    Cell,
-    CellState,
-    Motor,
-    MotorController,
-    RWDPowertrain,
-    StateOfCharge,
-)
 from usmlap.vehicle.powertrain.accumulator import (
+    Accumulator,
     ThermalDerateCurve,
     _ThermalDerateNode,
 )
 from usmlap.vehicle.powertrain.cell import (
+    Cell,
+    CellState,
+    StateOfCharge,
     _CellVoltageLookup,
     _SOCResistanceLookup,
     _TemperatureResistanceLookup,
 )
+from usmlap.vehicle.powertrain.motor import Motor
+from usmlap.vehicle.powertrain.motor_controller import MotorController
+from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
 
 
 @pytest.fixture

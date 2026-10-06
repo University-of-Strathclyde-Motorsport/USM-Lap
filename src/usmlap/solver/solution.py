@@ -8,13 +8,13 @@ from collections.abc import Generator
 from copy import copy
 from dataclasses import dataclass, field
 
-from usmlap.model import (
+from usmlap.model.traction.traction_model import TractionModel
+from usmlap.model.vehicle_state import (
     CalculatedVehicleState,
-    TractionModel,
+    Trajectory,
     TransientVariables,
 )
-from usmlap.model.vehicle_state import Trajectory
-from usmlap.track import Mesh, TrackNode
+from usmlap.track.mesh import Mesh, TrackNode
 
 logger = logging.getLogger(__name__)
 

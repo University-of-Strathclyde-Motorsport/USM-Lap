@@ -9,8 +9,8 @@ import numpy as np
 from scipy.interpolate import LinearNDInterpolator
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils import clamp
 from usmlap.utils.library import HasLibrary
+from usmlap.utils.maths import clamp
 
 NOMINAL_TEMPERATURE = 25
 

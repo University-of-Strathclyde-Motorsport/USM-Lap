@@ -4,18 +4,16 @@ This module models the full vehicle."""
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.datatypes import FrontRear
 from usmlap.utils.library import HasLibrary
-
-from .aero import AeroPackage
-from .brakes import Brakes
-from .driver import Driver
-from .inertia import Inertia
-from .powertrain import CellState, RWDPowertrain, StateOfCharge
-from .steering import Steering
-from .suspension import Suspension
-from .transmission import Transmission
-from .tyres import Tyre
-
-# from .tyre.tyre_model import Tyres
+from usmlap.vehicle.aero import AeroPackage
+from usmlap.vehicle.brakes import Brakes
+from usmlap.vehicle.driver import Driver
+from usmlap.vehicle.inertia import Inertia
+from usmlap.vehicle.powertrain.cell import CellState, StateOfCharge
+from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
+from usmlap.vehicle.steering import Steering
+from usmlap.vehicle.suspension import Suspension
+from usmlap.vehicle.transmission import Transmission
+from usmlap.vehicle.tyres import Tyre
 
 
 class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):

@@ -6,12 +6,15 @@ from typing import Literal
 
 import matplotlib.pyplot as plt
 
-from usmlap.telemetry import DataChannel, TelemetryChannel, TelemetrySolution
+from usmlap.plot.errors import NoChannelsError
+from usmlap.plot.style import COLOURMAP
+from usmlap.plot.utils import outside_legend
+from usmlap.telemetry.channel.channel import (
+    DataChannel,
+    TelemetryChannel,
+)
 from usmlap.telemetry.channel.library import Position, Time
-
-from .errors import NoChannelsError
-from .style import COLOURMAP
-from .utils import outside_legend
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 X_AXIS_OPTIONS = Literal["Position", "Time", "Lap"]
 X_AXIS_CHANNELS: dict[X_AXIS_OPTIONS, TelemetryChannel] = {

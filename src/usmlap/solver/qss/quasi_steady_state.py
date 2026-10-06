@@ -7,12 +7,11 @@ from rich import progress
 from scipy.signal import find_peaks
 
 from usmlap.model.vehicle_state import Trajectory
+from usmlap.solver.qss.acceleration import solve_acceleration
+from usmlap.solver.qss.apex_velocity import solve_apex_velocity
+from usmlap.solver.qss.braking import solve_braking
 from usmlap.solver.solution import Solution
 from usmlap.solver.solver_interface import SolverInterface
-
-from .acceleration import solve_acceleration
-from .apex_velocity import solve_apex_velocity
-from .braking import solve_braking
 
 logger = logging.getLogger(__name__)
 

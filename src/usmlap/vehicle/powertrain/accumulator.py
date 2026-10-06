@@ -10,8 +10,7 @@ from pydantic import BeforeValidator
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.utils.library import HasLibrary
-
-from .cell import Cell, CellState, StateOfCharge
+from usmlap.vehicle.powertrain.cell import Cell, CellState, StateOfCharge
 
 NOMINAL_TEMPERATURE = 25
 

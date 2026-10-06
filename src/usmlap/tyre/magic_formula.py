@@ -24,9 +24,8 @@ from math import atan, cos, exp, pi, pow, sin, sqrt, tan
 from numpy import sign
 from pydantic import BaseModel
 
+from usmlap.tyre.tir import TIRParameters
 from usmlap.utils.datatypes import Coordinate
-
-from .tir import TIRParameters
 
 EPSILON = 0.1
 

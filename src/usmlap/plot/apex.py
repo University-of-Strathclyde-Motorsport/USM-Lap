@@ -3,16 +3,15 @@ This module contains functions for plotting velocity profiles and apexes."""
 
 import matplotlib.pyplot as plt
 
-from usmlap.telemetry import TelemetrySolution
-from usmlap.telemetry.channel import DataChannel
+from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
+from usmlap.telemetry.channel.channel import DataChannel
 from usmlap.telemetry.channel.library import (
     Curvature,
     MaximumVelocity,
     Position,
     Velocity,
 )
-
-from .style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 POSITION: DataChannel = Position()
 VELOCITY: DataChannel = Velocity()

@@ -5,13 +5,12 @@ with and without the aerodynamic package.
 
 from pathlib import Path
 
-from usmlap.analysis import VehicleGenerator
-from usmlap.competition.events import Autocross
+from usmlap.analysis.vehicle_generator import VehicleGenerator
+from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.ggv import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
-from usmlap.telemetry import TelemetrySolution
 
 # from usmlap.simulation.channels import Channel
 from usmlap.telemetry.channel.library import (
@@ -20,9 +19,10 @@ from usmlap.telemetry.channel.library import (
     MotorPower,
     Velocity,
 )
-from usmlap.vehicle import Vehicle
+from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.parameters import AerodynamicPackage
+from usmlap.vehicle.vehicle import Vehicle
 
 QUALITY = QualityPresets.FAST_QSS
 # CHANNELS: list[Channel] = [

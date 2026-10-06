@@ -5,10 +5,9 @@ from collections.abc import Collection
 
 from rich.progress import Progress
 
-from usmlap.competition import Competition
-from usmlap.competition.competition import CompetitionResults
+from usmlap.competition.competition import Competition, CompetitionResults
 from usmlap.simulation.settings import SimulationSettings
-from usmlap.vehicle import Vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 
 def sweep_vehicles(

@@ -8,7 +8,7 @@ from typing import Annotated, Literal
 from annotated_types import Unit
 from pydantic import Field, PositiveFloat
 
-from .common import AbstractSubsystem
+from usmlap.vehicle.common import AbstractSubsystem
 
 
 class SuspensionAxle(ABC, AbstractSubsystem):

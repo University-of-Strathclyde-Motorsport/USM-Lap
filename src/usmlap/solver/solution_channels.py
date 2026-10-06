@@ -11,8 +11,8 @@ import numpy as np
 import polars
 
 from usmlap.core.types import Array1D
-from usmlap.solver import Solution
-from usmlap.track import Mesh
+from usmlap.solver.solution import Solution
+from usmlap.track.mesh import Mesh
 
 logger = logging.getLogger(__name__)
 

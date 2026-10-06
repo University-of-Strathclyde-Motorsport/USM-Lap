@@ -8,11 +8,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from usmlap.model.environment import EnvironmentSettings
-from usmlap.track import TrackNode
-from usmlap.vehicle import Vehicle
-
-from .lambda_coefficients import LambdaCoefficients
-from .vehicle_state import TransientVariables
+from usmlap.model.lambda_coefficients import LambdaCoefficients
+from usmlap.model.vehicle_state import TransientVariables
+from usmlap.track.mesh import TrackNode
+from usmlap.vehicle.vehicle import Vehicle
 
 
 @dataclass

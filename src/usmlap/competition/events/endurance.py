@@ -6,22 +6,22 @@ from dataclasses import dataclass
 from math import ceil
 from pathlib import Path
 
-from usmlap.simulation.settings import SimulationSettings
-from usmlap.simulation.simulation import simulate
-from usmlap.telemetry import TelemetrySolution
-from usmlap.track import Mesh, generate_mesh
-from usmlap.track.settings import TrackSettings
-from usmlap.vehicle import Vehicle, get_new_vehicle
-from usmlap.vehicle.parameters import DischargeCurrentLimit
-
-from ..points import (
+from usmlap.competition.events.event import EventInterface
+from usmlap.competition.points import (
     EFFICIENCY_COEFFICIENTS,
     ENDURANCE_COEFFICIENTS,
     CompetitionData,
     CompetitionPoints,
     calculate_points,
 )
-from .event import EventInterface
+from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.simulation import simulate
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.track.mesh import Mesh
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.track.settings import TrackSettings
+from usmlap.vehicle.parameters import DischargeCurrentLimit, get_new_vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 ENDURANCE_TRACK_LENGTH: float = 22000
 DEFAULT_DISCHARGE_LIMIT: float = 0.4

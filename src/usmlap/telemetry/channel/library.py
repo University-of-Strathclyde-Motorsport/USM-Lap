@@ -6,10 +6,12 @@ which extract values from a telemetry solution.
 from pint import UnitRegistry
 
 import usmlap.telemetry.channel.functions as fcn
-from usmlap.solver import SolutionNode
-from usmlap.telemetry import TelemetrySolution
-
-from .channel import DerivedDataChannel, PrimitiveDataChannel
+from usmlap.solver.solution import SolutionNode
+from usmlap.telemetry.channel.channel import (
+    DerivedDataChannel,
+    PrimitiveDataChannel,
+)
+from usmlap.telemetry.data.solution import TelemetrySolution
 
 ureg = UnitRegistry()
 

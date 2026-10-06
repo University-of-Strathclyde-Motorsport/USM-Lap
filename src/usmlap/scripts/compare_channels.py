@@ -4,13 +4,14 @@ This script compares the solutions for multiple vehicles.
 
 from pathlib import Path
 
-from usmlap.competition.events import Autocross
+from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
-from usmlap.telemetry import TelemetryChannel, TelemetrySolution
+from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import MotorTorque, Velocity
-from usmlap.vehicle import Vehicle, get_new_vehicle
-from usmlap.vehicle.parameters import FinalDriveRatio
+from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.vehicle.parameters import FinalDriveRatio, get_new_vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 BASELINE_VEHICLE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012"

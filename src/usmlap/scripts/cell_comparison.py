@@ -4,12 +4,14 @@ This script compares the performance of different cells.
 
 from pathlib import Path
 
-from usmlap.analysis import VehicleGenerator
-from usmlap.competition.events import Endurance
+from usmlap.analysis.vehicle_generator import VehicleGenerator
+from usmlap.competition.events.endurance import Endurance
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
 from usmlap.simulation.settings import QualityPresets
 from usmlap.telemetry.channel.channel import DataChannel
+from usmlap.vehicle.parameters import ElectricalCell
+from usmlap.vehicle.powertrain.cell import Cell
 
 # from usmlap.telemetry.channel.library import (
 #     LapAvgCurrent,
@@ -18,9 +20,7 @@ from usmlap.telemetry.channel.channel import DataChannel
 #     LapMaxVelocity,
 #     LapTime,
 # )
-from usmlap.vehicle import Vehicle
-from usmlap.vehicle.parameters import ElectricalCell
-from usmlap.vehicle.powertrain import Cell
+from usmlap.vehicle.vehicle import Vehicle
 
 QUALITY = QualityPresets.FAST
 

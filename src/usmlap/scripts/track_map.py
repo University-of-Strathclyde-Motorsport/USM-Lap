@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.track_map import plot_map
-from usmlap.track import TrackData, generate_mesh
+from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
+from usmlap.track.track_data import TrackData
 
 TRACK_SHEET = "FS AutoX Germany 2012"
 MESH_RESOLUTION = 0.1

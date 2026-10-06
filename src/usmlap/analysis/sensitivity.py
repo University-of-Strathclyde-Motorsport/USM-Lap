@@ -3,9 +3,10 @@ This module contains code for points sensitivity analysis."""
 
 from rich.progress import Progress
 
-from usmlap.competition import Competition
+from usmlap.competition.competition import Competition
 from usmlap.simulation.settings import SimulationSettings
-from usmlap.vehicle import Parameter, Vehicle, get_new_vehicle
+from usmlap.vehicle.parameters import Parameter, get_new_vehicle
+from usmlap.vehicle.vehicle import Vehicle
 
 PARAMETER_DELTA_SCALAR = 0.0001
 TASK_DESCRIPTION = "Evaluating sensitivity..."

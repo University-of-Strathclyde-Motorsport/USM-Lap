@@ -7,9 +7,9 @@ from abc import ABC
 
 from pydantic import BaseModel
 
-from .accumulator import Accumulator, CellState
-from .motor import Motor
-from .motor_controller import MotorController
+from usmlap.vehicle.powertrain.accumulator import Accumulator, CellState
+from usmlap.vehicle.powertrain.motor import Motor
+from usmlap.vehicle.powertrain.motor_controller import MotorController
 
 COOLING_TEMPERATURE_THRESHOLD = 45
 

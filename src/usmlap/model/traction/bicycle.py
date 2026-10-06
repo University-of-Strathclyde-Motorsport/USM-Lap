@@ -1,12 +1,11 @@
 """
 This module defines the bicycle vehicle model."""
 
+from usmlap.model.context import NodeContext
+from usmlap.model.errors import InsufficientTractionError
+from usmlap.model.traction.traction_model import TractionModel
 from usmlap.model.vehicle_state import Trajectory
 from usmlap.utils.datatypes import FourCorner, FrontRear
-
-from ..context import NodeContext
-from ..errors import InsufficientTractionError
-from .traction_model import TractionModel
 
 PRECISION = 1e-3
 MAXIMUM_ITERATIONS = 100

@@ -3,7 +3,7 @@ This module defines a common interface for powertrain models."""
 
 from abc import ABC, abstractmethod
 
-from ..context import NodeContext
+from usmlap.model.context import NodeContext
 
 
 class PowertrainModelInterface(ABC):

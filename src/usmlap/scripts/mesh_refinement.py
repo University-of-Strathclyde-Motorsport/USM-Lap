@@ -17,8 +17,8 @@ from usmlap.plot.utils import combined_legend
 from usmlap.simulation.settings import SimSettings, SimulationSettings
 from usmlap.simulation.simulation import get_initial_state, simulate
 from usmlap.solver import QuasiTransientSolver
-from usmlap.track import generate_mesh
-from usmlap.vehicle import Vehicle
+from usmlap.track.mesh_generation import generate_mesh
+from usmlap.vehicle.vehicle import Vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 TRACK_SHEET = "FS AutoX Germany 2012"

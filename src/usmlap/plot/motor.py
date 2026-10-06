@@ -7,9 +7,9 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import numpy as np
 
-from usmlap.vehicle.powertrain import CellState, RWDPowertrain, StateOfCharge
-
-from .style import COLOURMAP
+from usmlap.plot.style import COLOURMAP
+from usmlap.vehicle.powertrain.cell import CellState, StateOfCharge
+from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
 
 DEFAULT_SOC_VALUES = [StateOfCharge(v) for v in [1, 0.8, 0.6, 0.4, 0.2]]
 
