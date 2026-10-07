@@ -27,6 +27,5 @@ boundary_conditions:
 plots:
   waveform:
     - track_mesh
-    - doesnt_exist
   scatter:
     - gg

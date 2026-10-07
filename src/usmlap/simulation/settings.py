@@ -4,10 +4,8 @@ This module defines settings for a simulation."""
 from __future__ import annotations
 
 from pathlib import Path
-from pprint import pprint
 from typing import Annotated
 
-import yaml
 from pydantic import (
     BaseModel,
     BeforeValidator,
@@ -17,6 +15,7 @@ from pydantic import (
 )
 
 from usmlap.core.filepath import OUTPUT_ROOT
+from usmlap.core.git_tools import get_git_hash
 from usmlap.core.library import SupportsLoading
 from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
@@ -110,6 +109,7 @@ class QualityPresets:
 class SimSettings(SupportsLoading):
     """Settings for a single simulation."""
 
+    git_version: str = Field(init=False, default_factory=get_git_hash)
     sim_name: str = ""
     solver: Annotated[
         type[SolverInterface],
@@ -151,11 +151,3 @@ class BoundaryConditionSettings(BaseModel):
     initial_soc: float = Field(gt=0, le=1, default=1)
     initial_cell_temperature: float | None = None  # default to TAmbient
     initial_velocity: float = 0
-
-
-if __name__ == "__main__":
-    filepath = Path(r"sims/basic_simulation.yaml")
-    with open(filepath) as file:
-        data = yaml.safe_load(file)
-
-    pprint(data)
