@@ -5,7 +5,7 @@ import math
 
 import numpy as np
 
-from usmlap.core.types import Array1D
+from usmlap.core.typedefs import Array1D
 from usmlap.track.mesh import Mesh, TrackNode
 from usmlap.track.settings import TrackSettings
 from usmlap.track.track_data import (

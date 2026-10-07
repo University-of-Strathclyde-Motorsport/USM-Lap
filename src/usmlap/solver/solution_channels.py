@@ -10,7 +10,7 @@ from enum import StrEnum
 import numpy as np
 import polars
 
-from usmlap.core.types import Array1D
+from usmlap.core.typedefs import Array1D
 from usmlap.solver.solution import Solution
 from usmlap.track.mesh import Mesh
 
