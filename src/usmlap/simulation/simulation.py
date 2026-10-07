@@ -64,7 +64,7 @@ def simulate(
 
 def run_simulation(settings: SimSettings) -> FileMap:
     """Run a simulation and save the results to a file."""
-    sim_folder = make_new_sim_folder(settings.output_path)
+    sim_folder = make_new_sim_folder(settings.output_path, settings.sim_name)
     filemap = FileMap(sim_folder)
 
     with log_to_file(filemap.log_file):
@@ -86,7 +86,7 @@ def run_simulation(settings: SimSettings) -> FileMap:
         df_sol = SolutionDataFrame.from_solution(solution.solution)
         write_parquet(df_sol, filemap.parquet_file)
 
-        generate_plots(filemap, df_sol)
+        generate_plots(filemap, settings.plots, solution=df_sol)
 
     return filemap
 

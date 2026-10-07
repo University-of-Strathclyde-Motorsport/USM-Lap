@@ -20,6 +20,6 @@ class TrackSettings(SupportsLoading):
     correct_tangency: bool = True
     correct_displacement: bool = True
     tangency_correction_maximum_iterations: int = 100
-    tangency_correction_acceptable_error = 1e-4
+    tangency_correction_acceptable_error: float = 1e-4
     displacement_correction_maximum_iterations: int = 200
-    displacement_correction_acceptable_error = 1e-3
+    displacement_correction_acceptable_error: float = 1e-3

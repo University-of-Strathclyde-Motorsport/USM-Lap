@@ -13,7 +13,7 @@ from usmlap.track.track_data import TrackData
 from usmlap.vehicle.vehicle import Vehicle
 
 track_data = TrackData.from_json("FS AutoX Germany 2012")
-settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
+settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
 mesh = generate_mesh(settings.track)
 
 vehicle = Vehicle.from_json("USM23 Baseline")

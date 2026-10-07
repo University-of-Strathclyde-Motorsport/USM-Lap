@@ -74,6 +74,7 @@ def extract_channels(s: Solution) -> dict[ChannelId, Array1D]:
         ChannelId.INCLINATION: np.array(
             [node.track_node.inclination for node in s]
         ),
+        ChannelId.BANKING: np.array([node.track_node.banking for node in s]),
         ChannelId.SECTOR: np.array([node.sector for node in s]),
         ChannelId.N_LAP: np.array([node.lap_number for node in s]),
         ChannelId.TIME: np.array([node.time for node in s]),

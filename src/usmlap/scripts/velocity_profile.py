@@ -14,9 +14,7 @@ VEHICLE_FILE = "USM26"
 QUALITY = QualityPresets.DRAFT
 # SOLVER = QuasiTransientSolver
 # VEHICLE_MODEL = Bicycle
-settings = SimSettings.from_file(
-    Path(r"data/tracks/FS AutoX Germany 2012.json")
-)
+settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
 
 
 def main() -> None:

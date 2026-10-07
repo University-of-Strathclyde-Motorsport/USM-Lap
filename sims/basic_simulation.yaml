@@ -1,10 +1,32 @@
-simulation:
-  solver: quasi-steady-state
-  track:
-    track_file: "data/tracks/FS Endurance Germany 2010.json"
-    resolution: 0.1
-    smooth: true
-    initial_heading: 0
-    initial_coordinates: [0, 0]
-    correct_tangency: true
-    correct_displacement: true
+sim_name: TestSimulation
+solver: quasi-steady-state
+track:
+  track_file: "data/tracks/FS Endurance Germany 2010.json"
+  resolution: 0.1
+  smooth: true
+  initial_heading: 0
+  initial_coordinates: [0, 0]
+  correct_tangency: true
+  correct_displacement: true
+vehicle:
+  vehicle_file: "data/vehicles/USM26.json"
+  vehicle_model:
+    powertrain: single-motor-rwd
+    traction: four-corner
+    longitudinal_tyre: "linear"
+    lateral_tyre: "linear"
+    combined_tyre: "friction-ellipse"
+  environment:
+    gravity: 9.81
+    air_density: 1.225
+    ambient_temperature: 32
+boundary_conditions:
+  initial_soc: 1
+  initial_cell_temperature: 32
+  initial_velocity: 0
+plots:
+  waveform:
+    - track_mesh
+    - doesnt_exist
+  scatter:
+    - gg

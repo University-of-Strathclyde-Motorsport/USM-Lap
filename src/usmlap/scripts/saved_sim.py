@@ -9,7 +9,7 @@ from usmlap.simulation.simulation import run_simulation
 
 
 def main() -> None:  # noqa: S1720
-    settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
+    settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
     run_simulation(settings)
 
 

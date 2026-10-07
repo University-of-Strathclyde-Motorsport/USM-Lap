@@ -17,12 +17,14 @@ from pydantic import (
 )
 
 from usmlap.core.filepath import OUTPUT_ROOT
+from usmlap.core.library import SupportsLoading
 from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
 from usmlap.model.lambda_coefficients import LambdaCoefficients
 from usmlap.model.traction.four_corner import FourCornerModel
 from usmlap.model.traction.point_mass import PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
+from usmlap.plot.generate_plots import PlotSettings
 from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface, SolverRegistry
@@ -79,45 +81,46 @@ class QualityPresets:
 
     DRAFT: SimulationSettings = SimulationSettings(
         mesh_resolution=1,
-        vehicle_model=VehicleModelSettings(traction_model=PointMass),
+        vehicle_model=VehicleModelSettings(traction=PointMass),
         solver=QSS,
     )
     DRAFT_QT: SimulationSettings = SimulationSettings(
         mesh_resolution=1,
-        vehicle_model=VehicleModelSettings(traction_model=PointMass),
+        vehicle_model=VehicleModelSettings(traction=PointMass),
         solver=QT,
     )
     FAST: SimulationSettings = SimulationSettings(
         mesh_resolution=0.5,
-        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
+        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
         solver=QT,
     )
 
     FAST_QSS: SimulationSettings = SimulationSettings(
         mesh_resolution=0.5,
-        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
+        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
         solver=QSS,
     )
     HIGH_QUALITY: SimulationSettings = SimulationSettings(
         mesh_resolution=0.1,
-        vehicle_model=VehicleModelSettings(traction_model=FourCornerModel),
+        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
         solver=QT,
     )
 
 
-class SimSettings(BaseModel):
+class SimSettings(SupportsLoading):
     """Settings for a single simulation."""
 
+    sim_name: str = ""
     solver: Annotated[
         type[SolverInterface],
-        BeforeValidator(SolverRegistry.get),
+        BeforeValidator(SolverRegistry.ensure_value),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
     track: TrackSettings
     output_path: Path = OUTPUT_ROOT
     vehicle: VehicleSettings
     boundary_conditions: BoundaryConditionSettings
-    environment: EnvironmentSettings
+    plots: PlotSettings = Field(default_factory=PlotSettings)
 
     def get_legacy_settings(self) -> SimulationSettings:
         """Convert to legacy settings object.
@@ -127,15 +130,9 @@ class SimSettings(BaseModel):
             mesh_resolution=self.track.resolution,
             vehicle_model=self.vehicle.vehicle_model,
             solver=self.solver,
-            environment=self.environment,
+            environment=self.vehicle.environment,
             lambdas=LambdaCoefficients(),
         )
-
-    @staticmethod
-    def from_file(filepath: Path) -> SimSettings:
-        with open(filepath) as file:
-            data = yaml.safe_load(file)
-        return SimSettings.model_validate(data)
 
 
 class VehicleSettings(BaseModel):

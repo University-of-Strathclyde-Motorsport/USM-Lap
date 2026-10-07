@@ -19,7 +19,11 @@ dependencies = [
     "rich>=14.3.2",
     "scipy>=1.16.2",
     "scipy-stubs>=1.16.2.4",
+    "typer>=0.27.3",
 ]
+
+[project.scripts]
+usmlap = "usmlap.cli:app"
 
 [tool.uv]
 package = true

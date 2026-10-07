@@ -71,7 +71,7 @@ skidpad_results: dict[str, TelemetrySolution] = {}
 autocross_results: dict[str, TelemetrySolution] = {}
 
 for label, model in vehicle_models.items():
-    configuration.vehicle_model.traction_model = model
+    configuration.vehicle_model.traction = model
 
     acceleration_solution = acceleration.simulate_event(vehicle, configuration)
     acceleration_results[label] = acceleration_solution
