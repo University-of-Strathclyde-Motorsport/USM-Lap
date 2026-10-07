@@ -2,16 +2,18 @@
 This script simulates the skidpad event.
 """
 
+from pathlib import Path
+
 from usmlap.competition.events.acceleration import Acceleration
 from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 acceleration = Acceleration()
 
 vehicle = Vehicle.from_json("USM26")
 
-simulation_settings = SimulationSettings()
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 
-solution = acceleration.simulate_event(vehicle, simulation_settings)
+solution = acceleration.simulate_event(vehicle, settings)
 plot_apexes(solution)

@@ -12,7 +12,7 @@ from usmlap.competition.events.endurance import Endurance
 from usmlap.competition.events.event import EventInterface
 from usmlap.competition.events.skidpad import Skidpad
 from usmlap.competition.points import CompetitionData, CompetitionPoints
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -99,9 +99,7 @@ class Competition:
                 self._add_event(endurance)
 
     def simulate(
-        self,
-        vehicle: Vehicle,
-        settings: SimulationSettings,
+        self, vehicle: Vehicle, settings: SimSettings
     ) -> CompetitionResults:
         """
         Simulate a Formula Student competition.

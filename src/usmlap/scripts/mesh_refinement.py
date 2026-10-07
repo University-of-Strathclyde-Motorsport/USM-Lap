@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_ORANGE
 from usmlap.plot.utils import combined_legend
-from usmlap.simulation.settings import SimSettings, SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import get_initial_state, simulate
 from usmlap.solver import QuasiTransientSolver
 from usmlap.track.mesh_generation import generate_mesh
@@ -48,7 +48,8 @@ def mesh_refinement() -> list[MeshRefinementResult]:
     """
     Run a mesh refinement simulation."""
     vehicle = Vehicle.from_json(VEHICLE)
-    simulation_settings = SimulationSettings(solver=SOLVER)
+    settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+    settings.solver = SOLVER
 
     mesh_refinement_results: list[MeshRefinementResult] = []
 
@@ -58,9 +59,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
         mesh_time = time.time() - mesh_start_time
 
         simulation_start_time = time.time()
-        results = simulate(
-            vehicle, mesh, simulation_settings, get_initial_state(settings)
-        )
+        results = simulate(vehicle, mesh, settings, get_initial_state(settings))
         simulation_time = time.time() - simulation_start_time
 
         mesh_refinement_results.append(

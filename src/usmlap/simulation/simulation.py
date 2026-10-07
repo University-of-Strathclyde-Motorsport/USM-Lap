@@ -12,11 +12,7 @@ from usmlap.io.pydantic_io import save_object_to_json
 from usmlap.io.sim_folder import make_new_sim_folder
 from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
-from usmlap.simulation.settings import (
-    SimSettings,
-    SimulationSettings,
-    VehicleSettings,
-)
+from usmlap.simulation.settings import SimSettings, VehicleSettings
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
 from usmlap.telemetry.data.solution import TelemetrySolution
@@ -31,7 +27,7 @@ logger = logging.getLogger(__name__)
 def simulate(
     vehicle: Vehicle,
     track_mesh: Mesh,
-    settings: SimulationSettings,
+    settings: SimSettings,
     initial_state: TransientVariables | None = None,
 ) -> TelemetrySolution:
     """
@@ -45,7 +41,7 @@ def simulate(
     if initial_state is None:
         initial_state = TransientVariables.get_default()
 
-    vehicle_model = settings.vehicle_model.build_vehicle_model()
+    vehicle_model = settings.vehicle.vehicle_model.build_vehicle_model()
     global_context = settings.get_global_context(vehicle)
     solver = settings.solver(vehicle_model.traction, global_context)
 
@@ -80,7 +76,7 @@ def run_simulation(settings: SimSettings) -> FileMap:
         solution = simulate(
             vehicle=vehicle,
             track_mesh=track_mesh,
-            settings=settings.get_legacy_settings(),
+            settings=settings,
             initial_state=initial_state,
         )
         df_sol = SolutionDataFrame.from_solution(solution.solution)

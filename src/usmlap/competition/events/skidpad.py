@@ -10,13 +10,12 @@ from usmlap.competition.points import (
     CompetitionPoints,
     calculate_points,
 )
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
-from usmlap.track.track_data import TrackData
 from usmlap.vehicle.vehicle import Vehicle
 
 SKIDPAD_TRACK = r"data\tracks\FSAE Skidpad.json"
@@ -30,14 +29,10 @@ class Skidpad(EventInterface, label="skidpad"):
     Skidpad event at Formula Student.
     """
 
-    track_data = TrackData.from_json(SKIDPAD_TRACK)
-
     def simulate_event(
-        self,
-        vehicle: Vehicle,
-        settings: SimulationSettings,
+        self, vehicle: Vehicle, settings: SimSettings
     ) -> TelemetrySolution:
-        mesh = self.get_mesh(settings.mesh_resolution)
+        mesh = self.get_mesh(settings.track.resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 

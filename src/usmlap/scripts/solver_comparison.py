@@ -8,7 +8,10 @@ from usmlap.competition.events.autocross import Autocross
 from usmlap.competition.events.endurance import Endurance
 from usmlap.plot.style import USM_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets, SimulationSettings
+from usmlap.simulation.settings import SimSettings
+from usmlap.solver.qss.quasi_steady_state import QuasiSteadyStateSolver
+from usmlap.solver.qt.quasi_transient import QuasiTransientSolver
+from usmlap.solver.solver_interface import SolverInterface
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     # LapAvgMotorTorque,
@@ -23,10 +26,12 @@ from usmlap.telemetry.channel.library import (
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
-configurations: dict[str, SimulationSettings] = {
-    "QSS": QualityPresets.FAST_QSS,
-    "QT": QualityPresets.FAST,
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+solvers: dict[str, type[SolverInterface]] = {
+    "QSS": QuasiSteadyStateSolver,
+    "QT": QuasiTransientSolver,
 }
+
 
 autocross_channels: list[TelemetryChannel] = [
     Velocity(),
@@ -48,16 +53,11 @@ endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 autocross_solutions: dict[str, TelemetrySolution] = {}
 endurance_solutions: dict[str, TelemetrySolution] = {}
-for label, settings in configurations.items():
+for label, solver in solvers.items():
+    settings.solver = solver
     vehicle.label = label
-    endurance_solutions[label] = endurance.simulate_event(
-        vehicle,
-        settings=settings,
-    )
-    autocross_solutions[label] = autocross.simulate_event(
-        vehicle,
-        settings=settings,
-    )
+    endurance_solutions[label] = endurance.simulate_event(vehicle, settings)
+    autocross_solutions[label] = autocross.simulate_event(vehicle, settings)
 
 plot_channels(
     autocross_solutions,

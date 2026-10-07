@@ -8,14 +8,14 @@ from pint import UnitRegistry
 
 from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.functions import derivative, negate, power
 from usmlap.telemetry.channel.library import NodeTime, Position, Velocity
 from usmlap.vehicle.vehicle import Vehicle
 
 vehicle = Vehicle.from_json("USM26")
 event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
-settings = QualityPresets.DRAFT
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 telemetry_solution = event.simulate_event(vehicle, settings)
 
 

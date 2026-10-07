@@ -11,7 +11,7 @@ from usmlap.competition.points import (
     CompetitionPoints,
     calculate_points,
 )
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
@@ -31,9 +31,9 @@ class Autocross(EventInterface, label="autocross"):
     def simulate_event(
         self,
         vehicle: Vehicle,
-        settings: SimulationSettings,
+        settings: SimSettings,
     ) -> TelemetrySolution:
-        mesh = self.get_mesh(settings.mesh_resolution)
+        mesh = self.get_mesh(settings.track.resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 

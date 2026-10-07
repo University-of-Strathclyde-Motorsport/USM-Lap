@@ -6,12 +6,12 @@ from pathlib import Path
 
 from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.library import Drag, MotorPower, Velocity
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
-QUALITY = QualityPresets.FAST
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 
 vehicle_files: dict[str, str] = {
     "USM24": "USM26 with USM24 Aero",
@@ -25,7 +25,7 @@ autocross = Autocross(
 results: dict[str, TelemetrySolution] = {}
 for label, vehicle_file in vehicle_files.items():
     vehicle = Vehicle.from_json(vehicle_file)
-    solution = autocross.simulate_event(vehicle, settings=QUALITY)
+    solution = autocross.simulate_event(vehicle, settings=settings)
     results[label] = solution
 
 plot_channels(

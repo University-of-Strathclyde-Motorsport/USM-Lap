@@ -9,7 +9,7 @@ from usmlap.competition.competition import CompetitionData, CompetitionPoints
 from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     LongitudinalAcceleration,
@@ -34,7 +34,7 @@ NUMBER_OF_STEPS = 30
 #     START_VALUE, END_VALUE, NUMBER_OF_STEPS
 # ).tolist()
 VALUES = [2.8, 3.3, 3.8]
-QUALITY = QualityPresets.FAST
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 baseline_vehicle = Vehicle.from_json(BASELINE_VEHICLE)
 channels: list[TelemetryChannel] = [
     Velocity(),
@@ -53,7 +53,7 @@ all_points: dict[float, CompetitionPoints] = {}
 results: dict[str, TelemetrySolution] = {}
 for vehicle in vehicles:
     fdr = vehicle.transmission.final_drive_ratio
-    result = event.simulate_event(vehicle, QUALITY)
+    result = event.simulate_event(vehicle, settings)
     points = event.calculate_points(result, dataset)
     all_points[vehicle.transmission.final_drive_ratio] = points
     results[str(fdr)] = result

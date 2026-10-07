@@ -2,6 +2,7 @@
 This script analyses the sensitivities of a list of vehicle parameters.
 """
 
+from pathlib import Path
 from textwrap import wrap
 
 from rich import progress
@@ -12,12 +13,12 @@ from usmlap.plot.points_sensitivities import (
     PointsSensitivityData,
     plot_points_sensitivities,
 )
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import list_all_parameters
 from usmlap.vehicle.vehicle import Vehicle
 
 BASELINE_VEHICLE = "USM26"
-QUALITY = QualityPresets.DRAFT
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 LIMIT_PARAMETERS = False
 
 vehicle = Vehicle.from_json(BASELINE_VEHICLE)
@@ -36,7 +37,7 @@ for parameter in progress.track(parameters, "Evaluating parameters..."):
         continue
     sensitivity, deltas = points_sensitivity(
         vehicle,
-        QUALITY,
+        settings,
         competition,
         parameter,
     )

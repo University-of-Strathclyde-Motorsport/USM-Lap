@@ -10,7 +10,7 @@ from rich import progress
 from usmlap.analysis.sensitivity import points_sensitivity
 from usmlap.analysis.sweep_1d import SweepSettings
 from usmlap.competition.competition import Competition
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import Parameter
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -49,7 +49,7 @@ class CouplingResults:
 
 def coupling(
     baseline_vehicle: Vehicle,
-    simulation_settings: SimulationSettings,
+    simulation_settings: SimSettings,
     competition: Competition,
     sweep_settings: SweepSettings,
     coupled_parameter: type[Parameter[float]],

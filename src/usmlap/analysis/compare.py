@@ -4,7 +4,7 @@ This module contains code for comparing two or more distinct vehicles."""
 from collections.abc import Generator
 
 from usmlap.competition.competition import Competition, CompetitionPoints
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 
@@ -68,7 +68,7 @@ class ComparisonResults:
 
 def compare_vehicles(
     vehicles: list[Vehicle],
-    simulation_settings: SimulationSettings,
+    simulation_settings: SimSettings,
     competition: Competition,
 ) -> ComparisonResults:
     """

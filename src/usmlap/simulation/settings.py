@@ -9,9 +9,9 @@ from typing import Annotated
 from pydantic import (
     BaseModel,
     BeforeValidator,
-    ConfigDict,
     Field,
     PlainSerializer,
+    computed_field,
 )
 
 from usmlap.core.filepath import OUTPUT_ROOT
@@ -20,96 +20,17 @@ from usmlap.core.library import SupportsLoading
 from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
 from usmlap.model.lambda_coefficients import LambdaCoefficients
-from usmlap.model.traction.four_corner import FourCornerModel
-from usmlap.model.traction.point_mass import PointMass
 from usmlap.model.vehicle_model import VehicleModelSettings
 from usmlap.plot.generate_plots import PlotSettings
-from usmlap.solver import QuasiSteadyStateSolver as QSS
 from usmlap.solver import QuasiTransientSolver as QT
 from usmlap.solver import SolverInterface, SolverRegistry
 from usmlap.track.settings import TrackSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 
-class SimulationSettings(BaseModel):
-    """
-    Settings for a simulation.
-
-    Attributes:
-        environment (Environment): Environmental variables for the simulation.
-        vehicle_model (TractionModel): The vehicle model to use.
-        solver (SolverInterface): The solver to use.
-        lambdas (LambdaCoefficients): Coefficients for the vehicle model.
-
-    """
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    mesh_resolution: float = 0.1
-    vehicle_model: VehicleModelSettings = Field(
-        default_factory=VehicleModelSettings, exclude=True
-    )
-    solver: Annotated[
-        type[SolverInterface],
-        BeforeValidator(SolverRegistry.ensure_value),
-        PlainSerializer(SolverRegistry.get_key, return_type=str),
-    ] = QT
-    environment: EnvironmentSettings = Field(
-        default_factory=EnvironmentSettings
-    )
-    lambdas: LambdaCoefficients = Field(default_factory=LambdaCoefficients)
-
-    def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
-        return GlobalContext(
-            environment=self.environment,
-            lambdas=self.lambdas,
-            vehicle=vehicle,
-        )
-
-
-class QualityPresets:
-    """
-    Simulation setting quality presets.
-
-    Attributes:
-        DRAFT: Solves very quickly, but accuracy is low.
-        FAST: Solves quickly, with decent accuracy.
-        HIGH_QUALITY: Solves slowly, with high accuracy.
-
-    """
-
-    DRAFT: SimulationSettings = SimulationSettings(
-        mesh_resolution=1,
-        vehicle_model=VehicleModelSettings(traction=PointMass),
-        solver=QSS,
-    )
-    DRAFT_QT: SimulationSettings = SimulationSettings(
-        mesh_resolution=1,
-        vehicle_model=VehicleModelSettings(traction=PointMass),
-        solver=QT,
-    )
-    FAST: SimulationSettings = SimulationSettings(
-        mesh_resolution=0.5,
-        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
-        solver=QT,
-    )
-
-    FAST_QSS: SimulationSettings = SimulationSettings(
-        mesh_resolution=0.5,
-        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
-        solver=QSS,
-    )
-    HIGH_QUALITY: SimulationSettings = SimulationSettings(
-        mesh_resolution=0.1,
-        vehicle_model=VehicleModelSettings(traction=FourCornerModel),
-        solver=QT,
-    )
-
-
 class SimSettings(SupportsLoading):
     """Settings for a single simulation."""
 
-    git_version: str = Field(init=False, default_factory=get_git_hash)
     sim_name: str = ""
     solver: Annotated[
         type[SolverInterface],
@@ -122,16 +43,16 @@ class SimSettings(SupportsLoading):
     boundary_conditions: BoundaryConditionSettings
     plots: PlotSettings = Field(default_factory=PlotSettings)
 
-    def get_legacy_settings(self) -> SimulationSettings:
-        """Convert to legacy settings object.
-        TODO: remove this after finishing migration.
-        """
-        return SimulationSettings(
-            mesh_resolution=self.track.resolution,
-            vehicle_model=self.vehicle.vehicle_model,
-            solver=self.solver,
+    @computed_field
+    def git_version(self) -> str:
+        return get_git_hash()
+
+    def get_global_context(self, vehicle: Vehicle) -> GlobalContext:
+        # TODO: remove this
+        return GlobalContext(
             environment=self.vehicle.environment,
-            lambdas=LambdaCoefficients(),
+            lambdas=self.vehicle.lambdas,
+            vehicle=vehicle,
         )
 
 
@@ -140,9 +61,10 @@ class VehicleSettings(BaseModel):
 
     vehicle_file: Path
     vehicle_model: VehicleModelSettings = Field(
-        default_factory=VehicleModelSettings, exclude=True
+        default_factory=VehicleModelSettings
     )
     environment: EnvironmentSettings
+    lambdas: LambdaCoefficients
 
 
 class BoundaryConditionSettings(BaseModel):

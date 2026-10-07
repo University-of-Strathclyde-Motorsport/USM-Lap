@@ -6,7 +6,7 @@ from pathlib import Path
 
 from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import MotorTorque, Velocity
 from usmlap.telemetry.data.solution import TelemetrySolution
@@ -17,7 +17,7 @@ BASELINE_VEHICLE = "USM26"
 TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
-SETTINGS = QualityPresets.FAST
+SETTINGS = settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 CHANNELS: list[TelemetryChannel] = [Velocity(), MotorTorque()]
 
 baseline = Vehicle.from_json(BASELINE_VEHICLE)

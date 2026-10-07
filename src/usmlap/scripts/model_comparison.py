@@ -14,7 +14,7 @@ from usmlap.model.traction.point_mass import PointMass
 from usmlap.model.traction.traction_model import TractionModel
 from usmlap.plot.ggv import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
     Curvature,
@@ -28,8 +28,6 @@ from usmlap.telemetry.channel.library import (
 )
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
-
-configuration = QualityPresets.FAST
 
 vehicle_models: dict[str, type[TractionModel]] = {
     "Point Mass": PointMass,
@@ -70,17 +68,19 @@ acceleration_results: dict[str, TelemetrySolution] = {}
 skidpad_results: dict[str, TelemetrySolution] = {}
 autocross_results: dict[str, TelemetrySolution] = {}
 
-for label, model in vehicle_models.items():
-    configuration.vehicle_model.traction = model
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 
-    acceleration_solution = acceleration.simulate_event(vehicle, configuration)
+for label, model in vehicle_models.items():
+    settings.vehicle.vehicle_model.traction = model
+
+    acceleration_solution = acceleration.simulate_event(vehicle, settings)
     acceleration_results[label] = acceleration_solution
 
-    skidpad_solution = skidpad.simulate_event(vehicle, configuration)
+    skidpad_solution = skidpad.simulate_event(vehicle, settings)
     skidpad_results[label] = skidpad_solution
 
     start_time = time.time()
-    autocross_solution = autocross.simulate_event(vehicle, configuration)
+    autocross_solution = autocross.simulate_event(vehicle, settings)
     elapsed_time = time.time() - start_time
     print(f"Simulation time for {label}: {elapsed_time:.3f} s")
     autocross_results[label] = autocross_solution

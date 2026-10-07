@@ -6,18 +6,17 @@ from pathlib import Path
 
 from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.apex import plot_apexes
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 autocross = Autocross(
     track_file=Path(r"data\tracks\FS AutoX Germany 2012.json")
 )
-
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 vehicle = Vehicle.from_json("USM26")
 
-simulation_settings = QualityPresets.FAST_QSS
 
-solution = autocross.simulate_event(vehicle, simulation_settings)
+solution = autocross.simulate_event(vehicle, settings)
 # plot_gg(solution)
 # plot_ggv(solution)
 plot_apexes(solution)

@@ -10,7 +10,7 @@ from usmlap.competition.events.autocross import Autocross
 from usmlap.plot.ggv import plot_gg
 from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.plot.telemetry import plot_channels
-from usmlap.simulation.settings import QualityPresets
+from usmlap.simulation.settings import SimSettings
 
 # from usmlap.simulation.channels import Channel
 from usmlap.telemetry.channel.library import (
@@ -24,7 +24,7 @@ from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.parameters import AerodynamicPackage
 from usmlap.vehicle.vehicle import Vehicle
 
-QUALITY = QualityPresets.FAST_QSS
+settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 # CHANNELS: list[Channel] = [
 #     Velocity(),
 #     LongitudinalAcceleration(),
@@ -48,7 +48,7 @@ autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
 solutions: dict[str, TelemetrySolution] = {}
 for label, vehicle in zip(aero_files.keys(), vehicles, strict=True):
-    solutions[label] = autocross.simulate_event(vehicle, QUALITY)
+    solutions[label] = autocross.simulate_event(vehicle, settings)
 
 plot_channels(
     solutions,

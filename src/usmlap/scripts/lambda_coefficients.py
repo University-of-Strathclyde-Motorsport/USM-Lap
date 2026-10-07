@@ -2,15 +2,13 @@
 This script evaluates the impact of changing the lambda coefficients.
 """
 
-from usmlap.competition.competition import (
-    Competition,
-    CompetitionPoints,
-)
+from pathlib import Path
+
+from usmlap.competition.competition import Competition, CompetitionPoints
 from usmlap.competition.points import points_delta
 from usmlap.model.lambda_coefficients import LambdaCoefficients
 from usmlap.plot.comparison import plot_points_bar_chart
-from usmlap.simulation.settings import SimulationSettings
-from usmlap.solver import QuasiSteadyStateSolver as QSS
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 competition = Competition()
@@ -23,13 +21,14 @@ configurations: dict[str, LambdaCoefficients] = {
     "+10% Motor Torque": LambdaCoefficients(motor_torque=1.1),
 }
 
-baseline_settings = SimulationSettings(solver=QSS)
+baseline_settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 baseline_results = competition.simulate(vehicle, baseline_settings)
 
 data: dict[str, CompetitionPoints] = {}
 
 for name, coefficients in configurations.items():
-    simulation_settings = SimulationSettings(solver=QSS, lambdas=coefficients)
+    simulation_settings = baseline_settings
+    simulation_settings.vehicle.lambdas = coefficients
     results = competition.simulate(vehicle, simulation_settings)
     delta = points_delta(results.points, baseline_results.points)
     data[name] = delta

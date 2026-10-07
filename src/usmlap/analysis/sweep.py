@@ -6,13 +6,13 @@ from collections.abc import Collection
 from rich.progress import Progress
 
 from usmlap.competition.competition import Competition, CompetitionResults
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 
 def sweep_vehicles(
     vehicles: Collection[Vehicle],
-    settings: SimulationSettings,
+    settings: SimSettings,
 ) -> dict[str, CompetitionResults]:
     """
     Simulate a list of vehicles."""

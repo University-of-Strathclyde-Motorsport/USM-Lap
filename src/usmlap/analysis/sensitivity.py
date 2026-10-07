@@ -4,7 +4,7 @@ This module contains code for points sensitivity analysis."""
 from rich.progress import Progress
 
 from usmlap.competition.competition import Competition
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -14,7 +14,7 @@ TASK_DESCRIPTION = "Evaluating sensitivity..."
 
 def points_sensitivity(
     vehicle: Vehicle,
-    settings: SimulationSettings,
+    settings: SimSettings,
     competition: Competition,
     parameter: type[Parameter],
     delta: tuple[float, float] | None = None,
@@ -25,7 +25,7 @@ def points_sensitivity(
 
     Args:
         vehicle (Vehicle): The baseline vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
+        settings (SimSettings): Settings for the simulation.
         competition (Competition): The competition to simulate.
         parameter (Parameter): The parameter to analyse the sensitivity of.
         delta (Optional[tuple[float, float]]):

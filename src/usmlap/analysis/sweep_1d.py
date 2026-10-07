@@ -9,7 +9,7 @@ from rich import progress
 
 from usmlap.competition.competition import Competition
 from usmlap.competition.points import CompetitionPoints
-from usmlap.simulation.settings import SimulationSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import Parameter, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -94,7 +94,7 @@ type SweepResults = dict[float, CompetitionPoints]
 
 def sweep_1d(
     baseline_vehicle: Vehicle,
-    simulation_settings: SimulationSettings,
+    simulation_settings: SimSettings,
     competition: Competition,
     sweep_settings: SweepSettings,
 ) -> SweepResults:
@@ -103,7 +103,7 @@ def sweep_1d(
 
     Args:
         baseline_vehicle (Vehicle): The vehicle to simulate.
-        simulation_settings (SimulationSettings): Settings for the simulation.
+        simulation_settings (SimSettings): Settings for the simulation.
         competition (Competition): The competition to simulate.
         sweep_settings (SweepSettings): Settings for the sweep.
 
