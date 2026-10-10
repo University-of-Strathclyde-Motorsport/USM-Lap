@@ -4,7 +4,7 @@ Unit tests for accumulator module."""
 import pytest
 
 from usmlap.vehicle.powertrain.accumulator import Accumulator
-from usmlap.vehicle.powertrain.cell import Cell, StateOfCharge
+from usmlap.vehicle.powertrain.cell import Cell, CellState, StateOfCharge
 
 
 def test_state_of_charge() -> None:
@@ -40,11 +40,13 @@ def test_minimum_voltage(accumulator: Accumulator) -> None:
 
 
 def test_resistance(accumulator: Accumulator) -> None:
-    assert accumulator.resistance == pytest.approx(0.34)
+    cell_state = CellState(soc=StateOfCharge(0.5))
+    assert accumulator.resistance(cell_state) == pytest.approx(0.2)
 
 
 def test_maximum_discharge_current(accumulator: Accumulator) -> None:
-    assert accumulator.maximum_discharge_current == 150
+    cell_state = CellState(soc=StateOfCharge(0.5))
+    assert accumulator.maximum_discharge_current(cell_state) == 150
 
 
 def test_accumulator_voltage(accumulator: Accumulator) -> None:

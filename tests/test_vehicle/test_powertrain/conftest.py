@@ -33,7 +33,7 @@ def cell() -> Cell:
         nominal_voltage=3.6,
         voltage_lookup=[
             _CellVoltageLookup(state_of_charge=1, voltage=4.2),
-            _CellVoltageLookup(state_of_charge=0.5, voltage=3.5),
+            _CellVoltageLookup(state_of_charge=0.5, voltage=3.35),
             _CellVoltageLookup(state_of_charge=0, voltage=2.5),
         ],
         max_discharge_current=30,
@@ -41,8 +41,19 @@ def cell() -> Cell:
             _TemperatureResistanceLookup(
                 temperature=25,
                 lookup=[
-                    _SOCResistanceLookup(state_of_charge=0, resistance=0.01),
-                    _SOCResistanceLookup(state_of_charge=1, resistance=0.01),
+                    _SOCResistanceLookup(state_of_charge=0, resistance=0.02),
+                    _SOCResistanceLookup(state_of_charge=0.5, resistance=0.01),
+                    _SOCResistanceLookup(state_of_charge=0.8, resistance=0.01),
+                    _SOCResistanceLookup(state_of_charge=1, resistance=0.02),
+                ],
+            ),
+            _TemperatureResistanceLookup(
+                temperature=50,
+                lookup=[
+                    _SOCResistanceLookup(state_of_charge=0, resistance=0.02),
+                    _SOCResistanceLookup(state_of_charge=0.5, resistance=0.01),
+                    _SOCResistanceLookup(state_of_charge=0.8, resistance=0.01),
+                    _SOCResistanceLookup(state_of_charge=1, resistance=0.02),
                 ],
             ),
         ],

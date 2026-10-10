@@ -28,6 +28,7 @@ boundary_conditions:
   initial_soc: 1
   initial_cell_temperature: 32
   initial_velocity: 0
+
 plots:
   waveform:
     - track_mesh

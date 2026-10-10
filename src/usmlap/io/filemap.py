@@ -69,8 +69,8 @@ class StudyFileMap:
         )
 
     @property
-    def settings_file(self) -> Path:
-        return self.root / "settings.yaml"
+    def study_file(self) -> Path:
+        return self.root / "study.yaml"
 
     @property
     def plots_folder(self) -> Path:
@@ -102,6 +102,10 @@ class SimGroupFileMap:
             for subfolder in self.root.iterdir()
             if subfolder.is_dir()
         )
+
+    @property
+    def settings_file(self) -> Path:
+        return self.root / "settings.yaml"
 
     @property
     def study(self) -> StudyFileMap:

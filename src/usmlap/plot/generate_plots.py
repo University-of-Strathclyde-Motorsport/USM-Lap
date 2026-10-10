@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 from pydantic import BaseModel, Field
 
 from usmlap.core.filepath import PLOTS_ROOT
-from usmlap.io.filemap import FileMap
+from usmlap.io.filemap import SimFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.plots import save_figure
 from usmlap.plot.config import load_waveform_config
@@ -56,7 +56,7 @@ _SCATTER = _PlotType(
 
 
 def generate_plots(
-    filemap: FileMap,
+    filemap: SimFileMap,
     settings: PlotSettings,
     solution: SolutionDataFrame | None = None,
 ) -> None:
@@ -73,6 +73,7 @@ def generate_plots(
         solution = read_parquet(filemap.parquet_file)
 
     def _generate_plot_type(plot_ids: list[str], plot_type: _PlotType) -> None:
+        """Generate a plot of a specific type."""
         for id in plot_ids:
             config_file = plot_type.get_config_filepath(id)
             if not config_file.exists():

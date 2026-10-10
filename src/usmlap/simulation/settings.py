@@ -32,6 +32,7 @@ class SimSettings(SupportsLoading):
     """Settings for a single simulation."""
 
     sim_name: str = ""
+    plot_colour: str | None = None
     solver: Annotated[
         type[SolverInterface],
         BeforeValidator(SolverRegistry.ensure_value),
