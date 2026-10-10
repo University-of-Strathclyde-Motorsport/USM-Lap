@@ -1,4 +1,4 @@
-"""Unit tests for the study module."""
+"""Unit tests for the `usmlap.simulation.sweep` module."""
 
 from copy import deepcopy
 
@@ -7,6 +7,7 @@ import pytest
 from usmlap.simulation.sweep import (
     IncompatibleSweepDimensionError,
     _get_arrays,
+    format_nested_key,
     generate_sweep_definition,
     merge_dicts,
 )
@@ -70,10 +71,14 @@ def test_empty_sweep_definition_raises_error():
 
 def test_incompatible_sweep_dimension_raises_error():
     with pytest.raises(IncompatibleSweepDimensionError):
-        generate_sweep_definition({"abc": [1, 2, 3], "de": [1, 2]})
+        try:
+            generate_sweep_definition({"abc": [1, 2, 3], "de": [1, 2]})
+        except IncompatibleSweepDimensionError as e:
+            assert isinstance(str(e), str)
+            raise
 
 
-def test_merge_dict():
+def test_merge_dicts():
     new = {"abc": [2, 3, 4], "new": 10, "def": {"xyz": 0, "jkl": 100}}
     expected = {
         "abc": [2, 3, 4],
@@ -88,3 +93,7 @@ def test_merge_dict_new_key_is_forbidden():
     new = {"new": 456}
     with pytest.raises(ValueError):
         merge_dicts(old, new, allow_new_keys=False)
+
+
+def test_format_nested_key():
+    assert format_nested_key(("abc", "def", "ghi")) == "abc.def.ghi"
