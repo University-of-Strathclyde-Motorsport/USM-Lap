@@ -12,7 +12,7 @@ import pandas
 from pydantic import BaseModel, Field
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 
 TRACK_LIBRARY = LIBRARY_ROOT / "tracks"
 AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
@@ -160,7 +160,7 @@ class Direction(Enum):
         return self.name.lower().capitalize()
 
 
-class TrackData(HasLibrary, path=LIBRARY_ROOT / "tracks"):
+class TrackData(SupportsLoading, library=LIBRARY_ROOT / "tracks"):
     """
     Contains information about a racetrack.
 
@@ -459,5 +459,4 @@ def save_track_data(track_data: TrackData, filename: str | None = None) -> None:
         error_message = f"Error saving track; file '{filename}' already exists."
         raise FileExistsError(error_message)
 
-    with open(filepath, "w") as f:
-        f.write(track_data.to_json())
+    track_data.write_json(filepath)

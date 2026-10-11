@@ -3,53 +3,46 @@ This module models the suspension of a vehicle."""
 
 from abc import ABC
 from dataclasses import dataclass
-from typing import Annotated, Literal
+from typing import Annotated
 
 from annotated_types import Unit
-from pydantic import Field, PositiveFloat
+from pydantic import BaseModel, BeforeValidator, PlainSerializer, PositiveFloat
 
-from usmlap.vehicle.common import AbstractSubsystem
+from usmlap.core.registry import Registry
 
 
-class SuspensionAxle(ABC, AbstractSubsystem):
+class SuspensionModel(ABC):  # noqa: B024
     """
     Abstract base class for suspension on a single axle of a vehicle.
 
-    Attributes:
-        track_width (float):
-            The width of the track, measured between contact patches.
-
+    Currently does nothing! (sorry Chris)
     """
 
-    track_width: Annotated[PositiveFloat, Unit("m")]
 
-
-class DecoupledSuspension(SuspensionAxle, type="decoupled"):
+class DecoupledSuspension(SuspensionModel):
     """
     Decoupled suspension, with separate heave and roll springs.
     """
 
-    suspension_type: Literal["decoupled"]
 
+SuspensionModelRegistry = Registry[str, type[SuspensionModel]]()
+SuspensionModelRegistry.register("decoupled", DecoupledSuspension)
+
+
+class SuspensionAxle(BaseModel):
+    """The suspension system on one axle of a vehicle."""
+
+    suspension_model: Annotated[
+        type[SuspensionModel],
+        BeforeValidator(SuspensionModelRegistry.get),
+        PlainSerializer(SuspensionModelRegistry.get_key),
+    ]
     roll_centre_height: Annotated[PositiveFloat, Unit("m")]
     heave_motion_ratio: PositiveFloat
     heave_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
     roll_motion_ratio: PositiveFloat
     roll_spring_rate: Annotated[PositiveFloat, Unit("N/m")]
-
-
-class DirectActuationSuspension(SuspensionAxle, type="direct_actuation"):
-    """
-    Direct actuation suspension, with one spring per corner.
-    """
-
-    suspension_type: Literal["direct_actuation"]
-
-
-SuspensionImplementation = Annotated[
-    DecoupledSuspension | DirectActuationSuspension,
-    Field(discriminator="suspension_type"),
-]
+    track_width: Annotated[PositiveFloat, Unit("m")]
 
 
 @dataclass
@@ -58,9 +51,9 @@ class Suspension:
     The suspension system of a vehicle.
 
     Attributes:
-        front (SuspensionImplementation):
+        front (SuspensionModel):
             Front axle suspension.
-        rear (SuspensionImplementation):
+        rear (SuspensionModel):
             Rear axle suspension.
         wheelbase (float):
             The distance between the front and rear wheels,
@@ -76,7 +69,7 @@ class Suspension:
 
     """
 
-    front: SuspensionImplementation
-    rear: SuspensionImplementation
+    front: SuspensionAxle
+    rear: SuspensionAxle
     wheelbase: Annotated[PositiveFloat, Unit("m")]
     centre_of_gravity_height: Annotated[PositiveFloat, Unit("m")]

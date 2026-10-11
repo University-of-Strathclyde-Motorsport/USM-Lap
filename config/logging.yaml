@@ -25,6 +25,8 @@ loggers:
     level: WARNING
   PIL:
     level: WARNING
+  git:
+    level: WARNING
 
 root:
   level: NOTSET

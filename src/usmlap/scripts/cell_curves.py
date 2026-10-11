@@ -2,6 +2,8 @@
 This script plots the parameters of a cell.
 """
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 
 from usmlap.plot.cell import _plot_resistance
@@ -11,7 +13,10 @@ from usmlap.vehicle.powertrain.cell import Cell
 # plot_cell_parameters(accumulator)
 
 
-cells = [Cell.from_json("sony_VTC6"), Cell.from_json("molicel_P30b")]
+cells = [
+    Cell.from_json(Path(r"data\components\cells\sony_VTC6.json")),
+    Cell.from_json(Path(r"data\components\cells\molicel_P30b.json")),
+]
 
 _, axs = plt.subplots(ncols=2)
 

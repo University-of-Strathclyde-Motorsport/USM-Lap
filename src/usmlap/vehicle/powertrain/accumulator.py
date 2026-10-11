@@ -6,10 +6,10 @@ from functools import cached_property
 from typing import Annotated
 
 import numpy as np
-from pydantic import BeforeValidator
+from pydantic import BeforeValidator, ConfigDict
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 from usmlap.vehicle.powertrain.cell import Cell, CellState, StateOfCharge
 
 NOMINAL_TEMPERATURE = 25
@@ -25,8 +25,8 @@ class _ThermalDerateNode:
 
 
 class ThermalDerateCurve(
-    HasLibrary,
-    path=LIBRARY_ROOT / "bms" / "thermal_derate",
+    SupportsLoading,
+    library=LIBRARY_ROOT / "bms" / "thermal_derate",
 ):
     """
     Curve describing the thermal derating of the accumulator.
@@ -49,8 +49,7 @@ class ThermalDerateCurve(
 
 
 class Accumulator(
-    HasLibrary,
-    path=LIBRARY_ROOT / "components" / "accumulators",
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "accumulators"
 ):
     """
     An electric accumulator.
@@ -63,12 +62,15 @@ class Accumulator(
 
     """
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     print_name: str
-    cell: Cell
+    cell: Annotated[Cell, BeforeValidator(Cell.initialise)]
     cells_in_parallel: int
     cells_in_series: int
     soc_derate_point: Annotated[StateOfCharge, BeforeValidator(StateOfCharge)]
-    thermal_derate_curve: ThermalDerateCurve
+    thermal_derate_curve: Annotated[
+        ThermalDerateCurve, BeforeValidator(ThermalDerateCurve.initialise)
+    ]
 
     @property
     def number_of_cells(self) -> int:

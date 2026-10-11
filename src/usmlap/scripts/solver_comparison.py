@@ -47,7 +47,7 @@ autocross_channels: list[TelemetryChannel] = [
 # ]
 endurance_channels: list[TelemetryChannel] = []
 
-vehicle = Vehicle.from_json("USM26")
+vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
 autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 

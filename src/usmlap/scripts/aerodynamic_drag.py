@@ -13,9 +13,9 @@ from usmlap.vehicle.vehicle import Vehicle
 
 settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 
-vehicle_files: dict[str, str] = {
-    "USM24": "USM26 with USM24 Aero",
-    "USM25": "USM26 with USM25 Aero",
+vehicle_files: dict[str, Path] = {
+    "USM24": Path(r"data\vehicles\USM26 with USM24 Aero.json"),
+    "USM25": Path(r"data\vehicles\USM26 with USM25 Aero.json"),
 }
 
 autocross = Autocross(

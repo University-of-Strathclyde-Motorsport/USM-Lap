@@ -9,7 +9,7 @@ import numpy as np
 from scipy.interpolate import LinearNDInterpolator
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 from usmlap.utils.maths import clamp
 
 NOMINAL_TEMPERATURE = 25
@@ -75,7 +75,7 @@ class _TemperatureResistanceLookup:
     lookup: list[_SOCResistanceLookup]
 
 
-class Cell(HasLibrary, path=LIBRARY_ROOT / "components" / "cells"):
+class Cell(SupportsLoading, library=LIBRARY_ROOT / "components" / "cells"):
     """
     An electrochemical cell.
 

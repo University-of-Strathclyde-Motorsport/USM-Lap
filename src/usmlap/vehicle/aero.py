@@ -5,14 +5,14 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from math import pi
-from typing import Annotated, Literal
+from typing import Annotated
 
 from annotated_types import Unit
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, BeforeValidator, Field, PlainSerializer
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
-from usmlap.vehicle.common import AbstractSubsystem
+from usmlap.core.library import SupportsLoading
+from usmlap.core.registry import Registry
 
 
 class AeroAttitude(BaseModel):
@@ -39,70 +39,82 @@ class AeroAttitude(BaseModel):
     yaw_angle: float = Field(ge=-pi / 2, le=pi / 2, default=0)
 
 
-class AeroModelInterface(ABC, AbstractSubsystem):
+class AeroModelInterface(ABC):
     """
     Abstract  base class for aero models.
     """
 
+    @staticmethod
     @abstractmethod
-    def get_lift_coefficient(self, attitude: AeroAttitude) -> float: ...
+    def get_lift_coefficient(
+        package: AeroPackage, attitude: AeroAttitude
+    ) -> float: ...
 
+    @staticmethod
     @abstractmethod
-    def get_drag_coefficient(self, attitude: AeroAttitude) -> float: ...
+    def get_drag_coefficient(
+        package: AeroPackage, attitude: AeroAttitude
+    ) -> float: ...
 
 
-class ConstantAero(AeroModelInterface, type="constant"):
+class ConstantAero(AeroModelInterface):
     """
     Constant aero model.
 
     Lift and drag coefficients do not change with velocity.
 
     Attributes:
-        model_type (Literal["constant"]): The type of aero model.
         lift_coefficient (float): The lift coefficient (positive).
         drag_coefficient (float): The drag coefficient (positive).
 
     """
 
-    model_type: Literal["constant"]
+    @staticmethod
+    def get_lift_coefficient(
+        package: AeroPackage, attitude: AeroAttitude
+    ) -> float:
+        return package.lift_coefficient
 
-    lift_coefficient: float = Field(gt=0)
-    drag_coefficient: float = Field(gt=0)
-
-    def get_lift_coefficient(self, attitude: AeroAttitude) -> float:
-        return self.lift_coefficient
-
-    def get_drag_coefficient(self, attitude: AeroAttitude) -> float:
-        return self.drag_coefficient
+    @staticmethod
+    def get_drag_coefficient(
+        package: AeroPackage, attitude: AeroAttitude
+    ) -> float:
+        return package.drag_coefficient
 
 
-AeroModel = Annotated[ConstantAero, Field(discriminator="model_type")]
+AeroModelRegistry = Registry[str, type[AeroModelInterface]]()
+AeroModelRegistry.register("constant", ConstantAero)
 
 
 class AeroPackage(
-    HasLibrary,
-    path=LIBRARY_ROOT / "components" / "aero_packages",
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "aero_packages"
 ):
     """
     The aerodynamic package of a vehicle.
 
     Attributes:
         frontal_area (float): The frontal area of the vehicle.
-        aero_model (AeroModel): The aerodynamic model to use.
+        aero_model (str): The aerodynamic model to use.
 
     """
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
     front_aero_distribution: Annotated[float, Field(ge=0, le=1), Unit("%")]
     centre_of_pressure_height: Annotated[float, Field(ge=0), Unit("m")]
-    aero_model: AeroModel
+    lift_coefficient: float = Field(gt=0)
+    drag_coefficient: float = Field(gt=0)
+    aero_model: Annotated[
+        type[AeroModelInterface],
+        BeforeValidator(AeroModelRegistry.get),
+        PlainSerializer(AeroModelRegistry.get_key),
+    ]
 
     def get_downforce(self, attitude: AeroAttitude) -> float:
-        lift_coefficient = self.aero_model.get_lift_coefficient(attitude)
+        lift_coefficient = self.aero_model.get_lift_coefficient(self, attitude)
         return self.calculate_aero_force(lift_coefficient, attitude)
 
     def get_drag(self, attitude: AeroAttitude) -> float:
-        drag_coefficient = self.aero_model.get_drag_coefficient(attitude)
+        drag_coefficient = self.aero_model.get_drag_coefficient(self, attitude)
         return self.calculate_aero_force(drag_coefficient, attitude)
 
     def calculate_aero_force(

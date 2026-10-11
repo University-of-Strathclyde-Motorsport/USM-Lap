@@ -22,7 +22,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 TRACK_SHEET = "FS AutoX Germany 2012"
-VEHICLE = "USM23 Baseline"
+VEHICLE = Path(r"data\vehicles\USM23 Baseline.json")
 SOLVER = QuasiTransientSolver
 settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
 

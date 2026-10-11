@@ -9,8 +9,7 @@ from usmlap.simulation.simulation import get_initial_state, simulate
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.vehicle.vehicle import Vehicle
 
-TRACK_SHEET = "FS AutoX Germany 2012"
-VEHICLE_FILE = "USM26"
+VEHICLE_FILE = Path(r"data\vehicles\USM26.json")
 settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
 
 

@@ -8,7 +8,7 @@ from usmlap.competition.competition import Competition
 from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.vehicle import Vehicle
 
-VEHICLE_FILE = "USM23 Baseline"
+VEHICLE_FILE = Path(r"data\vehicles\USM23 Baseline.json")
 
 competition = Competition()
 

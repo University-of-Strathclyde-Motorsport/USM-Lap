@@ -21,7 +21,7 @@ from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.parameters import FinalDriveRatio
 from usmlap.vehicle.vehicle import Vehicle
 
-BASELINE_VEHICLE = "USM26"
+BASELINE_VEHICLE = Path(r"data\vehicles\USM26.json")
 PARAMETER = FinalDriveRatio
 START_VALUE = 2.5
 END_VALUE = 4
@@ -45,7 +45,9 @@ channels: list[TelemetryChannel] = [
 
 vehicles = VehicleGenerator(baseline_vehicle, FinalDriveRatio, VALUES)
 event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
-dataset = CompetitionData.from_json("FSG 2025 Hybrid")
+dataset = CompetitionData.from_json(
+    Path(r"data\competition\FSG 2025 Hybrid.json")
+)
 # results = sweep_vehicles(vehicles, QUALITY)
 
 

@@ -1,9 +1,13 @@
 """
 This module models the full vehicle."""
 
+from typing import Annotated
+
+from pydantic import BeforeValidator
+
 from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.core.library import SupportsLoading
 from usmlap.utils.datatypes import FrontRear
-from usmlap.utils.library import HasLibrary
 from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.brakes import Brakes
 from usmlap.vehicle.driver import Driver
@@ -13,10 +17,10 @@ from usmlap.vehicle.powertrain.powertrain import RWDPowertrain
 from usmlap.vehicle.steering import Steering
 from usmlap.vehicle.suspension import Suspension
 from usmlap.vehicle.transmission import Transmission
-from usmlap.vehicle.tyres import Tyre
+from usmlap.vehicle.tyres import Tyres
 
 
-class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
+class Vehicle(SupportsLoading, library=LIBRARY_ROOT / "vehicles"):
     """
     The full vehicle.
 
@@ -35,15 +39,15 @@ class Vehicle(HasLibrary, path=LIBRARY_ROOT / "vehicles"):
     """
 
     print_name: str
-    driver: Driver
-    aero: AeroPackage
+    driver: Annotated[Driver, BeforeValidator(Driver.initialise)]
+    aero: Annotated[AeroPackage, BeforeValidator(AeroPackage.initialise)]
     brakes: Brakes
     inertia: Inertia
     powertrain: RWDPowertrain
     steering: Steering
     suspension: Suspension
     transmission: Transmission
-    tyres: FrontRear[Tyre]
+    tyres: Tyres
     label: str = ""
     description: str = ""
     year: int | None = None

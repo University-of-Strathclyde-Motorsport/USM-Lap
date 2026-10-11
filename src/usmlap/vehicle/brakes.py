@@ -5,17 +5,16 @@ from dataclasses import dataclass
 from typing import Annotated
 
 from annotated_types import Unit
-from pydantic import PositiveFloat, PositiveInt
+from pydantic import BaseModel, BeforeValidator, PositiveFloat, PositiveInt
 
 from usmlap.core.filepath import LIBRARY_ROOT
+from usmlap.core.library import SupportsLoading
 from usmlap.utils import geometry
 from usmlap.utils.datatypes import FrontRear, Percentage
-from usmlap.utils.library import HasLibrary
 
 
 class MasterCylinder(
-    HasLibrary,
-    path=LIBRARY_ROOT / "components" / "master_cylinders",
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "master_cylinders"
 ):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
@@ -38,8 +37,7 @@ class MasterCylinder(
 
 
 class BrakeCaliper(
-    HasLibrary,
-    path=LIBRARY_ROOT / "components" / "brake_calipers",
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_calipers"
 ):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
@@ -61,7 +59,9 @@ class BrakeCaliper(
         return self.piston_count * geometry.area_of_circle(self.piston_diameter)
 
 
-class BrakeDisc(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_discs"):
+class BrakeDisc(
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_discs"
+):
     """
     The brake disc attached to the wheel.
 
@@ -75,7 +75,9 @@ class BrakeDisc(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_discs"):
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
-class BrakePad(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_pads"):
+class BrakePad(
+    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_pads"
+):
     """
     The brake pad attached to the caliper.
 
@@ -92,8 +94,7 @@ class BrakePad(HasLibrary, path=LIBRARY_ROOT / "components" / "brake_pads"):
     coefficient_of_friction: PositiveFloat
 
 
-@dataclass
-class BrakeLine:
+class BrakeLine(BaseModel):
     """
     An individual brake line.
 
@@ -105,10 +106,12 @@ class BrakeLine:
 
     """
 
-    cylinder: MasterCylinder
-    caliper: BrakeCaliper
-    disc: BrakeDisc
-    pad: BrakePad
+    cylinder: Annotated[
+        MasterCylinder, BeforeValidator(MasterCylinder.initialise)
+    ]
+    caliper: Annotated[BrakeCaliper, BeforeValidator(BrakeCaliper.initialise)]
+    disc: Annotated[BrakeDisc, BeforeValidator(BrakeDisc.initialise)]
+    pad: Annotated[BrakePad, BeforeValidator(BrakePad.initialise)]
 
     @property
     def area_scaling_factor(self) -> float:

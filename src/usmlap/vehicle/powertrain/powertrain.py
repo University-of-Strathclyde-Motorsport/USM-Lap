@@ -4,8 +4,9 @@ This module models the electric powertrain of a vehicle."""
 from __future__ import annotations
 
 from abc import ABC
+from typing import Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, BeforeValidator
 
 from usmlap.vehicle.powertrain.accumulator import Accumulator, CellState
 from usmlap.vehicle.powertrain.motor import Motor
@@ -35,9 +36,11 @@ class RWDPowertrain(PowertrainInterface):
 
     """
 
-    accumulator: Accumulator
-    motor: Motor
-    motor_controller: MotorController
+    accumulator: Annotated[Accumulator, BeforeValidator(Accumulator.initialise)]
+    motor: Annotated[Motor, BeforeValidator(Motor.initialise)]
+    motor_controller: Annotated[
+        MotorController, BeforeValidator(MotorController.initialise)
+    ]
     cooling_coefficient: float
     discharge_current_limit: float = 1
 

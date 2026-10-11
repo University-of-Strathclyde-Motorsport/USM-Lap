@@ -11,7 +11,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 acceleration = Acceleration()
 
-vehicle = Vehicle.from_json("USM26")
+vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
 
 settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 

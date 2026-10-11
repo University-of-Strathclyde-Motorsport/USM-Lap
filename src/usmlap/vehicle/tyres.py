@@ -1,13 +1,15 @@
 """
 This module defines the parameters of a tyre."""
 
-from pydantic import PositiveFloat
+from typing import Annotated
+
+from pydantic import BaseModel, BeforeValidator, PositiveFloat
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 
 
-class Tyre(HasLibrary, path=LIBRARY_ROOT / "components" / "tyres"):
+class Tyre(SupportsLoading, library=LIBRARY_ROOT / "components" / "tyres"):
     """
     A racing tyre.
 
@@ -26,3 +28,10 @@ class Tyre(HasLibrary, path=LIBRARY_ROOT / "components" / "tyres"):
     mu_y_sens: float
     slip_stiffness: float
     cornering_stiffness: float
+
+
+class Tyres(BaseModel):
+    """Front and rear tyres."""
+
+    front: Annotated[Tyre, BeforeValidator(Tyre.initialise)]
+    rear: Annotated[Tyre, BeforeValidator(Tyre.initialise)]

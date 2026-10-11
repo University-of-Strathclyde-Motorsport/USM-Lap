@@ -13,7 +13,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 competition = Competition()
 
-vehicle = Vehicle.from_json("USM26")
+vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
 
 configurations: dict[str, LambdaCoefficients] = {
     "+10% Longitudinal Grip": LambdaCoefficients(longitudinal_grip=1.1),

@@ -24,6 +24,7 @@ class Parameter[T](ABC):
     uncertainty: ClassVar[float] = 0
     implemented: ClassVar[bool] = True
 
+    @classmethod
     def __init_subclass__(
         cls: type[Parameter[T]],
         name: str,
@@ -31,7 +32,7 @@ class Parameter[T](ABC):
         uncertainty: float = 0,
         implemented: bool = True,
     ) -> None:
-        super().__init_subclass__()
+        super(cls).__init_subclass__()
         cls._REGISTRY[name] = cls
         cls.name = name
         cls.unit = unit
@@ -178,11 +179,11 @@ class LiftCoefficient(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.aero.aero_model.lift_coefficient
+        return vehicle.aero.lift_coefficient
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.aero.aero_model.lift_coefficient = value
+        vehicle.aero.lift_coefficient = value
 
 
 class DragCoefficient(
@@ -195,11 +196,11 @@ class DragCoefficient(
 
     @staticmethod
     def get_value(vehicle: Vehicle) -> float:
-        return vehicle.aero.aero_model.drag_coefficient
+        return vehicle.aero.drag_coefficient
 
     @staticmethod
     def set_value(vehicle: Vehicle, value: float) -> None:
-        vehicle.aero.aero_model.drag_coefficient = value
+        vehicle.aero.drag_coefficient = value
 
 
 class FrontalArea(

@@ -4,7 +4,7 @@ This module contains code for calculating points from competition results."""
 from dataclasses import dataclass
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 
 type CompetitionPoints = dict[str, float]
 
@@ -27,7 +27,7 @@ def points_delta(
     return {event: points[event] - baseline[event] for event in points}
 
 
-class CompetitionData(HasLibrary, path=LIBRARY_ROOT / "competition"):
+class CompetitionData(SupportsLoading, library=LIBRARY_ROOT / "competition"):
     """
     Data from a Formula Student competition.
     """

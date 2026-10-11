@@ -5,10 +5,10 @@ import math
 from functools import cached_property
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.utils.library import HasLibrary
+from usmlap.core.library import SupportsLoading
 
 
-class Motor(HasLibrary, path=LIBRARY_ROOT / "components" / "motors"):
+class Motor(SupportsLoading, library=LIBRARY_ROOT / "components" / "motors"):
     """
     An electric motor.
 

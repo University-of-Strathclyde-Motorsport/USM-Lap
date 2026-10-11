@@ -13,7 +13,7 @@ from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.parameters import FinalDriveRatio, get_new_vehicle
 from usmlap.vehicle.vehicle import Vehicle
 
-BASELINE_VEHICLE = "USM26"
+BASELINE_VEHICLE = Path(r"data\vehicles\USM26.json")
 TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]

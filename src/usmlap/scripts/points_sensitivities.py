@@ -17,7 +17,7 @@ from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import list_all_parameters
 from usmlap.vehicle.vehicle import Vehicle
 
-BASELINE_VEHICLE = "USM26"
+BASELINE_VEHICLE = Path(r"data\vehicles\USM26.json")
 settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 LIMIT_PARAMETERS = False
 

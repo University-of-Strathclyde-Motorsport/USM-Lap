@@ -12,7 +12,7 @@ from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
 from usmlap.track.track_data import TrackData
 
-TRACK_SHEET = "FS AutoX Germany 2012"
+TRACK_SHEET = Path(r"data\tracks\FS AutoX Germany 2012.json")
 MESH_RESOLUTION = 0.1
 
 

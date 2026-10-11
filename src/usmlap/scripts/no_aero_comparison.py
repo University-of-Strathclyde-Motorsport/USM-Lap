@@ -32,14 +32,14 @@ settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 # ]
 
 # competition = Competition()
-baseline_vehicle = Vehicle.from_json("USM26")
+baseline_vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
 
-aero_files: dict[str, str] = {
-    "No Aero": "no_aero",
+aero_files: dict[str, Path] = {
+    "No Aero": Path(r"data\components\aero_packages\no_aero.json"),
     # "USM23": "USM23",
     # "USM24": "USM24",
-    "USM25": "USM25",
-    "USM26": "USM26",
+    "USM25": Path(r"data\components\aero_packages\USM25.json"),
+    "USM26": Path(r"data\components\aero_packages\USM26.json"),
 }
 
 packages = [AeroPackage.from_json(file) for file in aero_files.values()]

@@ -1,9 +1,11 @@
 """
 This module contains code for simulating a Formula Student competition."""
 
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Annotated
 
+from pydantic import BaseModel, BeforeValidator
 from rich.progress import Progress
 
 from usmlap.competition.events.acceleration import Acceleration
@@ -17,7 +19,7 @@ from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
 DEFAULT_AUTOCROSS_TRACK = Path(r"data\tracks\FS AutoX Germany 2012.json")
-DEFAULT_COMPETITION_DATASET = "FSG 2025 Hybrid"
+DEFAULT_COMPETITION_DATASET = Path(r"data\competition\"FSG 2025 Hybrid.json")
 
 
 type CompetitionSolutions = dict[str, TelemetrySolution]
@@ -32,8 +34,7 @@ class CompetitionResults:
     solutions: CompetitionSolutions
 
 
-@dataclass
-class Competition:
+class Competition(BaseModel):
     """
     Class for simulating a Formula Student competition.
 
@@ -45,7 +46,7 @@ class Competition:
         simulate_autocross (bool): Whether to simulate the autocross event.
         simulate_endurance (bool): Whether to simulate the endurance event.
         simulate_efficiency (bool): Whether to simulate the efficiency event.
-        dataset (str): Dataset to use for points calculation.
+        dataset (Path): Dataset to use for points calculation.
         competition_data (CompetitionData): Data loaded from `dataset`.
         events: List of events to simulate.
 
@@ -57,12 +58,12 @@ class Competition:
     simulate_autocross: bool = True
     simulate_endurance: bool = True
     simulate_efficiency: bool = True
-    dataset: InitVar[str] = field(default=DEFAULT_COMPETITION_DATASET)
-    competition_data: CompetitionData = field(init=False)
+    dataset: Annotated[
+        CompetitionData, BeforeValidator(CompetitionData.initialise)
+    ] = CompetitionData.from_json(DEFAULT_COMPETITION_DATASET)
     events: list[EventInterface] = field(init=False, default_factory=list)
 
     def __post_init__(self, dataset: str) -> None:
-        self.competition_data = CompetitionData.get_item(dataset)
         self._create_events()
 
     def _add_event(self, event: EventInterface) -> None:
@@ -115,7 +116,6 @@ class Competition:
         """
         competition_results: CompetitionSolutions = {}
         competition_points: CompetitionPoints = {}
-        data = self.competition_data
 
         with Progress(transient=True) as progress:
             task = progress.add_task(
@@ -132,7 +132,9 @@ class Competition:
                 event_solution = event.simulate_event(vehicle, settings)
                 competition_results[event.label] = event_solution
 
-                event_points = event.calculate_points(event_solution, data)
+                event_points = event.calculate_points(
+                    event_solution, self.dataset
+                )
                 competition_points.update(event_points)
 
                 progress.advance(task)
