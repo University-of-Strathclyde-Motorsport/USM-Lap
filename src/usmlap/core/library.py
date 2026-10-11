@@ -1,6 +1,6 @@
-"""
-This module provides a superclass which can be loaded from a .yaml file.
-"""
+"""This module provides a framework for loading and writing objects to files."""
+
+from __future__ import annotations
 
 from __future__ import annotations
 
