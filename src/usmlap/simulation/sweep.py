@@ -7,24 +7,26 @@ from dataclasses import dataclass, field
 from itertools import groupby
 from typing import Any
 
+from usmlap.core.nested_dict import KeyPath, NestedDict, set_nested_value
+
 
 @dataclass
 class IncompatibleSweepDimensionError(Exception):
     """Raised if a sweep has incompatible dimensions."""
 
-    arrays: dict[int, list[tuple[str, ...]]]
+    keypaths: dict[int, list[KeyPath]]
 
     def __str__(self) -> str:
-        def _format_arrays(arrays: Iterable[tuple[str, ...]]) -> str:
+        def _format_paths(keypaths: Iterable[KeyPath]) -> str:
             """Format a list of nested keys."""
-            return ", ".join(f"'{format_nested_key(arr)}'" for arr in arrays)
+            return ", ".join(f"'{'.'.join(arr)}'" for arr in keypaths)
 
-        arrays = [
-            f"{n}: {_format_arrays(arrs)}" for n, arrs in self.arrays.items()
+        keypaths_by_length = [
+            f"{n}: {_format_paths(arrs)}" for n, arrs in self.keypaths.items()
         ]
         return (
-            f"All arrays in a sweep must be the same length.\n"
-            f"{'\n'.join(arrays)}"
+            f"All values in a sweep must be the same length.\n"
+            f"{'\n'.join(keypaths_by_length)}"
         )
 
 
@@ -32,7 +34,7 @@ class IncompatibleSweepDimensionError(Exception):
 class SweepDefinition:
     """Definitions of parameters to be swept."""
 
-    arrays: dict[tuple[str, ...], list[Any]]
+    arrays: dict[KeyPath, list[object]]
     _length: int = field(init=False)
 
     def __len__(self) -> int:
@@ -48,16 +50,13 @@ class SweepDefinition:
         else:
             self._length = next(iter(arrays_by_length.keys()))
 
-    def _build_dictionary(self, i: int) -> dict[str, Any]:
-        d: dict[str, Any] = {}
-        for nested_key, v in self.arrays.items():
-            cursor = d
-            for k in nested_key[:-1]:
-                cursor = cursor.setdefault(k, {})
-            cursor[nested_key[-1]] = v[i]
+    def _build_dictionary(self, i: int) -> NestedDict:
+        d: NestedDict = {}
+        for keypath, values in self.arrays.items():
+            set_nested_value(d, keypath, values[i])
         return d
 
-    def __iter__(self) -> Generator[dict[str, Any]]:
+    def __iter__(self) -> Generator[NestedDict]:
         for i in range(len(self)):
             yield self._build_dictionary(i)
 
@@ -69,10 +68,10 @@ def generate_sweep_definition(definition: dict[str, Any]) -> SweepDefinition:
 
 
 def _get_arrays(
-    d: dict[str, Any], _location: tuple[str, ...] = ()
-) -> dict[tuple[str, ...], list[Any]]:
+    d: dict[str, Any], _location: KeyPath = ()
+) -> dict[KeyPath, list[object]]:
     """Get a dict of arrays and their locations from a nested dictionary."""
-    arrays: dict[tuple[str, ...], list[Any]] = {}
+    arrays: dict[KeyPath, list[object]] = {}
     for k, v in d.items():
         key_location = (*_location, k)
         if isinstance(v, dict):
@@ -80,25 +79,3 @@ def _get_arrays(
         else:
             arrays[key_location] = v
     return arrays
-
-
-def merge_dicts(
-    base: dict[str, Any], new: dict[str, Any], *, allow_new_keys: bool = True
-) -> dict[str, Any]:
-    """Update a dictionary with values from another."""
-    for k, v in new.items():
-        if k not in base:
-            if allow_new_keys:
-                base[k] = v
-            else:
-                raise ValueError(f"Cannot add key '{k}' to dictionary")
-        elif isinstance(v, dict):
-            base[k] = merge_dicts(base[k], v, allow_new_keys=allow_new_keys)
-        else:
-            base[k] = v
-    return base
-
-
-def format_nested_key(key: tuple[str, ...]) -> str:
-    """Format a nested dictionary key with dots between parts."""
-    return ".".join(key)

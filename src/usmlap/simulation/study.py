@@ -11,15 +11,12 @@ from pydantic import BeforeValidator
 from rich import progress
 
 from usmlap.core.library import SupportsLoading
+from usmlap.core.nested_dict import merge_dicts
 from usmlap.io.filemap import SimGroupFileMap, StudyFileMap
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import run_simulation
-from usmlap.simulation.sweep import (
-    SweepDefinition,
-    generate_sweep_definition,
-    merge_dicts,
-)
+from usmlap.simulation.sweep import SweepDefinition, generate_sweep_definition
 
 logger = logging.getLogger(__name__)
 
