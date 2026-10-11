@@ -35,7 +35,7 @@ class SimSettings(SupportsLoading):
     plot_colour: str | None = None
     solver: Annotated[
         type[SolverInterface],
-        BeforeValidator(SolverRegistry.ensure_value),
+        BeforeValidator(SolverRegistry.get),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
     track: TrackSettings
