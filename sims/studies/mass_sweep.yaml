@@ -1,0 +1,17 @@
+study_name: MassSweep
+
+base_settings:
+  sim_name: TestSimulation
+  solver: quasi-steady-state
+  track: !include "sims/definitions/default_track_settings.yaml"
+  vehicle: !include "sims/definitions/baseline_vehicle.yaml"
+  boundary_conditions:
+    initial_soc: 1
+    initial_cell_temperature: 32
+    initial_velocity: 0
+
+sweep:
+  vehicle:
+    parameters:
+      inertia:
+        curb_mass: [180, 200, 220, 240, 260]

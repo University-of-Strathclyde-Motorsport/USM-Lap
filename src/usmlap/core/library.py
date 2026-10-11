@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from __future__ import annotations
-
 import json
 import logging
 from collections.abc import Callable, Iterator
@@ -13,11 +11,14 @@ from pathlib import Path
 from typing import Any, ClassVar, Self
 
 import yaml
+import yaml_include
 from pydantic import BaseModel
 
 from usmlap.core.registry import Registry
 
 logger = logging.getLogger(__name__)
+
+yaml.add_constructor("!include", yaml_include.Constructor())
 
 
 @dataclass
@@ -33,7 +34,7 @@ FileFormatRegistry.register(
     ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
 )
 FileFormatRegistry.register(
-    ".yaml", FileFormat(read_fcn=yaml.safe_load, write_fcn=yaml.dump)
+    ".yaml", FileFormat(read_fcn=yaml.full_load, write_fcn=yaml.dump)
 )
 
 

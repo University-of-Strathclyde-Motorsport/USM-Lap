@@ -60,7 +60,7 @@ class SimSettings(Serialisable):
 class VehicleSettings(BaseModel):
     """Settings for the vehicle and vehicle model."""
 
-    vehicle_file: Path
+    parameters: Annotated[Vehicle, BeforeValidator(Vehicle.initialise)]
     vehicle_model: VehicleModelSettings = Field(
         default_factory=VehicleModelSettings
     )

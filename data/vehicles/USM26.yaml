@@ -1,0 +1,60 @@
+print_name: USM26
+year: 2026
+driver: "data/drivers/acceleration.json"
+aero: "data/components/aero_packages/USM26.json"
+brakes:
+  front:
+    cylinder: "data/components/master_cylinders/CP7855-94.json"
+    caliper: "data/components/brake_calipers/front_caliper.json"
+    disc: "data/components/brake_discs/default.json"
+    pad: "data/components/brake_pads/default.json"
+  rear:
+    cylinder: "data/components/master_cylinders/CP7855-96.json"
+    caliper: "data/components/brake_calipers/rear_caliper.json"
+    disc: "data/components/brake_discs/default.json"
+    pad: "data/components/brake_pads/default.json"
+  pedal_ratio: 3.6
+  front_brake_bias: 0.5
+inertia:
+  curb_mass: 230
+  front_mass_distribution: 0.5
+  yaw_inertia: 75
+  front_unsprung_mass:
+    mass: 9
+    centre_of_gravity_height: 0.2
+  rear_unsprung_mass:
+    mass: 9
+    centre_of_gravity_height: 0.2
+  equivalent_drivetrain_inertia: 5
+powertrain:
+  accumulator: !include "data/components/accumulators/USM26.yaml"
+  motor: "data/components/motors/EMRAX_228.json"
+  motor_controller: "data/components/motor_controllers/BAMOCAR.json"
+  cooling_coefficient: 24
+steering:
+  steering_ratio: 5
+  steering_wheel_radius: 0.2
+suspension:
+  wheelbase: 1.535
+  centre_of_gravity_height: 0.3
+  front:
+    suspension_model: decoupled
+    track_width: 1.18
+    roll_centre_height: 0.04
+    heave_motion_ratio: 0.95
+    heave_spring_rate: 87560
+    roll_motion_ratio: 1.5
+    roll_spring_rate: 87560
+  rear:
+    suspension_model: decoupled
+    track_width: 1.2
+    roll_centre_height: 0.06
+    heave_motion_ratio: 0.95
+    heave_spring_rate: 96320
+    roll_motion_ratio: 1.2
+    roll_spring_rate: 39400
+transmission:
+  final_drive_ratio: 3.2
+tyres:
+  front: "data/components/tyres/hoozier_16x7.5-10_R20.json"
+  rear: "data/components/tyres/hoozier_16x7.5-10_R20.json"

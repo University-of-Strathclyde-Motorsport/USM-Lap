@@ -6,7 +6,7 @@ from pathlib import Path
 
 from usmlap.vehicle.vehicle import Vehicle
 
-VEHICLE = Path(r"data\vehicles\USM26.json")
+VEHICLE = Path(r"data\vehicles\USM26.yaml")
 
 vehicle = Vehicle.from_file(VEHICLE)
 print(vehicle)

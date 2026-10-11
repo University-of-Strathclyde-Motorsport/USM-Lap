@@ -9,7 +9,7 @@ track:
   correct_tangency: true
   correct_displacement: true
 vehicle:
-  vehicle_file: "data/vehicles/USM26.json"
+  parameters: "data/vehicles/USM26.json"
   vehicle_model:
     powertrain: single-motor-rwd
     traction: four-corner

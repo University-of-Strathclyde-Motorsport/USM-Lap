@@ -11,7 +11,7 @@ from usmlap.io.parquet import write_parquet
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
-from usmlap.simulation.settings import SimSettings, VehicleSettings
+from usmlap.simulation.settings import SimSettings
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
 from usmlap.telemetry.data.solution import TelemetrySolution
@@ -64,16 +64,15 @@ def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
 
     with log_to_file(sim_filemap.log_file):
         logger.info("Setting up simulation...")
-        vehicle = generate_vehicle(settings.vehicle)
         track_mesh = generate_mesh(settings.track)
         initial_state = get_initial_state(settings)
 
-        vehicle.write_file(filemap.vehicle_file)
+        settings.vehicle.parameters.write_file(filemap.vehicle_file)
         settings.write_file(filemap.settings_file)
 
         logger.info("Running simulation...")
         solution = simulate(
-            vehicle=vehicle,
+            vehicle=settings.vehicle.parameters,
             track_mesh=track_mesh,
             settings=settings,
             initial_state=initial_state,
@@ -82,11 +81,6 @@ def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
         write_parquet(df_sol, sim_filemap.parquet_file)
 
         generate_plots(sim_filemap, settings.plots, solution=df_sol)
-
-
-def generate_vehicle(settings: VehicleSettings) -> Vehicle:
-    """Generate a vehicle to simulate."""
-    return Vehicle.from_file(settings.vehicle_file)
 
 
 def get_initial_state(settings: SimSettings) -> TransientVariables:
