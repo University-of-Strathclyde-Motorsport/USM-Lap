@@ -24,7 +24,7 @@ from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.parameters import AerodynamicPackage
 from usmlap.vehicle.vehicle import Vehicle
 
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 # CHANNELS: list[Channel] = [
 #     Velocity(),
 #     LongitudinalAcceleration(),
@@ -32,7 +32,7 @@ settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
 # ]
 
 # competition = Competition()
-baseline_vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+baseline_vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 
 aero_files: dict[str, Path] = {
     "No Aero": Path(r"data\components\aero_packages\no_aero.json"),
@@ -42,7 +42,7 @@ aero_files: dict[str, Path] = {
     "USM26": Path(r"data\components\aero_packages\USM26.json"),
 }
 
-packages = [AeroPackage.from_json(file) for file in aero_files.values()]
+packages = [AeroPackage.from_file(file) for file in aero_files.values()]
 vehicles = VehicleGenerator(baseline_vehicle, AerodynamicPackage, packages)
 autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 
@@ -65,7 +65,7 @@ plot_gg(
 # points: dict[str, CompetitionPoints] = {}
 # solutions: dict[str, CompetitionSolutions] = {}
 # for label, vehicle_file in vehicle_files.items():
-#     vehicle = Vehicle.from_json(vehicle_file)
+#     vehicle = Vehicle.from_file(vehicle_file)
 #     results = competition.simulate(vehicle, QUALITY)
 #     points[label] = results.points
 #     solutions[label] = results.solutions

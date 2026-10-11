@@ -11,7 +11,7 @@ from usmlap.simulation.simulation import run_simulation
 
 
 def main() -> None:  # noqa: S1720
-    settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
+    settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
     filemap = SimGroupFileMap(OUTPUT_ROOT / "test_sim")
     run_simulation(settings, filemap)
 

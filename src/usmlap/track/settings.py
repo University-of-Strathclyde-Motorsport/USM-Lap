@@ -6,10 +6,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 
 
-class TrackSettings(SupportsLoading):
+class TrackSettings(Serialisable):
     """Settings for track mesh generation."""
 
     track_file: Path

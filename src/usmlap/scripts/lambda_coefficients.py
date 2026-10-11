@@ -13,7 +13,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 competition = Competition()
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 
 configurations: dict[str, LambdaCoefficients] = {
     "+10% Longitudinal Grip": LambdaCoefficients(longitudinal_grip=1.1),
@@ -21,7 +21,7 @@ configurations: dict[str, LambdaCoefficients] = {
     "+10% Motor Torque": LambdaCoefficients(motor_torque=1.1),
 }
 
-baseline_settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+baseline_settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 baseline_results = competition.simulate(vehicle, baseline_settings)
 
 data: dict[str, CompetitionPoints] = {}

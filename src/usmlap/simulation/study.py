@@ -10,7 +10,7 @@ from typing import Annotated
 from pydantic import BeforeValidator
 from rich import progress
 
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 from usmlap.core.nested_dict import merge_dicts
 from usmlap.io.filemap import SimGroupFileMap, StudyFileMap
 from usmlap.io.sim_folder import get_unique_filepath
@@ -21,7 +21,7 @@ from usmlap.simulation.sweep import SweepDefinition, generate_sweep_definition
 logger = logging.getLogger(__name__)
 
 
-class Study(SupportsLoading):
+class Study(Serialisable):
     """A set of simulations sweeping a range of sim settings."""
 
     study_name: str
@@ -40,7 +40,7 @@ class Study(SupportsLoading):
 def run_study(study: Study, filemap: StudyFileMap) -> None:
     """Run a study consisting of a set of simulations."""
     logger.info("Running study %s", study.study_name)
-    study.write_yaml(filemap.study_file)
+    study.write_file(filemap.study_file)
 
     for settings in progress.track(
         study.iter_settings(),

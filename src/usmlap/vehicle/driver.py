@@ -2,10 +2,10 @@
 This module models the driver of the vehicle."""
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 
 
-class Driver(SupportsLoading, library=LIBRARY_ROOT / "drivers"):
+class Driver(Serialisable, library=LIBRARY_ROOT / "drivers"):
     """
     The driver of the vehicle.
 

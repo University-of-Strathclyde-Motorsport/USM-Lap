@@ -9,13 +9,13 @@ import matplotlib.pyplot as plt
 from usmlap.plot.cell import _plot_resistance
 from usmlap.vehicle.powertrain.cell import Cell
 
-# accumulator = Accumulator.from_json("USM26")
+# accumulator = Accumulator.from_file("USM26")
 # plot_cell_parameters(accumulator)
 
 
 cells = [
-    Cell.from_json(Path(r"data\components\cells\sony_VTC6.json")),
-    Cell.from_json(Path(r"data\components\cells\molicel_P30b.json")),
+    Cell.from_file(Path(r"data\components\cells\sony_VTC6.json")),
+    Cell.from_file(Path(r"data\components\cells\molicel_P30b.json")),
 ]
 
 _, axs = plt.subplots(ncols=2)

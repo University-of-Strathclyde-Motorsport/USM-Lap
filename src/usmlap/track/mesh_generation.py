@@ -38,7 +38,7 @@ def generate_mesh(settings: TrackSettings) -> Mesh:
         mesh (Mesh): A mesh of the track.
 
     """
-    track_data = TrackData.from_json(settings.track_file)
+    track_data = TrackData.from_file(settings.track_file)
     track_length = track_data.total_length
     node_count = round(track_length / settings.resolution)
     spacing = track_length / (node_count - 1)

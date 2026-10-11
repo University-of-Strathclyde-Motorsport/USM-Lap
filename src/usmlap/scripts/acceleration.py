@@ -11,9 +11,9 @@ from usmlap.vehicle.vehicle import Vehicle
 
 acceleration = Acceleration()
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 
 solution = acceleration.simulate_event(vehicle, settings)
 plot_apexes(solution)

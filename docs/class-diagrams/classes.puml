@@ -773,7 +773,7 @@ class "Structural" as src.usmlap.vehicle.tyre.tir.Structural {
   YAW_STIFFNESS : float | None
 }
 class "Subsystem" as src.usmlap.vehicle.common.Subsystem {
-  from_json(filepath: Path) -> Self
+ .from_file(filepath: Path) -> Self
   to_json() -> str
 }
 class "Suspension" as src.usmlap.vehicle.suspension.Suspension {

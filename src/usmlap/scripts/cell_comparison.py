@@ -22,10 +22,10 @@ from usmlap.vehicle.powertrain.cell import Cell
 # )
 from usmlap.vehicle.vehicle import Vehicle
 
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 
-baseline_vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
-cells = [Cell.from_json(file) for file in Cell.iter_library()]
+baseline_vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
+cells = [Cell.from_file(file) for file in Cell.iter_library()]
 
 vehicles = VehicleGenerator(baseline_vehicle, ElectricalCell, cells)
 endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))

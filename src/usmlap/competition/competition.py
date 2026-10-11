@@ -60,7 +60,7 @@ class Competition(BaseModel):
     simulate_efficiency: bool = True
     dataset: Annotated[
         CompetitionData, BeforeValidator(CompetitionData.initialise)
-    ] = CompetitionData.from_json(DEFAULT_COMPETITION_DATASET)
+    ] = CompetitionData.from_file(DEFAULT_COMPETITION_DATASET)
     events: list[EventInterface] = field(init=False, default_factory=list)
 
     def __post_init__(self, dataset: str) -> None:

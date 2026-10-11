@@ -15,8 +15,8 @@ from usmlap.core.filepath import PLOTS_ROOT
 from usmlap.io.filemap import SimFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.plots import save_figure
-from usmlap.plot.config import load_waveform_config
-from usmlap.plot.scatter import load_scatter_config, plot_scatter
+from usmlap.plot.config import WaveformConfig
+from usmlap.plot.scatter import ScatterConfig, plot_scatter
 from usmlap.plot.waveform import plot_waveform
 from usmlap.solver.solution_channels import SolutionDataFrame
 
@@ -44,13 +44,13 @@ class _PlotType[ConfigType]:
 
 _WAVEFORM = _PlotType(
     subfolder="waveform",
-    load_config_fcn=load_waveform_config,
+    load_config_fcn=WaveformConfig.from_file,
     plot_fcn=plot_waveform,
 )
 
 _SCATTER = _PlotType(
     subfolder="scatter",
-    load_config_fcn=load_scatter_config,
+    load_config_fcn=ScatterConfig.from_file,
     plot_fcn=plot_scatter,
 )
 

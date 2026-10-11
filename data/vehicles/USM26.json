@@ -34,7 +34,7 @@
     "equivalent_drivetrain_inertia": 5
   },
   "powertrain": {
-    "accumulator": "data/components/accumulators/USM26.json",
+    "accumulator": "data/components/accumulators/USM26.yaml",
     "motor": "data/components/motors/EMRAX_228.json",
     "motor_controller": "data/components/motor_controllers/BAMOCAR.json",
     "cooling_coefficient": 24

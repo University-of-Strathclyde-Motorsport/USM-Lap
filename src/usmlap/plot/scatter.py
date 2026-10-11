@@ -3,13 +3,12 @@ This module creates scatter plots of telemetry data.
 """
 
 import logging
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from pydantic import BaseModel, Field
 
-from usmlap.io.pydantic_io import read_object_from_yaml
+from usmlap.core.library import Serialisable
 from usmlap.solver.solution_channels import ChannelId, SolutionDataFrame
 
 logger = logging.getLogger(__name__)
@@ -26,7 +25,7 @@ class AxisConfig(BaseModel):
         return self.provided_label or self.channel_id
 
 
-class ScatterConfig(BaseModel):
+class ScatterConfig(Serialisable):
     """Configuration options for a scatter plot."""
 
     title: str
@@ -35,11 +34,6 @@ class ScatterConfig(BaseModel):
     caxis: AxisConfig | None = None
     alpha: float = 1
     show_grid: bool = True
-
-
-def load_scatter_config(filepath: Path) -> ScatterConfig:
-    """Load plot config options from a .yaml file."""
-    return read_object_from_yaml(ScatterConfig, filepath)
 
 
 def plot_scatter(data: SolutionDataFrame, config: ScatterConfig) -> Figure:

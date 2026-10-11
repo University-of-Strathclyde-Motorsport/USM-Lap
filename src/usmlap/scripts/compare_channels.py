@@ -17,10 +17,10 @@ BASELINE_VEHICLE = Path(r"data\vehicles\USM26.json")
 TRACK_FILE = "FS AutoX Germany 2012"
 PARAMETER = FinalDriveRatio
 VALUES = [2.5, 3.5]
-SETTINGS = settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+SETTINGS = settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 CHANNELS: list[TelemetryChannel] = [Velocity(), MotorTorque()]
 
-baseline = Vehicle.from_json(BASELINE_VEHICLE)
+baseline = Vehicle.from_file(BASELINE_VEHICLE)
 vehicles: dict[str, Vehicle] = {}
 for value in VALUES:
     vehicles[str(value)] = get_new_vehicle(baseline, PARAMETER, value)

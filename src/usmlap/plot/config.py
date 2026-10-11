@@ -4,15 +4,13 @@ This module defines the structure of plot configurations.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from pydantic import BaseModel, Field
 
-from usmlap.io.pydantic_io import read_object_from_yaml
+from usmlap.core.library import Serialisable
 from usmlap.solver.solution_channels import ChannelId
 
 
-class WaveformConfig(BaseModel):
+class WaveformConfig(Serialisable):
     """Configuration options for a plot."""
 
     title: str
@@ -50,8 +48,3 @@ class XAxisConfig(BaseModel):
     @property
     def label(self) -> str:
         return self.provided_label or self.channel_id
-
-
-def load_waveform_config(filepath: Path) -> WaveformConfig:
-    """Load plot config options from a .yaml file."""
-    return read_object_from_yaml(WaveformConfig, filepath)

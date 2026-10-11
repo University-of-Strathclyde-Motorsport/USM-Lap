@@ -34,7 +34,7 @@ configurations: list[MeshConfiguration] = [
 ]
 
 _, ax = plt.subplots()
-track_data = TrackData.from_json(TRACK_SHEET)
+track_data = TrackData.from_file(TRACK_SHEET)
 
 # for config in configurations:
 #     mesh = generate_mesh(
@@ -47,7 +47,7 @@ track_data = TrackData.from_json(TRACK_SHEET)
 #         mesh, ax, colour=config.colour, label=config.label, show_legend=True
 #     )
 
-settings = TrackSettings.from_yaml(
+settings = TrackSettings.from_file(
     Path(r"data/tracks/FS AutoX Germany 2012.json")
 )
 mesh = generate_mesh(settings)

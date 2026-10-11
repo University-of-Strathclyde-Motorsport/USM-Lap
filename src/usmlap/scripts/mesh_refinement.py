@@ -24,7 +24,7 @@ RESOLUTIONS = [10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 TRACK_SHEET = "FS AutoX Germany 2012"
 VEHICLE = Path(r"data\vehicles\USM23 Baseline.json")
 SOLVER = QuasiTransientSolver
-settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 
 
 @dataclass
@@ -47,8 +47,8 @@ class MeshRefinementResult:
 def mesh_refinement() -> list[MeshRefinementResult]:
     """
     Run a mesh refinement simulation."""
-    vehicle = Vehicle.from_json(VEHICLE)
-    settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+    vehicle = Vehicle.from_file(VEHICLE)
+    settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
     settings.solver = SOLVER
 
     mesh_refinement_results: list[MeshRefinementResult] = []

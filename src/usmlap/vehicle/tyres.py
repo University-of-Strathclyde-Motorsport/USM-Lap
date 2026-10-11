@@ -6,10 +6,10 @@ from typing import Annotated
 from pydantic import BaseModel, BeforeValidator, PositiveFloat
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 
 
-class Tyre(SupportsLoading, library=LIBRARY_ROOT / "components" / "tyres"):
+class Tyre(Serialisable, library=LIBRARY_ROOT / "components" / "tyres"):
     """
     A racing tyre.
 

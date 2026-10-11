@@ -12,7 +12,7 @@ VEHICLE_FILE = Path(r"data\vehicles\USM23 Baseline.json")
 
 competition = Competition()
 
-vehicle = Vehicle.from_json(VEHICLE_FILE)
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+vehicle = Vehicle.from_file(VEHICLE_FILE)
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 
 points = competition.simulate(vehicle, settings)

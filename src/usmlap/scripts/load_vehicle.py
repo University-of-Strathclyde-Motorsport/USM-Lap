@@ -8,5 +8,5 @@ from usmlap.vehicle.vehicle import Vehicle
 
 VEHICLE = Path(r"data\vehicles\USM26.json")
 
-vehicle = Vehicle.from_json(VEHICLE)
+vehicle = Vehicle.from_file(VEHICLE)
 print(vehicle)

@@ -34,8 +34,8 @@ NUMBER_OF_STEPS = 30
 #     START_VALUE, END_VALUE, NUMBER_OF_STEPS
 # ).tolist()
 VALUES = [2.8, 3.3, 3.8]
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
-baseline_vehicle = Vehicle.from_json(BASELINE_VEHICLE)
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
+baseline_vehicle = Vehicle.from_file(BASELINE_VEHICLE)
 channels: list[TelemetryChannel] = [
     Velocity(),
     LongitudinalAcceleration(),
@@ -45,7 +45,7 @@ channels: list[TelemetryChannel] = [
 
 vehicles = VehicleGenerator(baseline_vehicle, FinalDriveRatio, VALUES)
 event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
-dataset = CompetitionData.from_json(
+dataset = CompetitionData.from_file(
     Path(r"data\competition\FSG 2025 Hybrid.json")
 )
 # results = sweep_vehicles(vehicles, QUALITY)

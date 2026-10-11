@@ -12,8 +12,8 @@ from usmlap.vehicle.vehicle import Vehicle
 autocross = Autocross(
     track_file=Path(r"data\tracks\FS AutoX Germany 2012.json")
 )
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 
 
 solution = autocross.simulate_event(vehicle, settings)

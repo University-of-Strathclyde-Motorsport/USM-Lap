@@ -7,6 +7,6 @@ from pathlib import Path
 from usmlap.plot.motor import plot_motor_curve
 from usmlap.vehicle.vehicle import Vehicle
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 powertrain = vehicle.powertrain
 plot_motor_curve(powertrain)

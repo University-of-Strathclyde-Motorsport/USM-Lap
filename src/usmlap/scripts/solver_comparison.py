@@ -26,7 +26,7 @@ from usmlap.telemetry.channel.library import (
 from usmlap.telemetry.data.solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 solvers: dict[str, type[SolverInterface]] = {
     "QSS": QuasiSteadyStateSolver,
     "QT": QuasiTransientSolver,
@@ -47,7 +47,7 @@ autocross_channels: list[TelemetryChannel] = [
 # ]
 endurance_channels: list[TelemetryChannel] = []
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 autocross = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 endurance = Endurance(Path(r"data\tracks\FS AutoX Germany 2012.json"))
 

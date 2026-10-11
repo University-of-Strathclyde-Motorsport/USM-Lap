@@ -58,7 +58,7 @@ autocross_channels: list[TelemetryChannel] = [
     LateralAcceleration(),
 ]
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 
 acceleration = Acceleration()
 skidpad = Skidpad()
@@ -68,7 +68,7 @@ acceleration_results: dict[str, TelemetrySolution] = {}
 skidpad_results: dict[str, TelemetrySolution] = {}
 autocross_results: dict[str, TelemetrySolution] = {}
 
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 
 for label, model in vehicle_models.items():
     settings.vehicle.vehicle_model.traction = model

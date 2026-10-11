@@ -8,7 +8,6 @@ import logging
 from usmlap.core.log import log_to_file
 from usmlap.io.filemap import SimFileMap, SimGroupFileMap
 from usmlap.io.parquet import write_parquet
-from usmlap.io.pydantic_io import save_object_to_json
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
@@ -69,8 +68,8 @@ def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
         track_mesh = generate_mesh(settings.track)
         initial_state = get_initial_state(settings)
 
-        save_object_to_json(vehicle, filemap.vehicle_file)
-        settings.write_yaml(filemap.settings_file)
+        vehicle.write_file(filemap.vehicle_file)
+        settings.write_file(filemap.settings_file)
 
         logger.info("Running simulation...")
         solution = simulate(
@@ -87,7 +86,7 @@ def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
 
 def generate_vehicle(settings: VehicleSettings) -> Vehicle:
     """Generate a vehicle to simulate."""
-    return Vehicle.from_json(settings.vehicle_file)
+    return Vehicle.from_file(settings.vehicle_file)
 
 
 def get_initial_state(settings: SimSettings) -> TransientVariables:

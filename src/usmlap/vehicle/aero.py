@@ -11,7 +11,7 @@ from annotated_types import Unit
 from pydantic import BaseModel, BeforeValidator, Field, PlainSerializer
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 from usmlap.core.registry import Registry
 
 
@@ -87,7 +87,7 @@ AeroModelRegistry.register("constant", ConstantAero)
 
 
 class AeroPackage(
-    SupportsLoading, library=LIBRARY_ROOT / "components" / "aero_packages"
+    Serialisable, library=LIBRARY_ROOT / "components" / "aero_packages"
 ):
     """
     The aerodynamic package of a vehicle.

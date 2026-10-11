@@ -18,10 +18,10 @@ from usmlap.vehicle.parameters import list_all_parameters
 from usmlap.vehicle.vehicle import Vehicle
 
 BASELINE_VEHICLE = Path(r"data\vehicles\USM26.json")
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 LIMIT_PARAMETERS = False
 
-vehicle = Vehicle.from_json(BASELINE_VEHICLE)
+vehicle = Vehicle.from_file(BASELINE_VEHICLE)
 competition = Competition(simulate_efficiency=False)
 
 parameters = list_all_parameters()

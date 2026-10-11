@@ -13,9 +13,9 @@ from usmlap.telemetry.channel.functions import derivative, negate, power
 from usmlap.telemetry.channel.library import NodeTime, Position, Velocity
 from usmlap.vehicle.vehicle import Vehicle
 
-vehicle = Vehicle.from_json(Path(r"data\vehicles\USM26.json"))
+vehicle = Vehicle.from_file(Path(r"data\vehicles\USM26.json"))
 event = Autocross(Path(r"data\tracks\FS AutoX Germany 2012.json"))
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 telemetry_solution = event.simulate_event(vehicle, settings)
 
 

@@ -8,13 +8,13 @@ from annotated_types import Unit
 from pydantic import BaseModel, BeforeValidator, PositiveFloat, PositiveInt
 
 from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 from usmlap.utils import geometry
 from usmlap.utils.datatypes import FrontRear, Percentage
 
 
 class MasterCylinder(
-    SupportsLoading, library=LIBRARY_ROOT / "components" / "master_cylinders"
+    Serialisable, library=LIBRARY_ROOT / "components" / "master_cylinders"
 ):
     """
     The master cylinder, transmitting force from the pedal to the brake line.
@@ -37,7 +37,7 @@ class MasterCylinder(
 
 
 class BrakeCaliper(
-    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_calipers"
+    Serialisable, library=LIBRARY_ROOT / "components" / "brake_calipers"
 ):
     """
     The brake caliper, transmitting force from the brake line to the wheel.
@@ -60,7 +60,7 @@ class BrakeCaliper(
 
 
 class BrakeDisc(
-    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_discs"
+    Serialisable, library=LIBRARY_ROOT / "components" / "brake_discs"
 ):
     """
     The brake disc attached to the wheel.
@@ -76,7 +76,7 @@ class BrakeDisc(
 
 
 class BrakePad(
-    SupportsLoading, library=LIBRARY_ROOT / "components" / "brake_pads"
+    Serialisable, library=LIBRARY_ROOT / "components" / "brake_pads"
 ):
     """
     The brake pad attached to the caliper.

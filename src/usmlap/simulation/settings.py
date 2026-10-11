@@ -16,7 +16,7 @@ from pydantic import (
 
 from usmlap.core.filepath import OUTPUT_ROOT
 from usmlap.core.git_tools import get_git_hash
-from usmlap.core.library import SupportsLoading
+from usmlap.core.library import Serialisable
 from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
 from usmlap.model.lambda_coefficients import LambdaCoefficients
@@ -28,7 +28,7 @@ from usmlap.track.settings import TrackSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 
-class SimSettings(SupportsLoading):
+class SimSettings(Serialisable):
     """Settings for a single simulation."""
 
     sim_name: str = ""

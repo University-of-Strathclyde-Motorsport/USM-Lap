@@ -2,20 +2,65 @@
 This module provides a superclass which can be loaded from a .yaml file.
 """
 
+from __future__ import annotations
+
 import json
 import logging
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
+from dataclasses import dataclass
+from io import TextIOWrapper
 from pathlib import Path
-from typing import ClassVar, Self
+from typing import Any, ClassVar, Self
 
 import yaml
 from pydantic import BaseModel
 
+from usmlap.core.registry import Registry
+
 logger = logging.getLogger(__name__)
 
 
-class SupportsLoading(BaseModel):
-    """Base class for classes which can be loaded from files."""
+@dataclass
+class FileFormat:
+    """Functions for reading and writing to a file format."""
+
+    read_fcn: Callable[[TextIOWrapper], dict[str, Any]]
+    write_fcn: Callable[[dict[str, Any], TextIOWrapper], None]
+
+
+FileFormatRegistry = Registry[str, FileFormat]()
+FileFormatRegistry.register(
+    ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
+)
+FileFormatRegistry.register(
+    ".yaml", FileFormat(read_fcn=yaml.safe_load, write_fcn=yaml.dump)
+)
+
+
+@dataclass
+class LibraryLoadError(Exception):
+    """Raised if an error occurs while loading a library object."""
+
+    object_type: str
+    filepath: Path
+
+    def __str__(self) -> str:
+        return f"Unable to load {self.object_type} from '{self.filepath}'"
+
+
+@dataclass
+class LibraryWriteError(Exception):
+    """Raised if an error occurs while writing a library object."""
+
+    object_type: str
+    filepath: Path
+
+    def __str__(self) -> str:
+        return f"Unable to write {self.object_type} to '{self.filepath}'"
+
+
+class Serialisable(BaseModel):
+    """Base for classes which can be loaded and written to file."""
 
     _library: ClassVar[Path | None]
 
@@ -42,40 +87,37 @@ class SupportsLoading(BaseModel):
         Otherwise, the input will be returned.
         """
         if isinstance(input, str):
-            return cls.from_json(Path(input))
+            return cls.from_file(Path(input))
         elif isinstance(input, Path):
-            return cls.from_json(input)
+            return cls.from_file(input)
         return input
 
     @classmethod
-    def from_yaml(cls, filepath: Path) -> Self:
-        """Load an object of the class from a .yaml file."""
-        logger.debug("Loading %s from '%s'", cls.__name__, filepath)
-        with open(filepath, "r", encoding="utf-8") as file:
-            data = yaml.safe_load(file)
-        return cls.model_validate(data)
+    def from_file(cls, filepath: Path) -> Self:
+        try:
+            logger.debug("Loading %s from '%s'", cls.__name__, filepath)
+            file_format = FileFormatRegistry.get(filepath.suffix)
+            with open(filepath, "r", encoding="utf-8") as file:
+                data = file_format.read_fcn(file)
+            return cls.model_validate(data)
+        except Exception as e:
+            raise LibraryLoadError(cls.__name__, filepath) from e
 
-    def write_yaml(self, filepath: Path) -> None:
-        """Write an object to a .yaml file."""
-        with open(filepath, "w", encoding="utf-8") as file:
-            data = self.model_dump(mode="json")
-            yaml.dump(data, file)
-        self._log_write_to_file(filepath)
+    def write_file(self, filepath: Path, *, overwrite: bool = False) -> None:
+        if filepath.exists() and not overwrite:
+            logger.warning(
+                "Unable to save %s to '%s'; file already exists",
+                self.__class__.__name__,
+                filepath,
+            )
+            return
 
-    @classmethod
-    def from_json(cls, filepath: Path) -> Self:
-        """Load an object of the class from a .json file."""
-        with open(filepath, "r", encoding="utf-8") as file:
-            data = json.load(file)
-        return cls.model_validate(data)
-
-    def write_json(self, filepath: Path) -> None:
-        """Write an object to a .json file."""
-        with open(filepath, "w", encoding="utf-8") as file:
-            data = self.model_dump(mode="json")
-            json.dump(data, file)
-        self._log_write_to_file(filepath)
-
-    def _log_write_to_file(self, filepath: Path) -> None:
-        """Log a message when an object is written to file."""
-        logger.info("%s written to '%s'", self.__class__.__name__, filepath)
+        try:
+            file_format = FileFormatRegistry.get(filepath.suffix)
+            filepath.parent.mkdir(exist_ok=True)
+            with open(filepath, "w", encoding="utf-8") as file:
+                data = self.model_dump(mode="json")
+                file_format.write_fcn(data, file)
+            logger.info("%s written to '%s'", self.__class__.__name__, filepath)
+        except Exception as e:
+            raise LibraryWriteError(self.__class__.__name__, filepath) from e

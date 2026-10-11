@@ -19,7 +19,7 @@ app = typer.Typer()
 @app.command()
 def simulate(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
     """Run a simulation from a .yaml file."""
-    settings = SimSettings.from_yaml(yaml_path)
+    settings = SimSettings.from_file(yaml_path)
     output_path = make_timestamped_folder(output_dir, settings.sim_name)
     filemap = SimGroupFileMap(output_path)
     run_simulation(settings, filemap)
@@ -28,7 +28,7 @@ def simulate(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
 @app.command()
 def study(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
     """Run a study from a .yaml file."""
-    study = Study.from_yaml(yaml_path)
+    study = Study.from_file(yaml_path)
     output_path = make_timestamped_folder(output_dir, study.study_name)
     filemap = StudyFileMap(output_path)
     run_study(study, filemap)

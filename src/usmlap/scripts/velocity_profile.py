@@ -10,14 +10,14 @@ from usmlap.track.mesh_generation import generate_mesh
 from usmlap.vehicle.vehicle import Vehicle
 
 VEHICLE_FILE = Path(r"data\vehicles\USM26.json")
-settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 
 
 def main() -> None:
     """
     Main function."""
     mesh = generate_mesh(settings.track)
-    vehicle = Vehicle.from_json(VEHICLE_FILE)
+    vehicle = Vehicle.from_file(VEHICLE_FILE)
     results = simulate(vehicle, mesh, settings, get_initial_state(settings))
     plot_apexes(results)
 

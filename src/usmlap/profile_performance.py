@@ -11,14 +11,14 @@ from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.track_data import TrackData
 from usmlap.vehicle.vehicle import Vehicle
 
-track_data = TrackData.from_json(
+track_data = TrackData.from_file(
     Path(r"data/tracks/FS AutoX Germany 2012.json")
 )
-settings = SimSettings.from_yaml(Path(r"sims/basic_simulation.yaml"))
+settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 mesh = generate_mesh(settings.track)
 
-vehicle = Vehicle.from_json(Path(r"data/vehicles/USM23 Baseline.json"))
-settings = SimSettings.from_yaml(Path("sims/basic_simulation.yaml"))
+vehicle = Vehicle.from_file(Path(r"data/vehicles/USM23 Baseline.json"))
+settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
 
 cProfile.run(statement="simulate(vehicle, mesh, settings)", filename="restats")
 p = pstats.Stats("restats")
