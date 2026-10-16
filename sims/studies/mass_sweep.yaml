@@ -1,9 +1,11 @@
+defs: !include "sims/definitions/defs.yaml"
 study_name: MassSweep
 
 base_settings:
   sim_name: TestSimulation
   solver: quasi-steady-state
-  track: !include "sims/definitions/default_track_settings.yaml"
+  track:
+    <<: !include "sims/definitions/default_track_settings.yaml"
   vehicle: !include "sims/definitions/baseline_vehicle.yaml"
   boundary_conditions:
     initial_soc: 1

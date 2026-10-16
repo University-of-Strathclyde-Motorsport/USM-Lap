@@ -27,7 +27,7 @@ inertia:
     centre_of_gravity_height: 0.2
   equivalent_drivetrain_inertia: 5
 powertrain:
-  accumulator: !include "data/components/accumulators/USM26.yaml"
+  accumulator: "data/components/accumulators/USM26.yaml"
   motor: "data/components/motors/EMRAX_228.json"
   motor_controller: "data/components/motor_controllers/BAMOCAR.json"
   cooling_coefficient: 24

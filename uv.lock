@@ -327,15 +327,6 @@ wheels = [
 ]
 
 [[package]]
-name = "fsspec"
-version = "2026.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/77/cd/9be253869fc42e764de7f3dedd6969af7d44ff9c3375214a3442a6f3fc08/fsspec-2026.9.0.tar.gz", hash = "sha256:0f08147951c8cb31d844c3547d631053b127863b60be04cf06e121333ee0e2fe", size = 333545, upload-time = "2026-09-18T17:50:42.825Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/c0/a98505f18594f1bce828bb159cec0fcf9860562f1a2c85913409fc8f3d9e/fsspec-2026.9.0-py3-none-any.whl", hash = "sha256:8dd6e646e99ea382bd85f97a45e6b526a442d79423a7dc673f1e2756d05fcb5f", size = 221738, upload-time = "2026-09-18T17:50:41.341Z" },
-]
-
-[[package]]
 name = "gitdb"
 version = "4.0.12"
 source = { registry = "https://pypi.org/simple" }
@@ -1141,19 +1132,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pyyaml-include"
-version = "2.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "fsspec" },
-    { name = "pyyaml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0f/8c/4bdc1bd9676e9eb49237b3750562e9794b7585281448909fa1837c92ca27/pyyaml_include-2.2.tar.gz", hash = "sha256:6f0c7e2ac56cdd9cc305b04122817b55514e6ce8584869fae2bc2a4ef2e0d40f", size = 29854, upload-time = "2024-11-09T09:36:16.915Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/1f/ae83ff547e70cd3aeefe2ebaeeef41c4e1fd5ed2453396d249d17c3a7ead/pyyaml_include-2.2-py3-none-any.whl", hash = "sha256:489fff69f78bad8b9509d006297a0140fd91382a66775b8b1da0ce7e126c1815", size = 29565, upload-time = "2024-11-09T09:36:15.241Z" },
-]
-
-[[package]]
 name = "rich"
 version = "15.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1385,12 +1363,11 @@ dependencies = [
     { name = "pint" },
     { name = "polars" },
     { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "pyyaml-include" },
     { name = "rich" },
     { name = "scipy" },
     { name = "scipy-stubs" },
     { name = "typer" },
+    { name = "yamlrocks" },
 ]
 
 [package.dev-dependencies]
@@ -1416,12 +1393,11 @@ requires-dist = [
     { name = "pint", specifier = ">=0.25.3" },
     { name = "polars", specifier = ">=1.44.2" },
     { name = "pydantic", specifier = ">=2.11.7" },
-    { name = "pyyaml", specifier = ">=6.0.3" },
-    { name = "pyyaml-include", specifier = ">=2.2" },
     { name = "rich", specifier = ">=14.3.2" },
     { name = "scipy", specifier = ">=1.16.2" },
     { name = "scipy-stubs", specifier = ">=1.16.2.4" },
     { name = "typer", specifier = ">=0.27.3" },
+    { name = "yamlrocks", specifier = ">=0.7.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1449,4 +1425,72 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c4/f9/f323b3b6058cff3853b31cf6a49c0425ed797bf9611572ec10d065e08bac/virtualenv-21.14.5.tar.gz", hash = "sha256:c4cb6c13e46b57225a999c7e22a09b163393878facc7ac4c059a57f46faa1647", size = 5467127, upload-time = "2026-10-02T17:42:25.613Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/df/93/084f10ebbecdedf7902ed68fbecc903f0e9c5742155bfffb05eccbc071da/virtualenv-21.14.5-py3-none-any.whl", hash = "sha256:b0651e0174982bba17cc6f0aaa2ef496730cb85a3f35eb5d1119d1c904f7d1da", size = 5487482, upload-time = "2026-10-02T17:42:23.38Z" },
+]
+
+[[package]]
+name = "yamlrocks"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/20/7111a374084e93bd89a32e09b2752b02a2161e6ff836f88fc869a67b199c/yamlrocks-0.7.0.tar.gz", hash = "sha256:5b08d2ac3ef16af8ac4882f12a7c64169176b72c86eac2d0fbd7241dc5708fc7", size = 935168, upload-time = "2026-10-13T07:29:23.197Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/87/74/ee9e717b20a5d496d2d3ec903d37fd374bbb3ea8f3267a25d1d82f8ba6a4/yamlrocks-0.7.0-cp313-cp313-macosx_10_12_x86_64.whl", hash = "sha256:9dcb952ff06cb3bc9bac4dd51dbc54e692188db2572459f71af80bafe5507555", size = 1254252, upload-time = "2026-10-13T07:27:36.306Z" },
+    { url = "https://files.pythonhosted.org/packages/39/4c/aacc9f49ee5fc2ffb27e6db2990e8550de39e33d2eafae4f04748bcda673/yamlrocks-0.7.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:2f2cd9def6a01c333b78bd3bd4125c1f5d1100be6901443f5b00460d19790a79", size = 1158533, upload-time = "2026-10-13T07:27:37.865Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/21/a35a640e9b43a78da44c4df91e8f55700ada6c96e06025efabace74b583d/yamlrocks-0.7.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:028ead2ce2e53a12597d789d70006bdc936771be7f8206c089765b12de83957f", size = 1206848, upload-time = "2026-10-13T07:27:39.901Z" },
+    { url = "https://files.pythonhosted.org/packages/7e/a0/f08a30255f16dd5d1b1e4afec5d8b0da0f505c7a4a06f17049977e0f28c0/yamlrocks-0.7.0-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:dcc01168a9c84a803c933ea2a8fd57c1e7da9d92139027388cde101eb0ed1143", size = 1199611, upload-time = "2026-10-13T07:27:41.612Z" },
+    { url = "https://files.pythonhosted.org/packages/43/cb/d150b6e50e9ebd90c630f29daa4e137a319ef88f690a5d912a1b1186645b/yamlrocks-0.7.0-cp313-cp313-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:e92d5e11c70d9e389cf662ea79eb4f131499bebd5b97b0f752a71f245d587e97", size = 1343198, upload-time = "2026-10-13T07:27:43.405Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/80/fdbe6318e40d4db0ec0f896fe0c50c70d417c2c8e06ed2a4044ab145e68a/yamlrocks-0.7.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:77862ed55309c97b08c7fb0af0000c30977022248cc15e4855fa0d090dfc3a82", size = 1294574, upload-time = "2026-10-13T07:27:45.04Z" },
+    { url = "https://files.pythonhosted.org/packages/56/10/3889579d3868e93ba76bfe2b63d0f8fc00f089b4ab3431c51ed5add459d2/yamlrocks-0.7.0-cp313-cp313-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:60dd544cd4672fab4aae28f1fcc0f4c93fb600f59fa34edb520a50bdb17f8fec", size = 1303815, upload-time = "2026-10-13T07:27:47.063Z" },
+    { url = "https://files.pythonhosted.org/packages/93/8e/814b9277e622c084256f544647531154e18646542b1b2d19d116d02ed2e1/yamlrocks-0.7.0-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:8a6397f1803457b2e8dee432a7225bba39ffaaa890e21e4d7573122fc90488f5", size = 1385329, upload-time = "2026-10-13T07:27:48.66Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/7d/f40df667abb25d3ea58cc8994c18e603a25005e5d8d11ecca0a7d22c5c55/yamlrocks-0.7.0-cp313-cp313-musllinux_1_2_armv7l.whl", hash = "sha256:3f4f87637c1023552de4de37fb34a377e6c24acaa2b07eb5cc8f1b4ae1d2f246", size = 1476258, upload-time = "2026-10-13T07:27:50.397Z" },
+    { url = "https://files.pythonhosted.org/packages/9c/94/751dddef868e689e7f324d41436a691b8bafdfd8b20464cc6bb8db77ecaa/yamlrocks-0.7.0-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:a6d243bc05a4e93003ddba98f4674d9ce72c5b8d20bfa74b82eea6cda2409fdc", size = 1493187, upload-time = "2026-10-13T07:27:52.15Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/90/977b410957eaa42b84c78c9276b126e074b6d0da6d7033210946b9da90dc/yamlrocks-0.7.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:30d7edba336acab30e497a483b988815508d708ef46c6c002c28c01ed1b735a5", size = 1518439, upload-time = "2026-10-13T07:27:54.114Z" },
+    { url = "https://files.pythonhosted.org/packages/9e/1e/76d7a41c84ae293e2f3517bb4d192d63d1281d2dc3d66a7c95cc3b370ef3/yamlrocks-0.7.0-cp313-cp313-win32.whl", hash = "sha256:9fa7e23b7056903403815c2bd668f8bc6ab841553fc015bbafd20243397e9251", size = 1135211, upload-time = "2026-10-13T07:27:56.011Z" },
+    { url = "https://files.pythonhosted.org/packages/05/ea/7bb9ea69010cf060ba0fe4e47e1a7a3c4405fb6a8fc78babc9a4cd2d8b07/yamlrocks-0.7.0-cp313-cp313-win_amd64.whl", hash = "sha256:be526aa9a4bd461c6fcf5b95a4d6ebf64cff36bed2db9ae9d46f6e27d50622df", size = 1279753, upload-time = "2026-10-13T07:27:57.884Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/29/62233c8d7339a2e31f0c66e15e6b85f9f933284ac66e696a6266012f0650/yamlrocks-0.7.0-cp313-cp313-win_arm64.whl", hash = "sha256:066a5f7468038abeaa0079704a2994fd637ec3232256eefba9bd51fb6b5b9c1a", size = 1158612, upload-time = "2026-10-13T07:27:59.435Z" },
+    { url = "https://files.pythonhosted.org/packages/39/56/fdd9199e04c481d4d0a7a822e8c90719e89519f063a79b01ec6c671e0a43/yamlrocks-0.7.0-cp314-cp314-macosx_10_12_x86_64.whl", hash = "sha256:4517814a0b346bd1d1c8e0354a543e27b02ec8cf8fc9a844f49c87c156657046", size = 1254729, upload-time = "2026-10-13T07:28:01.065Z" },
+    { url = "https://files.pythonhosted.org/packages/18/9d/a142f5c20261fa71aa2eb4032d523d32a08b6047eb7be88c81af2a912f8f/yamlrocks-0.7.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:a1724683382c6a5985a1294a3f998dc24153b4ac76e7256071dd653cbf94e685", size = 1158386, upload-time = "2026-10-13T07:28:03.042Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/72/e40e6823ad16718a710db372cbe36c74f0d940d960e3f0204092a37262c9/yamlrocks-0.7.0-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:43cbbc8d3da68925359b4eb50febd4bc36144b7563619ab9090ea06533796592", size = 1206692, upload-time = "2026-10-13T07:28:04.612Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/f3/6103ce4fa4a8f1bd893a0407ad7faec84c4a69e5eef7630a71c06bb4e89a/yamlrocks-0.7.0-cp314-cp314-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:e0b3658da54eb378d6f590c60c2015a3248b293d9dd364e44f1dd04f89904bc3", size = 1200279, upload-time = "2026-10-13T07:28:06.348Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/38/e8e66d5f21bbdd70f8c00ffabeaa4401e17efbed5972fa29eb37b2b00830/yamlrocks-0.7.0-cp314-cp314-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:317d58579ed5de1795f879986b5ac755e0f0348385924553298c56ca889739be", size = 1343650, upload-time = "2026-10-13T07:28:07.986Z" },
+    { url = "https://files.pythonhosted.org/packages/80/3e/ec2085e5c6e07edbb75d9b004bbc668eadc2818d2e6580775eb2ae2216be/yamlrocks-0.7.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6ebe6df5afc8bd17026b2791babc2f802ac200a09a22c4fec22bc3313b95c2a3", size = 1294956, upload-time = "2026-10-13T07:28:09.666Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/4d/e73586d0daac512e819d1488700864751bfc3776fcdfe30a4ae6673bd07a/yamlrocks-0.7.0-cp314-cp314-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:ec06f8a8f2467ed6c33d4bfcb8e936b864541ddfa198e12329862643f0817238", size = 1304699, upload-time = "2026-10-13T07:28:11.384Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/6c/15582843e0d4e45697f545970b27fbc593c2ef3111135f0bfb1c148deca2/yamlrocks-0.7.0-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:de318cbc52f6cb85bf48dec1c48ffbdf978156f887c62b05e341338745888d21", size = 1384799, upload-time = "2026-10-13T07:28:13.248Z" },
+    { url = "https://files.pythonhosted.org/packages/c9/ae/ebab53e7f6b38f4862f5c6b249c38e65b163f585c76a7709ea001bdbc9e3/yamlrocks-0.7.0-cp314-cp314-musllinux_1_2_armv7l.whl", hash = "sha256:0d4e01e574a18aa67ff2480fa943968716b209e9ee68e09f216f564ec57b5b5c", size = 1476929, upload-time = "2026-10-13T07:28:14.85Z" },
+    { url = "https://files.pythonhosted.org/packages/94/97/62c91d4004e88c1d918692a45901927c8a6b16746d5d4529288fa4a44b11/yamlrocks-0.7.0-cp314-cp314-musllinux_1_2_i686.whl", hash = "sha256:d5bb5530793a014744687d731419e086d98fa82ab16c5512c1a7c7419aec98e9", size = 1493661, upload-time = "2026-10-13T07:28:16.77Z" },
+    { url = "https://files.pythonhosted.org/packages/a0/50/a8dac26a504593ede72767b4b801d37c0672f6b5072a623a6f05e9aec2cf/yamlrocks-0.7.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:b37379191f1852b9a4dd07c8110c5aff8eee2e558c0eaf810f6496daab94eb73", size = 1519595, upload-time = "2026-10-13T07:28:19.17Z" },
+    { url = "https://files.pythonhosted.org/packages/91/e6/2db913ec40089288b34290bbdcb4eabd85104f82929c17fab03e72d61dc3/yamlrocks-0.7.0-cp314-cp314-win32.whl", hash = "sha256:63cc79a4485d30ee630fd643c0b78cc420e4e5ec4a560afe5ea0f6c5abb40abc", size = 1135366, upload-time = "2026-10-13T07:28:20.882Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/fd/d28711ab1c4f9698fb438395fd29b5c23d60d2d995f9a27a63df5b1954b3/yamlrocks-0.7.0-cp314-cp314-win_amd64.whl", hash = "sha256:20057cc1a3a8109675d655a7c1560065271067f031a01b70e62d84e0b339ccb7", size = 1279520, upload-time = "2026-10-13T07:28:22.757Z" },
+    { url = "https://files.pythonhosted.org/packages/a1/62/66ad31dc27d3fa810cc9ae1b01f0fe3aa6fc4fb9e4cce37650a5c28d541e/yamlrocks-0.7.0-cp314-cp314-win_arm64.whl", hash = "sha256:e6d48ac7b1bde42316b91f634019e7caeafb91d435a0a9f58d79ce967d302cb3", size = 1158479, upload-time = "2026-10-13T07:28:24.37Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/26/cc4ba05fe34a19356aa4697396e0d5c68a5291d3b9993f369cfd153c1fc2/yamlrocks-0.7.0-cp314-cp314t-macosx_10_12_x86_64.whl", hash = "sha256:4139a141e6df6bc42684423cf7e616c88778a7d8c579c34269a3b524e1baa11f", size = 1245163, upload-time = "2026-10-13T07:28:25.916Z" },
+    { url = "https://files.pythonhosted.org/packages/99/35/8baaba8a7c854fee65fa7b194aeb2f8011b03fb8f64cb1f6511d478a369e/yamlrocks-0.7.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:d57b81865664b8f2ffe5b6bc63fae5b3227c730b3cf8124ff80de38c98f46e39", size = 1151618, upload-time = "2026-10-13T07:28:27.548Z" },
+    { url = "https://files.pythonhosted.org/packages/7d/20/2ddbf3b8c457e16056d8fb803e3bdf496fec35f124517390d85441f8889c/yamlrocks-0.7.0-cp314-cp314t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d579c607dd95b0d35579192af3c4aa0d4fa6f826a7b00b8a9fa05d652247b252", size = 1201508, upload-time = "2026-10-13T07:28:29.169Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/00/4dac88a9c45e66d6b18fcac0f76dd4b5fc8f64ff28fd9aaef531da135e3d/yamlrocks-0.7.0-cp314-cp314t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:eea0384925772dcbfc4ae704b24d600fdcd39362bc5d5701adda5733f72fa251", size = 1292502, upload-time = "2026-10-13T07:28:30.826Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/e6/0a9e6bc6326a95aaa7cb58967605fcc8bd17daac2fed8624f3c5cffe9882/yamlrocks-0.7.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:57e7450d0d7bb6ad033f639e0b33b6d25ac4af88c6950a659f5e2efcb6b2a46b", size = 1380465, upload-time = "2026-10-13T07:28:32.299Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/6b/2a0ab0148d44809a0c5640c139d57c9ba60f1984f5b6e94629fe630ddf80/yamlrocks-0.7.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:440566ba6dfcc32e35555f6c88dbbc22b36813760a83a6af2ee64dcc10d583ba", size = 1516221, upload-time = "2026-10-13T07:28:33.984Z" },
+    { url = "https://files.pythonhosted.org/packages/a3/4a/77505cee7d28e91cfa3f1b98faf0d278283fdb8da4085f22eda18b7e3899/yamlrocks-0.7.0-cp314-cp314t-win32.whl", hash = "sha256:a24a53d5b16e61ad733db7663089a0ddb3e6ecd3d98455b4da57e1da20f4b878", size = 1130628, upload-time = "2026-10-13T07:28:35.834Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/f2/5c16077e0a9e6c59a6de888340cf0263d31e6554900c07fc64cd296a2d18/yamlrocks-0.7.0-cp314-cp314t-win_amd64.whl", hash = "sha256:ca0c6425520544d35b2649d5946f5f9ef6d5fa5414ff9e311bb0ffac04263621", size = 1275694, upload-time = "2026-10-13T07:28:38.397Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/f4/8c6c1e902e9a710768e78d592e6e051186a8c73ba2bbf6f43297a129ecc3/yamlrocks-0.7.0-cp314-cp314t-win_arm64.whl", hash = "sha256:94fb6f53e0be3851baed02a2de75244c97debf6ea14f0239063bad25dbf702f4", size = 1154377, upload-time = "2026-10-13T07:28:39.934Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/24/6e82184bcb84f65ed9ee606621aa0da0985dc49fd3665328d2f4f48c1683/yamlrocks-0.7.0-cp315-cp315-macosx_10_12_x86_64.whl", hash = "sha256:7a2e6a863159a6222c07123fe967a75018569c769bd16ffbb17d734bf1d2b363", size = 1254579, upload-time = "2026-10-13T07:28:41.567Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/4b/2f706ec37b036b084f8844bab0fdf803f061a289d9b809399f9807f76522/yamlrocks-0.7.0-cp315-cp315-macosx_11_0_arm64.whl", hash = "sha256:1eb2ce466245177be28a699d261eed8b4be9586eea77eef98d9868090665bd57", size = 1158518, upload-time = "2026-10-13T07:28:43.12Z" },
+    { url = "https://files.pythonhosted.org/packages/48/2f/d5a11c3cffa15e82766a387ae7f269256913e599d997e020d472c64e0e13/yamlrocks-0.7.0-cp315-cp315-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5acd4c44e54e3c51f4b5493f32f1b7fca47a8d5db2008433283e8b9e00a03ccb", size = 1206854, upload-time = "2026-10-13T07:28:44.764Z" },
+    { url = "https://files.pythonhosted.org/packages/65/fd/8a9944fe0a2cede5167771005a8c404b9eb5d43ca7839fd63e4c11ec90d7/yamlrocks-0.7.0-cp315-cp315-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:123f6518e7a7d797d83bc72eda5557a232d260f5bae56167a8bc5e822cdfc556", size = 1200717, upload-time = "2026-10-13T07:28:47.295Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/48/37e206ec7345aeb021bb6c326f48bc2505421cfc52c97cb999820bef2b15/yamlrocks-0.7.0-cp315-cp315-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:c0350db55481d882bf8b1bcf5d1bccd69f28e8c494cd1e8a43ac1e391d6d8f63", size = 1343127, upload-time = "2026-10-13T07:28:49.278Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/03/6ff3107c44ba0f7f0bb632f23fed302e519ef8a8b8bbd41e0e02df75f596/yamlrocks-0.7.0-cp315-cp315-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:00ae93d53890980bfdbb5b1b30b7a2367b46b8de28a7729bad4914d3519b716a", size = 1294789, upload-time = "2026-10-13T07:28:51.764Z" },
+    { url = "https://files.pythonhosted.org/packages/3e/02/17aa99ed90ea02f40458939083d8d4333a52143b3434d657b516da0f5562/yamlrocks-0.7.0-cp315-cp315-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:1d13ca950f4d94d63453938dd31813954f1ea73cea7ca43b86a9f1fc8366caab", size = 1305095, upload-time = "2026-10-13T07:28:53.374Z" },
+    { url = "https://files.pythonhosted.org/packages/d4/9d/865740a58426cc7732eb4402b170f1495d91fd45f09fd753647be940086f/yamlrocks-0.7.0-cp315-cp315-musllinux_1_2_aarch64.whl", hash = "sha256:524294086e338d7c903abe3d9f48da9bcff05d4e6697774a62eb7e2b591bf7de", size = 1384458, upload-time = "2026-10-13T07:28:55.026Z" },
+    { url = "https://files.pythonhosted.org/packages/47/49/44d629de8a94d2a9f84426aee90a0711fc8a5cfb2414af7f9c48ab0e3e0e/yamlrocks-0.7.0-cp315-cp315-musllinux_1_2_armv7l.whl", hash = "sha256:6bf5e1a10e8816676f30f09ce5a5de4bc501eb6aa7b2d19f1f67886d63cf1501", size = 1477072, upload-time = "2026-10-13T07:28:56.682Z" },
+    { url = "https://files.pythonhosted.org/packages/de/09/306c552ba54614928191d822c5925c2c191fd909755b1263154d1b723b9d/yamlrocks-0.7.0-cp315-cp315-musllinux_1_2_i686.whl", hash = "sha256:79096f83fb725c0065a381e484be0335f6061d28f949755da2dcd88174195dde", size = 1493896, upload-time = "2026-10-13T07:28:58.32Z" },
+    { url = "https://files.pythonhosted.org/packages/88/b1/7ce2475965312f168fa6fa2e806ea94a09a43841fe15a29cd1a0470ee2f3/yamlrocks-0.7.0-cp315-cp315-musllinux_1_2_x86_64.whl", hash = "sha256:78282f1f31a2f94f46949387084b5214c2c7fe75a71377e109ee718cdfdf9997", size = 1519200, upload-time = "2026-10-13T07:28:59.98Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/62/7ea3f619d0924e2fbb1db283f157086ae22f51e4a45764c3b289227a201c/yamlrocks-0.7.0-cp315-cp315-win32.whl", hash = "sha256:808156355d00de4cbe82e3112b25347b1d38e036066bdc7de0ba8cade07beef4", size = 1135697, upload-time = "2026-10-13T07:29:01.845Z" },
+    { url = "https://files.pythonhosted.org/packages/80/09/c72e4286a0b2df27e7f9267d1f95b996fe8ce9887b303b4dbbebcdda6c3a/yamlrocks-0.7.0-cp315-cp315-win_amd64.whl", hash = "sha256:1256e56bf5f6a30ebcd984809a28451f0fb518d138442616bfa1812f28d28e52", size = 1279801, upload-time = "2026-10-13T07:29:03.544Z" },
+    { url = "https://files.pythonhosted.org/packages/99/8b/fb7b0856345957c38657cf6b9064d2badb9e961e3022856feaad85ba2973/yamlrocks-0.7.0-cp315-cp315-win_arm64.whl", hash = "sha256:c696b71585213edad50edaa2f9ce087de31e298f2255987f9f731eec63aa0af5", size = 1158738, upload-time = "2026-10-13T07:29:05.084Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/54/43c3851e5c752dbd9375c93440f1fc05dd23eccb5c56bd089dd1ec679969/yamlrocks-0.7.0-cp315-cp315t-macosx_10_12_x86_64.whl", hash = "sha256:828f5d69da1a2c3ee97361bde728063bf1643f1a0f8acbb240a3f38f84cb3b48", size = 1245223, upload-time = "2026-10-13T07:29:06.853Z" },
+    { url = "https://files.pythonhosted.org/packages/87/c1/c848ced64e27debd1c3a9e06c706f7e43e1a78ce28449d191f543e50b3ce/yamlrocks-0.7.0-cp315-cp315t-macosx_11_0_arm64.whl", hash = "sha256:b501d46017ce939f96614970227e0bda63a6b62d15bd71c0fbd56168d6509413", size = 1151359, upload-time = "2026-10-13T07:29:08.638Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/c2/0a151476ac76a1d1e32af9132cec9987f6ed537303333a88c3401a0cb9c2/yamlrocks-0.7.0-cp315-cp315t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1afdff3aae99727e703c3023334d5a7d9508874befc9f2faf581efd38bbafbe2", size = 1201889, upload-time = "2026-10-13T07:29:10.201Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/17/53543efcd3ba284c669dab0a04ec73a3b8c41b6117a3f2c5a3c8e6e2a9c0/yamlrocks-0.7.0-cp315-cp315t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bfb2a51d183f4141acf8edd1234a62114911f39e4ffe713e09ef8d83cb1f841f", size = 1292325, upload-time = "2026-10-13T07:29:11.938Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/3f/8057c75584fba745d746fe2c4a1026e5967400ede9c78156a2d89ba248d7/yamlrocks-0.7.0-cp315-cp315t-musllinux_1_2_aarch64.whl", hash = "sha256:2f0e8e51cd045b24afd73853547575a2b601e6d606f36f3384df80117814bcc8", size = 1379989, upload-time = "2026-10-13T07:29:13.859Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/07/d33e3efaad40073ae7edac9b1fc7238e8301082d8bd9d690a431c41e1039/yamlrocks-0.7.0-cp315-cp315t-musllinux_1_2_x86_64.whl", hash = "sha256:181e96b38fa15d0b17f73426fbfd9c37fb9457a0fddff7e9746acc8fec1732bd", size = 1516383, upload-time = "2026-10-13T07:29:16.107Z" },
+    { url = "https://files.pythonhosted.org/packages/2c/f7/7fb9771e5d468fdab403e6ec1f2cae417a64d057932f5f82c673b37c6769/yamlrocks-0.7.0-cp315-cp315t-win32.whl", hash = "sha256:a27171f7a8589e973b3cae6e686d849f52d50a1128e001650d5dedbd79611b9e", size = 1130942, upload-time = "2026-10-13T07:29:17.971Z" },
+    { url = "https://files.pythonhosted.org/packages/73/cb/7d10ff32efc6e4eccb3600221a9d0d3f380380911b856faad79af43ce93c/yamlrocks-0.7.0-cp315-cp315t-win_amd64.whl", hash = "sha256:7db2b468e8f894ea7d8181d6f34170b74f3a204514b81a94c54af6f4e26fce20", size = 1275943, upload-time = "2026-10-13T07:29:19.713Z" },
+    { url = "https://files.pythonhosted.org/packages/55/14/8edd7c78e96bebe12fd5eb45131cccd239e0f21269b8a4f3cdc0e8693df6/yamlrocks-0.7.0-cp315-cp315t-win_arm64.whl", hash = "sha256:6ec17c57c206357508642d7c4f07f3556bde6e54e9cec9072c8229fd99d37666", size = 1154534, upload-time = "2026-10-13T07:29:21.34Z" },
 ]

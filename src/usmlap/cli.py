@@ -3,6 +3,7 @@ This module provides a command-line interface for running simulations.
 """
 
 from pathlib import Path
+from pprint import pprint
 
 import typer
 
@@ -32,3 +33,10 @@ def study(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
     output_path = make_timestamped_folder(output_dir, study.study_name)
     filemap = StudyFileMap(output_path)
     run_study(study, filemap)
+
+
+@app.command()
+def test_load(yaml_path: Path) -> None:
+    """Attempt to load a study from a .yaml file."""
+    study = Study.from_file(yaml_path)
+    pprint(study.model_dump(), compact=True)

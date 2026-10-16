@@ -10,15 +10,24 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import Any, ClassVar, Self
 
-import yaml
-import yaml_include
+import yamlrocks
 from pydantic import BaseModel
 
+from usmlap.core.filepath import PROJECT_ROOT
 from usmlap.core.registry import Registry
 
 logger = logging.getLogger(__name__)
 
-yaml.add_constructor("!include", yaml_include.Constructor())
+
+def load_yaml_dict_only(yaml: TextIOWrapper) -> dict[str, Any]:
+    data = yamlrocks.load(
+        yaml,
+        include_dir=PROJECT_ROOT,
+        option=yamlrocks.OPT_INCLUDES,
+    )
+    if isinstance(data, dict):
+        return data
+    raise ValueError("Yaml must be a dictionary, not an array")
 
 
 @dataclass
@@ -34,7 +43,7 @@ FileFormatRegistry.register(
     ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
 )
 FileFormatRegistry.register(
-    ".yaml", FileFormat(read_fcn=yaml.full_load, write_fcn=yaml.dump)
+    ".yaml", FileFormat(read_fcn=load_yaml_dict_only, write_fcn=yamlrocks.dump)
 )
 
 

@@ -4,4 +4,4 @@ initial_heading: 0
 initial_coordinates: [0, 0]
 correct_tangency: true
 correct_displacement: true
-track_file: "data/tracks/FS Endurance Germany 2010.json"
+track_file: "data/tracks/FS AutoX Germany 2012.json"
