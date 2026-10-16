@@ -1,4 +1,4 @@
-parameters: !include "../../data/vehicles/USM26.yaml"
+parameters: "data/vehicles/USM26.yaml"
 vehicle_model:
   powertrain: single-motor-rwd
   traction: four-corner
