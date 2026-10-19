@@ -19,6 +19,11 @@ def format_keypath(keypath: KeyPath, delimiter: str = ".") -> str:
     return delimiter.join(keypath)
 
 
+def parse_keypath(text: str, delimiter: str = ".") -> KeyPath:
+    """Split a string into a keypath."""
+    return tuple(text.split(delimiter))
+
+
 def merge_dicts(
     base: NestedDict, new: NestedDict, *, allow_new_keys: bool = True
 ) -> NestedDict:
@@ -34,6 +39,25 @@ def merge_dicts(
         else:
             base[k] = v
     return base
+
+
+def get_nested_value[T](
+    nested_dict: NestedDict, keypath: KeyPath, type_: type[T]
+) -> T:
+    """Get a value in a nested dictionary."""
+    if len(keypath) == 0:
+        raise KeyError("Keypath cannot be empty")
+    cursor = nested_dict
+    for k in keypath:
+        if not isinstance(cursor, dict):
+            raise TypeError("Intermediate value not a dictionary")
+        if k not in cursor:
+            raise KeyError("Keypath '%s' not found in dictionary")
+        cursor = cursor[k]
+    try:
+        return type_(cursor)  # type: ignore
+    except (ValueError, TypeError) as e:
+        raise TypeError("Unable to convert %s to %s", cursor, type_) from e
 
 
 def set_nested_value(
