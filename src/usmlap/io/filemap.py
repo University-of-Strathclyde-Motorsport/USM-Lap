@@ -104,6 +104,10 @@ class SimGroupFileMap:
         )
 
     @property
+    def outings_by_id(self) -> dict[str, OutingFileMap]:
+        return {outing.outing_id: outing for outing in self.sims}
+
+    @property
     def settings_file(self) -> Path:
         return self.root / "settings.yaml"
 
@@ -120,6 +124,9 @@ class SimGroupFileMap:
     def plots_folder(self) -> Path:
         """The path to the sim group plots folder."""
         return self.root / "plots"
+
+    def get_outing(self, outing_id: str) -> OutingFileMap | None:
+        return self.outings_by_id.get(outing_id)
 
     def get_plots(self) -> Iterator[Path]:
         """Iterate over the plots in the plots folder."""
@@ -171,3 +178,7 @@ class OutingFileMap:
     @property
     def study(self) -> StudyFileMap:
         return self.sim_group.study
+
+    @property
+    def outing_id(self) -> str:
+        return self.root.stem

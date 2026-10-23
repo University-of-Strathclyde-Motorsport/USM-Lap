@@ -17,8 +17,11 @@ sweep:
         curb_mass: [180, 200, 220, 240, 260]
 
 plots:
-  bar:
+  line:
     - title: "Mass Sensitivity"
       outing_id: autocross
+      colour: "#003366"
       x_value: vehicle.parameters.inertia.curb_mass
       y_value: laptime
+      x_label: Curb Mass (kg)
+      y_label: Laptime (s)

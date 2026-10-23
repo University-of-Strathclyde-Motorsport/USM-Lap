@@ -220,4 +220,4 @@ class SolutionDataFrame:
         time = self.get_channel(ChannelId.TIME)
         if np.all(np.isnan(time)):
             return np.float64(np.nan)
-        return np.nanmax(time)
+        return np.nansum(time)
