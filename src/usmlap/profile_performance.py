@@ -15,7 +15,7 @@ track_data = TrackData.from_file(
     Path(r"data/tracks/FS AutoX Germany 2012.json")
 )
 settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
-mesh = generate_mesh(settings.track)
+mesh = generate_mesh(settings.outings[0].track)
 
 vehicle = Vehicle.from_file(Path(r"data/vehicles/USM23 Baseline.json"))
 settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))

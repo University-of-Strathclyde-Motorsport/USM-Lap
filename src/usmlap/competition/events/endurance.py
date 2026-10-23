@@ -41,7 +41,7 @@ class Endurance(EventInterface, label="endurance"):
         vehicle: Vehicle,
         settings: SimSettings,
     ) -> TelemetrySolution:
-        mesh = self.get_mesh(settings.track.resolution)
+        mesh = self.get_mesh(settings.outings[0].track.resolution)
         vehicle = _modify_vehicle_for_event(vehicle)
         solution = simulate(vehicle, mesh, settings)
         return solution

@@ -96,9 +96,9 @@ class SimGroupFileMap:
     root: Path
 
     @property
-    def sims(self) -> Iterator[SimFileMap]:
+    def sims(self) -> Iterator[OutingFileMap]:
         return (
-            SimFileMap(subfolder)
+            OutingFileMap(subfolder)
             for subfolder in self.root.iterdir()
             if subfolder.is_dir()
         )
@@ -131,7 +131,7 @@ class SimGroupFileMap:
 
 
 @dataclass(frozen=True, slots=True)
-class SimFileMap:
+class OutingFileMap:
     """A mapping of the files associated with a single laptime simulation."""
 
     root: Path
@@ -140,6 +140,11 @@ class SimFileMap:
     def log_file(self) -> Path:
         """The path to the log file."""
         return self.root / "logs.log"
+
+    @property
+    def settings_file(self) -> Path:
+        """The path to the outing settings file."""
+        return self.root / "settings.yaml"
 
     @property
     def parquet_file(self) -> Path:

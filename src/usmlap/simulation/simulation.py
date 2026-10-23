@@ -6,12 +6,12 @@ from __future__ import annotations
 import logging
 
 from usmlap.core.log import log_to_file
-from usmlap.io.filemap import SimFileMap, SimGroupFileMap
+from usmlap.io.filemap import OutingFileMap, SimGroupFileMap
 from usmlap.io.parquet import write_parquet
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
-from usmlap.simulation.settings import SimSettings
+from usmlap.simulation.settings import OutingSettings, SimSettings
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
 from usmlap.telemetry.data.solution import TelemetrySolution
@@ -59,16 +59,25 @@ def simulate(
 
 def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
     """Run a simulation and save the results to a file."""
-    sim_filepath = get_unique_filepath(filemap.root / settings.sim_name)
-    sim_filemap = SimFileMap(sim_filepath)
+    settings.vehicle.parameters.write_file(filemap.vehicle_file)
+    settings.write_file(filemap.settings_file)
 
-    with log_to_file(sim_filemap.log_file):
+    for outing in settings.outings:
+        outing_filepath = get_unique_filepath(filemap.root / outing.id)
+        outing_filemap = OutingFileMap(outing_filepath)
+        run_outing(settings, outing, outing_filemap)
+
+
+def run_outing(
+    settings: SimSettings, outing: OutingSettings, filemap: OutingFileMap
+) -> None:
+    """Run a single simulation outing."""
+    outing.write_file(filemap.settings_file)
+
+    with log_to_file(filemap.log_file):
         logger.info("Setting up simulation...")
-        track_mesh = generate_mesh(settings.track)
+        track_mesh = generate_mesh(outing.track)
         initial_state = get_initial_state(settings)
-
-        settings.vehicle.parameters.write_file(filemap.vehicle_file)
-        settings.write_file(filemap.settings_file)
 
         logger.info("Running simulation...")
         solution = simulate(
@@ -78,9 +87,9 @@ def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
             initial_state=initial_state,
         )
         df_sol = SolutionDataFrame.from_solution(solution.solution)
-        write_parquet(df_sol, sim_filemap.parquet_file)
+        write_parquet(df_sol, filemap.parquet_file)
 
-        generate_plots(sim_filemap, settings.plots, solution=df_sol)
+        generate_plots(filemap, settings.plots, solution=df_sol)
 
 
 def get_initial_state(settings: SimSettings) -> TransientVariables:

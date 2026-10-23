@@ -55,7 +55,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
 
     for resolution in RESOLUTIONS:
         mesh_start_time = time.time()
-        mesh = generate_mesh(settings.track)
+        mesh = generate_mesh(settings.outings[0].track)
         mesh_time = time.time() - mesh_start_time
 
         simulation_start_time = time.time()

@@ -46,6 +46,8 @@ class TrackNode(BaseModel):
 
     @property
     def radius(self) -> float:
+        if self.curvature == 0:
+            return math.inf
         return 1 / self.curvature
 
     @property

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Annotated
 
 from pydantic import (
+    AfterValidator,
     BaseModel,
     BeforeValidator,
     Field,
@@ -28,6 +29,13 @@ from usmlap.track.settings import TrackSettings
 from usmlap.vehicle.vehicle import Vehicle
 
 
+class OutingSettings(Serialisable):
+    """Settings for an outing."""
+
+    id: str
+    track: TrackSettings
+
+
 class SimSettings(Serialisable):
     """Settings for a single simulation."""
 
@@ -38,7 +46,10 @@ class SimSettings(Serialisable):
         BeforeValidator(SolverRegistry.get),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
-    track: TrackSettings
+    outings: Annotated[
+        list[OutingSettings], AfterValidator(_ensure_at_least_one_outing)
+    ]
+    # track: TrackSettings
     output_path: Path = OUTPUT_ROOT
     vehicle: VehicleSettings
     boundary_conditions: BoundaryConditionSettings
@@ -55,6 +66,15 @@ class SimSettings(Serialisable):
             lambdas=self.vehicle.lambdas,
             vehicle=vehicle,
         )
+
+
+def _ensure_at_least_one_outing(
+    outings: list[OutingSettings],
+) -> list[OutingSettings]:
+    """Ensure at least one outing is defined."""
+    if len(outings) == 0:
+        raise ValueError("At least one outing must be defined")
+    return outings
 
 
 class VehicleSettings(BaseModel):

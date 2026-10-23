@@ -131,3 +131,7 @@ class Serialisable(BaseModel):
             logger.info("%s written to '%s'", self.__class__.__name__, filepath)
         except Exception as e:
             raise LibraryWriteError(self.__class__.__name__, filepath) from e
+
+    def as_dict(self) -> dict[str, Any]:
+        """Convert the object to a dictionary."""
+        return self.model_dump()

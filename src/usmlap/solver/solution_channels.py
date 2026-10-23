@@ -215,3 +215,9 @@ class SolutionDataFrame:
                 logger.warning("Channel '%s' not found", channel_id)
             return np.full(self.row_count, np.nan, dtype=np.float64)
         return self._df[channel_id].to_numpy()
+
+    def get_laptime(self) -> np.float64:
+        time = self.get_channel(ChannelId.TIME)
+        if np.all(np.isnan(time)):
+            return np.float64(np.nan)
+        return np.nanmax(time)

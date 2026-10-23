@@ -16,7 +16,7 @@ settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 def main() -> None:
     """
     Main function."""
-    mesh = generate_mesh(settings.track)
+    mesh = generate_mesh(settings.outings[0].track)
     vehicle = Vehicle.from_file(VEHICLE_FILE)
     results = simulate(vehicle, mesh, settings, get_initial_state(settings))
     plot_apexes(results)

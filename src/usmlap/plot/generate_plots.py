@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 from pydantic import BaseModel, Field
 
 from usmlap.core.filepath import PLOTS_ROOT
-from usmlap.io.filemap import SimFileMap
+from usmlap.io.filemap import OutingFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.plots import save_figure
 from usmlap.plot.config import WaveformConfig
@@ -56,7 +56,7 @@ _SCATTER = _PlotType(
 
 
 def generate_plots(
-    filemap: SimFileMap,
+    filemap: OutingFileMap,
     settings: PlotSettings,
     solution: SolutionDataFrame | None = None,
 ) -> None:

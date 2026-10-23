@@ -1,0 +1,16 @@
+- id: acceleration
+  track:
+    <<: !include "default_track_settings.yaml"
+    track_file: "data/tracks/FSAE Acceleration.json"
+- id: skidpad
+  track:
+    <<: !include "default_track_settings.yaml"
+    track_file: "data/tracks/FSAE Skidpad.json"
+- id: autocross
+  track:
+    <<: !include "default_track_settings.yaml"
+    track_file: "data/tracks/FS AutoX Germany 2012.json"
+- id: endurance
+  track:
+    <<: !include "default_track_settings.yaml"
+    track_file: "data/tracks/FS AutoX Germany 2012.json"

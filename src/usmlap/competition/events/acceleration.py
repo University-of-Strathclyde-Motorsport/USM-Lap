@@ -32,7 +32,7 @@ class Acceleration(EventInterface, label="acceleration"):
         vehicle: Vehicle,
         settings: SimSettings,
     ) -> TelemetrySolution:
-        mesh = self.get_mesh(settings.track.resolution)
+        mesh = self.get_mesh(settings.outings[0].track.resolution)
         solution = simulate(vehicle, mesh, settings)
         return solution
 
