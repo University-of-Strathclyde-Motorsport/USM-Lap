@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from usmlap.core.colour import HexColour
 from usmlap.core.library import Serialisable
 from usmlap.solver.solution_channels import ChannelId
 
@@ -32,7 +33,7 @@ class ChannelConfig(BaseModel):
 
     channel_id: ChannelId
     provided_label: str | None = Field(alias="label", default=None)
-    colour: str | None = Field(default=None)
+    colour: HexColour | None = Field(default=None)
 
     @property
     def label(self) -> str:

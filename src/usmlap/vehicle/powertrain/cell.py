@@ -29,9 +29,6 @@ class StateOfCharge(float):
             raise ValueError("State of charge must be between 0 and 1")
         return super().__new__(cls, value)
 
-    # def __str__(self) -> str:
-    #     return f"{float(self) * 100:.3f}%"
-
 
 @dataclass(frozen=True, eq=True)
 class CellState:

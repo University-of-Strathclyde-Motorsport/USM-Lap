@@ -10,6 +10,7 @@ import numpy as np
 from matplotlib.figure import Figure
 from pydantic import BeforeValidator
 
+from usmlap.core.colour import HexColour
 from usmlap.core.library import Serialisable
 from usmlap.core.nested_dict import KeyPath, get_nested_value, parse_keypath
 from usmlap.io.filemap import OutingFileMap, StudyFileMap
@@ -22,7 +23,7 @@ class StudyConfig(Serialisable):
 
     title: str | None = None
     outing_id: str
-    colour: str
+    colour: HexColour = HexColour("#003366")
     x_value: Annotated[KeyPath, BeforeValidator(parse_keypath)]
     y_value: str
     x_label: str | None = None
