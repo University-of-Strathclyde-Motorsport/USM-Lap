@@ -8,7 +8,7 @@ from typing import Annotated
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
-from pydantic import BeforeValidator
+from pydantic import BeforeValidator, ConfigDict
 
 from usmlap.core.colour import HexColour
 from usmlap.core.library import Serialisable
@@ -20,6 +20,8 @@ from usmlap.simulation.settings import SimSettings
 
 class StudyConfig(Serialisable):
     """Configuration options for a study plot."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     title: str | None = None
     outing_id: str

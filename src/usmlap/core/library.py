@@ -19,7 +19,8 @@ from usmlap.core.registry import Registry
 logger = logging.getLogger(__name__)
 
 
-def load_yaml_dict_only(yaml: TextIOWrapper) -> dict[str, Any]:
+def load_yaml_dict(yaml: TextIOWrapper) -> dict[str, Any]:
+    """Load a dictionary from a .yaml file."""
     data = yamlrocks.load(
         yaml,
         include_dir=PROJECT_ROOT,
@@ -43,7 +44,7 @@ FileFormatRegistry.register(
     ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
 )
 FileFormatRegistry.register(
-    ".yaml", FileFormat(read_fcn=load_yaml_dict_only, write_fcn=yamlrocks.dump)
+    ".yaml", FileFormat(read_fcn=load_yaml_dict, write_fcn=yamlrocks.dump)
 )
 
 

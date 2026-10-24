@@ -3,13 +3,13 @@ This module provides a command-line interface for running simulations.
 """
 
 from pathlib import Path
-from pprint import pprint
 
 import typer
 
 from usmlap.core.filepath import OUTPUT_ROOT
 from usmlap.io.filemap import SimGroupFileMap, StudyFileMap
 from usmlap.io.sim_folder import make_timestamped_folder
+from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import run_simulation
 from usmlap.simulation.study import Study, run_study
@@ -36,7 +36,13 @@ def study(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
 
 
 @app.command()
-def test_load(yaml_path: Path) -> None:
-    """Attempt to load a study from a .yaml file."""
-    study = Study.from_file(yaml_path)
-    pprint(study.model_dump(), compact=True)
+def load(model: str, filepath: Path) -> None:
+    """Attempt to load an object from a file."""
+    model_type = LoadableModelRegistry.get(model)
+    test_load(model_type, filepath)
+
+
+@app.command()
+def load_all() -> None:
+    """Test load objects from all files."""
+    test_load_all()

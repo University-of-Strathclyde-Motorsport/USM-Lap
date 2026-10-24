@@ -4,7 +4,7 @@ This module defines the structure of plot configurations.
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from usmlap.core.colour import HexColour
 from usmlap.core.library import Serialisable
@@ -30,6 +30,8 @@ class AxisConfig(BaseModel):
 
 class ChannelConfig(BaseModel):
     """Configuration options for a single channel."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     channel_id: ChannelId
     provided_label: str | None = Field(alias="label", default=None)
