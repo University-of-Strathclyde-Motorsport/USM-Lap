@@ -4,12 +4,16 @@ This module provides a command-line interface for running simulations.
 
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import typer
 
 from usmlap.core.filepath import OUTPUT_ROOT
-from usmlap.io.filemap import SimGroupFileMap, StudyFileMap
+from usmlap.io.filemap import OutingFileMap, SimGroupFileMap, StudyFileMap
+from usmlap.io.parquet import read_parquet
 from usmlap.io.sim_folder import make_timestamped_folder
 from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
+from usmlap.plot.config import WaveformConfig
+from usmlap.plot.waveform import plot_waveform
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import run_simulation
 from usmlap.simulation.study import Study, run_study
@@ -46,3 +50,12 @@ def load(model: str, filepath: Path) -> None:
 def load_all() -> None:
     """Test load objects from all files."""
     test_load_all()
+
+
+@app.command()
+def waveform(simulation: Path, config_file: Path) -> None:
+    """Generate a waveform plot of a simulation."""
+    filemap = OutingFileMap(simulation)
+    data = read_parquet(filemap.parquet_file)
+    plot_waveform(data, WaveformConfig.from_file(config_file))
+    plt.show()

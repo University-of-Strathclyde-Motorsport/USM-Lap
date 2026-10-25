@@ -5,6 +5,7 @@ This module plots telemetry data as a waveform.
 import logging
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.figure import Figure
 
 from usmlap.plot.config import WaveformConfig
@@ -24,7 +25,22 @@ def plot_waveform(data: SolutionDataFrame, config: WaveformConfig) -> Figure:
     for ax, axis_config in zip(axs, config.axes, strict=True):
         for channel_config in axis_config.channels:
             y_data = data.get_channel(channel_config.channel_id)
-            ax.plot(x_data, y_data, label=channel_config.label)
+            if channel_config.gate_channel is not None:
+                gate = data.get_channel(channel_config.gate_channel).astype(
+                    np.bool
+                )
+            else:
+                gate = np.full_like(x_data, True, dtype=np.bool)
+            ax.plot(
+                x_data[gate],
+                y_data[gate],
+                label=channel_config.label,
+                linestyle=channel_config.linestyle,
+                color=channel_config.colour,
+                marker=channel_config.marker,
+                markerfacecolor=channel_config.marker_colour,
+                markeredgewidth=channel_config.marker_edge_width,
+            )
 
         if axis_config.ylabel is not None:
             ax.set_ylabel(axis_config.ylabel)
@@ -43,7 +59,11 @@ def plot_waveform(data: SolutionDataFrame, config: WaveformConfig) -> Figure:
 
 def _get_subplots(config: WaveformConfig) -> tuple[Figure, list[plt.Axes]]:
     """Construct a matplotlib figure and subplots."""
+    heights = [axis_config.height for axis_config in config.axes]
     fig, axs = plt.subplots(
-        nrows=len(config.axes), sharex=True, layout="constrained"
+        nrows=len(config.axes),
+        height_ratios=heights,
+        sharex=True,
+        layout="constrained",
     )
     return fig, axs.flat

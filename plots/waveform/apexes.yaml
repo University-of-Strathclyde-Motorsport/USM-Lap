@@ -1,0 +1,22 @@
+title: "Velocity Profile"
+xaxis:
+  channel_id: sLap
+axes:
+  - ylabel: Velocity (ms⁻¹)
+    height: 2
+    channels:
+      - channel_id: vCar
+      - channel_id: vCar_grip_limit
+        linestyle: dashed
+        colour: "#69C2CD"
+      - channel_id: vCar
+        gate_channel: isApex
+        label: Apexes
+        linestyle: None
+        marker: o
+        marker_colour: "#FF6454"
+
+  - ylabel: Curvature (m⁻¹)
+    height: 1
+    channels:
+      - channel_id: curvature

@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, ClassVar, Self
 
 import yamlrocks
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from usmlap.core.filepath import PROJECT_ROOT
 from usmlap.core.registry import Registry
@@ -70,6 +70,8 @@ class LibraryWriteError(Exception):
 
 class Serialisable(BaseModel):
     """Base for classes which can be loaded and written to file."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     _library: ClassVar[Path | None]
 
