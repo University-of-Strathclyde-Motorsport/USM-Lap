@@ -22,9 +22,7 @@ logger = logging.getLogger(__name__)
 def load_yaml_dict(yaml: TextIOWrapper) -> dict[str, Any]:
     """Load a dictionary from a .yaml file."""
     data = yamlrocks.load(
-        yaml,
-        include_dir=PROJECT_ROOT,
-        option=yamlrocks.OPT_INCLUDES,
+        yaml, include_dir=PROJECT_ROOT, option=yamlrocks.OPT_INCLUDES
     )
     if isinstance(data, dict):
         return data

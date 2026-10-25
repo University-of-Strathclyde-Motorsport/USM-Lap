@@ -5,6 +5,7 @@ from pathlib import Path
 
 from usmlap.core.library import LibraryLoadError, Serialisable
 from usmlap.core.registry import Registry
+from usmlap.simulation.settings import OutingSettings
 from usmlap.simulation.study import Study
 
 logger = logging.getLogger(__name__)
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 LoadableModelRegistry = Registry[str, type[Serialisable]]()
 LoadableModelRegistry.register("study", Study)
+LoadableModelRegistry.register("outing", OutingSettings)
 
 
 def test_load(
@@ -27,7 +29,10 @@ def test_load(
         return False
 
 
-MODELS_BY_DIR: dict[Path, type[Serialisable]] = {Path(r"sims/studies"): Study}
+MODELS_BY_DIR: dict[Path, type[Serialisable]] = {
+    Path(r"sims/studies"): Study,
+    Path(r"sims/outings"): OutingSettings,
+}
 
 
 def test_load_all() -> None:

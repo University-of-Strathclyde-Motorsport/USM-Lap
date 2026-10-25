@@ -1,0 +1,4 @@
+id: autocross
+track:
+  track_file: "data/tracks/FS AutoX Germany 2012.json"
+  resolution: 0.1

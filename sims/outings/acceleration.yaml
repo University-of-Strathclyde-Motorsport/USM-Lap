@@ -1,0 +1,6 @@
+id: acceleration
+track:
+  track_file: "data/tracks/FSAE Acceleration.json"
+  resolution: 0.1
+  correct_tangency: false
+  correct_displacement: false
