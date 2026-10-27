@@ -5,13 +5,16 @@ from __future__ import annotations
 
 import logging
 
+from rich import progress
+
 from usmlap.core.log import log_to_file
-from usmlap.io.filemap import OutingFileMap, SimGroupFileMap
+from usmlap.io.filemap import OutingFileMap, SimGroupFileMap, StudyFileMap
 from usmlap.io.parquet import write_parquet
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.model.vehicle_state import TransientVariables
 from usmlap.plot.generate_plots import generate_plots
 from usmlap.simulation.settings import OutingSettings, SimSettings
+from usmlap.simulation.study import Study
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
 from usmlap.telemetry.data.solution import TelemetrySolution
@@ -55,6 +58,23 @@ def simulate(
         solution=solution,
         solver=type(solver),
     )
+
+
+def run_study(study: Study, filemap: StudyFileMap) -> None:
+    """Run a study consisting of a set of simulations."""
+    logger.info("Running study %s", study.study_name)
+    study.write_file(filemap.study_file)
+
+    for settings in progress.track(
+        study.iter_settings(),
+        transient=True,
+        description=f"Running study '{study.study_name}'...",
+    ):
+        sim_filepath = get_unique_filepath(
+            filemap.sims_folder / settings.sim_name
+        )
+        sim_filemap = SimGroupFileMap(sim_filepath)
+        run_simulation(settings, sim_filemap)
 
 
 def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:

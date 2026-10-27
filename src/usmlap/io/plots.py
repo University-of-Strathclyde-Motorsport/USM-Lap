@@ -15,7 +15,7 @@ def save_figure(
     filepath: Path,
     *,
     size: tuple[int, int] = (15, 9),
-    dpi: float = 100,
+    dpi: float = 300,
     format: str = "png",
 ) -> None:
     """Save a matplotlib figure."""

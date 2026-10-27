@@ -25,3 +25,6 @@ plots:
       y_value: laptime
       x_label: Curb Mass (kg)
       y_label: Laptime (s)
+  waveform:
+    - config: general
+      outing_id: autocross

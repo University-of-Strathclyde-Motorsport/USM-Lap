@@ -125,7 +125,7 @@ class Serialisable(BaseModel):
 
         try:
             file_format = FileFormatRegistry.get(filepath.suffix)
-            filepath.parent.mkdir(exist_ok=True)
+            filepath.parent.mkdir(exist_ok=True, parents=True)
             with open(filepath, "w", encoding="utf-8") as file:
                 data = self.model_dump(mode="json")
                 file_format.write_fcn(data, file)

@@ -19,8 +19,10 @@ def format_keypath(keypath: KeyPath, delimiter: str = ".") -> str:
     return delimiter.join(keypath)
 
 
-def parse_keypath(text: str, delimiter: str = ".") -> KeyPath:
+def parse_keypath(text: str | list[str], delimiter: str = ".") -> KeyPath:
     """Split a string into a keypath."""
+    if isinstance(text, list):
+        return tuple(text)
     return tuple(text.split(delimiter))
 
 

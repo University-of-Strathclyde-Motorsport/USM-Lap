@@ -1,0 +1,25 @@
+title: "Telemetry Channels"
+xaxis:
+  channel_id: sLap
+axes:
+  - ylabel: Velocity (ms⁻¹)
+    channels:
+      - channel_id: vCar
+
+  - ylabel: Acceleration (ms⁻²)
+    channels:
+      - channel_id: accelLong
+        linestyle: dotted
+      - channel_id: accelLat
+
+  - ylabel: Motor Power (W)
+    channels:
+      - channel_id: PMotor
+
+  - ylabel: Heat Generation (W)
+    channels:
+      - channel_id: PThermalNet
+
+  - ylabel: Cell Temperature (K)
+    channels:
+      - channel_id: TCell

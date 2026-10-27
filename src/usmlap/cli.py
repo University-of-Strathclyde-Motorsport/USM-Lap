@@ -13,10 +13,11 @@ from usmlap.io.parquet import read_parquet
 from usmlap.io.sim_folder import make_timestamped_folder
 from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
 from usmlap.plot.config import WaveformConfig
+from usmlap.plot.study_plots import generate_study_plots
 from usmlap.plot.waveform import plot_waveform
 from usmlap.simulation.settings import SimSettings
-from usmlap.simulation.simulation import run_simulation
-from usmlap.simulation.study import Study, run_study
+from usmlap.simulation.simulation import run_simulation, run_study
+from usmlap.simulation.study import Study
 
 app = typer.Typer()
 
@@ -59,3 +60,10 @@ def waveform(simulation: Path, config_file: Path) -> None:
     data = read_parquet(filemap.parquet_file)
     plot_waveform(data, WaveformConfig.from_file(config_file))
     plt.show()
+
+
+@app.command()
+def study_plots(filepath: Path) -> None:
+    """Generate all plots for a study."""
+    filemap = StudyFileMap(filepath)
+    generate_study_plots(filemap)

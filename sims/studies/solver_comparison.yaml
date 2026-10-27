@@ -3,7 +3,7 @@ study_name: SolverComparison
 base_settings:
   sim_name: TestSimulation
   solver: quasi-steady-state
-  outings: !include "sims/definitions/competition.yaml"
+  outings: [!include "sims/outings/autocross.yaml"]
   track: !include "sims/definitions/default_track_settings.yaml"
   vehicle: !include "sims/definitions/baseline_vehicle.yaml"
   boundary_conditions: !include "sims/definitions/default_boundary_conditions.yaml"
@@ -27,4 +27,5 @@ sweep:
 
 plots:
   waveform:
-    - cell_state
+    - config: cell_state
+      outing_id: autocross

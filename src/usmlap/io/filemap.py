@@ -11,46 +11,6 @@ from pathlib import Path
 PLOT_EXTENSIONS = {".png", ".svg", ".jpg"}
 
 
-@dataclass(frozen=True)
-class FileMap:
-    """A mapping of the files associated with a laptime simulation."""
-
-    root: Path
-
-    @property
-    def vehicle_file(self) -> Path:
-        """The path to the vehicle file."""
-        return self.root / "vehicle.json"
-
-    @property
-    def settings_file(self) -> Path:
-        """The path of the simulation settings."""
-        return self.root / "settings.json"
-
-    @property
-    def log_file(self) -> Path:
-        """The path to the log file."""
-        return self.root / "logs.log"
-
-    @property
-    def parquet_file(self) -> Path:
-        """The path to the parquet file."""
-        return self.root / "channels.prq"
-
-    @property
-    def plots_folder(self) -> Path:
-        """The path to the plots folder."""
-        return self.root / "plots"
-
-    def get_plots(self) -> Iterator[Path]:
-        """Iterate over the plots in the plots folder."""
-        return (
-            file
-            for file in self.plots_folder.iterdir()
-            if file.suffix in PLOT_EXTENSIONS
-        )
-
-
 @dataclass(frozen=True, slots=True)
 class StudyFileMap:
     """A mapping of the files associates with a study.
@@ -64,13 +24,17 @@ class StudyFileMap:
     def sim_groups(self) -> Iterator[SimGroupFileMap]:
         return (
             SimGroupFileMap(subfolder)
-            for subfolder in self.root.iterdir()
+            for subfolder in self.sims_folder.iterdir()
             if subfolder.is_dir()
         )
 
     @property
     def study_file(self) -> Path:
         return self.root / "study.yaml"
+
+    @property
+    def sims_folder(self) -> Path:
+        return self.root / "sims"
 
     @property
     def plots_folder(self) -> Path:
@@ -113,7 +77,7 @@ class SimGroupFileMap:
 
     @property
     def study(self) -> StudyFileMap:
-        return StudyFileMap(self.root.parent)
+        return StudyFileMap(self.root.parents[1])
 
     @property
     def vehicle_file(self) -> Path:
@@ -182,3 +146,13 @@ class OutingFileMap:
     @property
     def outing_id(self) -> str:
         return self.root.stem
+
+
+if __name__ == "__main__":
+    root = Path(r"out\20261023012619_MassSweep")
+    for sim in root.iterdir():
+        if not sim.is_dir():
+            continue
+        print("=" * 30)
+        print(sim)
+        print(list(sim.iterdir()))

@@ -63,7 +63,7 @@ def generate_plots(
     """Generate plots of a simulation and save them to file.
 
     Args:
-        filemap (FileMap): The filemap for the simulation.
+        filemap (OutingFileMap): The filemap for the simulation.
         settings (PlotSettings): Settings for generating plots.
         solution (SolutionDataFrame | None): Optionally provide the solution.
             If not provided, it will be loaded from the filemap.
