@@ -1,6 +1,4 @@
-"""
-This module provides a command-line interface for running simulations.
-"""
+"""Main command-line interface for USMLap."""
 
 from pathlib import Path
 

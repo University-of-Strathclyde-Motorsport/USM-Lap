@@ -1,0 +1,30 @@
+study_name: CellComparison
+
+base_settings:
+  sim_name: CellComparison
+  solver: quasi-transient
+  outings:
+    - !include "sims/outings/acceleration.yaml"
+    - !include "sims/outings/autocross.yaml"
+    - !include "sims/outings/endurance.yaml"
+    # No impact on skidpad!
+  track: !include "sims/definitions/default_track_settings.yaml"
+  vehicle: !include "sims/definitions/baseline_vehicle.yaml"
+  boundary_conditions: !include "sims/definitions/default_boundary_conditions.yaml"
+
+sweep:
+  vehicle:
+    parameters:
+      powertrain:
+        accumulator:
+          cell:
+            - "data/components/cells/molicel_P30b.json"
+            - "data/components/cells/sony_VTC6.json"
+  sim_name:
+    - Molicel_P30b
+    - Sony_VTC6
+
+plots:
+  waveform:
+    - config: general
+      outing_id: acceleration

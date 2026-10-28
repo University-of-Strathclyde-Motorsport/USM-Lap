@@ -274,7 +274,7 @@ class TrackData(Serialisable, library=LIBRARY_ROOT / "tracks"):
         return [sector.label for sector in self.sectors]
 
 
-def load_track_from_spreadsheet(filename: str) -> TrackData:
+def load_track_from_spreadsheet(filepath: Path) -> TrackData:
     """
     Load a track from the library.
 
@@ -288,27 +288,19 @@ def load_track_from_spreadsheet(filename: str) -> TrackData:
         FileNotFoundError: If the file does not exist.
 
     """
-    try:
-        filepath = TRACK_LIBRARY / "legacy" / filename
-        reader = TrackReader(filepath)
-        return TrackData(
-            print_name=reader.get_print_name(),
-            country=reader.get_country(),
-            city=reader.get_city(),
-            shape=reader.get_shape_data(),
-            elevation=reader.get_elevation_data(),
-            banking=reader.get_banking_data(),
-            grip_factor=reader.get_grip_factor_data(),
-            sectors=reader.get_sector_data(),
-            event=Event.AUTOX,
-            configuration=reader.get_configuration(),
-        )
-    except FileNotFoundError:
-        error_message = (
-            f"Unable to find '{filename}' in track library. "
-            f"Available tracks: {AVAILABLE_TRACKS}"
-        )
-        raise FileNotFoundError(error_message) from None
+    reader = TrackReader(filepath)
+    return TrackData(
+        print_name=reader.get_print_name(),
+        country=reader.get_country(),
+        city=reader.get_city(),
+        shape=reader.get_shape_data(),
+        elevation=reader.get_elevation_data(),
+        banking=reader.get_banking_data(),
+        grip_factor=reader.get_grip_factor_data(),
+        sectors=reader.get_sector_data(),
+        event=Event.AUTOX,
+        configuration=reader.get_configuration(),
+    )
 
 
 class TrackReader:
@@ -448,15 +440,9 @@ class TrackReader:
         return mirror_str.lower() in ["on", "yes", "true"]
 
 
-def save_track_data(track_data: TrackData, filename: str | None = None) -> None:
+def save_track_data(
+    track_data: TrackData, filepath: Path, *, overwrite: bool = False
+) -> None:
     """
     Save track data to a JSON file."""
-    if filename is None:
-        filename = track_data.print_name
-
-    filepath = TRACK_LIBRARY / f"{filename}.json"
-    if filepath.exists():
-        error_message = f"Error saving track; file '{filename}' already exists."
-        raise FileExistsError(error_message)
-
-    track_data.write_file(filepath)
+    track_data.write_file(filepath, overwrite=overwrite)

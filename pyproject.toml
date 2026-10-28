@@ -23,7 +23,8 @@ dependencies = [
 ]
 
 [project.scripts]
-usmlap = "usmlap.cli:app"
+usmlap = "usmlap.cli.usmlap:app"
+dev-utils  = "usmlap.cli.dev_utils:app"
 
 [tool.uv]
 package = true
