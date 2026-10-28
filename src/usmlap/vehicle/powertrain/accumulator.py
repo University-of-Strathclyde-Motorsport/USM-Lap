@@ -6,7 +6,7 @@ from functools import cached_property
 from typing import Annotated
 
 import numpy as np
-from pydantic import BeforeValidator, ConfigDict
+from pydantic import BeforeValidator
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.core.library import Serialisable
@@ -62,7 +62,6 @@ class Accumulator(
 
     """
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
     print_name: str
     cell: Annotated[Cell, BeforeValidator(Cell.initialise)]
     cells_in_parallel: int

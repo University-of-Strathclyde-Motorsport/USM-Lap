@@ -15,9 +15,10 @@ from usmlap.core.filepath import PLOTS_ROOT
 from usmlap.io.filemap import OutingFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.plots import save_figure
-from usmlap.plot.config import WaveformConfig
-from usmlap.plot.scatter import ScatterConfig, plot_scatter
-from usmlap.plot.waveform import plot_waveform
+from usmlap.plot.config.scatter import ScatterConfig
+from usmlap.plot.config.waveform import WaveformConfig
+from usmlap.plot.plots.scatter import plot_scatter
+from usmlap.plot.plots.waveform import plot_waveform
 from usmlap.solver.solution_channels import SolutionDataFrame
 
 logger = logging.getLogger(__name__)

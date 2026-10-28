@@ -12,9 +12,9 @@ from usmlap.io.filemap import OutingFileMap, SimGroupFileMap, StudyFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.sim_folder import make_timestamped_folder
 from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
-from usmlap.plot.config import WaveformConfig
+from usmlap.plot.config.waveform import WaveformConfig
+from usmlap.plot.plots.waveform import plot_waveform
 from usmlap.plot.study_plots import generate_study_plots
-from usmlap.plot.waveform import plot_waveform
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import run_simulation, run_study
 from usmlap.simulation.study import Study

@@ -5,8 +5,8 @@ from pathlib import Path
 
 from usmlap.core.library import LibraryLoadError, Serialisable
 from usmlap.core.registry import Registry
-from usmlap.plot.config import WaveformConfig
-from usmlap.plot.scatter import ScatterConfig
+from usmlap.plot.config.scatter import ScatterConfig
+from usmlap.plot.config.waveform import WaveformConfig
 from usmlap.simulation.settings import OutingSettings
 from usmlap.simulation.study import Study
 

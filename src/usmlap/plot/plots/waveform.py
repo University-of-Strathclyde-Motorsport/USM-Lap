@@ -1,6 +1,4 @@
-"""
-This module plots telemetry data as a waveform.
-"""
+"""Generate waveform plots of telemetry data."""
 
 import logging
 
@@ -9,7 +7,7 @@ import numpy as np
 from matplotlib.figure import Figure
 
 from usmlap.core.colour import HexColour, get_n_colours
-from usmlap.plot.config import ChannelConfig, WaveformConfig
+from usmlap.plot.config.waveform import ChannelConfig, WaveformConfig
 from usmlap.solver.solution_channels import ChannelId, SolutionDataFrame
 
 logger = logging.getLogger(__name__)

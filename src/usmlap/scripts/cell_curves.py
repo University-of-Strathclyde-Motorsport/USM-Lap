@@ -6,7 +6,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from usmlap.plot.cell import _plot_resistance
+from usmlap.plot.component.cell import _plot_resistance
 from usmlap.vehicle.powertrain.cell import Cell
 
 # accumulator = Accumulator.from_file("USM26")

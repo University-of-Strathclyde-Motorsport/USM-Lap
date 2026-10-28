@@ -9,9 +9,9 @@ from usmlap.core.nested_dict import get_nested_value
 from usmlap.io.filemap import OutingFileMap, StudyFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.plots import save_figure
-from usmlap.plot.config import WaveformConfig
+from usmlap.plot.config.waveform import WaveformConfig
+from usmlap.plot.plots.waveform import plot_waveform
 from usmlap.plot.studies import StudyLineConfig, StudyWaveform
-from usmlap.plot.waveform import plot_waveform
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.study import Study
 
