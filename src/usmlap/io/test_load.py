@@ -9,11 +9,13 @@ from usmlap.plot.config.scatter import ScatterConfig
 from usmlap.plot.config.waveform import WaveformConfig
 from usmlap.simulation.settings import OutingSettings
 from usmlap.simulation.study import Study
+from usmlap.vehicle.vehicle import Vehicle
 
 logger = logging.getLogger(__name__)
 
 
 LoadableModelRegistry = Registry[str, type[Serialisable]]()
+LoadableModelRegistry.register("vehicle", Vehicle)
 LoadableModelRegistry.register("study", Study)
 LoadableModelRegistry.register("outing", OutingSettings)
 LoadableModelRegistry.register("waveform", WaveformConfig)
@@ -26,7 +28,8 @@ def test_load(
     """Attempt to load a model from a file."""
     try:
         model.from_file(filepath)
-        # logger.info("Successfully loaded '%s'", filepath)
+        if not quiet:
+            logger.info("Successfully loaded '%s'", filepath)
         return True
     except LibraryLoadError:
         logger.error("Failed to load '%s'", filepath, exc_info=not quiet)
@@ -34,6 +37,7 @@ def test_load(
 
 
 MODELS_BY_DIR: dict[Path, type[Serialisable]] = {
+    Path(r"data/vehicles"): Vehicle,
     Path(r"sims/studies"): Study,
     Path(r"sims/outings"): OutingSettings,
     Path(r"plots/waveform"): WaveformConfig,

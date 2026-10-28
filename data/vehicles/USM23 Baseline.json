@@ -1,20 +1,20 @@
 {
   "print_name": "USM23 Baseline",
   "year": 2023,
-  "driver": "acceleration",
-  "aero": "USM26",
+  "driver": "data/drivers/acceleration.json",
+  "aero": "data/components/aero_packages/USM26.json",
   "brakes": {
     "front": {
-      "cylinder": "CP7855-94",
-      "caliper": "front_caliper",
-      "disc": "default",
-      "pad": "default"
+      "cylinder": "data/components/master_cylinders/CP7855-94.json",
+      "caliper": "data/components/brake_calipers/front_caliper.json",
+      "disc": "data/components/brake_discs/default.json",
+      "pad": "data/components/brake_pads/default.json"
     },
     "rear": {
-      "cylinder": "CP7855-96",
-      "caliper": "rear_caliper",
-      "disc": "default",
-      "pad": "default"
+      "cylinder": "data/components/master_cylinders/CP7855-96.json",
+      "caliper": "data/components/brake_calipers/rear_caliper.json",
+      "disc": "data/components/brake_discs/default.json",
+      "pad": "data/components/brake_pads/default.json"
     },
     "pedal_ratio": 3.6,
     "front_brake_bias": 0.681
@@ -34,9 +34,9 @@
     "equivalent_drivetrain_inertia": 5
   },
   "powertrain": {
-    "accumulator": "USM26",
-    "motor": "EMRAX_228",
-    "motor_controller": "BAMOCAR",
+    "accumulator": "data/components/accumulators/USM26.yaml",
+    "motor": "data/components/motors/EMRAX_228.json",
+    "motor_controller": "data/components/motor_controllers/BAMOCAR.json",
     "cooling_coefficient": 24
   },
   "steering": {
@@ -47,7 +47,7 @@
     "wheelbase": 1.535,
     "centre_of_gravity_height": 0.3,
     "front": {
-      "suspension_type": "decoupled",
+      "suspension_model": "decoupled",
       "track_width": 1.2,
       "roll_centre_height": 0.04,
       "heave_motion_ratio": 0.95,
@@ -56,7 +56,7 @@
       "roll_spring_rate": 87560
     },
     "rear": {
-      "suspension_type": "decoupled",
+      "suspension_model": "decoupled",
       "track_width": 1.2,
       "roll_centre_height": 0.06,
       "heave_motion_ratio": 0.95,
@@ -69,7 +69,7 @@
     "final_drive_ratio": 3.2
   },
   "tyres": {
-    "front": "hoozier_16x7.5-10_R20",
-    "rear": "hoozier_16x7.5-10_R20"
+    "front": "data/components/tyres/hoozier_16x7.5-10_R20.json",
+    "rear": "data/components/tyres/hoozier_16x7.5-10_R20.json"
   }
 }
