@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import typer
 
 from usmlap.core.filepath import OUTPUT_ROOT
-from usmlap.io.filemap import OutingFileMap, SimGroupFileMap, StudyFileMap
+from usmlap.io.filemap import OutingFileMap, SimFileMap, StudyFileMap
 from usmlap.io.parquet import read_parquet
 from usmlap.io.sim_folder import make_timestamped_folder
 from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
@@ -27,7 +27,7 @@ def simulate(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
     """Run a simulation from a .yaml file."""
     settings = SimSettings.from_file(yaml_path)
     output_path = make_timestamped_folder(output_dir, settings.sim_name)
-    filemap = SimGroupFileMap(output_path)
+    filemap = SimFileMap(output_path)
     run_simulation(settings, filemap)
 
 

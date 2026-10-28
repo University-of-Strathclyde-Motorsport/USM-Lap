@@ -21,9 +21,9 @@ class StudyFileMap:
     root: Path
 
     @property
-    def sim_groups(self) -> Iterator[SimGroupFileMap]:
+    def sims(self) -> Iterator[SimFileMap]:
         return (
-            SimGroupFileMap(subfolder)
+            SimFileMap(subfolder)
             for subfolder in self.sims_folder.iterdir()
             if subfolder.is_dir()
         )
@@ -51,7 +51,7 @@ class StudyFileMap:
 
 
 @dataclass(frozen=True, slots=True)
-class SimGroupFileMap:
+class SimFileMap:
     """A mapping of the files associated with a sim group.
     A sim group is a collection of sims using the same vehicle,
     such as for a competition simulation.
@@ -60,7 +60,7 @@ class SimGroupFileMap:
     root: Path
 
     @property
-    def sims(self) -> Iterator[OutingFileMap]:
+    def outings(self) -> Iterator[OutingFileMap]:
         return (
             OutingFileMap(subfolder)
             for subfolder in self.root.iterdir()
@@ -69,7 +69,7 @@ class SimGroupFileMap:
 
     @property
     def outings_by_id(self) -> dict[str, OutingFileMap]:
-        return {outing.outing_id: outing for outing in self.sims}
+        return {outing.outing_id: outing for outing in self.outings}
 
     @property
     def settings_file(self) -> Path:
@@ -136,23 +136,13 @@ class OutingFileMap:
         )
 
     @property
-    def sim_group(self) -> SimGroupFileMap:
-        return SimGroupFileMap(self.root.parent)
+    def sim(self) -> SimFileMap:
+        return SimFileMap(self.root.parent)
 
     @property
     def study(self) -> StudyFileMap:
-        return self.sim_group.study
+        return self.sim.study
 
     @property
     def outing_id(self) -> str:
         return self.root.stem
-
-
-if __name__ == "__main__":
-    root = Path(r"out\20261023012619_MassSweep")
-    for sim in root.iterdir():
-        if not sim.is_dir():
-            continue
-        print("=" * 30)
-        print(sim)
-        print(list(sim.iterdir()))

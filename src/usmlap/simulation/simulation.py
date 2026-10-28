@@ -8,7 +8,7 @@ import logging
 from rich import progress
 
 from usmlap.core.log import log_to_file
-from usmlap.io.filemap import OutingFileMap, SimGroupFileMap, StudyFileMap
+from usmlap.io.filemap import OutingFileMap, SimFileMap, StudyFileMap
 from usmlap.io.parquet import write_parquet
 from usmlap.io.sim_folder import get_unique_filepath
 from usmlap.model.vehicle_state import TransientVariables
@@ -73,11 +73,11 @@ def run_study(study: Study, filemap: StudyFileMap) -> None:
         sim_filepath = get_unique_filepath(
             filemap.sims_folder / settings.sim_name
         )
-        sim_filemap = SimGroupFileMap(sim_filepath)
+        sim_filemap = SimFileMap(sim_filepath)
         run_simulation(settings, sim_filemap)
 
 
-def run_simulation(settings: SimSettings, filemap: SimGroupFileMap) -> None:
+def run_simulation(settings: SimSettings, filemap: SimFileMap) -> None:
     """Run a simulation and save the results to a file."""
     settings.vehicle.parameters.write_file(filemap.vehicle_file)
     settings.write_file(filemap.settings_file)

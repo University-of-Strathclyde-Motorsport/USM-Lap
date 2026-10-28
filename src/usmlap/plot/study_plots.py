@@ -30,7 +30,7 @@ def generate_study_plots(study: StudyFileMap) -> None:
 
 def plot_study_waveform(study: StudyFileMap, config: StudyWaveform) -> Figure:
     """Plot a waveform of a set of sims in a study."""
-    outings = [sim.get_outing(config.outing_id) for sim in study.sim_groups]
+    outings = [sim.get_outing(config.outing_id) for sim in study.sims]
     outings = [outing for outing in outings if outing is not None]
     data = [read_parquet(outing.parquet_file) for outing in outings]
     #  TODO: this is messy, i don't like it
@@ -46,8 +46,7 @@ def plot_study_line_chart(
     fig, ax = plt.subplots(layout="constrained")
 
     sim_settings = [
-        SimSettings.from_file(sim_group.settings_file).as_dict()
-        for sim_group in study.sim_groups
+        SimSettings.from_file(sim.settings_file).as_dict() for sim in study.sims
     ]
 
     x_values = [
@@ -55,7 +54,7 @@ def plot_study_line_chart(
         for settings in sim_settings
     ]
 
-    outings = [sim.get_outing(config.outing_id) for sim in study.sim_groups]
+    outings = [sim.get_outing(config.outing_id) for sim in study.sims]
     laptime = [_get_laptime(outing) for outing in outings]
 
     ax.plot(x_values, laptime, color=config.colour, marker="o")
