@@ -3,7 +3,7 @@ This module defines exceptions raised by vehicle models."""
 
 from dataclasses import dataclass
 
-from usmlap.utils.datatypes import FourCorner
+from usmlap.core.datatypes import FourCorner
 
 
 class ModelError(Exception):

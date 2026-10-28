@@ -1,14 +1,37 @@
 """
-This module defines custom datatypes used throughout the project."""
+This module contains type definitions used throughout the library.
+"""
 
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
 from typing import Annotated, Any, NamedTuple
 
 import numpy as np
 from pydantic import BaseModel, Field
+
+type Percentage = Annotated[float, Field(ge=0, le=1)]
+
+type Array1D = np.ndarray[tuple[int], np.dtype[np.float64]]
+
+
+class Coordinate(BaseModel):
+    """
+    Represents a coordinate with x, y, and z components.
+
+    Attributes:
+        x (float): x component.
+        y (float): y component.
+        z (float): z component (default: 0).
+
+    """
+
+    x: float
+    y: float
+    z: float = 0
+
+    def norm(self) -> float:
+        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
 
 
 class FrontRear[T](NamedTuple):
@@ -163,80 +186,3 @@ class FourCorner[T](NamedTuple):
         if isinstance(other, float | int):
             return FourCorner(*(a * other for a in self))
         return NotImplemented
-
-
-type Percentage = Annotated[float, Field(ge=0, le=1)]
-
-
-class Coordinate(BaseModel):
-    """
-    Represents a coordinate with x, y, and z components.
-
-    Attributes:
-        x (float): x component.
-        y (float): y component.
-        z (float): z component (default: 0).
-
-    """
-
-    x: float
-    y: float
-    z: float = 0
-
-    def norm(self) -> float:
-        return math.sqrt(self.x**2 + self.y**2 + self.z**2)
-
-
-@dataclass
-class Vector3:
-    """
-    Represents a 3D vector with x, y, and z components.
-
-    Attributes:
-        x (float): x component.
-        y (float): y component.
-        z (float): z component.
-
-    """
-
-    x: float = 0
-    y: float = 0
-    z: float = 0
-
-    def __array__(self, dtype: np.dtype | None = None) -> np.ndarray:
-        if dtype:
-            return np.array([self.x, self.y, self.z], dtype=dtype)
-        return np.array([self.x, self.y, self.z])
-
-
-# @dataclass
-# class RotationMatrix(object):
-#     """
-#     Represents a rotation around the x, y, and z axes.
-
-#     Attributes:
-#         roll (float): Rotation around the x axis.
-#         pitch (float): Rotation around the y axis.
-#         yaw (float): Rotation around the z axis.
-#     """
-
-#     roll: float = 0
-#     pitch: float = 0
-#     yaw: float = 0
-
-#     def __array__(self) -> np.ndarray:
-#         return np.array(
-#             [
-#                 [
-#                     cos(self.pitch),
-#                     -sin(self.roll) * sin(self.pitch),
-#                     -cos(self.roll) * sin(self.pitch),
-#                 ],
-#                 [0, cos(self.roll), -sin(self.roll)],
-#                 [
-#                     sin(self.pitch),
-#                     sin(self.roll) * cos(self.pitch),
-#                     cos(self.roll) * cos(self.pitch),
-#                 ],
-#             ]
-#         )

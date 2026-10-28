@@ -4,8 +4,10 @@ This module contains code for generating a track mesh."""
 import math
 
 import numpy as np
+import numpy.typing as npt
 
-from usmlap.core.typedefs import Array1D
+from usmlap.core.datatypes import Array1D
+from usmlap.core.maths import interp_previous
 from usmlap.track.mesh import Mesh, TrackNode
 from usmlap.track.settings import TrackSettings
 from usmlap.track.track_data import (
@@ -17,7 +19,6 @@ from usmlap.track.track_data import (
     ShapeData,
     TrackData,
 )
-from usmlap.utils.array import interp_previous
 
 
 def generate_mesh(settings: TrackSettings) -> Mesh:
@@ -114,13 +115,7 @@ def _interpolate_curvature(
     if smooth:
         interpolated = np.interp(sample_position, position, curvature)
     else:
-        interpolated = np.array(
-            interp_previous(
-                sample_position.tolist(),
-                position.tolist(),
-                curvature.tolist(),
-            ),
-        )
+        interpolated = interp_previous(sample_position, position, curvature)
     return interpolated
 
 
@@ -193,7 +188,7 @@ def _interpolate_grip_factor(
 def _interpolate_sector(
     data: list[SectorData],
     sample_position: Array1D,
-) -> list[str]:
+) -> npt.NDArray[np.str_]:
     """
     Interpolate the sector of the track at a series of positions.
 
@@ -206,10 +201,10 @@ def _interpolate_sector(
 
     """
     if not data:
-        return [SectorData.default()] * len(sample_position)
-    label = [node.label for node in data]
-    start_position = [node.start_position for node in data]
-    return interp_previous(list(sample_position), start_position, label)
+        return np.full((1, len(sample_position)), SectorData.default())
+    label = np.array([node.label for node in data])
+    start_position = np.array([node.start_position for node in data])
+    return interp_previous(sample_position, start_position, label)
 
 
 def _calculate_inclination(position: Array1D, elevation: Array1D) -> Array1D:

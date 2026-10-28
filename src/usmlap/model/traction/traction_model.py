@@ -4,11 +4,11 @@ This module defines a common interface for vehicle models."""
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
+from usmlap.core.datatypes import FourCorner
 from usmlap.model.context import NodeContext
 from usmlap.model.powertrain.interface import PowertrainModelInterface
 from usmlap.model.tyre.tyre_model import TyreAttitude, TyreModel
 from usmlap.model.vehicle_state import CalculatedVehicleState, Trajectory
-from usmlap.utils.datatypes import FourCorner
 from usmlap.vehicle.aero import AeroAttitude
 from usmlap.vehicle.tyres import Tyre
 from usmlap.vehicle.vehicle import Vehicle

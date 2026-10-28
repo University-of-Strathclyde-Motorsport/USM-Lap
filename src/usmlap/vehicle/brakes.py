@@ -7,10 +7,10 @@ from typing import Annotated
 from annotated_types import Unit
 from pydantic import BaseModel, BeforeValidator, PositiveFloat, PositiveInt
 
+from usmlap.core.datatypes import FrontRear, Percentage
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.core.library import Serialisable
-from usmlap.utils import geometry
-from usmlap.utils.datatypes import FrontRear, Percentage
+from usmlap.core.maths import area_of_circle
 
 
 class MasterCylinder(
@@ -33,7 +33,7 @@ class MasterCylinder(
 
     @property
     def piston_area(self) -> float:
-        return geometry.area_of_circle(self.piston_diameter)
+        return area_of_circle(self.piston_diameter)
 
 
 class BrakeCaliper(
@@ -56,7 +56,7 @@ class BrakeCaliper(
 
     @property
     def piston_area(self) -> float:
-        return self.piston_count * geometry.area_of_circle(self.piston_diameter)
+        return self.piston_count * area_of_circle(self.piston_diameter)
 
 
 class BrakeDisc(

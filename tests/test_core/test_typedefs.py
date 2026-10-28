@@ -1,5 +1,5 @@
-"""Unit tests for the `usmlap.core.typedefs` module."""
+"""Unit tests for the `usmlap.core.datatypes` module."""
 
 
 def test_import_raises_no_errors():
-    import usmlap.core.typedefs  # noqa: F401
+    import usmlap.core.datatypes  # noqa: F401

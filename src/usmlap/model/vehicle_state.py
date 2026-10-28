@@ -7,7 +7,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from usmlap.utils.datatypes import FourCorner
+from usmlap.core.datatypes import FourCorner
 from usmlap.vehicle.powertrain.cell import CellState, StateOfCharge
 
 
