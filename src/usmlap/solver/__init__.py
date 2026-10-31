@@ -7,6 +7,6 @@ from usmlap.solver.qss.quasi_steady_state import QuasiSteadyStateSolver
 from usmlap.solver.qt.quasi_transient import QuasiTransientSolver
 from usmlap.solver.solver_interface import SolverInterface
 
-SolverRegistry = Registry[str, type[SolverInterface]]()
+SolverRegistry = Registry[str, type[SolverInterface]]("solver")
 SolverRegistry.register("quasi-steady-state", QuasiSteadyStateSolver)
 SolverRegistry.register("quasi-transient", QuasiTransientSolver)

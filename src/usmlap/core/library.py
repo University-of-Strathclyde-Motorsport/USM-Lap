@@ -45,7 +45,7 @@ class FileFormat:
             self.write_fcn(data, file)
 
 
-_FileFormatRegistry = Registry[str, FileFormat]()
+_FileFormatRegistry = Registry[str, FileFormat]("file format")
 _FileFormatRegistry.register(
     ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
 )
@@ -71,24 +71,7 @@ def get_file_format(filepath: Path | str) -> FileFormat:
     else:
         format_ = filepath
 
-    file_format = _FileFormatRegistry.get(format_)
-    if file_format is None:
-        raise UnrecognisedFileFormatError(format_)
-    return file_format
-
-
-@dataclass
-class UnrecognisedFileFormatError(Exception):
-    """Raised if a file format is not recognised."""
-
-    file_format: str
-
-    def __str__(self) -> str:
-        available = "', '".join(_FileFormatRegistry.list_keys())
-        return (
-            f"Invalid file format '{self.file_format}'; "
-            f"available: '{available}'"
-        )
+    return _FileFormatRegistry.get_or_raise(format_)
 
 
 @dataclass

@@ -8,7 +8,7 @@ from usmlap.model.traction.four_corner import FourCornerModel
 from usmlap.model.traction.point_mass import PointMass
 from usmlap.model.traction.traction_model import TractionModel
 
-TractionModelRegistry = Registry[str, type[TractionModel]]()
+TractionModelRegistry = Registry[str, type[TractionModel]]("traction model")
 TractionModelRegistry.register("point-mass", PointMass)
 TractionModelRegistry.register("bicycle", Bicycle)
 TractionModelRegistry.register("four-corner", FourCornerModel)

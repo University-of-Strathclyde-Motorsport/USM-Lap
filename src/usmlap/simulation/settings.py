@@ -43,7 +43,7 @@ class SimSettings(Serialisable):
     plot_colour: str | None = None
     solver: Annotated[
         type[SolverInterface],
-        BeforeValidator(SolverRegistry.get),
+        BeforeValidator(SolverRegistry.get_or_raise),
         PlainSerializer(SolverRegistry.get_key, return_type=str),
     ] = QT
     outings: Annotated[

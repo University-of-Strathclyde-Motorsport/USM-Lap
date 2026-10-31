@@ -6,5 +6,7 @@ from usmlap.core.registry import Registry
 from usmlap.model.powertrain.interface import PowertrainModelInterface
 from usmlap.model.powertrain.single_motor_rwd import SingleMotorRWD
 
-PowertrainModelRegistry = Registry[str, type[PowertrainModelInterface]]()
+PowertrainModelRegistry = Registry[str, type[PowertrainModelInterface]](
+    "powertrain model"
+)
 PowertrainModelRegistry.register("single-motor-rwd", SingleMotorRWD)

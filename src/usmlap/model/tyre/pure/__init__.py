@@ -7,6 +7,6 @@ from usmlap.model.tyre.pure.constant import ConstantTyre
 from usmlap.model.tyre.pure.linear import LinearTyre
 from usmlap.model.tyre.tyre_model import PureTyreModel
 
-PureTyreModelRegistry = Registry[str, type[PureTyreModel]]()
+PureTyreModelRegistry = Registry[str, type[PureTyreModel]]("pure tyre model")
 PureTyreModelRegistry.register("constant", ConstantTyre)
 PureTyreModelRegistry.register("linear", LinearTyre)

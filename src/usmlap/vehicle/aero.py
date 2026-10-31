@@ -82,7 +82,7 @@ class ConstantAero(AeroModelInterface):
         return package.drag_coefficient
 
 
-AeroModelRegistry = Registry[str, type[AeroModelInterface]]()
+AeroModelRegistry = Registry[str, type[AeroModelInterface]]("aero model")
 AeroModelRegistry.register("constant", ConstantAero)
 
 
@@ -105,7 +105,7 @@ class AeroPackage(
     drag_coefficient: float = Field(gt=0)
     aero_model: Annotated[
         type[AeroModelInterface],
-        BeforeValidator(AeroModelRegistry.get),
+        BeforeValidator(AeroModelRegistry.get_or_raise),
         PlainSerializer(AeroModelRegistry.get_key),
     ]
 

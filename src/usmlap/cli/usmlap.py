@@ -48,15 +48,11 @@ def study(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
 @app.command()
 def load(model: str, filepath: Path) -> None:
     """Attempt to load an object from a file."""
-    model_type = LoadableModelRegistry.get(model)
-    if model_type is None:
-        logger.error(
-            "Invalid model type '%s'; available: '%s'",
-            model,
-            "', '".join(sorted(LoadableModelRegistry.list_keys())),
-        )
-        raise typer.Exit(-1)
-
+    try:
+        model_type = LoadableModelRegistry.get_or_raise(model)
+    except KeyError as e:
+        logger.error(e)
+        raise typer.Exit(-1) from None
     test_load(model_type, filepath)
 
 

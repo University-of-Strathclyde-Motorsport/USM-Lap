@@ -41,19 +41,19 @@ class TyreModelSettings(BaseModel):
 
     longitudinal: Annotated[
         type[PureTyreModel],
-        BeforeValidator(PureTyreModelRegistry.get),
+        BeforeValidator(PureTyreModelRegistry.get_or_raise),
         PlainSerializer(PureTyreModelRegistry.get_key),
     ] = LinearTyre
 
     lateral: Annotated[
         type[PureTyreModel],
-        BeforeValidator(PureTyreModelRegistry.get),
+        BeforeValidator(PureTyreModelRegistry.get_or_raise),
         PlainSerializer(PureTyreModelRegistry.get_key),
     ] = LinearTyre
 
     combined: Annotated[
         type[CombinedTyreModel],
-        BeforeValidator(CombinedTyreModelRegistry.get),
+        BeforeValidator(CombinedTyreModelRegistry.get_or_raise),
         PlainSerializer(CombinedTyreModelRegistry.get_key),
     ] = FrictionEllipse
 
@@ -70,13 +70,13 @@ class VehicleModelSettings(BaseModel):
 
     powertrain: Annotated[
         type[PowertrainModelInterface],
-        BeforeValidator(PowertrainModelRegistry.get),
+        BeforeValidator(PowertrainModelRegistry.get_or_raise),
         PlainSerializer(PowertrainModelRegistry.get_key, return_type=str),
     ] = SingleMotorRWD
 
     traction: Annotated[
         type[TractionModel],
-        BeforeValidator(TractionModelRegistry.get),
+        BeforeValidator(TractionModelRegistry.get_or_raise),
         PlainSerializer(TractionModelRegistry.get_key, return_type=str),
     ] = FourCornerModel
 

@@ -25,7 +25,9 @@ class DecoupledSuspension(SuspensionModel):
     """
 
 
-SuspensionModelRegistry = Registry[str, type[SuspensionModel]]()
+SuspensionModelRegistry = Registry[str, type[SuspensionModel]](
+    "suspension model"
+)
 SuspensionModelRegistry.register("decoupled", DecoupledSuspension)
 
 
@@ -34,7 +36,7 @@ class SuspensionAxle(BaseModel):
 
     suspension_model: Annotated[
         type[SuspensionModel],
-        BeforeValidator(SuspensionModelRegistry.get),
+        BeforeValidator(SuspensionModelRegistry.get_or_raise),
         PlainSerializer(SuspensionModelRegistry.get_key),
     ]
     roll_centre_height: Annotated[PositiveFloat, Unit("m")]

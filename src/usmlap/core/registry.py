@@ -10,7 +10,11 @@ from collections.abc import Iterable
 class Registry[KT, VT]:
     """Generic implementation of the registry pattern."""
 
-    def __init__(self) -> None:
+    _name: str | None
+    _store: dict[KT, VT]
+
+    def __init__(self, name: str | None = None) -> None:
+        self._name = name
         self._store: dict[KT, VT] = {}
 
     def __contains__(self, key: KT) -> bool:
@@ -42,6 +46,19 @@ class Registry[KT, VT]:
         """Retrieve a value by its key.
 
         Args:
+            key (`KT`): The unique identifier to look up.
+
+        Returns:
+            `VT  | None`: The stored value associated with `key`.
+                Returns `None` if `key` is not registered.
+        """
+        return self._store.get(key)
+
+    def get_or_raise(self, key: KT) -> VT:
+        """Retrieve a value by its key.
+        Raise an error if the key is no registered.
+
+        Args:
             key (KT): The unique identifier to look up.
 
         Returns:
@@ -52,7 +69,11 @@ class Registry[KT, VT]:
         """
         if key in self:
             return self._store[key]
-        return None
+
+        name = self._name or "key"
+        available = "', '".join(str(k) for k in self.list_keys())
+        msg = f"Unrecognised {name} '{key}'; available: '{available}'"
+        raise KeyError(msg)
 
     def get_key(self, value: VT) -> KT:
         """Get the first key corresponding to a value in the registry.

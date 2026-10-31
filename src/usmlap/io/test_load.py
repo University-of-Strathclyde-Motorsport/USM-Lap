@@ -32,7 +32,7 @@ from usmlap.vehicle.vehicle import Vehicle
 logger = logging.getLogger(__name__)
 
 
-LoadableModelRegistry = Registry[str, type[Serialisable]]()
+LoadableModelRegistry = Registry[str, type[Serialisable]]("model")
 LoadableModelRegistry.register("vehicle", Vehicle)
 LoadableModelRegistry.register("study", Study)
 LoadableModelRegistry.register("outing", OutingSettings)
