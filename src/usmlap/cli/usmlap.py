@@ -3,20 +3,24 @@
 import logging
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import typer
+lazy import matplotlib.pyplot as plt
 
-from usmlap.core.filepath import OUTPUT_ROOT
-from usmlap.io.filemap import OutingFileMap, SimFileMap, StudyFileMap
-from usmlap.io.parquet import read_parquet
-from usmlap.io.sim_folder import make_timestamped_folder
-from usmlap.io.test_load import LoadableModelRegistry, test_load, test_load_all
-from usmlap.plot.config.waveform import WaveformConfig
-from usmlap.plot.plots.waveform import plot_waveform
-from usmlap.plot.study_plots import generate_study_plots
-from usmlap.simulation.settings import SimSettings
-from usmlap.simulation.simulation import run_simulation, run_study
-from usmlap.simulation.study import Study
+lazy from usmlap.core.filepath import OUTPUT_ROOT
+lazy from usmlap.io.filemap import OutingFileMap, SimFileMap, StudyFileMap
+lazy from usmlap.io.parquet import read_parquet
+lazy from usmlap.io.sim_folder import make_timestamped_folder
+lazy from usmlap.io.test_load import (
+    LoadableModelRegistry,
+    test_load,
+    test_load_all,
+)
+lazy from usmlap.plot.config.waveform import WaveformConfig
+lazy from usmlap.plot.plots.waveform import plot_waveform
+lazy from usmlap.plot.study_plots import generate_study_plots
+lazy from usmlap.simulation.settings import SimSettings
+lazy from usmlap.simulation.simulation import run_simulation, run_study
+lazy from usmlap.simulation.study import Study
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +58,6 @@ def load(model: str, filepath: Path) -> None:
         raise typer.Exit(-1)
 
     test_load(model_type, filepath)
-    raise typer.Exit(0)
 
 
 @app.command()
