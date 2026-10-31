@@ -5,6 +5,7 @@ from pathlib import Path
 
 import typer
 
+from usmlap.core.library import get_file_format
 from usmlap.track.track_data import (
     TRACK_LIBRARY,
     load_track_from_spreadsheet,
@@ -47,3 +48,32 @@ def convert_excel_track(
 
     track_data = load_track_from_spreadsheet(excel_file)
     save_track_data(track_data, output_path, overwrite=overwrite)
+
+
+@app.command()
+def convert(
+    filepath: Path,
+    format: str,
+    output_path: Path | None = OUTPUT_OPTION,
+    overwrite: bool = OVERWRITE_OPTION,
+) -> None:
+    """Convert a data file from one format to another."""
+    input_format = get_file_format(filepath)
+    output_format = get_file_format(format)
+
+    if output_path is None:
+        output_path = filepath.with_suffix(format)
+
+    if not overwrite and output_path.exists():
+        logger.error(
+            (
+                "%s already exists. "
+                "Specify an alternative output_path or use the overwrite flag"
+            ),
+            output_path,
+        )
+        raise typer.Exit(-1)
+
+    data = input_format.read_file(filepath)
+    output_format.write_file(output_path, data)
+    logger.info("Successfully converted '%s' to '%s'", filepath, output_path)

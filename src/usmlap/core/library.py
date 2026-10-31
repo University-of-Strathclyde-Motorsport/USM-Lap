@@ -36,14 +36,59 @@ class FileFormat:
     read_fcn: Callable[[TextIOWrapper], dict[str, Any]]
     write_fcn: Callable[[dict[str, Any], TextIOWrapper], None]
 
+    def read_file(self, filepath: Path) -> dict[str, Any]:
+        with open(filepath, "r", encoding="utf-8") as file:
+            return self.read_fcn(file)
 
-FileFormatRegistry = Registry[str, FileFormat]()
-FileFormatRegistry.register(
+    def write_file(self, filepath: Path, data: dict[str, Any]) -> None:
+        with open(filepath, "w", encoding="utf-8") as file:
+            self.write_fcn(data, file)
+
+
+_FileFormatRegistry = Registry[str, FileFormat]()
+_FileFormatRegistry.register(
     ".json", FileFormat(read_fcn=json.load, write_fcn=json.dump)
 )
-FileFormatRegistry.register(
+_FileFormatRegistry.register(
     ".yaml", FileFormat(read_fcn=load_yaml_dict, write_fcn=yamlrocks.dump)
 )
+
+
+def get_file_format(filepath: Path | str) -> FileFormat:
+    """Get the file format for a filepath.
+
+    Args:
+        filepath (`Path`): The filepath.
+
+    Returns:
+        `FileFormat`: The file format of the filepath.
+
+    Raises:
+        `UnrecognisedFileFormatError`:  If the file format is not recognised.
+    """
+    if isinstance(filepath, Path):
+        format_ = filepath.suffix
+    else:
+        format_ = filepath
+
+    file_format = _FileFormatRegistry.get(format_)
+    if file_format is None:
+        raise UnrecognisedFileFormatError(format_)
+    return file_format
+
+
+@dataclass
+class UnrecognisedFileFormatError(Exception):
+    """Raised if a file format is not recognised."""
+
+    file_format: str
+
+    def __str__(self) -> str:
+        available = "', '".join(_FileFormatRegistry.list_keys())
+        return (
+            f"Invalid file format '{self.file_format}'; "
+            f"available: '{available}'"
+        )
 
 
 @dataclass
@@ -105,13 +150,13 @@ class Serialisable(BaseModel):
 
     @classmethod
     def from_file(cls, filepath: Path) -> Self:
+        file_format = get_file_format(filepath)
+
         try:
             logger.debug("Loading %s from '%s'", cls.__name__, filepath)
-            file_format = FileFormatRegistry.get(filepath.suffix)
-            with open(filepath, "r", encoding="utf-8") as file:
-                data = file_format.read_fcn(file)
+            data = file_format.read_file(filepath)
             return cls.model_validate(data)
-        except Exception as e:
+        except Exception as e:  # TODO: handle each error separately
             raise LibraryLoadError(cls.__name__, filepath) from e
 
     def write_file(self, filepath: Path, *, overwrite: bool = False) -> None:
@@ -123,12 +168,12 @@ class Serialisable(BaseModel):
             )
             return
 
+        file_format = get_file_format(filepath)
+        filepath.parent.mkdir(exist_ok=True, parents=True)
+        data = self.model_dump(mode="json")
+
         try:
-            file_format = FileFormatRegistry.get(filepath.suffix)
-            filepath.parent.mkdir(exist_ok=True, parents=True)
-            with open(filepath, "w", encoding="utf-8") as file:
-                data = self.model_dump(mode="json")
-                file_format.write_fcn(data, file)
+            file_format.write_file(filepath, data)
             logger.info("%s written to '%s'", self.__class__.__name__, filepath)
         except Exception as e:
             raise LibraryWriteError(self.__class__.__name__, filepath) from e

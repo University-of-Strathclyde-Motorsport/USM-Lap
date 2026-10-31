@@ -1,5 +1,6 @@
 """Main command-line interface for USMLap."""
 
+import logging
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -16,6 +17,8 @@ from usmlap.plot.study_plots import generate_study_plots
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import run_simulation, run_study
 from usmlap.simulation.study import Study
+
+logger = logging.getLogger(__name__)
 
 app = typer.Typer()
 
@@ -42,7 +45,16 @@ def study(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
 def load(model: str, filepath: Path) -> None:
     """Attempt to load an object from a file."""
     model_type = LoadableModelRegistry.get(model)
+    if model_type is None:
+        logger.error(
+            "Invalid model type '%s'; available: '%s'",
+            model,
+            "', '".join(sorted(LoadableModelRegistry.list_keys())),
+        )
+        raise typer.Exit(-1)
+
     test_load(model_type, filepath)
+    raise typer.Exit(0)
 
 
 @app.command()

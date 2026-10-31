@@ -38,7 +38,7 @@ class Registry[KT, VT]:
             raise ValueError(f"Key '{key}' is already registered.")
         self._store[key] = value
 
-    def get(self, key: KT) -> VT:
+    def get(self, key: KT) -> VT | None:
         """Retrieve a value by its key.
 
         Args:
@@ -52,7 +52,7 @@ class Registry[KT, VT]:
         """
         if key in self:
             return self._store[key]
-        raise KeyError(f"Key '{key}' not found in registry.")
+        return None
 
     def get_key(self, value: VT) -> KT:
         """Get the first key corresponding to a value in the registry.
