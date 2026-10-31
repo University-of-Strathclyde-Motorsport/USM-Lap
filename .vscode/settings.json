@@ -2,6 +2,9 @@
   "python-envs.defaultEnvManager": "ms-python.python:venv",
   "python.analysis.extraPaths": ["./src/usmlap"],
   "mermaidExportPro.autoExport": false,
+  "yaml.schemas": {
+    "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
+  },
   "json.schemas": [
     {
       "fileMatch": ["/data/components/accumulators/*"],

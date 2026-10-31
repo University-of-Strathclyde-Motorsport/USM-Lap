@@ -32,6 +32,9 @@ package = true
 [dependency-groups]
 dev = [
     "graphviz>=0.21",
+    "mkdocs-autoapi>=0.4.1",
+    "mkdocs-material>=9.8.0",
+    "mkdocstrings[python]>=1.0.8",
     "pre-commit>=4.6.2",
     "pylint>=4.0.4",
     "pytest>=8.4.2",

@@ -28,6 +28,12 @@ app = typer.Typer()
 
 
 @app.command()
+def hello() -> None:
+    """Print a greeting to check the project has been correctly installed."""
+    typer.echo("Hello from USM Lap!")
+
+
+@app.command()
 def simulate(yaml_path: Path, output_dir: Path = OUTPUT_ROOT) -> None:
     """Run a simulation from a .yaml file."""
     settings = SimSettings.from_file(yaml_path)
