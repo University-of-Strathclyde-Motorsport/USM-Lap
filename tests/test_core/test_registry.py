@@ -18,10 +18,9 @@ def test_registering_duplicate_key_raises_error():
         registry.register("abc", 2)
 
 
-def test_getting_missing_key_raises_error():
+def test_getting_missing_key_returns_None():
     registry = Registry[str, int]()
-    with pytest.raises(KeyError):
-        registry.get("abc")
+    assert registry.get("abc") is None
 
 
 def test_get_key_by_value():

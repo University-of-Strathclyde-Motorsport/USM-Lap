@@ -17,7 +17,6 @@ from usmlap.plot.style import USM_BLUE, USM_LIGHT_BLUE, USM_RED
 from usmlap.simulation.settings import SimSettings
 from usmlap.telemetry.channel.channel import TelemetryChannel
 from usmlap.telemetry.channel.library import (
-    Curvature,
     LateralAcceleration,
     LatLT,
     LongitudinalAcceleration,
@@ -45,14 +44,12 @@ acceleration_channels: list[TelemetryChannel] = [
     MotorPower(),
 ]
 skidpad_channels: list[TelemetryChannel] = [
-    Curvature(),
     Velocity(),
     LateralAcceleration(),
     LatLT(),
 ]
 
 autocross_channels: list[TelemetryChannel] = [
-    Curvature(),
     Velocity(),
     LongitudinalAcceleration(),
     LateralAcceleration(),

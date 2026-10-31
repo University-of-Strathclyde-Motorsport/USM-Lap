@@ -69,15 +69,6 @@ class Time(DerivedDataChannel, unit=ureg.second, label="Time"):
         return fcn.cumulative_sum(NodeTime())(solution)
 
 
-class Curvature(PrimitiveDataChannel, unit=1 / ureg.meter, label="Curvature"):
-    """
-    Curvature of the track."""
-
-    @classmethod
-    def read_value(cls, node: SolutionNode) -> float:
-        return node.track_node.curvature
-
-
 class LateralAcceleration(
     PrimitiveDataChannel,
     unit=ureg.meter / ureg.second**2,
