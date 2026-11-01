@@ -5,12 +5,12 @@ from textwrap import wrap
 
 from rich import progress
 
-from usmlap.analysis.sensitivity import points_sensitivity
 from usmlap.competition.competition import Competition
 from usmlap.plot.points_sensitivities import (
     PointsSensitivityData,
     plot_points_sensitivities,
 )
+from usmlap.simulation.sensitivity import points_sensitivity
 from usmlap.simulation.settings import SimSettings
 from usmlap.vehicle.parameters import list_all_parameters
 from usmlap.vehicle.vehicle import Vehicle

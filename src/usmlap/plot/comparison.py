@@ -1,12 +1,67 @@
 """This module contains functions for plotting comparisons between vehicles."""
 
+from collections.abc import Generator
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator
 
-from usmlap.analysis.compare import ComparisonResults
 from usmlap.competition.points import CompetitionPoints
 from usmlap.plot.style import COLOURMAP
+from usmlap.vehicle.vehicle import Vehicle
+
+
+class ComparisonResults:
+    """Data structure containing the results of a comparison simulation."""
+
+    _vehicles: list[Vehicle]
+    _points: list[CompetitionPoints]
+
+    def __init__(self) -> None:
+        self._vehicles = []
+        self._points = []
+
+    def add_result(self, vehicle: Vehicle, points: CompetitionPoints) -> None:
+        """Add a result to the comparison.
+
+        Args:
+            vehicle (Vehicle): The vehicle that was simulated.
+            points (CompetitionPoints): Competition points for the vehicle.
+
+        """
+        self._vehicles.append(vehicle)
+        self._points.append(points)
+
+    def __iter__(self) -> Generator[tuple[Vehicle, CompetitionPoints]]:
+        yield from zip(self._vehicles, self._points, strict=True)
+
+    def get_vehicles(self) -> list[Vehicle]:
+        """Get a list of the vehicles that were simulated.
+
+        Returns:
+            vehicles (list[Vehicle]): The vehicles that were simulated.
+
+        """
+        return self._vehicles
+
+    def get_points(self) -> list[CompetitionPoints]:
+        """Get a list of results.
+
+        Returns:
+            points (list[CompetitionPoints]): The results to the simulations.
+
+        """
+        return self._points
+
+    def get_vehicle_labels(self) -> list[str]:
+        """Get a list of labels for the vehicles that were simulated.
+
+        Returns:
+            labels (list[str]): The labels for the vehicles.
+
+        """
+        return [vehicle.label for vehicle in self._vehicles]
+
 
 type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 
