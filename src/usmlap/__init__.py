@@ -1,6 +1,4 @@
-"""
-Initialise the usmlap project.
-"""
+"""Initialise the usmlap project."""
 
 import matplotlib
 

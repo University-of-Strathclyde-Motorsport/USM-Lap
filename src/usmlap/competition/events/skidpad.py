@@ -1,5 +1,4 @@
-"""
-This module defines the skidpad event at Formula Student."""
+"""This module defines the skidpad event at Formula Student."""
 
 from dataclasses import dataclass
 
@@ -12,7 +11,7 @@ from usmlap.competition.points import (
 )
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
@@ -25,9 +24,7 @@ LEFT_CIRCLE_TIMED_SECTOR = "Left Circle 2"
 
 @dataclass
 class Skidpad(EventInterface, label="skidpad"):
-    """
-    Skidpad event at Formula Student.
-    """
+    """Skidpad event at Formula Student."""
 
     def simulate_event(
         self, vehicle: Vehicle, settings: SimSettings
@@ -54,8 +51,7 @@ class Skidpad(EventInterface, label="skidpad"):
         return {"skidpad": points}
 
     def _generate_mesh(self, resolution: float) -> Mesh:
-        """
-        Generate a track mesh for the skidpad event.
+        """Generate a track mesh for the skidpad event.
 
         The track has 5 sectors:
             1. Runup

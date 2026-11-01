@@ -1,5 +1,4 @@
-"""
-This module defines the interface for Formula Student events."""
+"""This module defines the interface for Formula Student events."""
 
 from __future__ import annotations
 
@@ -8,7 +7,7 @@ from typing import NamedTuple
 
 from usmlap.competition.points import CompetitionData, CompetitionPoints
 from usmlap.simulation.settings import SimSettings
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.vehicle.vehicle import Vehicle
 
@@ -22,8 +21,7 @@ class EventTuple[T](NamedTuple):
 
 
 class EventInterface(ABC):
-    """
-    Interface for Formula Student events.
+    """Interface for Formula Student events.
 
     Attributes:
         label (str): Name of the event.

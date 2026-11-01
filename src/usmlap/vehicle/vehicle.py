@@ -1,5 +1,4 @@
-"""
-This module models the full vehicle."""
+"""This module models the full vehicle."""
 
 from typing import Annotated
 
@@ -21,8 +20,7 @@ from usmlap.vehicle.tyres import Tyres
 
 
 class Vehicle(Serialisable, library=LIBRARY_ROOT / "vehicles"):
-    """
-    The full vehicle.
+    """The full vehicle.
 
     Attributes:
         metadata (Metadata): The metadata of the vehicle.

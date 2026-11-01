@@ -1,5 +1,4 @@
-"""
-This module defines the acceleration event at Formula Student."""
+"""This module defines the acceleration event at Formula Student."""
 
 from dataclasses import dataclass
 
@@ -12,7 +11,7 @@ from usmlap.competition.points import (
 )
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
@@ -23,9 +22,7 @@ ACCELERATION_TRACK = r"data\tracks\FSAE Acceleration.json"
 
 @dataclass
 class Acceleration(EventInterface, label="acceleration"):
-    """
-    Acceleration event at Formula Student.
-    """
+    """Acceleration event at Formula Student."""
 
     def simulate_event(
         self,
@@ -47,8 +44,7 @@ class Acceleration(EventInterface, label="acceleration"):
         return {"acceleration": points}
 
     def _generate_mesh(self, resolution: float) -> Mesh:
-        """
-        Generate a track mesh for the acceleration event.
+        """Generate a track mesh for the acceleration event.
 
         Args:
             resolution (float): The resolution of the mesh.

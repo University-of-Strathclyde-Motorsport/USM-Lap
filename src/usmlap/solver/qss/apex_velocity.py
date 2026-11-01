@@ -1,5 +1,4 @@
-"""
-This module implements the apex solver,
+"""This module implements the apex solver,
 which calculates the theoretical maximum velocity at each node,
 assuming zero longitudinal acceleration.
 """
@@ -26,8 +25,7 @@ def solve_apex_velocity(
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
 ) -> float:
-    """
-    Calculate the apex velocity at a node.
+    """Calculate the apex velocity at a node.
     This is the maximum velocity that the vehicle can travel at
     while maintaining lateral traction,
     with zero longitudinal acceleration.

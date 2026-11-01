@@ -1,5 +1,4 @@
-"""
-This module contains code for carrying out a 1D sweep of a parameter."""
+"""This module contains code for carrying out a 1D sweep of a parameter."""
 
 import logging
 from collections.abc import Generator
@@ -18,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SweepSettings:
-    """
-    Settings for a 1D sweep of a parameter.
+    """Settings for a 1D sweep of a parameter.
 
     Attributes:
         parameter (type[Parameter[float]]): The parameter to sweep.
@@ -49,8 +47,7 @@ class SweepSettings:
         self,
         baseline_vehicle: Vehicle,
     ) -> Generator[tuple[float, Vehicle]]:
-        """
-        Generate a list of vehicles for a sweep.
+        """Generate a list of vehicles for a sweep.
 
         Args:
             baseline_vehicle (Vehicle): The baseline vehicle to use.
@@ -98,8 +95,7 @@ def sweep_1d(
     competition: Competition,
     sweep_settings: SweepSettings,
 ) -> SweepResults:
-    """
-    Carry out a 1D sweep of a parameter.
+    """Carry out a 1D sweep of a parameter.
 
     Args:
         baseline_vehicle (Vehicle): The vehicle to simulate.

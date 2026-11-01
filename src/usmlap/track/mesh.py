@@ -1,5 +1,4 @@
-"""
-This module defines nodes and meshes for a track."""
+"""This module defines nodes and meshes for a track."""
 
 from __future__ import annotations
 
@@ -15,8 +14,7 @@ from usmlap.track.track_data import Configuration
 
 
 class TrackNode(BaseModel):
-    """
-    A node of a track.
+    """A node of a track.
 
     Attributes:
         Position (float): The position of the node from the start of the track.
@@ -78,8 +76,7 @@ class TrackNode(BaseModel):
 
 @dataclass
 class Mesh:
-    """
-    A mesh of a track.
+    """A mesh of a track.
 
     Attributes:
         nodes (list[Node]): A list of nodes making up the track.
@@ -121,8 +118,7 @@ class Mesh:
             position += node.length
 
     def get_repeating_mesh(self, number_of_laps: int) -> Mesh:
-        """
-        Generate a new mesh that repeats the track a number of times.
+        """Generate a new mesh that repeats the track a number of times.
 
         Args:
             number_of_laps (int): The number of times to repeat the track.

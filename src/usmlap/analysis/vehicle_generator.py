@@ -1,5 +1,4 @@
-"""
-This module contains utility functions for generating vehicles."""
+"""This module contains utility functions for generating vehicles."""
 
 from collections.abc import Collection, Iterator
 from dataclasses import dataclass
@@ -11,8 +10,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 
 def linspace(start: float, end: float, steps: int) -> list[float]:
-    """
-    Generate a list of `steps` evenly spaced values between `start` and `end`.
+    """Get a list of `steps` evenly spaced values between `start` and `end`.
 
     Example:
         >>> linspace(0, 10, 6)
@@ -23,8 +21,7 @@ def linspace(start: float, end: float, steps: int) -> list[float]:
 
 
 def geomspace(start: float, end: float, steps: int) -> list[float]:
-    """
-    Generate a list of `steps` logarithmically spaced values
+    """Generate a list of `steps` logarithmically spaced values
     between `start` and `end`.
 
     Example:
@@ -36,8 +33,7 @@ def geomspace(start: float, end: float, steps: int) -> list[float]:
 
 
 def step_array(start: float, end: float, step_size: float) -> list[float]:
-    """
-    Generate a list of values between `start` and `end`
+    """Generate a list of values between `start` and `end`
     with a specified `step_size`.
     The end value may not be included in the list.
 
@@ -51,8 +47,7 @@ def step_array(start: float, end: float, step_size: float) -> list[float]:
 
 @dataclass
 class VehicleGenerator[T](Collection[Vehicle]):
-    """
-    Generate a list of vehicles from a set of discrete values."""
+    """Generate a list of vehicles from a set of discrete values."""
 
     baseline_vehicle: Vehicle
     parameter: type[Parameter[T]]

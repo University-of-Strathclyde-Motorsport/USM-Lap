@@ -1,5 +1,4 @@
-"""
-This module defines a common interface for powertrain models."""
+"""This module defines a common interface for powertrain models."""
 
 from abc import ABC, abstractmethod
 
@@ -7,9 +6,7 @@ from usmlap.model.context import NodeContext
 
 
 class PowertrainModelInterface(ABC):
-    """
-    Abstract base class for powertrain models.
-    """
+    """Abstract base class for powertrain models."""
 
     @abstractmethod
     def required_torque(

@@ -1,5 +1,4 @@
-"""
-This module models the electric powertrain of a vehicle."""
+"""This module models the electric powertrain of a vehicle."""
 
 from __future__ import annotations
 
@@ -16,15 +15,13 @@ COOLING_TEMPERATURE_THRESHOLD = 45
 
 
 class PowertrainInterface(ABC, BaseModel):
-    """
-    Abstract base class for powertrain models."""
+    """Abstract base class for powertrain models."""
 
     # TODO: Why is BaseModel inheritance required?
 
 
 class RWDPowertrain(PowertrainInterface):
-    """
-    Implements a single motor, rear wheel drive electric powertrain.
+    """Implements a single motor, rear wheel drive electric powertrain.
 
     Attributes:
         accumulator (Accumulator): The accumulator storing energy.
@@ -45,8 +42,7 @@ class RWDPowertrain(PowertrainInterface):
     discharge_current_limit: float = 1
 
     def get_discharge_current(self, cell_state: CellState) -> float:
-        """
-        Get the available discharge current at a given state of charge.
+        """Get the available discharge current at a given state of charge.
 
         Above the derate point, the maximum discharge current is available.
         Below the derate point, the current is scaled linearly to zero.
@@ -64,8 +60,7 @@ class RWDPowertrain(PowertrainInterface):
         return maximum_discharge_current * self.discharge_current_limit
 
     def get_voltage_drop(self, cell_state: CellState, current: float) -> float:
-        """
-        Get the voltage drop across the accumulator and motor controller.
+        """Get the voltage drop across the accumulator and motor controller.
 
         Args:
             current (float): Current drawn from the accumulator.
@@ -81,8 +76,7 @@ class RWDPowertrain(PowertrainInterface):
         return current * resistance
 
     def get_motor_voltage(self, cell_state: CellState, current: float) -> float:
-        """
-        Calculate the voltage applied to the motor.
+        """Calculate the voltage applied to the motor.
 
         Args:
             state_of_charge (float): State of charge of the accumulator.
@@ -99,8 +93,7 @@ class RWDPowertrain(PowertrainInterface):
     def get_knee_speed(
         self, cell_state: CellState, current: float | None = None
     ) -> float:
-        """
-        Calculate the knee speed of the motor.
+        """Calculate the knee speed of the motor.
 
         Args:
             state_of_charge (float): State of charge of the accumulator.
@@ -119,8 +112,7 @@ class RWDPowertrain(PowertrainInterface):
         return knee_speed
 
     def get_maximum_motor_speed(self, cell_state: CellState) -> float:
-        """
-        Calculate the maximum speed of the motor.
+        """Calculate the maximum speed of the motor.
 
         Args:
             state_of_charge (float): State of charge of the accumulator.

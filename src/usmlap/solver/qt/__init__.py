@@ -1,3 +1,1 @@
-"""
-This subpackage implements a Quasi Transient laptime solver.
-"""
+"""This subpackage implements a Quasi Transient laptime solver."""

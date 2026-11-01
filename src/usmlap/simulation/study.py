@@ -1,5 +1,4 @@
-"""
-This module defines studies: sets of simulations which modify a setting or
+"""This module defines studies: sets of simulations which modify a setting or
 parameter to determine the impact on laptime or simulation behaviour.
 """
 

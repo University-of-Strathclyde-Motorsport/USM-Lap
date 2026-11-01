@@ -1,5 +1,4 @@
-"""
-This module contains code for calculating points from competition results."""
+"""This module contains code for calculating points from competition results."""
 
 from dataclasses import dataclass
 
@@ -13,8 +12,7 @@ def points_delta(
     points: CompetitionPoints,
     baseline: CompetitionPoints,
 ) -> CompetitionPoints:
-    """
-    Calculate the difference between two sets of points.
+    """Calculate the difference between two sets of points.
 
     Args:
         points (CompetitionPoints): Points scored in the event.
@@ -28,9 +26,7 @@ def points_delta(
 
 
 class CompetitionData(Serialisable, library=LIBRARY_ROOT / "competition"):
-    """
-    Data from a Formula Student competition.
-    """
+    """Data from a Formula Student competition."""
 
     print_name: str
     acceleration_t_min: float
@@ -42,8 +38,7 @@ class CompetitionData(Serialisable, library=LIBRARY_ROOT / "competition"):
 
 @dataclass
 class PointsCoefficients:
-    """
-    Coefficients for points formula.
+    """Coefficients for points formula.
 
     Attributes:
         label (str): Label for the event.
@@ -65,8 +60,7 @@ def calculate_points(
     x_min: float,
     coefficients: PointsCoefficients,
 ) -> tuple[str, float]:
-    """
-    Calculate points scored in a competition event.
+    """Calculate points scored in a competition event.
 
     Args:
         x_team (float): The time or efficiency factor of the car.

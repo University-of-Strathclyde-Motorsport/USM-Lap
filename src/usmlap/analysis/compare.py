@@ -1,5 +1,4 @@
-"""
-This module contains code for comparing two or more distinct vehicles."""
+"""This module contains code for comparing two or more distinct vehicles."""
 
 from collections.abc import Generator
 
@@ -9,9 +8,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 
 class ComparisonResults:
-    """
-    Data structure containing the results of a comparison simulation.
-    """
+    """Data structure containing the results of a comparison simulation."""
 
     _vehicles: list[Vehicle]
     _points: list[CompetitionPoints]
@@ -21,8 +18,7 @@ class ComparisonResults:
         self._points = []
 
     def add_result(self, vehicle: Vehicle, points: CompetitionPoints) -> None:
-        """
-        Add a result to the comparison.
+        """Add a result to the comparison.
 
         Args:
             vehicle (Vehicle): The vehicle that was simulated.
@@ -36,8 +32,7 @@ class ComparisonResults:
         yield from zip(self._vehicles, self._points, strict=True)
 
     def get_vehicles(self) -> list[Vehicle]:
-        """
-        Get a list of the vehicles that were simulated.
+        """Get a list of the vehicles that were simulated.
 
         Returns:
             vehicles (list[Vehicle]): The vehicles that were simulated.
@@ -46,8 +41,7 @@ class ComparisonResults:
         return self._vehicles
 
     def get_points(self) -> list[CompetitionPoints]:
-        """
-        Get a list of results.
+        """Get a list of results.
 
         Returns:
             points (list[CompetitionPoints]): The results to the simulations.
@@ -56,8 +50,7 @@ class ComparisonResults:
         return self._points
 
     def get_vehicle_labels(self) -> list[str]:
-        """
-        Get a list of labels for the vehicles that were simulated.
+        """Get a list of labels for the vehicles that were simulated.
 
         Returns:
             labels (list[str]): The labels for the vehicles.
@@ -71,9 +64,7 @@ def compare_vehicles(
     simulation_settings: SimSettings,
     competition: Competition,
 ) -> ComparisonResults:
-    """
-    Run simulations for a list of vehicles and return the results.
-    """
+    """Run simulations for a list of vehicles and return the results."""
     results = ComparisonResults()
 
     for vehicle in vehicles:

@@ -1,5 +1,4 @@
-"""
-This module implements a generic registry for registering classes.
+"""This module implements a generic registry for registering classes.
 
 https://dev.to/dentedlogic/stop-writing-giant-if-else-chains-master-the-python-registry-pattern-ldm
 """
@@ -25,6 +24,7 @@ class Registry[KT, VT]:
 
         Returns:
             list[KT]: A list containing all registered keys.
+
         """
         return self._store.keys()
 
@@ -37,6 +37,7 @@ class Registry[KT, VT]:
 
         Raises:
             ValueError: If the key is already registered.
+
         """
         if key in self:
             raise ValueError(f"Key '{key}' is already registered.")
@@ -51,6 +52,7 @@ class Registry[KT, VT]:
         Returns:
             `VT  | None`: The stored value associated with `key`.
                 Returns `None` if `key` is not registered.
+
         """
         return self._store.get(key)
 
@@ -66,6 +68,7 @@ class Registry[KT, VT]:
 
         Raises:
             KeyError: If the key is not found in the registry.
+
         """
         if key in self:
             return self._store[key]
@@ -86,6 +89,7 @@ class Registry[KT, VT]:
 
         Raises:
             KeyError: If the value is not registered in the registry.
+
         """
         for k, v in self._store.items():
             if v == value:

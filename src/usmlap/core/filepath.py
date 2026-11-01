@@ -1,6 +1,4 @@
-"""
-This module contains code for working with filepaths.
-"""
+"""This module contains code for working with filepaths."""
 
 from pathlib import Path
 

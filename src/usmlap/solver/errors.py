@@ -1,18 +1,15 @@
-"""
-This module defines custom error types for simulation solvers."""
+"""This module defines custom error types for simulation solvers."""
 
 from dataclasses import dataclass
 
 
 class SolverError(Exception):
-    """
-    Base class for solver errors."""
+    """Base class for solver errors."""
 
 
 @dataclass
 class AlgorithmError(SolverError):
-    """
-    Error raised when the solver algorithm behaves unexpectedly.
+    """Error raised when the solver algorithm behaves unexpectedly.
     This indicates that there is a bug in the code.
     """
 
@@ -24,8 +21,7 @@ class AlgorithmError(SolverError):
 
 @dataclass
 class MaximumIterationsExceededError(SolverError):
-    """
-    Error raised when the maximum number of iterations is exceeded
+    """Error raised when the maximum number of iterations is exceeded
     without converging on a solution.
     """
 
@@ -50,8 +46,7 @@ class MaximumIterationsExceededError(SolverError):
 
 @dataclass
 class BelowTargetSOCError(SolverError):
-    """
-    Error raised when the finishing SOC is below the target SOC."""
+    """Error raised when the finishing SOC is below the target SOC."""
 
     final_soc: float
     target_soc: float

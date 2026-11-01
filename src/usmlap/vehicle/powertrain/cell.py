@@ -1,5 +1,4 @@
-"""
-This module models electrical cells."""
+"""This module models electrical cells."""
 
 from dataclasses import dataclass
 from functools import cached_property, lru_cache
@@ -18,8 +17,7 @@ type Grid = np.ndarray[tuple[int, int], np.dtype[np.float64]]
 
 
 class StateOfCharge(float):
-    """
-    State of charge of a cell.
+    """State of charge of a cell.
     Must be a number between 0 and 1.
     """
 
@@ -32,8 +30,7 @@ class StateOfCharge(float):
 
 @dataclass(frozen=True, eq=True)
 class CellState:
-    """
-    The state of a cell in the accumulator.
+    """The state of a cell in the accumulator.
 
     Attributes:
         soc (StateOfCharge): State of charge of the cell.
@@ -47,8 +44,7 @@ class CellState:
 
 @dataclass
 class _CellVoltageLookup:
-    """
-    Value from cell voltage lookup table."""
+    """Value from cell voltage lookup table."""
 
     state_of_charge: float
     voltage: float
@@ -56,8 +52,7 @@ class _CellVoltageLookup:
 
 @dataclass
 class _SOCResistanceLookup:
-    """
-    Value from SOC - resistance lookup table."""
+    """Value from SOC - resistance lookup table."""
 
     state_of_charge: float
     resistance: float
@@ -65,16 +60,14 @@ class _SOCResistanceLookup:
 
 @dataclass
 class _TemperatureResistanceLookup:
-    """
-    Row from temperature - resistance lookup table."""
+    """Row from temperature - resistance lookup table."""
 
     temperature: float
     lookup: list[_SOCResistanceLookup]
 
 
 class Cell(Serialisable, library=LIBRARY_ROOT / "components" / "cells"):
-    """
-    An electrochemical cell.
+    """An electrochemical cell.
 
     Attributes:
         print_name (str): Printable name of the cell.
@@ -126,8 +119,7 @@ class Cell(Serialisable, library=LIBRARY_ROOT / "components" / "cells"):
         return [node.voltage for node in self.voltage_lookup]
 
     def get_voltage(self, state_of_charge: StateOfCharge) -> float:
-        """
-        Get approximate cell voltage from state of charge.
+        """Get approximate cell voltage from state of charge.
 
         This function interpolates linearly
         between the charge and discharge voltage.
@@ -178,20 +170,17 @@ class Cell(Serialisable, library=LIBRARY_ROOT / "components" / "cells"):
         return max([node.temperature for node in self.resistance_lookup])
 
     def resistance(self, cell_state: CellState) -> float:
-        """
-        Get the resistance of the cell for a given cell state."""
+        """Get the resistance of the cell for a given cell state."""
         return calculate_resistance(self, cell_state)
 
     def discharge_current(self, cell_state: CellState) -> float:
-        """
-        Get the available  discharge current for a given cell state.."""
+        """Get the available  discharge current for a given cell state.."""
         return self.max_discharge_current
 
 
 @lru_cache(maxsize=100000)
 def calculate_resistance(cell: Cell, cell_state: CellState) -> float:
-    """
-    Calculate the resistance of a cell for a given cell state.
+    """Calculate the resistance of a cell for a given cell state.
 
     Args:
         cell (Cell): The cell to calculate the resistance for.

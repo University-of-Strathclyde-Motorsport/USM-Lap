@@ -1,6 +1,4 @@
-"""
-This module provides access to git repository information.
-"""
+"""This module provides access to git repository information."""
 
 import git
 

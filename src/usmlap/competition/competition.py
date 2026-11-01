@@ -1,5 +1,4 @@
-"""
-This module contains code for simulating a Formula Student competition."""
+"""This module contains code for simulating a Formula Student competition."""
 
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -15,7 +14,7 @@ from usmlap.competition.events.event import EventInterface
 from usmlap.competition.events.skidpad import Skidpad
 from usmlap.competition.points import CompetitionData, CompetitionPoints
 from usmlap.simulation.settings import SimSettings
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.vehicle.vehicle import Vehicle
 
 DEFAULT_AUTOCROSS_TRACK = Path(r"data\tracks\FS AutoX Germany 2012.json")
@@ -27,16 +26,14 @@ type CompetitionSolutions = dict[str, TelemetrySolution]
 
 @dataclass
 class CompetitionResults:
-    """
-    Results of simulating a Formula Student competition."""
+    """Results of simulating a Formula Student competition."""
 
     points: CompetitionPoints
     solutions: CompetitionSolutions
 
 
 class Competition(BaseModel):
-    """
-    Class for simulating a Formula Student competition.
+    """Class for simulating a Formula Student competition.
 
     Attributes:
         autocross_track (str): Track to use for autocross and endurance events.
@@ -70,9 +67,7 @@ class Competition(BaseModel):
         self.events.append(event)
 
     def _create_events(self) -> None:
-        """
-        Create competition events.
-        """
+        """Create competition events."""
         with Progress(transient=True) as progress:
             task = progress.add_task("Setting up events...")
 
@@ -102,8 +97,7 @@ class Competition(BaseModel):
     def simulate(
         self, vehicle: Vehicle, settings: SimSettings
     ) -> CompetitionResults:
-        """
-        Simulate a Formula Student competition.
+        """Simulate a Formula Student competition.
 
         Args:
             vehicle (Vehicle): The vehicle to simulate.

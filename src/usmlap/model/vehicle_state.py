@@ -1,6 +1,4 @@
-"""
-This module defines the variables associated with a vehicle's state.
-"""
+"""This module defines the variables associated with a vehicle's state."""
 
 from __future__ import annotations
 
@@ -13,8 +11,7 @@ from usmlap.vehicle.powertrain.cell import CellState, StateOfCharge
 
 @dataclass(slots=True)
 class Trajectory:
-    """
-    Variables describing the trajectory of the vehicle.
+    """Variables describing the trajectory of the vehicle.
 
     Attributes:
         curvature (float): Curvature of the track (left +ve).
@@ -37,8 +34,7 @@ class Trajectory:
         self.velocity = math.sqrt(value / self.curvature)
 
     def next_velocity(self, distance: float) -> float:
-        """
-        Get the new velocity after travelling `distance` metres.
+        """Get the new velocity after travelling `distance` metres.
 
         Distance is signed, positive for forwards and negative for backwards.
         """
@@ -50,8 +46,7 @@ DEFAULT_SOC = StateOfCharge(1)
 
 @dataclass(frozen=True)
 class TransientVariables:
-    """
-    Transient variables of the vehicle at a single instant.
+    """Transient variables of the vehicle at a single instant.
 
     Attributes:
         soc (StateOfCharge): The state of charge of the accumulator.
@@ -73,9 +68,7 @@ class TransientVariables:
 
 @dataclass
 class CalculatedVehicleState:
-    """
-    The full state of the vehicle at a point.
-    """
+    """The full state of the vehicle at a point."""
 
     velocity: float
     ax: float
@@ -101,21 +94,18 @@ class CalculatedVehicleState:
 
     @property
     def long_lt(self) -> float:
-        """
-        Longitudinal load transfer."""
+        """Longitudinal load transfer."""
         return sum(self.normal_loads.front) - sum(self.normal_loads.rear)
 
     @property
     def lat_lt(self) -> float:
-        """
-        Lateral load transfer."""
+        """Lateral load transfer."""
         return sum(self.normal_loads.left) - sum(self.normal_loads.right)
 
 
 @dataclass
 class VehicleState:
-    """
-    Container for variables describing a vehicle's state.
+    """Container for variables describing a vehicle's state.
 
     Attributes:
         trajectory (Trajectory): Variables describing the vehicle's trajectory.

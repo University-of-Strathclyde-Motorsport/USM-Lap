@@ -1,5 +1,4 @@
-"""
-This module contains functions for plotting comparisons between vehicles."""
+"""This module contains functions for plotting comparisons between vehicles."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,8 +12,7 @@ type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 
 
 def _transform_data(input_data: list[CompetitionPoints]) -> PointsData:
-    """
-    Transform points data into a format suitable for plotting.
+    """Transform points data into a format suitable for plotting.
 
     Args:
         input_data (list[CompetitionPoints]): Points data to transform.
@@ -36,8 +34,7 @@ def plot_competition_bar_chart(
     bar_width: float = 0.8,
     padding: float | None = None,
 ) -> None:
-    """
-    Plot a bar chart of points for a list of vehicles.
+    """Plot a bar chart of points for a list of vehicles.
 
     Args:
         comparison_results (ComparisonResults): Comparison results to plot.
@@ -90,8 +87,7 @@ def plot_competition_bar_chart(
 
 
 def _transform_dictionary(data: dict[str, CompetitionPoints]) -> PointsData:
-    """
-    Transform points data into a suitable form for plotting.
+    """Transform points data into a suitable form for plotting.
 
     Args:
         data (dict[str, CompetitionPoints]): Input points data.
@@ -113,8 +109,7 @@ def plot_points_bar_chart(
     y_label: str = "Points",
     width: float = 0.9,
 ) -> None:
-    """
-    Plot a bar chart of points for a list of simulations.
+    """Plot a bar chart of points for a list of simulations.
 
     Args:
         data (dict[str, CompetitionPoints]):

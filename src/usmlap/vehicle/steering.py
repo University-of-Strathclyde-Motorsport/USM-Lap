@@ -1,5 +1,4 @@
-"""
-This module models the steering system of a vehicle."""
+"""This module models the steering system of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -10,8 +9,7 @@ from pydantic import PositiveFloat
 
 @dataclass
 class Steering:
-    """
-    The steering system of the vehicle.
+    """The steering system of the vehicle.
 
     Attributes:
         steering_ratio (float):
@@ -29,8 +27,7 @@ class Steering:
     steering_wheel_radius: Annotated[PositiveFloat, Unit("m")]
 
     def get_steering_wheel_angle(self, wheel_angle: float) -> float:
-        """
-        Calculate the steering wheel angle required for a given wheel angle.
+        """Calculate the steering wheel angle required for a given wheel angle.
 
         Args:
             wheel_angle (float):
@@ -46,8 +43,7 @@ class Steering:
         return wheel_angle * self.steering_ratio
 
     def get_wheel_angle(self, steering_wheel_angle: float) -> float:
-        """
-        Calculate the wheel angle for a given steering angle.
+        """Calculate the wheel angle for a given steering angle.
 
         Args:
             steering_wheel_angle (float):

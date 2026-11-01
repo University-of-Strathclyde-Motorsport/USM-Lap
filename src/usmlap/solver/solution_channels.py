@@ -1,6 +1,4 @@
-"""
-This module implements telemetry channels for a solution.
-"""
+"""This module implements telemetry channels for a solution."""
 
 from __future__ import annotations
 
@@ -206,8 +204,7 @@ class SolutionDataFrame:
     def get_channel(
         self, channel_id: ChannelId, *, warn_missing: bool = True
     ) -> Array1D:
-        """
-        Get a channel from the solution.
+        """Get a channel from the solution.
         Returns an array of NaN if the channel is missing.
         """
         if channel_id not in self._df.columns:

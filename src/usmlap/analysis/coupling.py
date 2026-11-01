@@ -1,6 +1,4 @@
-"""
-This module contains code for analysing the coupling between two parameters.
-"""
+"""Code for analysing the coupling between two parameters."""
 
 from dataclasses import dataclass, field
 
@@ -17,8 +15,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 @dataclass
 class CouplingResults:
-    """
-    The results of a coupling analysis.
+    """The results of a coupling analysis.
 
     Attributes:
         sweep_parameter (type[Parameter[float]]):
@@ -54,8 +51,7 @@ def coupling(
     sweep_settings: SweepSettings,
     coupled_parameter: type[Parameter[float]],
 ) -> CouplingResults:
-    """
-    Carry out a coupling analysis between two parameters.
+    """Carry out a coupling analysis between two parameters.
 
     Args:
         baseline_vehicle (Vehicle):

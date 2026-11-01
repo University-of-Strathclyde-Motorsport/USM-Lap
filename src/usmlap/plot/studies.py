@@ -1,6 +1,4 @@
-"""
-This module plots charts of multiple sweeps in a study.
-"""
+"""This module plots charts of multiple sweeps in a study."""
 
 from typing import Annotated
 

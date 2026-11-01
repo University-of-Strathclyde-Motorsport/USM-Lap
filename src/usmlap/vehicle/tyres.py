@@ -1,5 +1,4 @@
-"""
-This module defines the parameters of a tyre."""
+"""This module defines the parameters of a tyre."""
 
 from typing import Annotated
 
@@ -10,8 +9,7 @@ from usmlap.core.library import Serialisable
 
 
 class Tyre(Serialisable, library=LIBRARY_ROOT / "components" / "tyres"):
-    """
-    A racing tyre.
+    """A racing tyre.
 
     Attributes:
         print_name (str): Printable name of the tyre.

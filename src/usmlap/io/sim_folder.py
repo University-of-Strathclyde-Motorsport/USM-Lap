@@ -1,6 +1,4 @@
-"""
-This module creates a folder structure for a laptime simulation.
-"""
+"""This module creates a folder structure for a laptime simulation."""
 
 import logging
 from datetime import UTC, datetime

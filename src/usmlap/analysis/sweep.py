@@ -1,5 +1,4 @@
-"""
-This module contains code for sweeping through a list of vehicles."""
+"""This module contains code for sweeping through a list of vehicles."""
 
 from collections.abc import Collection
 
@@ -14,8 +13,7 @@ def sweep_vehicles(
     vehicles: Collection[Vehicle],
     settings: SimSettings,
 ) -> dict[str, CompetitionResults]:
-    """
-    Simulate a list of vehicles."""
+    """Simulate a list of vehicles."""
     competition = Competition()
     results: dict[str, CompetitionResults] = {}
 

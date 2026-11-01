@@ -1,5 +1,4 @@
-"""
-This module defines the context dataclass,
+"""This module defines the context dataclass,
 which stores all the information required by vehicle models.
 """
 
@@ -16,8 +15,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 @dataclass
 class GlobalContext:
-    """
-    Global context object storing data for an entire simulation.
+    """Global context object storing data for an entire simulation.
 
     Attributes:
         environment (EnvironmentSettings):
@@ -47,8 +45,7 @@ class GlobalContext:
 
 @dataclass
 class NodeContext(GlobalContext):
-    """
-    Context at a node of the track.
+    """Context at a node of the track.
 
     Attributes:
         state (TransientVariables): The vehicle's state variables.

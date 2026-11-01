@@ -1,5 +1,4 @@
-"""
-This module contains code for running a simulation."""
+"""This module contains code for running a simulation."""
 
 from __future__ import annotations
 
@@ -17,7 +16,7 @@ from usmlap.simulation.settings import OutingSettings, SimSettings
 from usmlap.simulation.study import Study
 from usmlap.solver.solution import create_new_solution
 from usmlap.solver.solution_channels import SolutionDataFrame
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.vehicle.powertrain.cell import StateOfCharge
@@ -32,8 +31,7 @@ def simulate(
     settings: SimSettings,
     initial_state: TransientVariables | None = None,
 ) -> TelemetrySolution:
-    """
-    Simulate a vehicle driving around a track.
+    """Simulate a vehicle driving around a track.
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.

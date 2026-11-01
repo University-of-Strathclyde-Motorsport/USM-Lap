@@ -1,5 +1,4 @@
-"""
-This module defines the point mass vehicle model."""
+"""This module defines the point mass vehicle model."""
 
 import logging
 
@@ -15,9 +14,7 @@ MAXIMUM_ITERATIONS = 100
 
 
 class PointMass(TractionModel):
-    """
-    Point mass vehicle model.
-    """
+    """Point mass vehicle model."""
 
     def lateral_traction(
         self,

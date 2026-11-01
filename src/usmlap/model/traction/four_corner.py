@@ -1,5 +1,4 @@
-"""
-This module defines the four corner vehicle model."""
+"""This module defines the four corner vehicle model."""
 
 from usmlap.core.datatypes import FourCorner, FrontRear
 from usmlap.model.context import NodeContext
@@ -12,9 +11,7 @@ MAXIMUM_ITERATIONS = 100
 
 
 class FourCornerModel(TractionModel):
-    """
-    Four corner vehicle model.
-    """
+    """Four corner vehicle model."""
 
     def lateral_traction(
         self,

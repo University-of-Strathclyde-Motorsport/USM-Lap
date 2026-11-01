@@ -1,6 +1,4 @@
-"""
-This script plots the parameters of a cell.
-"""
+"""This script plots the parameters of a cell."""
 
 from pathlib import Path
 

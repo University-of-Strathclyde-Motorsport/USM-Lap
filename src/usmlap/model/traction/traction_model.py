@@ -1,5 +1,4 @@
-"""
-This module defines a common interface for vehicle models."""
+"""This module defines a common interface for vehicle models."""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -16,9 +15,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 @dataclass
 class TractionModel(ABC):
-    """
-    Abstract base class for vehicle models.
-    """
+    """Abstract base class for vehicle models."""
 
     powertrain: PowertrainModelInterface
     tyre_model: TyreModel
@@ -48,8 +45,7 @@ class TractionModel(ABC):
         ctx: NodeContext,
         velocity: float,
     ) -> tuple[float, float]:
-        """
-        Get the total resistive forces acting on the vehicle.
+        """Get the total resistive forces acting on the vehicle.
         Returns a tuple of body and aerodynamic forces.
 
         Args:
@@ -76,8 +72,7 @@ class TractionModel(ABC):
         ctx: NodeContext,
         velocity: float,
     ) -> tuple[float, float]:
-        """
-        Get the total normal forces acting on the tyres.
+        """Get the total normal forces acting on the tyres.
         Returns a tuple of body and aerodynamic forces.
 
         Args:

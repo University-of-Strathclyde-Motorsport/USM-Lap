@@ -1,5 +1,4 @@
-"""
-This module models the suspension of a vehicle."""
+"""This module models the suspension of a vehicle."""
 
 from abc import ABC
 from dataclasses import dataclass
@@ -12,17 +11,14 @@ from usmlap.core.registry import Registry
 
 
 class SuspensionModel(ABC):  # noqa: B024
-    """
-    Abstract base class for suspension on a single axle of a vehicle.
+    """Abstract base class for suspension on a single axle of a vehicle.
 
     Currently does nothing! (sorry Chris)
     """
 
 
 class DecoupledSuspension(SuspensionModel):
-    """
-    Decoupled suspension, with separate heave and roll springs.
-    """
+    """Decoupled suspension, with separate heave and roll springs."""
 
 
 SuspensionModelRegistry = Registry[str, type[SuspensionModel]](
@@ -49,8 +45,7 @@ class SuspensionAxle(BaseModel):
 
 @dataclass
 class Suspension:
-    """
-    The suspension system of a vehicle.
+    """The suspension system of a vehicle.
 
     Attributes:
         front (SuspensionModel):

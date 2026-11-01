@@ -1,5 +1,4 @@
-"""
-This module implements the Pacejka Magic Formula tyre model.
+"""This module implements the Pacejka Magic Formula tyre model.
 
 Equations are taken from Chapter 4.3.2
 of Tire and Vehicle Dynamics (3rd Edition) by Hans Pacejka,
@@ -31,8 +30,7 @@ EPSILON = 0.1
 
 
 class TyreAttitude(BaseModel):
-    """
-    Parameters describing the attitude of a tyre.
+    """Parameters describing the attitude of a tyre.
 
     Attributes:
         Vx:
@@ -68,8 +66,7 @@ class TyreAttitude(BaseModel):
 
 
 class MagicFormula:
-    """
-    Contains the Pacejka Magic Formula equations.
+    """Contains the Pacejka Magic Formula equations.
 
     Attributes:
         parameters (TIRParameters):
@@ -683,8 +680,7 @@ class MagicFormula:
         x: float,
         SV: float,
     ) -> float:
-        """
-        Implements the Pacejka Magic Formula.
+        """Implements the Pacejka Magic Formula.
 
         Calculates longitudinal force Fx,
         lateral force Fy, or aligning moment Mz.
@@ -713,8 +709,7 @@ class MagicFormula:
         E: float,
         x: float,
     ) -> float:
-        """
-        Implements the cosine version of the Pacejka Magic Formula.
+        """Implements the cosine version of the Pacejka Magic Formula.
 
         Args:
             B (float): Stiffness factor.

@@ -1,5 +1,4 @@
-"""
-This module contains code for plotting motor performance curves."""
+"""This module contains code for plotting motor performance curves."""
 
 import math
 from dataclasses import dataclass
@@ -19,8 +18,7 @@ def plot_motor_curve(
     state_of_charge: list[StateOfCharge] = DEFAULT_SOC_VALUES,
     resolution: int = 1000,
 ) -> None:
-    """
-    Plot torque and power curves for a motor.
+    """Plot torque and power curves for a motor.
 
     Args:
         powertrain (RWDPowertrain): Powertrain to plot the curve for.
@@ -66,8 +64,7 @@ def plot_motor_curve(
 
 @dataclass
 class _MotorCurveNode:
-    """
-    A node of a motor performance curve.
+    """A node of a motor performance curve.
 
     Attributes:
         speed (float): Motor speed in rad/s.
@@ -89,8 +86,7 @@ def _generate_motor_curve(
     cell_state: CellState,
     resolution: int,
 ) -> list[_MotorCurveNode]:
-    """
-    Generate a motor curve for a powertrain."""
+    """Generate a motor curve for a powertrain."""
     maximum_speed = powertrain.get_maximum_motor_speed(cell_state)
     speeds = np.linspace(0, maximum_speed, resolution).tolist()
     torques = [
@@ -103,6 +99,5 @@ def _generate_motor_curve(
 
 
 def rads_to_rpm(speed: float) -> float:
-    """
-    Convert a speed from rad/s to rpm"""
+    """Convert a speed from rad/s to rpm"""
     return speed * (30 / math.pi)

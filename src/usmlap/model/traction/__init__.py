@@ -1,6 +1,4 @@
-"""
-This subpackage contains defintions of traction models.
-"""
+"""This subpackage contains defintions of traction models."""
 
 from usmlap.core.registry import Registry
 from usmlap.model.traction.bicycle import Bicycle

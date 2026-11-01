@@ -1,5 +1,4 @@
-"""
-This script runs a mesh refinement simulation.
+"""This script runs a mesh refinement simulation.
 
 A vehicle is simulated over a range of track mesh resolutions.
 The laptime and computation time for each simulation
@@ -29,8 +28,7 @@ settings = SimSettings.from_file(Path(r"sims/basic_simulation.yaml"))
 
 @dataclass
 class MeshRefinementResult:
-    """
-    Mesh refinement result."""
+    """Mesh refinement result."""
 
     track_length: float
     resolution: float
@@ -45,8 +43,7 @@ class MeshRefinementResult:
 
 
 def mesh_refinement() -> list[MeshRefinementResult]:
-    """
-    Run a mesh refinement simulation."""
+    """Run a mesh refinement simulation."""
     vehicle = Vehicle.from_file(VEHICLE)
     settings = SimSettings.from_file(Path("sims/basic_simulation.yaml"))
     settings.solver = SOLVER
@@ -77,8 +74,7 @@ def mesh_refinement() -> list[MeshRefinementResult]:
 
 
 def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
-    """
-    Plot metrics from a mesh refinement simulation."""
+    """Plot metrics from a mesh refinement simulation."""
     resolutions = [result.resolution for result in results]
     node_counts = [result.node_count for result in results]
     laptimes = [result.laptime for result in results]
@@ -126,8 +122,7 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
 
 
 def main() -> None:
-    """
-    Main function."""
+    """Main function."""
     results = mesh_refinement()
     plot_mesh_refinement(results)
 

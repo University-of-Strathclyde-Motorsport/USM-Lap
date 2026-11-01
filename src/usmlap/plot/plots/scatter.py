@@ -1,6 +1,4 @@
-"""
-This module creates scatter plots of telemetry data.
-"""
+"""This module creates scatter plots of telemetry data."""
 
 import logging
 
@@ -15,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 def plot_scatter(data: SolutionDataFrame, config: ScatterConfig) -> Figure:
     """Create a scatter plot."""
-
     fig, ax = plt.subplots(layout="constrained")
 
     x_data = data.get_channel(config.xaxis.channel_id)

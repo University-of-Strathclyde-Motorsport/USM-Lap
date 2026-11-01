@@ -1,5 +1,4 @@
-"""
-This module contains functions for plotting points sensitivities."""
+"""This module contains functions for plotting points sensitivities."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,8 +11,7 @@ type PointsData = dict[str, np.ndarray[tuple[int, ...], np.dtype[np.float32]]]
 
 
 def _transform_dictionary(data: list[CompetitionPoints]) -> PointsData:
-    """
-    Transform points data into a suitable form for plotting.
+    """Transform points data into a suitable form for plotting.
 
     Args:
         data (list[CompetitionPoints]): Input points data.
@@ -34,8 +32,7 @@ def plot_points_sensitivity(
     data: dict[float, CompetitionPoints],
     title: str = "Event Points",
 ) -> None:
-    """
-    Plot the results of a parameter sweep.
+    """Plot the results of a parameter sweep.
 
     Args:
         parameter (type[Parameter[float]]): The parameter being swept.

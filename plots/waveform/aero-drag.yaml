@@ -1,0 +1,19 @@
+title: "Aerodynamic Drag"
+xaxis:
+  channel_id: sLap
+axes:
+  - ylabel: Velocity (ms⁻¹)
+    channels:
+      - channel_id: vCar
+
+  - ylabel: Drag Force (N)
+    channels:
+      - channel_id: FDrag
+
+  - ylabel: Motor Power (W)
+    channels:
+      - channel_id: PMotor
+
+  - ylabel: State of Charge (%)
+    channels:
+      - channel_id: SOC

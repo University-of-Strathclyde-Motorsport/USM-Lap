@@ -1,5 +1,4 @@
-"""
-This module implements a quasi-transient solver."""
+"""This module implements a quasi-transient solver."""
 
 import logging
 
@@ -78,8 +77,7 @@ class QuasiTransientSolver(SolverInterface):
         )
 
     def _solve_next_iteration(self, previous_solution: Solution) -> Solution:
-        """
-        Calculate the next iteration of the solution.
+        """Calculate the next iteration of the solution.
 
         This is done by calling the `QuasiSteadyStateSolver`.
 
@@ -97,8 +95,7 @@ class QuasiTransientSolver(SolverInterface):
         return solution
 
     def _recalculate_state_variables(self, solution: Solution) -> Solution:
-        """
-        Recalculate the state variables of the vehicle.
+        """Recalculate the state variables of the vehicle.
 
         Args:
             solution (Solution): The solution object.
@@ -129,8 +126,7 @@ class QuasiTransientSolver(SolverInterface):
 
 
 def _convergence_achieved(times: list[float], threshold: float) -> bool:
-    """
-    Check if the solution has converged.
+    """Check if the solution has converged.
 
     This is done by checking if the difference in solution times
     between the previous two iterations

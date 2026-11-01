@@ -1,6 +1,4 @@
-"""
-This subpackage defines pure tyre models.
-"""
+"""This subpackage defines pure tyre models."""
 
 from usmlap.core.registry import Registry
 from usmlap.model.tyre.pure.constant import ConstantTyre

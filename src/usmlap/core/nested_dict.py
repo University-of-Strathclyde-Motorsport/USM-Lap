@@ -1,6 +1,4 @@
-"""
-This module defines functions for working with nested dictionaries.
-"""
+"""This module defines functions for working with nested dictionaries."""
 
 from typing import Any
 

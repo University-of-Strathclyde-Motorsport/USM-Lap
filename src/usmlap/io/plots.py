@@ -1,6 +1,4 @@
-"""
-This module saves matplotlib figures to disk.
-"""
+"""This module saves matplotlib figures to disk."""
 
 import logging
 from pathlib import Path

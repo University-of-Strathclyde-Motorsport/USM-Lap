@@ -1,5 +1,4 @@
-"""
-This module contains code for points sensitivity analysis."""
+"""This module contains code for points sensitivity analysis."""
 
 from rich.progress import Progress
 
@@ -20,8 +19,7 @@ def points_sensitivity(
     delta: tuple[float, float] | None = None,
     normalise: bool = False,
 ) -> tuple[float, tuple[float, float]]:
-    """
-    Evaluate the points sensitivity of a vehicle parameter.
+    """Evaluate the points sensitivity of a vehicle parameter.
 
     Args:
         vehicle (Vehicle): The baseline vehicle to simulate.

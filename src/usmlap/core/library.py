@@ -65,6 +65,7 @@ def get_file_format(filepath: Path | str) -> FileFormat:
 
     Raises:
         `UnrecognisedFileFormatError`:  If the file format is not recognised.
+
     """
     if isinstance(filepath, Path):
         format_ = filepath.suffix
@@ -120,8 +121,7 @@ class Serialisable(BaseModel):
 
     @classmethod
     def initialise(cls, input: str | Path | Self) -> Self:
-        """
-        Method designed for use as a BeforeValidator.
+        """Method designed for use as a BeforeValidator.
         If input is a filepath, an object will be loaded from file.
         Otherwise, the input will be returned.
         """

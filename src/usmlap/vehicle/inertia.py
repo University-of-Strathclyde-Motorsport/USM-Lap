@@ -1,5 +1,4 @@
-"""
-This module models the inertia of a vehicle."""
+"""This module models the inertia of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -12,8 +11,7 @@ from usmlap.core.datatypes import Percentage
 
 @dataclass
 class UnsprungMass:
-    """
-    Unsprung mass properties for a vehicle.
+    """Unsprung mass properties for a vehicle.
 
     Attributes:
         mass (float): Mass of the unsprung mass.
@@ -28,8 +26,7 @@ class UnsprungMass:
 
 @dataclass
 class Inertia:
-    """
-    Inertia properties for a vehicle.
+    """Inertia properties for a vehicle.
 
     Attributes:
         curb_mass (float): Mass of the vehicle.

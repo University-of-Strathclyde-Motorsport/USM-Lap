@@ -1,12 +1,10 @@
-"""
-This module contains utility functions for matplotlib."""
+"""This module contains utility functions for matplotlib."""
 
 from matplotlib.axes import Axes
 
 
 def combined_legend(*args: Axes) -> None:
-    """
-    Create a combined legend for multiple axes.
+    """Create a combined legend for multiple axes.
 
     Args:
         *args (Axes): The axes to create a legend for.
@@ -24,9 +22,7 @@ def combined_legend(*args: Axes) -> None:
 
 
 def outside_legend(axs: Axes | list[Axes], title: str | None = None) -> None:
-    """
-    Add a legend outside the plot.
-    """
+    """Add a legend outside the plot."""
     if isinstance(axs, Axes):
         axs = [axs]
 

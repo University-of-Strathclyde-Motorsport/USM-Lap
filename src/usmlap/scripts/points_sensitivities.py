@@ -1,6 +1,4 @@
-"""
-This script analyses the sensitivities of a list of vehicle parameters.
-"""
+"""This script analyses the sensitivities of a list of vehicle parameters."""
 
 from pathlib import Path
 from textwrap import wrap

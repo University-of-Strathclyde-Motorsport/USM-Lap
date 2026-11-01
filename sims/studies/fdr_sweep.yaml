@@ -1,0 +1,30 @@
+study_name: FDRSweep
+
+base_settings:
+  sim_name: TestSimulation
+  solver: quasi-steady-state
+  outings: !include "sims/definitions/competition.yaml"
+  vehicle: !include "sims/definitions/baseline_vehicle.yaml"
+  boundary_conditions:
+    initial_soc: 1
+    initial_cell_temperature: 32
+    initial_velocity: 0
+
+sweep:
+  vehicle:
+    parameters:
+      transmission:
+        final_drive_ratio: [2.5, 2.7, 2.9, 3.1, 3.3, 3.5]
+
+plots:
+  line:
+    - title: "FDR Sensitivity"
+      outing_id: autocross
+      colour: "#003366"
+      x_value: vehicle.parameters.transmission.final_drive_ratio
+      y_value: laptime
+      x_label: FDR
+      y_label: Laptime (s)
+  waveform:
+    - config: general
+      outing_id: autocross

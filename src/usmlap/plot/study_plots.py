@@ -42,7 +42,6 @@ def plot_study_line_chart(
     study: StudyFileMap, config: StudyLineConfig
 ) -> Figure:
     """Create a bar chart."""
-
     fig, ax = plt.subplots(layout="constrained")
 
     sim_settings = [

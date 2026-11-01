@@ -1,3 +1,1 @@
-"""
-This package contains mathematical models for vehicle simulation.
-"""
+"""This package contains mathematical models for vehicle simulation."""

@@ -1,5 +1,4 @@
-"""
-This module contains code for representing the solution to a simulation."""
+"""This module contains code for representing the solution to a simulation."""
 
 from __future__ import annotations
 
@@ -21,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SolutionNode:
-    """
-    The solution at a single node.
+    """The solution at a single node.
 
     Attributes:
         track_node (TrackNode): The corresponding track node.
@@ -125,8 +123,7 @@ class SolutionNode:
         return self.calculated_vehicle_state.motor_power * self.time  # TODO
 
     def is_apex(self) -> bool:
-        """
-        Check if the node is an apex.
+        """Check if the node is an apex.
 
         Returns:
             is_apex (bool): `True` is the node is an apex, otherwise `False`.
@@ -135,19 +132,16 @@ class SolutionNode:
         return self._apex
 
     def add_apex(self) -> None:
-        """
-        Add the node as an apex."""
+        """Add the node as an apex."""
         self._apex = True
 
     def remove_apex(self) -> None:
-        """
-        Remove the node as an apex."""
+        """Remove the node as an apex."""
         logger.debug("Removing apex")
         self._apex = False
 
     def set_initial_velocity(self, velocity: float) -> None:
-        """
-        Set the velocity at the start of the node.
+        """Set the velocity at the start of the node.
         If the initial velocity has been anchored, it will not be modified.
 
         Args:
@@ -158,8 +152,7 @@ class SolutionNode:
             self._initial_velocity = velocity
 
     def set_final_velocity(self, velocity: float) -> None:
-        """
-        Set the velocity at the end of the node.
+        """Set the velocity at the end of the node.
         If the final velocity has been anchored, it will not be modified.
 
         Args:
@@ -170,8 +163,7 @@ class SolutionNode:
             self._final_velocity = velocity
 
     def anchor_initial_velocity(self, velocity: float) -> None:
-        """
-        Anchor the initial velocity of this node.
+        """Anchor the initial velocity of this node.
         It can no longer be modified.
 
         Args:
@@ -182,8 +174,7 @@ class SolutionNode:
         self._initial_velocity_anchored = True
 
     def anchor_final_velocity(self, velocity: float) -> None:
-        """
-        Anchor the final velocity of this node.
+        """Anchor the final velocity of this node.
         It can no longer be modified.
 
         Args:
@@ -194,8 +185,7 @@ class SolutionNode:
         self._final_velocity_anchored = True
 
     def get_calculated_vehicle_state(self) -> CalculatedVehicleState:
-        """
-        Get the calculated vehicle state for this node.
+        """Get the calculated vehicle state for this node.
 
         TODO: This is a temporary fix to get rid of downstream type errors!
         The entire system will be overhauled.
@@ -209,8 +199,7 @@ class SolutionNode:
 
 @dataclass
 class Solution:
-    """
-    The solution to a simulation."""
+    """The solution to a simulation."""
 
     nodes: list[SolutionNode]
     vehicle_model: TractionModel
@@ -246,8 +235,7 @@ class Solution:
         return self.total_length / self.total_time
 
     def get_sector_time(self, sector: str) -> float:
-        """
-        Get the time for a given sector.
+        """Get the time for a given sector.
 
         Args:
             sector (int): The sector to get the time for.
@@ -259,8 +247,7 @@ class Solution:
         return sum([node.time for node in self if node.sector == sector])
 
     def get_sector_boundary_positions(self) -> list[float]:
-        """
-        Get a list of positions where the sector changes.
+        """Get a list of positions where the sector changes.
 
         Returns:
             sector_boundary_positions (list[float]): List of positions.
@@ -276,8 +263,7 @@ class Solution:
         return positions
 
     def get_apex_indices(self) -> list[int]:
-        """
-        Get a list of apex indices.
+        """Get a list of apex indices.
 
         Returns:
             apex_indices (list[int]): Indices of apexes.
@@ -286,8 +272,7 @@ class Solution:
         return [i for i, node in enumerate(self.nodes) if node.is_apex()]
 
     def get_sorted_apex_indices(self) -> list[int]:
-        """
-        Get a list of apex indices, sorted by maximum velocity from low to high.
+        """Get a list of apex indices sorted by maximum velocity (low to high).
 
         Returns:
             sorted_apex_indices (list[int]): Indices of apexes.
@@ -302,8 +287,7 @@ class Solution:
         return list(sorted_indices)
 
     def get_apexes(self) -> list[SolutionNode]:
-        """
-        Get a list of apex nodes.
+        """Get a list of apex nodes.
 
         Returns:
             apexes (list[SolutionNode]): Solution nodes which are apexes.
@@ -316,8 +300,7 @@ class Solution:
             self.nodes[i].add_apex()
 
     def get_subset(self, indices: list[int]) -> Solution:
-        """
-        Return a new solution containing only the nodes at the given indices.
+        """Return a new solution containing only the nodes at the given indices.
 
         Args:
             indices (list[int]):
@@ -332,8 +315,7 @@ class Solution:
         return new_solution
 
     def get_lap_solutions(self) -> list[Solution]:
-        """
-        Get a list of solutions separated by lap."""
+        """Get a list of solutions separated by lap."""
         laps = {node.lap_number for node in self.nodes}
         solutions: list[Solution] = []
         for lap in laps:
@@ -350,8 +332,7 @@ def create_new_solution(
     vehicle_model: TractionModel,
     initial_state: TransientVariables,
 ) -> Solution:
-    """
-    Create a new solution from a track mesh and vehicle model.
+    """Create a new solution from a track mesh and vehicle model.
 
     Args:
         track_mesh (Mesh): The track mesh.
@@ -381,6 +362,5 @@ def initialise_transient_variables(
     track_mesh: Mesh,
     initial_state: TransientVariables,
 ) -> list[TransientVariables]:
-    """
-    Generate initial estimated state variables for a simulation."""
+    """Generate initial estimated state variables for a simulation."""
     return [initial_state for _ in range(track_mesh.node_count)]

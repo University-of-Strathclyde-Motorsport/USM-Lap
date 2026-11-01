@@ -1,5 +1,4 @@
-"""
-This module models the brake system of a vehicle."""
+"""This module models the brake system of a vehicle."""
 
 from dataclasses import dataclass
 from typing import Annotated
@@ -16,8 +15,7 @@ from usmlap.core.maths import area_of_circle
 class MasterCylinder(
     Serialisable, library=LIBRARY_ROOT / "components" / "master_cylinders"
 ):
-    """
-    The master cylinder, transmitting force from the pedal to the brake line.
+    """The master cylinder, transmitting force from the pedal to the brake line.
 
     Attributes:
         print_name (str): The printable name of the master cylinder.
@@ -39,8 +37,7 @@ class MasterCylinder(
 class BrakeCaliper(
     Serialisable, library=LIBRARY_ROOT / "components" / "brake_calipers"
 ):
-    """
-    The brake caliper, transmitting force from the brake line to the wheel.
+    """The brake caliper, transmitting force from the brake line to the wheel.
 
     Attributes:
         print_name (str): The printable name of the caliper.
@@ -62,8 +59,7 @@ class BrakeCaliper(
 class BrakeDisc(
     Serialisable, library=LIBRARY_ROOT / "components" / "brake_discs"
 ):
-    """
-    The brake disc attached to the wheel.
+    """The brake disc attached to the wheel.
 
     Attributes:
         print_name (str): The printable name of the brake disc.
@@ -78,8 +74,7 @@ class BrakeDisc(
 class BrakePad(
     Serialisable, library=LIBRARY_ROOT / "components" / "brake_pads"
 ):
-    """
-    The brake pad attached to the caliper.
+    """The brake pad attached to the caliper.
 
     Attributes:
         print_name (str): The printable name of the brake pad.
@@ -95,8 +90,7 @@ class BrakePad(
 
 
 class BrakeLine(BaseModel):
-    """
-    An individual brake line.
+    """An individual brake line.
 
     Attributes:
         cylinder (MasterCylinder): The master cylinder attached to the pedal.
@@ -115,20 +109,17 @@ class BrakeLine(BaseModel):
 
     @property
     def area_scaling_factor(self) -> float:
-        """
-        The force scaling factor between the cylinder and caliper."""
+        """The force scaling factor between the cylinder and caliper."""
         return self.caliper.piston_area / self.cylinder.piston_area
 
     @property
     def effective_radius(self) -> float:
-        """
-        The radius at which the braking force is applied to the wheel."""
+        """The radius at which the braking force is applied to the wheel."""
         return 0.5 * (self.disc.outer_diameter - self.pad.height)
 
     @property
     def force_to_torque_scaling_factor(self) -> float:
-        """
-        The ratio between braking torque and master cylinder force."""
+        """The ratio between braking torque and master cylinder force."""
         return (
             self.area_scaling_factor
             * self.pad.coefficient_of_friction
@@ -136,8 +127,7 @@ class BrakeLine(BaseModel):
         )
 
     def get_brake_pressure(self, cylinder_force: float) -> float:
-        """
-        Calculate the pressure of the brake fluid.
+        """Calculate the pressure of the brake fluid.
 
         Args:
             cylinder_force (float): Force applied to the master cylinder.
@@ -149,8 +139,7 @@ class BrakeLine(BaseModel):
         return cylinder_force / self.cylinder.piston_area
 
     def force_to_torque(self, cylinder_force: float) -> float:
-        """
-        Calculate the braking torque applied to the wheel.
+        """Calculate the braking torque applied to the wheel.
 
         Args:
             cylinder_force (float): Force applied to the master cylinder.
@@ -162,8 +151,7 @@ class BrakeLine(BaseModel):
         return cylinder_force * self.force_to_torque_scaling_factor
 
     def torque_to_force(self, braking_torque: float) -> float:
-        """
-        Calculate the force required to apply a torque to the wheel.
+        """Calculate the force required to apply a torque to the wheel.
 
         Args:
             braking_torque (float): Braking torque required on the wheel.
@@ -177,8 +165,7 @@ class BrakeLine(BaseModel):
 
 @dataclass
 class Brakes:
-    """
-    The brake system of the vehicle.
+    """The brake system of the vehicle.
 
     Attributes:
         front (BrakeLine): Brake line for the front wheels.
@@ -197,14 +184,12 @@ class Brakes:
 
     @property
     def brake_bias(self) -> FrontRear[float]:
-        """
-        Tuple of brake biases for the front and rear wheels."""
+        """Tuple of brake biases for the front and rear wheels."""
         return FrontRear(self.front_brake_bias, 1 - self.front_brake_bias)
 
     @property
     def brake_lines(self) -> FrontRear[BrakeLine]:
-        """
-        Tuple of front and rear brake lines."""
+        """Tuple of front and rear brake lines."""
         return FrontRear(self.front, self.rear)
 
     def _get_front_brake_balance(self) -> float:
@@ -213,8 +198,7 @@ class Brakes:
         return front_multiplier / (front_multiplier + rear_multiplier)
 
     def _get_cylinder_forces(self, pedal_force: float) -> FrontRear[float]:
-        """
-        Get the force applied to the front and rear master cylinders.
+        """Get the force applied to the front and rear master cylinders.
 
         Args:
             pedal_force (float): Force applied to the pedal.

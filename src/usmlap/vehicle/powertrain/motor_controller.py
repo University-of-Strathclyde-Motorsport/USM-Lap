@@ -1,5 +1,4 @@
-"""
-This modules models the motor controller of a vehicle."""
+"""This modules models the motor controller of a vehicle."""
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.core.library import Serialisable
@@ -8,8 +7,7 @@ from usmlap.core.library import Serialisable
 class MotorController(
     Serialisable, library=LIBRARY_ROOT / "components" / "motor_controllers"
 ):
-    """
-    A motor controller.
+    """A motor controller.
 
     Attributes:
         print_name (str): The printable name of the motor controller.

@@ -1,5 +1,4 @@
-"""
-This module defines the autocross event at Formula Student."""
+"""This module defines the autocross event at Formula Student."""
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,7 +12,7 @@ from usmlap.competition.points import (
 )
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
@@ -22,9 +21,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 @dataclass
 class Autocross(EventInterface, label="autocross"):
-    """
-    Autocross event at Formula Student.
-    """
+    """Autocross event at Formula Student."""
 
     track_file: Path
 
@@ -48,8 +45,7 @@ class Autocross(EventInterface, label="autocross"):
         return {"autocross": points}
 
     def _generate_mesh(self, resolution: float) -> Mesh:
-        """
-        Generate a track mesh for the autocross event.
+        """Generate a track mesh for the autocross event.
 
         Args:
             resolution (float): The resolution of the mesh.

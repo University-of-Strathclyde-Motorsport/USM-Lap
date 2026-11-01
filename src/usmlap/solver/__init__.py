@@ -1,6 +1,4 @@
-"""
-This package implements algorithms for solving a vehicle's trajectory.
-"""
+"""This package implements algorithms for solving a vehicle's trajectory."""
 
 from usmlap.core.registry import Registry
 from usmlap.solver.qss.quasi_steady_state import QuasiSteadyStateSolver

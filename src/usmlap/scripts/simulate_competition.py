@@ -1,6 +1,4 @@
-"""
-Script for simulating a Formula Student competition.
-"""
+"""Script for simulating a Formula Student competition."""
 
 from pathlib import Path
 

@@ -1,5 +1,4 @@
-"""
-This module models the motor of a vehicle."""
+"""This module models the motor of a vehicle."""
 
 import math
 from functools import cached_property
@@ -9,8 +8,7 @@ from usmlap.core.library import Serialisable
 
 
 class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
-    """
-    An electric motor.
+    """An electric motor.
 
     Attributes:
         print_name (str): Printable name of the motor.
@@ -51,8 +49,7 @@ class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
         return self.peak_torque / self.peak_current
 
     def get_speed(self, voltage: float) -> float:
-        """
-        Calculate the motor speed for an input voltage.
+        """Calculate the motor speed for an input voltage.
 
         Args:
             voltage (float): Voltage applied to the motor.
@@ -64,8 +61,7 @@ class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
         return voltage * self.speed_per_volt
 
     def get_torque(self, current: float) -> float:
-        """
-        Calculate the motor torque for an input current.
+        """Calculate the motor torque for an input current.
 
         Args:
             current (float): Current applied to the motor.
@@ -77,8 +73,7 @@ class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
         return current * self.torque_per_amp
 
     def get_current(self, torque: float) -> float:
-        """
-        Calculate the motor current for an input torque.
+        """Calculate the motor current for an input torque.
 
         Args:
             torque (float): Torque applied to the motor.
@@ -91,8 +86,7 @@ class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
 
 
 def rpm_to_rads(rpm: float) -> float:
-    """
-    Convert from RPM to radians per second
+    """Convert from RPM to radians per second
 
     Args:
         rpm (float): Speed in revolutions per minute
@@ -105,8 +99,7 @@ def rpm_to_rads(rpm: float) -> float:
 
 
 def rads_to_rpm(speed: float) -> float:
-    """
-    Convert from radians per second to RPM
+    """Convert from radians per second to RPM
 
     Args:
         speed (float): Speed in radians per second

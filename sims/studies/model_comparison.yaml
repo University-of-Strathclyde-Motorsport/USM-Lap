@@ -1,0 +1,46 @@
+study_name: ModelComparison
+
+base_settings:
+  sim_name: TestSimulation
+  solver: quasi-steady-state
+  outings:
+    - !include "sims/outings/autocross.yaml"
+    - !include "sims/outings/acceleration.yaml"
+    - !include "sims/outings/skidpad.yaml"
+  track: !include "sims/definitions/default_track_settings.yaml"
+  vehicle: !include "sims/definitions/baseline_vehicle.yaml"
+  boundary_conditions: !include "sims/definitions/default_boundary_conditions.yaml"
+
+  plots:
+    waveform:
+      - track_mesh
+    scatter:
+      - gg
+
+sweep:
+  vehicle:
+    vehicle_model:
+      traction:
+        - point-mass
+        - bicycle
+        - four-corner
+  sim_name:
+    - PointMass
+    - Bicycle
+    - FourCorner
+  plot_colour:
+    - "#FF6454"
+    - "#69C2CD"
+    - "#003366"
+
+plots:
+  waveform:
+    - config: general
+      outing_id: autocross
+    - config: general
+      outing_id: acceleration
+    - config: general
+      outing_id: skidpad
+  scatter:
+    - config: gg
+      outing_id: autocross

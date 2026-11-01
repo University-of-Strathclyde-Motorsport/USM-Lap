@@ -1,5 +1,4 @@
-"""
-This module implements the braking solver,
+"""This module implements the braking solver,
 which calculates the maximum possible braking at a node.
 """
 
@@ -17,8 +16,7 @@ def solve_braking(
     ctx: NodeContext,
     final_velocity: float,
 ) -> float:
-    """
-    Calculate the velocity at the start of a node,
+    """Calculate the velocity at the start of a node,
     given the final velocity at the end of the node.
 
     Args:

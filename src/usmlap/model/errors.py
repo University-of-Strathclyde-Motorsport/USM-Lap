@@ -1,5 +1,4 @@
-"""
-This module defines exceptions raised by vehicle models."""
+"""This module defines exceptions raised by vehicle models."""
 
 from dataclasses import dataclass
 
@@ -7,15 +6,12 @@ from usmlap.core.datatypes import FourCorner
 
 
 class ModelError(Exception):
-    """
-    Base class for exceptions raised by vehicle models.
-    """
+    """Base class for exceptions raised by vehicle models."""
 
 
 @dataclass
 class MaximumIterationsExceededError(ModelError):
-    """
-    Error raised when the maximum number of iterations is exceeded
+    """Error raised when the maximum number of iterations is exceeded
     without converging on a solution.
     """
 
@@ -40,9 +36,7 @@ class MaximumIterationsExceededError(ModelError):
 
 @dataclass
 class InsufficientTractionError(ModelError):
-    """
-    Error raised when the vehicle has insufficient traction.
-    """
+    """Error raised when the vehicle has insufficient traction."""
 
     required: float
     available: float
@@ -61,9 +55,7 @@ class InsufficientTractionError(ModelError):
 
 @dataclass
 class OutOfChargeError(ModelError):
-    """
-    Error raised when the vehicle is out of battery.
-    """
+    """Error raised when the vehicle is out of battery."""
 
     def __str__(self) -> str:
         return "Vehicle is out of battery."
@@ -71,8 +63,7 @@ class OutOfChargeError(ModelError):
 
 @dataclass
 class WheelLiftError(ModelError):
-    """
-    Error raised when one or more wheels have negative normal forces.
+    """Error raised when one or more wheels have negative normal forces.
 
     This is usually caused by extreme load transfer,
     typically in the first couple of solver iterations.

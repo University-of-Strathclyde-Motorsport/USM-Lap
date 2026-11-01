@@ -1,5 +1,4 @@
-"""
-This module defines lambda coefficients for a simulation.
+"""This module defines lambda coefficients for a simulation.
 
 These are used to directly modify results in order to investigate sensitivities.
 """
@@ -9,8 +8,7 @@ from dataclasses import dataclass
 
 @dataclass
 class LambdaCoefficients:
-    """
-    Lambda coefficients for a simulation.
+    """Lambda coefficients for a simulation.
 
     Attributes:
         longitudinal_grip (float): Longitudinal grip coefficient.

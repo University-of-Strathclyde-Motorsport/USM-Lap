@@ -1,5 +1,4 @@
-"""
-This module provides support for reading tyre data from .TIR files.
+"""This module provides support for reading tyre data from .TIR files.
 
 The .TIR file format specifies a wide range of tyre parameters
 which can be used in the Pacejka Magic Formula.
@@ -17,13 +16,11 @@ from pydantic import BaseModel
 
 
 class _ParameterGroup(ABC, BaseModel):
-    """
-    Base class for parameter groups."""
+    """Base class for parameter groups."""
 
 
 class Units(_ParameterGroup):
-    """
-    Units used in the .TIR file.
+    """Units used in the .TIR file.
 
     Attributes:
         LENGTH: Length units (default: "meter").
@@ -42,8 +39,7 @@ class Units(_ParameterGroup):
 
 
 class Model(_ParameterGroup):
-    """
-    Parameters on the usage of the tyre model.
+    """Parameters on the usage of the tyre model.
 
     Attributes:
         FITTYP (int): Magic Formula version number.
@@ -66,8 +62,7 @@ class Model(_ParameterGroup):
 
 
 class Dimension(_ParameterGroup):
-    """
-    Tyre dimensions.
+    """Tyre dimensions.
 
     Attributes:
         UNLOADED_RADIUS (float): Free tyre radius.
@@ -86,8 +81,7 @@ class Dimension(_ParameterGroup):
 
 
 class OperatingConditions(_ParameterGroup):
-    """
-    Operating conditions of the tyre.
+    """Operating conditions of the tyre.
 
     Attributes:
         INFLPRES (float): Tyre inflation pressure.
@@ -100,8 +94,7 @@ class OperatingConditions(_ParameterGroup):
 
 
 class Inertia(_ParameterGroup):
-    """
-    Mass and inertia properties of the tyre and tyre belt.
+    """Mass and inertia properties of the tyre and tyre belt.
 
     Attributes:
         MASS (float | None): Tyre mass.
@@ -124,8 +117,7 @@ class Inertia(_ParameterGroup):
 
 
 class Vertical(_ParameterGroup):
-    """
-    Vertical stiffness, loaded and effective rolling radius.
+    """Vertical stiffness, loaded and effective rolling radius.
 
     Attributes:
         FNOMIN (float): Nominal wheel load.
@@ -195,8 +187,7 @@ class Vertical(_ParameterGroup):
 
 
 class Structural(_ParameterGroup):
-    """
-    Tyre stiffness, damping, and eigenfrequencies.
+    """Tyre stiffness, damping, and eigenfrequencies.
 
     Attributes:
         LONGITUDINAL_STIFFNESS (float | None):
@@ -262,8 +253,7 @@ class Structural(_ParameterGroup):
 
 
 class ContactPatch(_ParameterGroup):
-    """
-    Contact length and obstacle enveloping parameters.
+    """Contact length and obstacle enveloping parameters.
 
     Attributes:
         Q_RA1 (float | None): Square root term in contact length equation.
@@ -304,8 +294,7 @@ class ContactPatch(_ParameterGroup):
 
 
 class InflationPressureRange(_ParameterGroup):
-    """
-    Minimum and maximum allowed inflation pressures.
+    """Minimum and maximum allowed inflation pressures.
 
     Attributes:
         PRESMIN (float | None): Minimum allowed inflation pressure.
@@ -318,8 +307,7 @@ class InflationPressureRange(_ParameterGroup):
 
 
 class VerticalForceRange(_ParameterGroup):
-    """
-    Minimum and maximum allowed wheel loads.
+    """Minimum and maximum allowed wheel loads.
 
     Attributes:
         FZMIN (float | None): Minimum allowed wheel load.
@@ -332,8 +320,7 @@ class VerticalForceRange(_ParameterGroup):
 
 
 class LongSlipRange(_ParameterGroup):
-    """
-    Minimum and maximum valid longitudinal slips.
+    """Minimum and maximum valid longitudinal slips.
 
     Attributes:
         KPUMIN (float | None): Minimum valid wheel slip.
@@ -346,8 +333,7 @@ class LongSlipRange(_ParameterGroup):
 
 
 class SlipAngleRange(_ParameterGroup):
-    """
-    Minimum and maximum valid sideslip angles.
+    """Minimum and maximum valid sideslip angles.
 
     Attributes:
         ALPMIN (float | None): Minimum valid slip angle.
@@ -360,8 +346,7 @@ class SlipAngleRange(_ParameterGroup):
 
 
 class InclinationAngleRange(_ParameterGroup):
-    """
-    Minimum and maximum valid inclination angles.
+    """Minimum and maximum valid inclination angles.
 
     Attributes:
         CAMMIN (float | None): Minimum valid camber angle.
@@ -374,8 +359,7 @@ class InclinationAngleRange(_ParameterGroup):
 
 
 class ScalingCoefficients(_ParameterGroup):
-    """
-    Magic Formula scaling factors.
+    """Magic Formula scaling factors.
 
     Attributes:
         LFZO (float): Scale factor of nominal (rated) load.
@@ -434,8 +418,7 @@ class ScalingCoefficients(_ParameterGroup):
 
 
 class LongitudinalCoefficients(_ParameterGroup):
-    """
-    Coefficients for evaluating longitudinal force, Fx.
+    """Coefficients for evaluating longitudinal force, Fx.
 
     Attributes:
         PCX1 (float): Shape factor Cf for longitudinal force.
@@ -496,8 +479,7 @@ class LongitudinalCoefficients(_ParameterGroup):
 
 
 class OverturningCoefficients(_ParameterGroup):
-    """
-    Coefficients for evaluating overturning moment, Mx.
+    """Coefficients for evaluating overturning moment, Mx.
 
     Attributes:
         QSX1 (float): Overturning moment offset.
@@ -537,8 +519,7 @@ class OverturningCoefficients(_ParameterGroup):
 
 
 class LateralCoefficients(_ParameterGroup):
-    """
-    Coefficients for evaluating lateral force, Fy.
+    """Coefficients for evaluating lateral force, Fy.
 
     Attributes:
         PCY1 (float): Shape factor Cfy for lateral forces.
@@ -631,8 +612,7 @@ class LateralCoefficients(_ParameterGroup):
 
 
 class RollingCoefficients(_ParameterGroup):
-    """
-    Coefficients for evaluating rolling resistance moment, My.
+    """Coefficients for evaluating rolling resistance moment, My.
 
     Attributes:
         QSY1 (float): Rolling resistance torque coefficient.
@@ -659,8 +639,7 @@ class RollingCoefficients(_ParameterGroup):
 
 
 class AligningCoefficients(_ParameterGroup):
-    """
-    Coefficients for evaluating self-aligning moment, Mz.
+    """Coefficients for evaluating self-aligning moment, Mz.
 
     Attributes:
         QBZ1 (float): Trail slope factor for trail Bpt at Fznom.
@@ -738,8 +717,7 @@ class AligningCoefficients(_ParameterGroup):
 
 
 class TurnslipCoefficients(_ParameterGroup):
-    """
-    Coefficients for turn slip, affecting all forces and moments.
+    """Coefficients for turn slip, affecting all forces and moments.
 
     Attributes:
         PDXP1 (float | None):
@@ -805,8 +783,7 @@ class TurnslipCoefficients(_ParameterGroup):
 
 
 class TIRParameters(BaseModel):
-    """
-    Tyre parameters specified in a .TIR file.
+    """Tyre parameters specified in a .TIR file.
 
     For ease of use, parameters are split into groups.
 
@@ -889,8 +866,7 @@ class TIRParameters(BaseModel):
 
     @classmethod
     def from_file(cls, filepath: str) -> Self:
-        """
-        Generate a TIRParameters object from a .TIR file.
+        """Generate a TIRParameters object from a .TIR file.
 
         Uses _TIRReader to parse the .TIR file into a dictionary,
         then converts it to a TIRParameters object.
@@ -918,12 +894,10 @@ class TIRParameters(BaseModel):
 
 
 class _TIRReader:
-    """
-    Reads and parses .TIR files."""
+    """Reads and parses .TIR files."""
 
     def read(self, filepath: str) -> dict[str, dict[str, str]]:
-        """
-        Generate a dictionary from a .TIR file.
+        """Generate a dictionary from a .TIR file.
 
         Args:
             filepath (str): Filepath to the .TIR file.
@@ -955,8 +929,7 @@ class _TIRReader:
             return file.readlines()
 
     def _parse_line(self, line: str) -> None:
-        """
-        Determine the line type and parse it with the appropriate strategy.
+        """Determine the line type and parse it with the appropriate strategy.
 
         Args:
             line (str): A line from the .TIR file.
@@ -971,8 +944,7 @@ class _TIRReader:
             self._parse_parameter(line)
 
     def _parse_parameter_group(self, line: str) -> None:
-        """
-        Parse a parameter group.
+        """Parse a parameter group.
 
         Extract the group name from the line.
         Create a new dictionary for this group.
@@ -994,8 +966,7 @@ class _TIRReader:
         self.data[self.active_parameter_group] = {}
 
     def _parse_parameter(self, line: str) -> None:
-        """
-        Parse a parameter.
+        """Parse a parameter.
 
         Extract the parameter name and value from the line.
         Add the parameter to the current parameter group dictionary.

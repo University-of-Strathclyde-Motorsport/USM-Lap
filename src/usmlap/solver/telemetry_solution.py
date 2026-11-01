@@ -1,5 +1,6 @@
-"""
-This module defines a format for storing the solution of a simulation."""
+"""This module defines a format for storing the solution of a simulation."""
+
+# TODO: deprecate this module
 
 from __future__ import annotations
 

@@ -1,13 +1,11 @@
-"""
-This module models the driver of the vehicle."""
+"""This module models the driver of the vehicle."""
 
 from usmlap.core.filepath import LIBRARY_ROOT
 from usmlap.core.library import Serialisable
 
 
 class Driver(Serialisable, library=LIBRARY_ROOT / "drivers"):
-    """
-    The driver of the vehicle.
+    """The driver of the vehicle.
 
     Attributes:
         print_name (str): Printable name of the driver.

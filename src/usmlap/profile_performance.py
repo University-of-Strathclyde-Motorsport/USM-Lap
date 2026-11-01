@@ -1,5 +1,4 @@
-"""
-Code for profiling the performance of the simulation."""
+"""Code for profiling the performance of the simulation."""
 
 import cProfile
 import pstats

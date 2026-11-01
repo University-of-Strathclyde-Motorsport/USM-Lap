@@ -1,6 +1,4 @@
-"""
-This subpackage contains definitions of powertrain models.
-"""
+"""This subpackage contains definitions of powertrain models."""
 
 from usmlap.core.registry import Registry
 from usmlap.model.powertrain.interface import PowertrainModelInterface

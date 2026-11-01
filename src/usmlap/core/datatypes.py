@@ -1,6 +1,4 @@
-"""
-This module contains type definitions used throughout the library.
-"""
+"""This module contains type definitions used throughout the library."""
 
 from __future__ import annotations
 
@@ -16,8 +14,7 @@ type Array1D = np.ndarray[tuple[int], np.dtype[np.float64]]
 
 
 class Coordinate(BaseModel):
-    """
-    Represents a coordinate with x, y, and z components.
+    """Represents a coordinate with x, y, and z components.
 
     Attributes:
         x (float): x component.
@@ -35,8 +32,7 @@ class Coordinate(BaseModel):
 
 
 class FrontRear[T](NamedTuple):
-    """
-    Represents a property with a front and rear value.
+    """Represents a property with a front and rear value.
 
     Used for properties which differ on each axle of the vehicle.
 
@@ -74,8 +70,7 @@ class FrontRear[T](NamedTuple):
 
 
 class LeftRight[T](NamedTuple):
-    """
-    Represents a property with a left and right value.
+    """Represents a property with a left and right value.
 
     Used for properties which differ on each side of the vehicle.
 
@@ -113,8 +108,7 @@ class LeftRight[T](NamedTuple):
 
 
 class FourCorner[T](NamedTuple):
-    """
-    Represents a property with values for each corner of the vehicle.
+    """Represents a property with values for each corner of the vehicle.
 
     Attributes:
         front_left (T): Value for the front left corner.

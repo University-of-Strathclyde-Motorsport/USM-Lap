@@ -1,5 +1,4 @@
-"""
-This module models the aerodynamics of a vehicle."""
+"""This module models the aerodynamics of a vehicle."""
 
 from __future__ import annotations
 
@@ -16,8 +15,7 @@ from usmlap.core.registry import Registry
 
 
 class AeroAttitude(BaseModel):
-    """
-    Aerodynamic attitude of a vehicle.
+    """Aerodynamic attitude of a vehicle.
 
     Attributes:
         air_density (float): The density of air.
@@ -40,9 +38,7 @@ class AeroAttitude(BaseModel):
 
 
 class AeroModelInterface(ABC):
-    """
-    Abstract  base class for aero models.
-    """
+    """Abstract  base class for aero models."""
 
     @staticmethod
     @abstractmethod
@@ -58,8 +54,7 @@ class AeroModelInterface(ABC):
 
 
 class ConstantAero(AeroModelInterface):
-    """
-    Constant aero model.
+    """Constant aero model.
 
     Lift and drag coefficients do not change with velocity.
 
@@ -89,8 +84,7 @@ AeroModelRegistry.register("constant", ConstantAero)
 class AeroPackage(
     Serialisable, library=LIBRARY_ROOT / "components" / "aero_packages"
 ):
-    """
-    The aerodynamic package of a vehicle.
+    """The aerodynamic package of a vehicle.
 
     Attributes:
         frontal_area (float): The frontal area of the vehicle.

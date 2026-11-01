@@ -1,5 +1,4 @@
-"""
-This module defines the interface for simulation solvers."""
+"""This module defines the interface for simulation solvers."""
 
 from __future__ import annotations
 
@@ -18,9 +17,7 @@ from usmlap.track.mesh import TrackNode
 
 @dataclass
 class SolverInterface(ABC):
-    """
-    Abstract base class for simulation solvers.
-    """
+    """Abstract base class for simulation solvers."""
 
     vehicle_model: TractionModel
     global_context: GlobalContext

@@ -1,6 +1,4 @@
-"""
-This script plots a map of motor performance.
-"""
+"""This script plots a map of motor performance."""
 
 from pathlib import Path
 

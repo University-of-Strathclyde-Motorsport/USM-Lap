@@ -1,6 +1,4 @@
-"""
-This module contains style settings for plots.
-"""
+"""This module contains style settings for plots."""
 
 from itertools import cycle
 

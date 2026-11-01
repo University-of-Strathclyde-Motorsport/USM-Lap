@@ -1,3 +1,1 @@
-"""
-This subpackage contains definitions of tyre models.
-"""
+"""This subpackage contains definitions of tyre models."""

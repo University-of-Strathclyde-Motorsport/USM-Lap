@@ -1,6 +1,4 @@
-"""
-This script evaluates the impact of changing the lambda coefficients.
-"""
+"""This script evaluates the impact of changing the lambda coefficients."""
 
 from pathlib import Path
 

@@ -1,3 +1,1 @@
-"""
-This package contains higher-order functions for carrying out analysis.
-"""
+"""This package contains higher-order functions for carrying out analysis."""

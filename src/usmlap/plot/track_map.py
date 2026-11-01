@@ -1,5 +1,4 @@
-"""
-This module contains functions for plotting track maps."""
+"""This module contains functions for plotting track maps."""
 
 from matplotlib import pyplot as plt
 
@@ -15,8 +14,7 @@ def plot_map(
     label: str | None = None,
     show_legend: bool = False,
 ) -> plt.Axes:
-    """
-    Plot a map of a track mesh.
+    """Plot a map of a track mesh.
 
     Args:
         mesh (Mesh): The track mesh to plot.
@@ -49,8 +47,7 @@ def plot_map(
 
 
 def _draw_start_arrow(ax: plt.Axes) -> None:
-    """
-    Plot a red arrow at the start line of the track.
+    """Plot a red arrow at the start line of the track.
 
     Args:
         ax (Axes): The axes to draw the arrow on.

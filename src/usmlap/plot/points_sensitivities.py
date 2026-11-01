@@ -1,6 +1,4 @@
-"""
-This module plots the relative magnitudes of a list of points sensitivities.
-"""
+"""Functions for plotting the relative magnitudes of points sensitivities."""
 
 from dataclasses import dataclass
 from functools import total_ordering
@@ -15,8 +13,7 @@ from usmlap.plot.style import USM_BLUE, USM_RED
 @total_ordering
 @dataclass
 class PointsSensitivityData:
-    """
-    Dataclass for storing points sensitivity data.
+    """Dataclass for storing points sensitivity data.
 
     Attributes:
         label (str): Label for the bar.
@@ -44,7 +41,7 @@ class PointsSensitivityData:
             return NotImplemented
         return abs(self.value) == abs(other.value)
 
-    def __lt__(self, other: Any) -> bool:
+    def __lt__(self, other: Any) -> bool:  # noqa: S6542
         if not isinstance(other, PointsSensitivityData):
             return NotImplemented
         return abs(self.value) < abs(other.value)
@@ -56,8 +53,7 @@ def plot_points_sensitivities(
     x_label: str | None = None,
     max_results: int | None = None,
 ) -> None:
-    """
-    This function plots the relative magnitudes
+    """This function plots the relative magnitudes
     of a list of points sensitivities.
 
     Args:
@@ -103,8 +99,7 @@ def plot_points_sensitivities(
 
 
 def get_bar_colour(sensitivity: float) -> str:
-    """
-    Get the bar colour for a sensitivity.
+    """Get the bar colour for a sensitivity.
 
     If the sensitivity is positive, the bar is blue.
     If the sensitivity is negative, the bar is red.
@@ -115,8 +110,7 @@ def get_bar_colour(sensitivity: float) -> str:
 
 
 def get_bar_text_colour(sensitivity: float) -> str:
-    """
-    Get the text colour for a sensitivity.
+    """Get the text colour for a sensitivity.
 
     If the sensitivity is positive, the text is white.
     If the sensitivity is negative, the text is black.
@@ -127,9 +121,7 @@ def get_bar_text_colour(sensitivity: float) -> str:
 
 
 def create_legend(ax: plt.Axes) -> None:
-    """
-    Add a legend to the plot, denoting colours for positive and negative bars.
-    """
+    """Add a legend to the plot, with colours for positive and negative bars."""
     colours = {
         "positive correlation": USM_BLUE,
         "negative correlation": USM_RED,

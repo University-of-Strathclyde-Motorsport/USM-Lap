@@ -15,7 +15,9 @@ lazy from usmlap.io.test_load import (
     test_load,
     test_load_all,
 )
+lazy from usmlap.plot.config.scatter import ScatterConfig
 lazy from usmlap.plot.config.waveform import WaveformConfig
+lazy from usmlap.plot.plots.scatter import plot_scatter
 lazy from usmlap.plot.plots.waveform import plot_waveform
 lazy from usmlap.plot.study_plots import generate_study_plots
 lazy from usmlap.simulation.settings import SimSettings
@@ -74,6 +76,15 @@ def waveform(simulation: Path, config_file: Path) -> None:
     filemap = OutingFileMap(simulation)
     data = read_parquet(filemap.parquet_file)
     plot_waveform(data, WaveformConfig.from_file(config_file))
+    plt.show()
+
+
+@app.command()
+def scatter(simulation: Path, config_file: Path) -> None:
+    """Generate a scatter plot of a simulation."""
+    filemap = OutingFileMap(simulation)
+    data = read_parquet(filemap.parquet_file)
+    plot_scatter(data, ScatterConfig.from_file(config_file))
     plt.show()
 
 

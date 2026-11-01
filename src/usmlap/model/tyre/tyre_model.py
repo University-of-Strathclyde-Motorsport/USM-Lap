@@ -1,5 +1,4 @@
-"""
-This module defines the interface for tyre models."""
+"""This module defines the interface for tyre models."""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -9,8 +8,7 @@ from usmlap.vehicle.tyres import Tyre
 
 
 class TyreAttitude(NamedTuple):
-    """
-    Variables describing the state of a tyre."""
+    """Variables describing the state of a tyre."""
 
     normal_load: float
     slip_angle: float = 0
@@ -19,8 +17,7 @@ class TyreAttitude(NamedTuple):
 
 
 class PureTyreModel(ABC):
-    """
-    Abstract base class for pure tyre models."""
+    """Abstract base class for pure tyre models."""
 
     @abstractmethod
     def maximum_fx(self, tyre: Tyre, attitude: TyreAttitude) -> float: ...
@@ -30,8 +27,7 @@ class PureTyreModel(ABC):
 
 
 class CombinedTyreModel(ABC):
-    """
-    Abstract base class for combined tyre models."""
+    """Abstract base class for combined tyre models."""
 
     @abstractmethod
     def fx(self, fy: float, fx_max: float, fy_max: float) -> float: ...
@@ -42,8 +38,7 @@ class CombinedTyreModel(ABC):
 
 @dataclass
 class TyreModel:
-    """
-    Tyre model object."""
+    """Tyre model object."""
 
     longitudinal: PureTyreModel
     lateral: PureTyreModel

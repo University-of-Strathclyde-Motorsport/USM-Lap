@@ -1,5 +1,4 @@
-"""
-This module contains code for plotting cell maps."""
+"""This module contains code for plotting cell maps."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,8 +24,7 @@ AXIS_LABELS = {
 
 
 def plot_cell_parameters(accumulator: Accumulator) -> None:
-    """
-    Plot the parameters of a cell.
+    """Plot the parameters of a cell.
 
     Args:
         cell (Cell): The cell to plot.
@@ -49,8 +47,7 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
 
 
 def _plot_voltage(cell: Cell, ax: plt.Axes) -> None:
-    """
-    Plot voltage against state of charge."""
+    """Plot voltage against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     voltage = [cell.get_voltage(StateOfCharge(soc)) for soc in state_of_charge]
     ax.plot(state_of_charge * 100, voltage, color=USM_BLUE)
@@ -68,8 +65,7 @@ def _plot_resistance(
     title: str = "Resistance",
     y_limits: tuple[float, float] | None = None,
 ) -> None:
-    """
-    Plot resistance against state of charge."""
+    """Plot resistance against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     for temperature in REFERENCE_TEMPERATURES:
         resistances = []
@@ -93,8 +89,7 @@ def _plot_resistance(
 
 
 def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
-    """
-    Plot current against state of charge."""
+    """Plot current against state of charge."""
     state_of_charge = np.linspace(0, 1, RESOLUTION)
     derate = [
         accumulator.soc_derate(StateOfCharge(soc)) for soc in state_of_charge
@@ -108,8 +103,7 @@ def _plot_soc_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
 
 
 def _plot_thermal_derate(accumulator: Accumulator, ax: plt.Axes) -> None:
-    """
-    Plot current against temperature."""
+    """Plot current against temperature."""
     temperature = np.linspace(T_MIN, T_MAX, RESOLUTION)
     derate = [accumulator.thermal_derate(t) for t in temperature]
     ax.plot(temperature, derate, color=USM_BLUE)

@@ -1,6 +1,4 @@
-"""
-This module reads and writes channels to parquet files.
-"""
+"""This module reads and writes channels to parquet files."""
 
 import logging
 from pathlib import Path

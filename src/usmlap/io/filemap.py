@@ -1,6 +1,4 @@
-"""
-This module defines the files associated with a laptime simulation.
-"""
+"""This module defines the files associated with a laptime simulation."""
 
 from __future__ import annotations
 

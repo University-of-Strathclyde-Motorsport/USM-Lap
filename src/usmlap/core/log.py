@@ -1,5 +1,4 @@
-"""
-This module configures logging for the project."""
+"""This module configures logging for the project."""
 
 import logging
 from collections.abc import Generator
@@ -15,8 +14,7 @@ from usmlap.core.filepath import CONFIG_ROOT
 
 
 def get_logging_config_file() -> Path:
-    """
-    Get the path to the logging configuration file."""
+    """Get the path to the logging configuration file."""
     return CONFIG_ROOT / "logging.yaml"
 
 
@@ -32,8 +30,7 @@ def _load_logging_config() -> dict[str, Any]:
 
 
 def configure_logging() -> None:
-    """
-    Configure logging for the project."""
+    """Configure logging for the project."""
     dictConfig(_load_logging_config())
 
 

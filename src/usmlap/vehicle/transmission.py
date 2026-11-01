@@ -1,5 +1,4 @@
-"""
-This module models the transmission of a vehicle."""
+"""This module models the transmission of a vehicle."""
 
 from dataclasses import dataclass
 
@@ -8,8 +7,7 @@ from pydantic import PositiveFloat
 
 @dataclass
 class Transmission:
-    """
-    The transmission of the vehicle.
+    """The transmission of the vehicle.
 
     Transmits power from the motor to the wheels.
 

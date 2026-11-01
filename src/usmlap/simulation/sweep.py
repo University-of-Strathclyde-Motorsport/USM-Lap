@@ -1,6 +1,4 @@
-"""
-This module implements code for sweeping through values.
-"""
+"""This module implements code for sweeping through values."""
 
 from collections.abc import Generator, Iterable
 from dataclasses import dataclass, field

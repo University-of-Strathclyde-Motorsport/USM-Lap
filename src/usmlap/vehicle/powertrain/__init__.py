@@ -1,3 +1,1 @@
-"""
-This subpackage contains definitions of powertrain models.
-"""
+"""This subpackage contains definitions of powertrain models."""

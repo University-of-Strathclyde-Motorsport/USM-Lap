@@ -1,6 +1,4 @@
-"""
-This module defines settings for track mesh generation.
-"""
+"""This module defines settings for track mesh generation."""
 
 from __future__ import annotations
 

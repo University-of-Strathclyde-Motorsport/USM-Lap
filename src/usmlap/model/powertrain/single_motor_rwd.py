@@ -1,14 +1,11 @@
-"""
-This module defines a single-motor, rear-wheel drive powertrain."""
+"""This module defines a single-motor, rear-wheel drive powertrain."""
 
 from usmlap.model.context import NodeContext
 from usmlap.model.powertrain.interface import PowertrainModelInterface
 
 
 class SingleMotorRWD(PowertrainModelInterface):
-    """
-    Powertrain model for a single-motor vehicle.
-    """
+    """Powertrain model for a single-motor vehicle."""
 
     def required_torque(self, ctx: NodeContext, drive_force: float) -> float:
         return ctx.vehicle.traction_force_to_motor_torque(drive_force)

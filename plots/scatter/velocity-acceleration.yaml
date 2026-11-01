@@ -1,0 +1,7 @@
+title: "Velocity-Acceleration"
+xaxis:
+  channel_id: vCar
+yaxis:
+  channel_id: accelLong
+alpha: 1
+show_grid: True

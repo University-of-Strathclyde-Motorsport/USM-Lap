@@ -1,5 +1,4 @@
-"""
-This module contains code for generating a track mesh."""
+"""This module contains code for generating a track mesh."""
 
 import math
 
@@ -22,8 +21,7 @@ from usmlap.track.track_data import (
 
 
 def generate_mesh(settings: TrackSettings) -> Mesh:
-    """
-    Generate a track mesh from track data.
+    """Generate a track mesh from track data.
 
     Args:
         track_data (TrackData): The track data object.
@@ -95,8 +93,7 @@ def _interpolate_curvature(
     sample_position: Array1D,
     smooth: bool = True,
 ) -> Array1D:
-    """
-    Interpolate the curvature of the track at a series of positions.
+    """Interpolate the curvature of the track at a series of positions.
 
     Args:
         data (list[ShapeData]): Shape data for the track.
@@ -123,8 +120,7 @@ def _interpolate_elevation(
     data: list[ElevationData],
     sample_position: Array1D,
 ) -> Array1D:
-    """
-    Interpolate the elevation of the track at a series of positions.
+    """Interpolate the elevation of the track at a series of positions.
 
     Args:
         data (list[ElevationData]): Elevation data for the track.
@@ -145,8 +141,7 @@ def _interpolate_banking(
     data: list[BankingData],
     sample_position: Array1D,
 ) -> Array1D:
-    """
-    Interpolate the banking of the track at a series of positions.
+    """Interpolate the banking of the track at a series of positions.
 
     Args:
         data (list[BankingData]): Banking data for the track.
@@ -167,8 +162,7 @@ def _interpolate_grip_factor(
     data: list[GripFactorData],
     sample_position: Array1D,
 ) -> Array1D:
-    """
-    Interpolate the grip factor of the track at a series of positions.
+    """Interpolate the grip factor of the track at a series of positions.
 
     Args:
         data (list[GripFactorData]): Grip factor data for the track.
@@ -189,8 +183,7 @@ def _interpolate_sector(
     data: list[SectorData],
     sample_position: Array1D,
 ) -> npt.NDArray[np.str_]:
-    """
-    Interpolate the sector of the track at a series of positions.
+    """Interpolate the sector of the track at a series of positions.
 
     Args:
         data (list[SectorData]): Sector data for the track.
@@ -208,8 +201,7 @@ def _interpolate_sector(
 
 
 def _calculate_inclination(position: Array1D, elevation: Array1D) -> Array1D:
-    """
-    Calculate the inclination of the track.
+    """Calculate the inclination of the track.
 
     Args:
         position (Array1D): A list of positions.
@@ -234,8 +226,7 @@ def _calculate_heading_angle(
     curvature: Array1D,
     initial_heading: float = 0,
 ) -> Array1D:
-    """
-    Calculate the heading angle for each node of a track.
+    """Calculate the heading angle for each node of a track.
 
     Args:
         length (Array1D): The length of each node.
@@ -255,8 +246,7 @@ def _set_heading_angle(
     nodes: list[TrackNode],
     initial_heading: float = 0,
 ) -> list[TrackNode]:
-    """
-    Set the heading angle of each node in a list.
+    """Set the heading angle of each node in a list.
 
     Args:
         nodes (list[TrackNode]): The nodes to update.
@@ -281,8 +271,7 @@ def _calculate_coordinates(
     curvature: Array1D,
     initial_coordinates: tuple[float, float] = (0, 0),
 ) -> tuple[Array1D, Array1D]:
-    """
-    Calculate the coordinates for each node of a track.
+    """Calculate the coordinates for each node of a track.
 
     Note that the lengths of the returned arrays are one greater
     than the length of the input arrays.
@@ -320,8 +309,7 @@ def _set_coordinates(
     nodes: list[TrackNode],
     initial_coordinates: tuple[float, float] = (0, 0),
 ) -> list[TrackNode]:
-    """
-    Set the heading angle and coordinates of each node in a list.
+    """Set the heading angle and coordinates of each node in a list.
 
     Args:
         nodes (list[TrackNode]): The nodes to update.
@@ -346,8 +334,7 @@ def _set_coordinates(
 def _correct_tangency(
     nodes: list[TrackNode], settings: TrackSettings
 ) -> list[TrackNode]:
-    """
-    Adjust track curvature to correct the tangency of closed tracks.
+    """Adjust track curvature to correct the tangency of closed tracks.
 
     The tangency error is calculated by summing the sweep angle of each node.
 
@@ -392,8 +379,7 @@ def _correct_tangency(
 def _correct_displacement(
     nodes: list[TrackNode], settings: TrackSettings
 ) -> list[TrackNode]:
-    """
-    Adjust the length and curvature of each node
+    """Adjust the length and curvature of each node
     to correct a displacement error.
 
     Args:

@@ -1,6 +1,4 @@
-"""
-This subpackage defines combined tyre models.
-"""
+"""This subpackage defines combined tyre models."""
 
 from usmlap.core.registry import Registry
 from usmlap.model.tyre.combined.friction_ellipse import FrictionEllipse

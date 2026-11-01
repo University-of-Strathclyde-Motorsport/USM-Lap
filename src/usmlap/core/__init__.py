@@ -1,3 +1,1 @@
-"""
-This package contains core modules used throughout the project.
-"""
+"""This package contains core modules used throughout the project."""

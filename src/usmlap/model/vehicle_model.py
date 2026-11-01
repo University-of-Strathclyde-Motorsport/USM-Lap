@@ -1,5 +1,4 @@
-"""
-This module implements the vehicle model,
+"""This module implements the vehicle model,
 which contains all the subsystem models.
 """
 
@@ -29,8 +28,7 @@ from usmlap.model.tyre.tyre_model import (
 
 @dataclass
 class VehicleModel:
-    """
-    Dataclass to store all the models used for modelling a vehicle."""
+    """Dataclass to store all the models used for modelling a vehicle."""
 
     powertrain: PowertrainModelInterface
     traction: TractionModel

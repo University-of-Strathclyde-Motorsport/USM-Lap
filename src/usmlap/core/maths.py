@@ -12,8 +12,7 @@ def clamp(
     minimum: float | None = None,
     maximum: float | None = None,
 ) -> float:
-    """
-    Clamp a value to a range.
+    """Clamp a value to a range.
     If `value` is below `minimum`, it is set to `minimum`.
     If `value` is above `maximum`, it is set to `maximum`.
     Otherwise, `value` is returned unchanged.
@@ -28,8 +27,7 @@ def clamp(
 
 
 def area_of_circle(diameter: float) -> float:
-    """
-    Calculate the area of a circle from its diameter.
+    """Calculate the area of a circle from its diameter.
 
     Diameter must be non-negative.
 
@@ -63,7 +61,7 @@ def interp_previous[T: np.generic](
         yp (`list[T]`):
             The y-coordinates of the data. Must be the same length as `xp`.
 
-     Returns:
+    Returns:
         y (list[T]): The interpolated values. The same length as `x`.
 
     Raises:
@@ -71,6 +69,7 @@ def interp_previous[T: np.generic](
             - If `xp` and `yp` are not the same length
             - If `xp` (or  `yp`) is empty
             - If `xp` is not strictly increasing
+
     """
     if len(xp) != len(yp):
         raise ValueError("xp and yp must have the same length")

@@ -1,3 +1,1 @@
-"""
-Package containing code for simulating different events at Formula Student.
-"""
+"""Code for simulating different events at Formula Student."""

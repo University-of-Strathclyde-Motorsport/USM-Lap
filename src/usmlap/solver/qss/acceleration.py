@@ -1,5 +1,4 @@
-"""
-This module implements the acceleration solver,
+"""This module implements the acceleration solver,
 which calculates the maximum possible acceleration at a node.
 """
 
@@ -17,8 +16,7 @@ def solve_acceleration(
     ctx: NodeContext,
     initial_velocity: float,
 ) -> float:
-    """
-    Calculate the velocity at the end of a node,
+    """Calculate the velocity at the end of a node,
     given the initial velocity at the start of the node.
 
     Args:

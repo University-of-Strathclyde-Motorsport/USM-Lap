@@ -1,5 +1,4 @@
-"""
-This module defines settings for a simulation."""
+"""This module defines settings for a simulation."""
 
 from __future__ import annotations
 

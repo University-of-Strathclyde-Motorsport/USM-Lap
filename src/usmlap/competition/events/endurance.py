@@ -1,6 +1,4 @@
-"""
-This module defines the endurance and efficiency events at Formula Student.
-"""
+"""This module defines the endurance and efficiency event at Formula Student."""
 
 from dataclasses import dataclass
 from math import ceil
@@ -16,7 +14,7 @@ from usmlap.competition.points import (
 )
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.simulation import simulate
-from usmlap.telemetry.data.solution import TelemetrySolution
+from usmlap.solver.telemetry_solution import TelemetrySolution
 from usmlap.track.mesh import Mesh
 from usmlap.track.mesh_generation import generate_mesh
 from usmlap.track.settings import TrackSettings
@@ -29,9 +27,7 @@ DEFAULT_DISCHARGE_LIMIT: float = 0.4
 
 @dataclass
 class Endurance(EventInterface, label="endurance"):
-    """
-    Endurance and efficiency events at Formula Student.
-    """
+    """Endurance and efficiency events at Formula Student."""
 
     track_file: Path
     simulate_efficiency: bool = True
@@ -75,8 +71,7 @@ class Endurance(EventInterface, label="endurance"):
         return points
 
     def _generate_mesh(self, resolution: float) -> Mesh:
-        """
-        Generate a track mesh for the endurance event.
+        """Generate a track mesh for the endurance event.
 
         Args:
             resolution (float): The resolution of the mesh.
@@ -96,9 +91,7 @@ class Endurance(EventInterface, label="endurance"):
 
 
 def _modify_vehicle_for_event(vehicle: Vehicle) -> Vehicle:
-    """
-    Modify a vehicle for the endurance event by updating parameters.
-    """
+    """Modify a vehicle for the endurance event by updating parameters."""
     return get_new_vehicle(
         vehicle,
         DischargeCurrentLimit,

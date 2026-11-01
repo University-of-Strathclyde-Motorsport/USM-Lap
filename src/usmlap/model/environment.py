@@ -1,5 +1,4 @@
-"""
-This module models the environment in which the vehicle is simulated."""
+"""This module models the environment in which the vehicle is simulated."""
 
 from pydantic import BaseModel, Field
 
@@ -11,6 +10,7 @@ class EnvironmentSettings(BaseModel):
         gravity (float): Acceleration due to gravity (default = 9.81).
         air_density (float): The density of the air (default = 1.225).
         ambient_temperature (float): The ambient air temperature (default = 25).
+
     """
 
     gravity: float = 9.81

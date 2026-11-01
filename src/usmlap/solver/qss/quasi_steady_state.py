@@ -1,5 +1,4 @@
-"""
-This module implements a quasi-steady-state solver."""
+"""This module implements a quasi-steady-state solver."""
 
 import logging
 
@@ -17,9 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class QuasiSteadyStateSolver(SolverInterface):
-    """
-    Quasi-steady-state solver.
-    """
+    """Quasi-steady-state solver."""
 
     def solve(self, previous_solution: Solution) -> Solution:
 
@@ -66,8 +63,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         return solution
 
     def _solve_maximum_velocities(self, solution: Solution) -> Solution:
-        """
-        Calculate the theoretical maximum velocity at each node.
+        """Calculate the theoretical maximum velocity at each node.
 
         Nodes are solved independently of each other.
         Only the potential lateral acceleration of the vehicle is considered.
@@ -101,8 +97,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution: Solution,
         start_index: int,
     ) -> Solution:
-        """
-        Propagate the solution forward.
+        """Propagate the solution forward.
 
         Args:
             solution (Solution): The initial unpropagated solution.
@@ -146,8 +141,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         solution: Solution,
         start_index: int,
     ) -> Solution:
-        """
-        Propagate the solution backwards.
+        """Propagate the solution backwards.
 
         Args:
             solution (Solution): The initial unpropagated solution.
@@ -190,8 +184,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
 
 def _find_apexes(solution: Solution) -> list[int]:
-    """
-    Identify the apexes of a solution.
+    """Identify the apexes of a solution.
 
     Apexes are the indices at which the maximum velocity is a local minimum.
 
