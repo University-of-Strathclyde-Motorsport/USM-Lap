@@ -26,7 +26,16 @@ def test_getting_missing_key_returns_None():
 def test_get_key_by_value():
     registry = Registry[str, int]()
     registry.register("abc", 1)
-    assert registry.get_key(1) == "abc"
+    registry.register("def", 2)
+    assert registry.get_key(2) == "def"
+
+
+def test_get_or_raise():
+    registry = Registry[str, int]()
+    registry.register("abc", 1)
+    assert registry.get_or_raise("abc") == 1
+    with pytest.raises(KeyError):
+        registry.get_or_raise("def")
 
 
 def test_get_key_for_missing_value_raises_error():

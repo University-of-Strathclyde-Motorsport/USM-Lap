@@ -5,8 +5,7 @@ from typing import Annotated
 from pydantic import BeforeValidator
 
 from usmlap.core.datatypes import FrontRear
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 from usmlap.vehicle.aero import AeroPackage
 from usmlap.vehicle.brakes import Brakes
 from usmlap.vehicle.driver import Driver
@@ -19,7 +18,7 @@ from usmlap.vehicle.transmission import Transmission
 from usmlap.vehicle.tyres import Tyres
 
 
-class Vehicle(Serialisable, library=LIBRARY_ROOT / "vehicles"):
+class Vehicle(Serialisable):
     """The full vehicle.
 
     Attributes:

@@ -3,19 +3,13 @@
 from __future__ import annotations
 
 import math
-import os
 from enum import Enum, IntEnum
 from pathlib import Path
 
 import pandas
 from pydantic import BaseModel, Field
 
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
-
-TRACK_LIBRARY = LIBRARY_ROOT / "tracks"
-AVAILABLE_TRACKS = os.listdir(TRACK_LIBRARY)
-
+from usmlap.core.serialisable import Serialisable
 
 UNKNOWN_LOCATION = "Unknown"
 
@@ -150,7 +144,7 @@ class Direction(Enum):
         return self.name.lower().capitalize()
 
 
-class TrackData(Serialisable, library=LIBRARY_ROOT / "tracks"):
+class TrackData(Serialisable):
     """Contains information about a racetrack.
 
     Attributes:

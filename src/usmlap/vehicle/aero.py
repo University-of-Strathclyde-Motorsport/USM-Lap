@@ -9,9 +9,8 @@ from typing import Annotated
 from annotated_types import Unit
 from pydantic import BaseModel, BeforeValidator, Field, PlainSerializer
 
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
 from usmlap.core.registry import Registry
+from usmlap.core.serialisable import Serialisable
 
 
 class AeroAttitude(BaseModel):
@@ -81,9 +80,7 @@ AeroModelRegistry = Registry[str, type[AeroModelInterface]]("aero model")
 AeroModelRegistry.register("constant", ConstantAero)
 
 
-class AeroPackage(
-    Serialisable, library=LIBRARY_ROOT / "components" / "aero_packages"
-):
+class AeroPackage(Serialisable):
     """The aerodynamic package of a vehicle.
 
     Attributes:

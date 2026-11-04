@@ -72,25 +72,25 @@ def brakes(brake_line: BrakeLine) -> Brakes:
     )
 
 
-def test_master_cylinder_area(master_cylinder: MasterCylinder) -> None:
+def test_master_cylinder_area(master_cylinder: MasterCylinder):
     assert master_cylinder.piston_area == pytest.approx(0.01 * math.pi)
 
 
-def test_brake_caliper_area(brake_caliper: BrakeCaliper) -> None:
+def test_brake_caliper_area(brake_caliper: BrakeCaliper):
     assert brake_caliper.piston_area == pytest.approx(0.005 * math.pi)
 
 
-def test_brake_line_area_scaling_factor(brake_line: BrakeLine) -> None:
+def test_brake_line_area_scaling_factor(brake_line: BrakeLine):
     assert brake_line.area_scaling_factor == pytest.approx(0.5)
 
 
-def test_brake_line_effective_radius(brake_line: BrakeLine) -> None:
+def test_brake_line_effective_radius(brake_line: BrakeLine):
     assert brake_line.effective_radius == pytest.approx(0.14)
 
 
-def test_brake_line_force_to_torque_scaling(brake_line: BrakeLine) -> None:
+def test_brake_line_force_to_torque_scaling(brake_line: BrakeLine):
     assert brake_line.force_to_torque_scaling_factor == pytest.approx(0.035)
 
 
-def test_brake_balance(brakes: Brakes) -> None:
+def test_brake_balance(brakes: Brakes):
     assert brakes.brake_bias == pytest.approx((0.5, 0.5))

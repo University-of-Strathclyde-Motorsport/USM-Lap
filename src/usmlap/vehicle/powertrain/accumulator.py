@@ -7,8 +7,7 @@ from typing import Annotated
 import numpy as np
 from pydantic import BeforeValidator
 
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 from usmlap.vehicle.powertrain.cell import Cell, CellState, StateOfCharge
 
 NOMINAL_TEMPERATURE = 25
@@ -22,10 +21,7 @@ class _ThermalDerateNode:
     current: float
 
 
-class ThermalDerateCurve(
-    Serialisable,
-    library=LIBRARY_ROOT / "bms" / "thermal_derate",
-):
+class ThermalDerateCurve(Serialisable):
     """Curve describing the thermal derating of the accumulator."""
 
     nodes: list[_ThermalDerateNode]
@@ -44,9 +40,7 @@ class ThermalDerateCurve(
         return np.interp(temperature, self._temperature, self._current)
 
 
-class Accumulator(
-    Serialisable, library=LIBRARY_ROOT / "components" / "accumulators"
-):
+class Accumulator(Serialisable):
     """An electric accumulator.
 
     Attributes:

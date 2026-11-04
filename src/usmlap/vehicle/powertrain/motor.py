@@ -3,11 +3,10 @@
 import math
 from functools import cached_property
 
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 
 
-class Motor(Serialisable, library=LIBRARY_ROOT / "components" / "motors"):
+class Motor(Serialisable):
     """An electric motor.
 
     Attributes:

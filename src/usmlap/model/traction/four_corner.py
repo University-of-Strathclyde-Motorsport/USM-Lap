@@ -30,7 +30,7 @@ class FourCornerModel(TractionModel):
         fx_max = self.fx_max(tyres, attitudes)
         fy_max = self.fy_max(tyres, attitudes)
         fx = self._split_traction(
-            FourCorner(0, 0, fx_max.rear_left, fx_max.rear_right),
+            FourCorner(0, 0, fx_max.rl, fx_max.rr),
             resistive_fx,
         )
         fy = self.fy_available(fx, fx_max, fy_max)
@@ -60,7 +60,7 @@ class FourCornerModel(TractionModel):
         fy = self._split_traction(fy_max, required_fy)
         fx = self.fx_available(fy, fx_max, fy_max)
 
-        return FourCorner(0, 0, fx.rear_left, fx.rear_right)
+        return FourCorner(0, 0, fx.rl, fx.rr)
 
     def braking_traction(
         self,

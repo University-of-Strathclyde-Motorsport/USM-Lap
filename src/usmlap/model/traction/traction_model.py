@@ -193,10 +193,10 @@ class TractionModel(ABC):
 
     def get_tyres(self, vehicle: Vehicle) -> FourCorner[Tyre]:
         return FourCorner(
-            front_left=vehicle.tyres.front,
-            front_right=vehicle.tyres.front,
-            rear_left=vehicle.tyres.rear,
-            rear_right=vehicle.tyres.rear,
+            fl=vehicle.tyres.front,
+            fr=vehicle.tyres.front,
+            rl=vehicle.tyres.rear,
+            rr=vehicle.tyres.rear,
         )
 
     def fx_max(

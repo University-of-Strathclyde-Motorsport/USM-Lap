@@ -5,9 +5,8 @@ from pathlib import Path
 
 import typer
 
-from usmlap.core.library import get_file_format
+from usmlap.core.serialisable import get_file_format
 from usmlap.track.track_data import (
-    TRACK_LIBRARY,
     load_track_from_spreadsheet,
     save_track_data,
 )
@@ -34,7 +33,7 @@ def convert_excel_track(
 ) -> None:
     """Convert a track from the legacy Excel format to .json."""
     if output_path is None:
-        output_path = (TRACK_LIBRARY / excel_file.stem).with_suffix(".json")
+        output_path = excel_file.with_suffix(".json")
 
     if not overwrite and output_path.exists():
         logger.error(

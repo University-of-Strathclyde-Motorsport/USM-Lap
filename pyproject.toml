@@ -22,13 +22,6 @@ dependencies = [
     "yamlrocks>=0.7.1",
 ]
 
-[project.scripts]
-usmlap = "usmlap.cli.usmlap:app"
-dev-utils  = "usmlap.cli.dev_utils:app"
-
-[tool.uv]
-package = true
-
 [dependency-groups]
 dev = [
     "graphviz>=0.21",
@@ -44,12 +37,25 @@ dev = [
     "vulture>=2.16",
 ]
 
-[tool.pytest.ini_options]
-testpaths  = "tests"
+[project.scripts]
+usmlap = "usmlap.cli.usmlap:app"
+dev-utils  = "usmlap.cli.dev_utils:app"
+
+[tool.uv]
+package = true
+
+[tool.pytest]
+testpaths  = ["tests"]
+addopts = [
+    "-q",
+    "-ra",
+    "--cov",
+    "--cov-report=term-missing",
+]
 
 [tool.coverage.run]
 source_pkgs = ["usmlap"]
-omit = ["__main__.py"]
+branch = true
 
 [tool.coverage.report]
 skip_empty = true

@@ -5,8 +5,8 @@ from pathlib import Path
 
 from rich.progress import Progress
 
-from usmlap.core.library import Serialisable
 from usmlap.core.registry import Registry
+from usmlap.core.serialisable import Serialisable
 from usmlap.plot.config.scatter import ScatterConfig
 from usmlap.plot.config.waveform import WaveformConfig
 from usmlap.simulation.settings import OutingSettings

@@ -45,9 +45,6 @@ class FrontRear[T](NamedTuple):
     front: T
     rear: T
 
-    def __str__(self) -> str:
-        return f"front: {self.front}, rear: {self.rear}"
-
     def __add__(self, other: Any) -> FrontRear[T]:
         if isinstance(other, FrontRear):
             return FrontRear(*(a + b for a, b in zip(self, other, strict=True)))
@@ -63,10 +60,10 @@ class FrontRear[T](NamedTuple):
         return NotImplemented
 
     def normalise(self) -> FrontRear[T]:
-        total = sum(self)
-        if not isinstance(total, float | int):
+        if not isinstance(self.front, float | int):
             return NotImplemented
-        return self * (1 / total)
+        total = sum(self)
+        return self * (1 / total) if total != 0 else self
 
 
 class LeftRight[T](NamedTuple):
@@ -83,9 +80,6 @@ class LeftRight[T](NamedTuple):
     left: T
     right: T
 
-    def __str__(self) -> str:
-        return f"left: {self.left}, right: {self.right}"
-
     def __add__(self, other: Any) -> LeftRight[T]:
         if isinstance(other, LeftRight):
             return LeftRight(*(a + b for a, b in zip(self, other, strict=True)))
@@ -101,67 +95,43 @@ class LeftRight[T](NamedTuple):
         return NotImplemented
 
     def normalise(self) -> LeftRight[T]:
-        total = sum(self)
-        if not isinstance(total, float | int):
+        if not isinstance(self.left, float | int):
             return NotImplemented
-        return self * (1 / total)
+        total = sum(self)
+        return self * (1 / total) if total != 0 else self
 
 
 class FourCorner[T](NamedTuple):
     """Represents a property with values for each corner of the vehicle.
 
     Attributes:
-        front_left (T): Value for the front left corner.
-        front_right (T): Value for the front right corner.
-        rear_left (T): Value for the rear left corner.
-        rear_right (T): Value for the rear right corner.
+        fl (T): Value for the front left corner.
+        fr (T): Value for the front right corner.
+        rl (T): Value for the rear left corner.
+        rr (T): Value for the rear right corner.
 
     """
 
-    front_left: T
-    front_right: T
-    rear_left: T
-    rear_right: T
-
-    @property
-    def fl(self) -> T:
-        return self.front_left
-
-    @property
-    def fr(self) -> T:
-        return self.front_right
-
-    @property
-    def rl(self) -> T:
-        return self.rear_left
-
-    @property
-    def rr(self) -> T:
-        return self.rear_right
+    fl: T
+    fr: T
+    rl: T
+    rr: T
 
     @property
     def front(self) -> LeftRight[T]:
-        return LeftRight(self.front_left, self.front_right)
+        return LeftRight(self.fl, self.fr)
 
     @property
     def rear(self) -> LeftRight[T]:
-        return LeftRight(self.rear_left, self.rear_right)
+        return LeftRight(self.rl, self.rr)
 
     @property
     def left(self) -> FrontRear[T]:
-        return FrontRear(self.front_left, self.rear_left)
+        return FrontRear(self.fl, self.rl)
 
     @property
     def right(self) -> FrontRear[T]:
-        return FrontRear(self.front_right, self.rear_right)
-
-    def __str__(self) -> str:
-        return (
-            f"FL: {self.front_left}"
-            f"FR: {self.front_right}"
-            f"RL: {self.rear_left}"
-            f"RR: {self.rear_right}"
-        )
+        return FrontRear(self.fr, self.rr)
 
     def __add__(self, other: Any) -> FourCorner[T]:
         if isinstance(other, FourCorner):

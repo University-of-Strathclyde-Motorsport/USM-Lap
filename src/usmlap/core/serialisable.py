@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import json
 import logging
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from io import TextIOWrapper
 from pathlib import Path
-from typing import Any, ClassVar, Self
+from typing import Any, Self
 
 import yamlrocks
 from pydantic import BaseModel, ConfigDict
@@ -62,10 +62,6 @@ def get_file_format(filepath: Path | str) -> FileFormat:
 
     Returns:
         `FileFormat`: The file format of the filepath.
-
-    Raises:
-        `UnrecognisedFileFormatError`:  If the file format is not recognised.
-
     """
     if isinstance(filepath, Path):
         format_ = filepath.suffix
@@ -73,6 +69,11 @@ def get_file_format(filepath: Path | str) -> FileFormat:
         format_ = filepath
 
     return _FileFormatRegistry.get_or_raise(format_)
+
+
+def list_file_formats() -> Iterable[str]:
+    """List the recognised file formats."""
+    return _FileFormatRegistry.list_keys()
 
 
 @dataclass
@@ -101,23 +102,6 @@ class Serialisable(BaseModel):
     """Base for classes which can be loaded and written to file."""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    _library: ClassVar[Path | None]
-
-    @classmethod
-    def __init_subclass__(cls, library: Path | None = None) -> None:
-        super(cls).__init_subclass__()
-        cls._library = library
-
-    @classmethod
-    def has_library(cls) -> bool:
-        return cls._library is not None
-
-    @classmethod
-    def iter_library(cls) -> Iterator[Path]:
-        if cls._library is None:
-            raise ValueError(f"{cls.__name__} does not have a library")
-        return cls._library.iterdir()
 
     @classmethod
     def initialise(cls, input: str | Path | Self) -> Self:
@@ -151,11 +135,10 @@ class Serialisable(BaseModel):
             )
             return
 
-        file_format = get_file_format(filepath)
-        filepath.parent.mkdir(exist_ok=True, parents=True)
-        data = self.model_dump(mode="json")
-
         try:
+            file_format = get_file_format(filepath)
+            filepath.parent.mkdir(exist_ok=True, parents=True)
+            data = self.model_dump(mode="json")
             file_format.write_file(filepath, data)
             logger.info("%s written to '%s'", self.__class__.__name__, filepath)
         except Exception as e:

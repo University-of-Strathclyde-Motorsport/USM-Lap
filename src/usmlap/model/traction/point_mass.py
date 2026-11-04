@@ -26,10 +26,10 @@ class PointMass(TractionModel):
         attitudes = self.get_tyre_attitudes(normal_loads)
         tyres = ctx.vehicle.tyres
 
-        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
+        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.fl)
 
-        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
-        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rl)
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rl)
         rear_fy = self.tyre_model.fy(
             fx=resistive_fx / 2,
             fx_max=rear_fx_max,
@@ -48,11 +48,11 @@ class PointMass(TractionModel):
         attitudes = self.get_tyre_attitudes(normal_loads)
         tyres = ctx.vehicle.tyres
 
-        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
+        front_fy = self.tyre_model.fy_max(tyres.front, attitudes.fl)
         rear_fy = max(required_fy - 2 * front_fy, 0)
 
-        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
-        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rl)
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rl)
         rear_traction = self.tyre_model.fx(
             fy=rear_fy / 2,
             fx_max=rear_fx_max,
@@ -72,16 +72,16 @@ class PointMass(TractionModel):
         attitudes = self.get_tyre_attitudes(normal_loads)
         tyres = ctx.vehicle.tyres
 
-        front_fx_max = self.tyre_model.fx_max(tyres.front, attitudes.front_left)
-        front_fy_max = self.tyre_model.fy_max(tyres.front, attitudes.front_left)
+        front_fx_max = self.tyre_model.fx_max(tyres.front, attitudes.fl)
+        front_fy_max = self.tyre_model.fy_max(tyres.front, attitudes.fl)
         front_traction = self.tyre_model.fx(
             fy=required_fy / 4,
             fx_max=front_fx_max,
             fy_max=front_fy_max,
         )
 
-        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rear_left)
-        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rear_left)
+        rear_fx_max = self.tyre_model.fx_max(tyres.rear, attitudes.rl)
+        rear_fy_max = self.tyre_model.fy_max(tyres.rear, attitudes.rl)
         rear_traction = self.tyre_model.fx(
             fy=required_fy / 4,
             fx_max=rear_fx_max,

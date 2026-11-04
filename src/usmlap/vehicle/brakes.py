@@ -7,14 +7,11 @@ from annotated_types import Unit
 from pydantic import BaseModel, BeforeValidator, PositiveFloat, PositiveInt
 
 from usmlap.core.datatypes import FrontRear, Percentage
-from usmlap.core.filepath import LIBRARY_ROOT
-from usmlap.core.library import Serialisable
 from usmlap.core.maths import area_of_circle
+from usmlap.core.serialisable import Serialisable
 
 
-class MasterCylinder(
-    Serialisable, library=LIBRARY_ROOT / "components" / "master_cylinders"
-):
+class MasterCylinder(Serialisable):
     """The master cylinder, transmitting force from the pedal to the brake line.
 
     Attributes:
@@ -34,9 +31,7 @@ class MasterCylinder(
         return area_of_circle(self.piston_diameter)
 
 
-class BrakeCaliper(
-    Serialisable, library=LIBRARY_ROOT / "components" / "brake_calipers"
-):
+class BrakeCaliper(Serialisable):
     """The brake caliper, transmitting force from the brake line to the wheel.
 
     Attributes:
@@ -56,9 +51,7 @@ class BrakeCaliper(
         return self.piston_count * area_of_circle(self.piston_diameter)
 
 
-class BrakeDisc(
-    Serialisable, library=LIBRARY_ROOT / "components" / "brake_discs"
-):
+class BrakeDisc(Serialisable):
     """The brake disc attached to the wheel.
 
     Attributes:
@@ -71,9 +64,7 @@ class BrakeDisc(
     outer_diameter: Annotated[PositiveFloat, Unit("m")]
 
 
-class BrakePad(
-    Serialisable, library=LIBRARY_ROOT / "components" / "brake_pads"
-):
+class BrakePad(Serialisable):
     """The brake pad attached to the caliper.
 
     Attributes:

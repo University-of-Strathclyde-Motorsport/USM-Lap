@@ -50,6 +50,10 @@ def test_parse_keypath_scalar():
     assert parse_keypath("abc") == ("abc",)
 
 
+def test_parse_keypath_list():
+    assert parse_keypath(["abc", "def", "ghi"]) == ("abc", "def", "ghi")
+
+
 def test_parse_keypath_alternative_delimiter():
     assert parse_keypath("abc|def|ghi", "|") == ("abc", "def", "ghi")
 

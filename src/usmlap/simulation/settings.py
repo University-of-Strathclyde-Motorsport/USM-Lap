@@ -16,7 +16,7 @@ from pydantic import (
 
 from usmlap.core.filepath import OUTPUT_ROOT
 from usmlap.core.git_tools import get_git_hash
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 from usmlap.model.context import GlobalContext
 from usmlap.model.environment import EnvironmentSettings
 from usmlap.model.lambda_coefficients import LambdaCoefficients

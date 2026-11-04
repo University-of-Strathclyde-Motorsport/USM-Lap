@@ -46,7 +46,7 @@ class Bicycle(TractionModel):
         fy = self._split_traction(fy_max, required_fy)
         fx = self.fx_available(fy, fx_max, fy_max)
 
-        return FourCorner(0, 0, fx.rear_left, fx.rear_right)
+        return FourCorner(0, 0, fx.rl, fx.rr)
 
     def braking_traction(
         self,

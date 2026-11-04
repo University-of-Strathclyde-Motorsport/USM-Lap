@@ -81,14 +81,14 @@ class WheelLiftError(ModelError):
 
     @property
     def lateral_load_transfer(self) -> float:
-        left_load = self.loads.front_left + self.loads.rear_left
-        right_load = self.loads.front_right + self.loads.rear_right
+        left_load = self.loads.fl + self.loads.rl
+        right_load = self.loads.fr + self.loads.rr
         return abs(left_load - right_load)
 
     @property
     def longitudinal_load_transfer(self) -> float:
-        front_load = self.loads.front_left + self.loads.front_right
-        rear_load = self.loads.rear_left + self.loads.rear_right
+        front_load = self.loads.fl + self.loads.fr
+        rear_load = self.loads.rl + self.loads.rr
         return abs(front_load - rear_load)
 
     @property

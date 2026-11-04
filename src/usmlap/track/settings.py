@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 
 
 class TrackSettings(Serialisable):

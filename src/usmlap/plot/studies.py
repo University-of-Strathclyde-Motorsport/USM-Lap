@@ -5,8 +5,8 @@ from typing import Annotated
 from pydantic import BeforeValidator, Field, PlainSerializer
 
 from usmlap.core.colour import HexColour
-from usmlap.core.library import Serialisable
 from usmlap.core.nested_dict import KeyPath, format_keypath, parse_keypath
+from usmlap.core.serialisable import Serialisable
 
 
 class StudyLineConfig(Serialisable):

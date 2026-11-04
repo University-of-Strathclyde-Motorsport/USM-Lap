@@ -8,8 +8,8 @@ from typing import Annotated
 
 from pydantic import BeforeValidator
 
-from usmlap.core.library import Serialisable
 from usmlap.core.nested_dict import merge_dicts
+from usmlap.core.serialisable import Serialisable
 from usmlap.plot.studies import StudyPlots
 from usmlap.simulation.settings import SimSettings
 from usmlap.simulation.sweep import SweepDefinition, generate_sweep_definition

@@ -6,7 +6,7 @@ from matplotlib.typing import LineStyleType, MarkerType
 from pydantic import Field
 
 from usmlap.core.colour import HexColour
-from usmlap.core.library import Serialisable
+from usmlap.core.serialisable import Serialisable
 from usmlap.solver.solution_channels import ChannelId
 
 
