@@ -13,8 +13,7 @@ from usmlap.vehicle.vehicle import Vehicle
 
 @dataclass(frozen=True)
 class TelemetrySolution:
-    """
-    A solution object."""
+    """A solution object."""
 
     vehicle: Vehicle
     solution: Solution

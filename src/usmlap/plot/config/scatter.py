@@ -1,4 +1,4 @@
-"""Configuration options for scatter  plots."""
+"""Configuration options for scatter plots."""
 
 from pydantic import Field
 

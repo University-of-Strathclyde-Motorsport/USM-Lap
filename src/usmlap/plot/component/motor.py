@@ -22,12 +22,9 @@ def plot_motor_curve(
 
     Args:
         powertrain (RWDPowertrain): Powertrain to plot the curve for.
-        state_of_charge (list[float], optional):
-            List of state of charge values to plot.
-            Defaults to [1, 0.8, 0.6, 0.4, 0.2].
-        resolution (int, optional):
-            Number of points to generate. Defaults to 1000.
-
+        state_of_charge (list[StateOfCharge]): List of state of charge values to
+            plot. Defaults to [1, 0.8, 0.6, 0.4, 0.2].
+        resolution (int): Number of points to generate. Defaults to 1000.
     """
     fig, (ax_torque, ax_power) = plt.subplots(
         nrows=2,
@@ -70,7 +67,6 @@ class _MotorCurveNode:
         speed (float): Motor speed in rad/s.
         torque (float): Motor torque in Nm.
         power (float): Motor power in W.
-
     """
 
     speed: float

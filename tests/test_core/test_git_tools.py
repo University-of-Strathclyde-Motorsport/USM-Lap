@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.git_tools` module."""
+"""Unit tests for the ``usmlap.core.git_tools`` module."""
 
 import git
 

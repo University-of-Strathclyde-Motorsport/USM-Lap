@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Annotated
+from typing import Any
 
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, field_validator
 
 from usmlap.vehicle.powertrain.accumulator import Accumulator, CellState
 from usmlap.vehicle.powertrain.motor import Motor
@@ -24,22 +24,35 @@ class RWDPowertrain(PowertrainInterface):
     """Implements a single motor, rear wheel drive electric powertrain.
 
     Attributes:
-        accumulator (Accumulator): The accumulator storing energy.
+        accumulator (Accumulator, BeforeValidator(Accumulator.initialise)]):
+            The accumulator storing energy.
         motor (Motor): The electric motor.
         motor_controller (MotorController): The motor controller.
-        soc_current_derate_point (float):
-            State of charge at which to begin derating current.
+        soc_current_derate_point (float): State of charge at which to begin
+            derating current.
         discharge_current_limit (float): Scaling factor for the current limit.
-
     """
 
-    accumulator: Annotated[Accumulator, BeforeValidator(Accumulator.initialise)]
-    motor: Annotated[Motor, BeforeValidator(Motor.initialise)]
-    motor_controller: Annotated[
-        MotorController, BeforeValidator(MotorController.initialise)
-    ]
+    accumulator: Accumulator
+    motor: Motor
+    motor_controller: MotorController
     cooling_coefficient: float
     discharge_current_limit: float = 1
+
+    @field_validator("accumulator", mode="before")
+    @classmethod
+    def _initialise_accumulator(cls, accumulator: Any) -> Accumulator:
+        return Accumulator.initialise(accumulator)
+
+    @field_validator("motor", mode="before")
+    @classmethod
+    def _initialise_motor(cls, motor: Any) -> Motor:
+        return Motor.initialise(motor)
+
+    @field_validator("motor_controller", mode="before")
+    @classmethod
+    def _initialise_mc(cls, motor_controller: Any) -> MotorController:
+        return MotorController.initialise(motor_controller)
 
     def get_discharge_current(self, cell_state: CellState) -> float:
         """Get the available discharge current at a given state of charge.
@@ -51,8 +64,7 @@ class RWDPowertrain(PowertrainInterface):
             state_of_charge (float): State of charge, between 0 and 1.
 
         Returns:
-            current (float): Available discharge current.
-
+            float: Available discharge current.
         """
         maximum_discharge_current = self.accumulator.maximum_discharge_current(
             cell_state,
@@ -66,8 +78,7 @@ class RWDPowertrain(PowertrainInterface):
             current (float): Current drawn from the accumulator.
 
         Returns:
-            voltage_drop (float): Voltage drop.
-
+            float: Voltage drop.
         """
         resistance = (
             self.accumulator.resistance(cell_state)
@@ -83,8 +94,7 @@ class RWDPowertrain(PowertrainInterface):
             current (float): Current drawn from the accumulator.
 
         Returns:
-            motor_voltage (float): Voltage across the motor.
-
+            float: Voltage across the motor.
         """
         accumulator_voltage = self.accumulator.get_voltage(cell_state.soc)
         voltage_drop = self.get_voltage_drop(cell_state, current)
@@ -97,12 +107,11 @@ class RWDPowertrain(PowertrainInterface):
 
         Args:
             state_of_charge (float): State of charge of the accumulator.
-            current (float | None): Current drawn from the accumulator.
-                If not provided, the maximum discharge current is used.
+            current (float | None): Current drawn from the accumulator. If not
+                provided, the maximum discharge current is used.
 
         Returns:
-            knee_speed (float): Knee speed of the motor.
-
+            float: Knee speed of the motor.
         """
         if current is None:
             current = self.get_discharge_current(cell_state)
@@ -118,8 +127,7 @@ class RWDPowertrain(PowertrainInterface):
             state_of_charge (float): State of charge of the accumulator.
 
         Returns:
-            maximum_speed (float): Maximum speed of the motor.
-
+            float: Maximum speed of the motor.
         """
         return self.get_knee_speed(cell_state, current=0)
 

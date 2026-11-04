@@ -27,9 +27,8 @@ class ShapeData(BaseModel):
 
     Attributes:
         length (float): The length of the track section.
-        curvature (float): The curvature of the track section.
-            Positive for left, negative for right.
-
+        curvature (float): The curvature of the track section. Positive for
+            left, negative for right.
     """
 
     length: float = Field(gt=0)
@@ -41,10 +40,9 @@ class SectorData(BaseModel):
 
     Attributes:
         start_position (float): The start position of the sector.
-        label (str): An optional label for the sector (default = "").
-            If left blank, labels will be automatically generated.
+        label (str): An optional label for the sector (default = ""). If left
+            blank, labels will be automatically generated.
         timed (bool): Whether the sector should be timed (default = True).
-
     """
 
     start_position: float = Field(ge=0)
@@ -62,7 +60,6 @@ class ElevationData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         elevation (float): The elevation of the track at the position.
-
     """
 
     position: float = Field(ge=0)
@@ -80,7 +77,6 @@ class BankingData(BaseModel):
         position (float): The position that the data was recorded.
         angle (float): The banking angle of the track at the position.
         TODO: Sign convention?
-
     """
 
     position: float = Field(ge=0)
@@ -97,7 +93,6 @@ class GripFactorData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         grip_factor (float): The grip factor of the track at the position.
-
     """
 
     position: float = Field(ge=0)
@@ -111,8 +106,8 @@ class GripFactorData(BaseModel):
 class Event(Enum):
     """Enum representing the type of event the track is suitable for.
 
-    If a track is used to simulate an unsuitable event,
-    a warning will be issued.
+    If a track is used to simulate an unsuitable event, a warning will be
+    issued.
     """
 
     ACCELERATION = "acceleration"
@@ -123,8 +118,8 @@ class Event(Enum):
 class Configuration(Enum):
     """Enum representing the configuration of the track.
 
-    A closed track returns back to its starting position.
-    An open track can start and end in different locations.
+    A closed track returns back to its starting position. An open track can
+    start and end in different locations.
     """
 
     CLOSED = "closed"
@@ -149,20 +144,19 @@ class TrackData(Serialisable):
 
     Attributes:
         print_name (str): The name of the track.
-        country (str): The country the track is located in.
-        city (str): The city the track is located near.
+        country (str | None): The country the track is located in.
+        city (str | None): The city the track is located near.
         shape (list[ShapeData]): Data describing the shape of the track.
         elevation (list[ElevationData]): Data describing the track elevation.
         banking (list[BankingData]): Data describing the track banking.
         grip_factor (list[GripFactorData]): Grip factor data for the track.
         sector (list[SectorData]): Data specifying sectors of the track.
-        event (Event | None): The type of event the track is suitable for.
-            A warning will be issued if the track is used
-            to simulate an unsuitable event.
+        event (Event | None): The type of event the track is suitable for. A
+            warning will be issued if the track is used to simulate an
+            unsuitable event.
         configuration (Configuration): The configuration of the track.
-        # direction (Direction): The direction of driving (default = FORWARD).
-        # mirror (bool): Whether the track should be mirrored (default = False).
-
+        # direction (Direction): The direction of driving (default = FORWARD). #
+        mirror (bool): Whether the track should be mirrored (default = False).
     """
 
     print_name: str
@@ -234,8 +228,8 @@ class TrackData(Serialisable):
     def location(self) -> str:
         """The location of the track.
 
-        Uses the city and/or country attributes, if present.
-        Otherwise, "Unknown" is returned.
+        Uses the city and/or country attributes, if present. Otherwise,
+        "Unknown" is returned.
         """
         if self.city and self.country:
             location = f"{self.city}, {self.country}"
@@ -263,11 +257,10 @@ def load_track_from_spreadsheet(filepath: Path) -> TrackData:
         filename (str): The name of the track file.
 
     Returns:
-        track_data (TrackData): The loaded track data.
+        TrackData: The loaded track data.
 
     Raises:
         FileNotFoundError: If the file does not exist.
-
     """
     reader = TrackReader(filepath)
     return TrackData(
@@ -289,7 +282,6 @@ class TrackReader:
 
     Attributes:
         workbook (pandas.ExcelFile): The Excel file containing the track data.
-
     """
 
     def __init__(self, filepath: Path) -> None:
@@ -297,7 +289,6 @@ class TrackReader:
 
         Args:
             filepath (Path): Path to the Excel file to be read.
-
         """
         self.workbook = pandas.ExcelFile(filepath, engine="openpyxl")
 

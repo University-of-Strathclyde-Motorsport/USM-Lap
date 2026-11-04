@@ -1,5 +1,4 @@
-"""
-Unit tests for brake module."""
+"""Unit tests for brake module."""
 
 import math
 

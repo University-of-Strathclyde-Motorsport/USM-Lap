@@ -12,12 +12,9 @@ class Transmission:
     Transmits power from the motor to the wheels.
 
     Attributes:
-        final_drive_ratio (float):
-            The overall gear reduction of the transmission.
-            A final drive ratio of 3
-            means that the drive axle rotates once
-            for every 3 revolutions of the motor.
-
+        final_drive_ratio (PositiveFloat): The overall gear reduction of the
+            transmission. A final drive ratio of 3 means that the drive axle
+            rotates once for every 3 revolutions of the motor.
     """
 
     final_drive_ratio: PositiveFloat

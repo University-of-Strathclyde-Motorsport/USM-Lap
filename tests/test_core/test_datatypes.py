@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.datatypes` module."""
+"""Unit tests for the ``usmlap.core.datatypes`` module."""
 
 import pytest
 

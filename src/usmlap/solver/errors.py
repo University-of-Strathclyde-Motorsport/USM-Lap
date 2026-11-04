@@ -9,8 +9,8 @@ class SolverError(Exception):
 
 @dataclass
 class AlgorithmError(SolverError):
-    """Error raised when the solver algorithm behaves unexpectedly.
-    This indicates that there is a bug in the code.
+    """Error raised when the solver algorithm behaves unexpectedly. This
+    indicates that there is a bug in the code.
     """
 
     message: str
@@ -21,8 +21,8 @@ class AlgorithmError(SolverError):
 
 @dataclass
 class MaximumIterationsExceededError(SolverError):
-    """Error raised when the maximum number of iterations is exceeded
-    without converging on a solution.
+    """Error raised when the maximum number of iterations is exceeded without
+    converging on a solution.
     """
 
     iterations: int

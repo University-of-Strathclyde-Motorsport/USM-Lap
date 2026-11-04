@@ -2,9 +2,8 @@
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Annotated
 
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, field_validator
 from rich.progress import Progress
 
 from usmlap.competition.events.acceleration import Acceleration
@@ -36,17 +35,16 @@ class Competition(BaseModel):
     """Class for simulating a Formula Student competition.
 
     Attributes:
-        autocross_track (str): Track to use for autocross and endurance events.
-        simulate_acceleration (bool):
-            Whether to simulate the acceleration event.
+        autocross_track (Path): Track to use for autocross and endurance events.
+        simulate_acceleration (bool): Whether to simulate the acceleration
+            event.
         simulate_skidpad (bool): Whether to simulate the skidpad event.
         simulate_autocross (bool): Whether to simulate the autocross event.
         simulate_endurance (bool): Whether to simulate the endurance event.
         simulate_efficiency (bool): Whether to simulate the efficiency event.
-        dataset (Path): Dataset to use for points calculation.
-        competition_data (CompetitionData): Data loaded from `dataset`.
-        events: List of events to simulate.
-
+        dataset (CompetitionData): Dataset to use for points calculation.
+        competition_data (CompetitionData): Data loaded from ``dataset``.
+        events (list[EventInterface]): List of events to simulate.
     """
 
     autocross_track: Path = DEFAULT_AUTOCROSS_TRACK
@@ -55,10 +53,15 @@ class Competition(BaseModel):
     simulate_autocross: bool = True
     simulate_endurance: bool = True
     simulate_efficiency: bool = True
-    dataset: Annotated[
-        CompetitionData, BeforeValidator(CompetitionData.initialise)
-    ] = CompetitionData.from_file(DEFAULT_COMPETITION_DATASET)
+    dataset: CompetitionData = CompetitionData.from_file(
+        DEFAULT_COMPETITION_DATASET
+    )
     events: list[EventInterface] = field(init=False, default_factory=list)
+
+    @field_validator("dataset", mode="before")
+    @classmethod
+    def _initialise_dataset(cls, dataset: str) -> CompetitionData:
+        return CompetitionData.initialise(dataset)
 
     def __post_init__(self, dataset: str) -> None:
         self._create_events()
@@ -101,12 +104,11 @@ class Competition(BaseModel):
 
         Args:
             vehicle (Vehicle): The vehicle to simulate.
-            settings (SimulationSettings): Settings for the simulation.
+            settings (SimSettings): Settings for the simulation.
 
         Returns:
-            competition_points (CompetitionPoints):
-                Dictionary of points scored in all simulated events.
-
+            CompetitionResults: Dictionary of points scored in all simulated
+                events.
         """
         competition_results: CompetitionSolutions = {}
         competition_points: CompetitionPoints = {}

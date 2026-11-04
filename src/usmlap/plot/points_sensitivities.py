@@ -17,7 +17,6 @@ class PointsSensitivityData:
 
     Attributes:
         label (str): Label for the bar.
-
     """
 
     label: str
@@ -53,16 +52,16 @@ def plot_points_sensitivities(
     x_label: str | None = None,
     max_results: int | None = None,
 ) -> None:
-    """This function plots the relative magnitudes
-    of a list of points sensitivities.
+    """This function plots the relative magnitudes of a list of points
+    sensitivities.
 
     Args:
-        data (dict[str, float]): Bar labels and corresponding sensitivities.
+        data (list[PointsSensitivityData]): Bar labels and corresponding
+            sensitivities.
         title (str): Title for the plot (default = "Points Sensitivities").
         x_label (str | None): Label for the x-axis (default = None).
-        max_results (int | None): Maximum number of bars to plot.
-            If None, plot all results (default = None).
-
+        max_results (int | None): Maximum number of bars to plot. If None, plot
+            all results (default = None).
     """
     data = sorted(data, reverse=True)
     if max_results is not None:
@@ -101,8 +100,8 @@ def plot_points_sensitivities(
 def get_bar_colour(sensitivity: float) -> str:
     """Get the bar colour for a sensitivity.
 
-    If the sensitivity is positive, the bar is blue.
-    If the sensitivity is negative, the bar is red.
+    If the sensitivity is positive, the bar is blue. If the sensitivity is
+    negative, the bar is red.
     """
     if sensitivity > 0:
         return USM_BLUE
@@ -112,8 +111,8 @@ def get_bar_colour(sensitivity: float) -> str:
 def get_bar_text_colour(sensitivity: float) -> str:
     """Get the text colour for a sensitivity.
 
-    If the sensitivity is positive, the text is white.
-    If the sensitivity is negative, the text is black.
+    If the sensitivity is positive, the text is white. If the sensitivity is
+    negative, the text is black.
     """
     if sensitivity > 0:
         return "white"

@@ -77,8 +77,7 @@ class Endurance(EventInterface, label="endurance"):
             resolution (float): The resolution of the mesh.
 
         Returns:
-            mesh (Mesh): A mesh of the track.
-
+            Mesh: A mesh of the track.
         """
         base_mesh = generate_mesh(
             TrackSettings(track_file=self.track_file, resolution=resolution)

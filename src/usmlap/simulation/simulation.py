@@ -35,8 +35,7 @@ def simulate(
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
-        settings (SimulationSettings): Settings for the simulation.
-
+        settings (SimSettings): Settings for the simulation.
     """
     if initial_state is None:
         initial_state = TransientVariables.get_default()

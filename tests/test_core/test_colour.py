@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.colour` module."""
+"""Unit tests for the ``usmlap.core.colour`` module."""
 
 import pytest
 from pydantic import TypeAdapter, ValidationError

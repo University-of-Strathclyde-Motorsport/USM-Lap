@@ -25,7 +25,6 @@ class EventInterface(ABC):
 
     Attributes:
         label (str): Name of the event.
-
     """
 
     def __init_subclass__(cls: type[EventInterface], label: str) -> None:

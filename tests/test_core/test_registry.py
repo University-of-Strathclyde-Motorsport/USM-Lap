@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.registry` module."""
+"""Unit tests for the ``usmlap.core.registry`` module."""
 
 import pytest
 

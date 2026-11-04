@@ -64,8 +64,7 @@ class Skidpad(EventInterface, label="skidpad"):
             resolution (float): The resolution of the mesh.
 
         Returns:
-            mesh (Mesh): A mesh of the skidpad track.
-
+            Mesh: A mesh of the skidpad track.
         """
         return generate_mesh(
             TrackSettings(

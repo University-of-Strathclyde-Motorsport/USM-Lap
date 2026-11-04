@@ -1,13 +1,11 @@
 """This module implements the Pacejka Magic Formula tyre model.
 
-Equations are taken from Chapter 4.3.2
-of Tire and Vehicle Dynamics (3rd Edition) by Hans Pacejka,
-and numbered accordingly.
+Equations are taken from Chapter 4.3.2 of Tire and Vehicle Dynamics (3rd
+Edition) by Hans Pacejka, and numbered accordingly.
 https://www.sciencedirect.com/book/9780080970165/tire-and-vehicle-dynamics
 
-These equations are in accordance
-with the MF-Tire/MF-Swift 6.1.2 Equation Manual,
-or MF612 for short.
+These equations are in accordance with the MF-Tire/MF-Swift 6.1.2 Equation
+Manual, or MF612 for short.
 
 The following repositories have been used as a starting point for this module:
 
@@ -33,25 +31,15 @@ class TyreAttitude(BaseModel):
     """Parameters describing the attitude of a tyre.
 
     Attributes:
-        Vx:
-            Longitudinal velocity of wheel centre.
-        Vc:
-            Velocity of the wheel contact patch.
-        Vs:
-            Slip velocity.
-        fz:
-            Normal load on the tyre.
-        omega:
-            Wheel speed of revolution.
-        kappa:
-            Longitudinal slip.
-        alpha:
-            Side slip angle.
-        gamma:
-            Camber angle.
-        pressure:
-            Inflation pressure.
-
+        Vx (float): Longitudinal velocity of wheel centre.
+        Vc (Coordinate): Velocity of the wheel contact patch.
+        Vs (Coordinate): Slip velocity.
+        fz (float): Normal load on the tyre.
+        omega (float): Wheel speed of revolution.
+        kappa (float): Longitudinal slip.
+        alpha (float): Side slip angle.
+        gamma (float): Camber angle.
+        pressure (float): Inflation pressure.
     """
 
     Vx: float
@@ -69,13 +57,9 @@ class MagicFormula:
     """Contains the Pacejka Magic Formula equations.
 
     Attributes:
-        parameters (TIRParameters):
-            Tyre parameters loaded from a .TIR file.
-        AMU (float):
-            Constant used in calculation of digressive friction factor.
-        LMUV (float):
-            Scaling factor with slip speed vs decaying friction.
-
+        parameters (TIRParameters): Tyre parameters loaded from a .TIR file.
+        AMU (float): Constant used in calculation of digressive friction factor.
+        LMUV (float): Scaling factor with slip speed vs decaying friction.
     """
 
     def __init__(self, parameters: TIRParameters, tyre: TyreAttitude) -> None:
@@ -682,21 +666,20 @@ class MagicFormula:
     ) -> float:
         """Implements the Pacejka Magic Formula.
 
-        Calculates longitudinal force Fx,
-        lateral force Fy, or aligning moment Mz.
+        Calculates longitudinal force Fx, lateral force Fy, or aligning moment
+        Mz.
 
         Args:
             B (float): Stiffness factor.
             C (float): Shape factor.
             D (float): Peak value.
             E (float): Curvature factor.
-            x (float): Input variable (kappa, alpha, or gamma),
-                plus horizontal shift.
+            x (float): Input variable (kappa, alpha, or gamma), plus horizontal
+                shift.
             SV (float): Vertical shift.
 
         Returns:
-            Y (float): Output variable (either Fx, Fy, or Mz).
-
+            float: Output variable (either Fx, Fy, or Mz).
         """
         Bx = B * x
         return D * sin(C * atan(Bx - E * (Bx - atan(Bx)))) + SV
@@ -716,12 +699,11 @@ class MagicFormula:
             C (float): Shape factor.
             D (float): Peak value.
             E (float): Curvature factor.
-            x (float): Input variable (kappa, alpha, or gamma),
-                plus horizontal shift.
+            x (float): Input variable (kappa, alpha, or gamma), plus horizontal
+                shift.
 
         Returns:
-            Y (float): Output variable.
-
+            float: Output variable.
         """
         Bx = B * x
         return D * cos(C * atan(Bx - E * (Bx - atan(Bx))))

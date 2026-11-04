@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.log` module."""
+"""Unit tests for the ``usmlap.core.log`` module."""
 
 import logging
 from pathlib import Path

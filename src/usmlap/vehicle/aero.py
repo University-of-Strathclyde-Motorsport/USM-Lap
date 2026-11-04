@@ -24,7 +24,6 @@ class AeroAttitude(BaseModel):
         roll_angle (float): The roll angle of the vehicle.
         pitch_angle (float): The pitch angle of the vehicle.
         yaw_angle (float): The yaw angle of the vehicle.
-
     """
 
     air_density: float = Field(gt=0)
@@ -37,7 +36,7 @@ class AeroAttitude(BaseModel):
 
 
 class AeroModelInterface(ABC):
-    """Abstract  base class for aero models."""
+    """Abstract base class for aero models."""
 
     @staticmethod
     @abstractmethod
@@ -60,7 +59,6 @@ class ConstantAero(AeroModelInterface):
     Attributes:
         lift_coefficient (float): The lift coefficient (positive).
         drag_coefficient (float): The drag coefficient (positive).
-
     """
 
     @staticmethod
@@ -84,10 +82,11 @@ class AeroPackage(Serialisable):
     """The aerodynamic package of a vehicle.
 
     Attributes:
-        frontal_area (float): The frontal area of the vehicle.
-        aero_model (str): The aerodynamic model to use.
-
-    """
+        frontal_area (Annotated[float, Field(gt=0), Unit("m^2")]): The frontal
+            area of the vehicle.
+        aero_model (type[AeroModelInterface):
+            The aerodynamic model to use.
+    """  # no-format-docstring
 
     frontal_area: Annotated[float, Field(gt=0), Unit("m^2")]
     front_aero_distribution: Annotated[float, Field(ge=0, le=1), Unit("%")]

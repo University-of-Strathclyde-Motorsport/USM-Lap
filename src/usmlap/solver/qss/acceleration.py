@@ -1,5 +1,5 @@
-"""This module implements the acceleration solver,
-which calculates the maximum possible acceleration at a node.
+"""This module implements the acceleration solver, which calculates the maximum
+possible acceleration at a node.
 """
 
 from usmlap.model.context import NodeContext
@@ -16,8 +16,8 @@ def solve_acceleration(
     ctx: NodeContext,
     initial_velocity: float,
 ) -> float:
-    """Calculate the velocity at the end of a node,
-    given the initial velocity at the start of the node.
+    """Calculate the velocity at the end of a node, given the initial velocity
+    at the start of the node.
 
     Args:
         vehicle_model (TractionModel): The vehicle model to use.
@@ -26,8 +26,7 @@ def solve_acceleration(
         initial_velocity (float): The velocity at the start of the node.
 
     Returns:
-        final_velocity (float): The velocity at the end of the node.
-
+        float: The velocity at the end of the node.
     """
     initial_ax = 0
     trajectory = Trajectory(

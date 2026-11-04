@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.maths` module."""
+"""Unit tests for the ``usmlap.core.maths`` module."""
 
 import math
 

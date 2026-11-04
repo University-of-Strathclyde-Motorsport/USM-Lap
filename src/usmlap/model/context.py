@@ -1,5 +1,5 @@
-"""This module defines the context dataclass,
-which stores all the information required by vehicle models.
+"""This module defines the context dataclass, which stores all the information
+required by vehicle models.
 """
 
 from __future__ import annotations
@@ -18,11 +18,10 @@ class GlobalContext:
     """Global context object storing data for an entire simulation.
 
     Attributes:
-        environment (EnvironmentSettings):
-            Environmental variables for the simulation.
+        environment (EnvironmentSettings): Environmental variables for the
+            simulation.
         vehicle (Vehicle): The vehicle being simulated.
         lambdas (LambdaCoefficients): Lambda coefficients for the simulation.
-
     """
 
     environment: EnvironmentSettings
@@ -50,7 +49,6 @@ class NodeContext(GlobalContext):
     Attributes:
         state (TransientVariables): The vehicle's state variables.
         node (TrackNode): The track node to evaluate.
-
     """
 
     state: TransientVariables

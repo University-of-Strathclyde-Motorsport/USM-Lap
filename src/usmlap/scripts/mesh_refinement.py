@@ -1,8 +1,7 @@
 """This script runs a mesh refinement simulation.
 
-A vehicle is simulated over a range of track mesh resolutions.
-The laptime and computation time for each simulation
-are plotted against the resolution.
+A vehicle is simulated over a range of track mesh resolutions. The laptime and
+computation time for each simulation are plotted against the resolution.
 """
 
 import time

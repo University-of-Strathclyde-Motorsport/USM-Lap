@@ -1,5 +1,5 @@
-"""This module implements the braking solver,
-which calculates the maximum possible braking at a node.
+"""This module implements the braking solver, which calculates the maximum
+possible braking at a node.
 """
 
 from usmlap.model.context import NodeContext
@@ -16,8 +16,8 @@ def solve_braking(
     ctx: NodeContext,
     final_velocity: float,
 ) -> float:
-    """Calculate the velocity at the start of a node,
-    given the final velocity at the end of the node.
+    """Calculate the velocity at the start of a node, given the final velocity
+    at the end of the node.
 
     Args:
         vehicle_model (TractionModel): The vehicle model to use.
@@ -26,8 +26,7 @@ def solve_braking(
         final_velocity (float): The velocity at the end of the node.
 
     Returns:
-        initial_velocity (float): The velocity at the start of the node.
-
+        float: The velocity at the start of the node.
     """
     initial_ax = 0
 

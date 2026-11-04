@@ -47,8 +47,7 @@ class Parameter[T](ABC):
             KeyError: If no parameter with the given name exists.
 
         Returns:
-            parameter (type[Parameter]): A parameter object.
-
+            type[Parameter[T]]: A parameter object.
         """
         try:
             return cls._REGISTRY[name]
@@ -64,8 +63,7 @@ class Parameter[T](ABC):
         """Get a list of available parameters.
 
         Returns:
-            parameters (list[type[Parameters]]): Available parameters.
-
+            list[type[Parameter[T]]]: Available parameters.
         """
         return list(cls._REGISTRY.values())
 
@@ -90,8 +88,7 @@ class Parameter[T](ABC):
             vehicle (Vehicle): A vehicle object.
 
         Returns:
-            value (T): The value of the corresponding parameter.
-
+            T: The value of the corresponding parameter.
         """
         ...
 
@@ -105,8 +102,7 @@ class Parameter[T](ABC):
             value (T): The value to set the parameter to.
 
         Returns:
-            vehicle (Vehicle): The modified vehicle object.
-
+            None: The modified vehicle object.
         """
         ...
 
@@ -121,12 +117,11 @@ def get_new_vehicle[T](
 
     Args:
         baseline (Vehicle): The baseline vehicle to use.
-        parameter (type[Parameter]): The parameter to modify.
-        value (float): The updated parameter value.
+        parameter (type[Parameter[T]]): The parameter to modify.
+        value (T): The updated parameter value.
 
     Returns:
-        new_vehicle(Vehicle): A new vehicle with the updated parameter.
-
+        Vehicle: A new vehicle with the updated parameter.
     """
     if label is None:
         label = str(uuid.uuid4())
@@ -140,8 +135,7 @@ def list_all_parameters() -> list[type[Parameter[Any]]]:
     """Get a list of available parameters.
 
     Returns:
-        parameters (list[type[Parameters]]): Available parameters.
-
+        list[type[Parameter[Any]]]: Available parameters.
     """
     return list(Parameter.list_all_parameters())
 

@@ -27,24 +27,23 @@ class SolutionNode:
         maximum_velocity (float): The maximum possible velocity at the node,
             obtained from the lateral vehicle model.
         acceleration (float): The longitudinal acceleration at the node.
-        transient_variables (TransientVariables):
-            The transient variables at the node.
-        calculated_vehicle_state (CalculatedVehicleState):
-            The state of the vehicle at the node.
-        next (SolutionNode | None): The next node in the solution
-            (`None` if this is the final node).
+        transient_variables (TransientVariables): The transient variables at the
+            node.
+        calculated_vehicle_state (CalculatedVehicleState | None): The state of
+            the vehicle at the node.
+        next (SolutionNode | None): The next node in the solution (``None`` if
+            this is the final node).
         previous (SolutionNode | None): The previous node in the solution
-            (`None` if this is the first node).
+            (``None`` if this is the first node).
         length (float): The length of the track segment.
         initial_velocity (float): The velocity at the start of the node.
         final_velocity (float): The velocity at the end of the node.
         average_velocity (float): The average velocity for the node.
-        longitudinal_acceleration (float):
-            The longitudinal acceleration for the node.
+        longitudinal_acceleration (float): The longitudinal acceleration for the
+            node.
         lateral_acceleration (float): The lateral acceleration for the node.
         time (float): The time taken to drive this node.
         energy_used (float): The energy used to drive this node.
-
     """
 
     track_node: TrackNode
@@ -126,8 +125,7 @@ class SolutionNode:
         """Check if the node is an apex.
 
         Returns:
-            is_apex (bool): `True` is the node is an apex, otherwise `False`.
-
+            bool: ``True`` is the node is an apex, otherwise ``False``.
         """
         return self._apex
 
@@ -141,45 +139,40 @@ class SolutionNode:
         self._apex = False
 
     def set_initial_velocity(self, velocity: float) -> None:
-        """Set the velocity at the start of the node.
-        If the initial velocity has been anchored, it will not be modified.
+        """Set the velocity at the start of the node. If the initial velocity
+        has been anchored, it will not be modified.
 
         Args:
             velocity (float): The initial velocity to be set.
-
         """
         if not self._initial_velocity_anchored:
             self._initial_velocity = velocity
 
     def set_final_velocity(self, velocity: float) -> None:
-        """Set the velocity at the end of the node.
-        If the final velocity has been anchored, it will not be modified.
+        """Set the velocity at the end of the node. If the final velocity has
+        been anchored, it will not be modified.
 
         Args:
             velocity (float): The final velocity to be set.
-
         """
         if not self._final_velocity_anchored:
             self._final_velocity = velocity
 
     def anchor_initial_velocity(self, velocity: float) -> None:
-        """Anchor the initial velocity of this node.
-        It can no longer be modified.
+        """Anchor the initial velocity of this node. It can no longer be
+        modified.
 
         Args:
             velocity (float): The initial velocity to be set.
-
         """
         self.set_initial_velocity(velocity)
         self._initial_velocity_anchored = True
 
     def anchor_final_velocity(self, velocity: float) -> None:
-        """Anchor the final velocity of this node.
-        It can no longer be modified.
+        """Anchor the final velocity of this node. It can no longer be modified.
 
         Args:
             velocity (float): The final velocity to be set.
-
         """
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
@@ -187,8 +180,8 @@ class SolutionNode:
     def get_calculated_vehicle_state(self) -> CalculatedVehicleState:
         """Get the calculated vehicle state for this node.
 
-        TODO: This is a temporary fix to get rid of downstream type errors!
-        The entire system will be overhauled.
+        TODO: This is a temporary fix to get rid of downstream type errors! The
+        entire system will be overhauled.
         """
         if self.calculated_vehicle_state is None:
             raise ValueError(
@@ -238,11 +231,10 @@ class Solution:
         """Get the time for a given sector.
 
         Args:
-            sector (int): The sector to get the time for.
+            sector (str): The sector to get the time for.
 
         Returns:
-            sector_time (float): The sum of times for the nodes in the sector.
-
+            float: The sum of times for the nodes in the sector.
         """
         return sum([node.time for node in self if node.sector == sector])
 
@@ -250,8 +242,7 @@ class Solution:
         """Get a list of positions where the sector changes.
 
         Returns:
-            sector_boundary_positions (list[float]): List of positions.
-
+            list[float]: List of positions.
         """
         sector = self.nodes[0].track_node.sector
         positions: list[float] = []
@@ -266,8 +257,7 @@ class Solution:
         """Get a list of apex indices.
 
         Returns:
-            apex_indices (list[int]): Indices of apexes.
-
+            list[int]: Indices of apexes.
         """
         return [i for i, node in enumerate(self.nodes) if node.is_apex()]
 
@@ -275,8 +265,7 @@ class Solution:
         """Get a list of apex indices sorted by maximum velocity (low to high).
 
         Returns:
-            sorted_apex_indices (list[int]): Indices of apexes.
-
+            list[int]: Indices of apexes.
         """
         indices = self.get_apex_indices()
         velocities = [self.nodes[i].apex_velocity for i in indices]
@@ -290,8 +279,7 @@ class Solution:
         """Get a list of apex nodes.
 
         Returns:
-            apexes (list[SolutionNode]): Solution nodes which are apexes.
-
+            list[SolutionNode]: Solution nodes which are apexes.
         """
         return [node for node in self if node.is_apex()]
 
@@ -303,12 +291,11 @@ class Solution:
         """Return a new solution containing only the nodes at the given indices.
 
         Args:
-            indices (list[int]):
-                The indices of the nodes to include in the new solution.
+            indices (list[int]): The indices of the nodes to include in the new
+                solution.
 
         Returns:
-            new_solution (Solution): The new solution.
-
+            Solution: The new solution.
         """
         new_solution = copy(self)
         new_solution.nodes = [self.nodes[i] for i in indices]
@@ -339,8 +326,7 @@ def create_new_solution(
         vehicle_model (TractionModel): The vehicle model.
 
     Returns:
-        solution (Solution): A blank solution.
-
+        Solution: A blank solution.
     """
     transient_variables = initialise_transient_variables(
         track_mesh,

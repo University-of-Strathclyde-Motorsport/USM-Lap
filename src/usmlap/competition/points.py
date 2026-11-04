@@ -18,8 +18,7 @@ def points_delta(
         baseline (CompetitionPoints): Baseline points to compare to.
 
     Returns:
-        delta (CompetitionPoints): `points` - `baseline`.
-
+        CompetitionPoints: ``points`` - ``baseline``.
     """
     return {event: points[event] - baseline[event] for event in points}
 
@@ -43,9 +42,8 @@ class PointsCoefficients:
         label (str): Label for the event.
         p_max (float): The maximum points available for the event.
         p_min (float): The minimum points awarded for completing the event.
-        x_max_scalar (float): Multiplied by `x_min` to determine `x_max`.
-            If `x_team` >= `x_max`, only the minimum points are awarded.
-
+        x_max_scalar (float): Multiplied by ``x_min`` to determine ``x_max``. If
+            ``x_team`` >= ``x_max``, only the minimum points are awarded.
     """
 
     label: str
@@ -67,9 +65,8 @@ def calculate_points(
         coefficients (PointsCoefficients): Points coefficients for the event.
 
     Returns:
-        label (str): Label for the event.
-        points (float): Competition points scored in the event.
-
+        tuple[str, float]: Label for the event. points (float): Competition
+            points scored in the event.
     """
     p_max = coefficients.p_max
     p_min = coefficients.p_min

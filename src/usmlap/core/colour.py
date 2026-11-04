@@ -43,9 +43,9 @@ N_COLOUR_MAX = max(_N_COLOUR_LISTS.keys())
 
 
 def get_n_colours(n: int) -> list[HexColour]:
-    """Get a list of `n` colours.
+    """Get a list of ``n`` colours.
 
-    The maximum value of `n` is given by `N_COLOUR_MAX`.
+    The maximum value of ``n`` is given by ``N_COLOUR_MAX``.
     """
     if n not in _N_COLOUR_LISTS:
         raise ValueError(f"No colour list defined for {n} colours")

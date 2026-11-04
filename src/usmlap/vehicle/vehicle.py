@@ -23,8 +23,10 @@ class Vehicle(Serialisable):
 
     Attributes:
         metadata (Metadata): The metadata of the vehicle.
-        driver (Driver): The driver of the vehicle.
-        aero (AeroPackage): The aerodynamic package of the vehicle.
+        driver (Annotated[Driver, BeforeValidator(Driver.initialise)]):
+            The driver of the vehicle.
+        aero (Annotated[AeroPackage, BeforeValidator(AeroPackage.initialise)]):
+            The aerodynamic package of the vehicle.
         brakes (Brakes): The brakes of the vehicle.
         powertrain (RWDPowertrain): The powertrain of the vehicle.
         inertia (Inertia): The inertia properties of the vehicle.
@@ -32,7 +34,6 @@ class Vehicle(Serialisable):
         suspension (Suspension): The suspension of the vehicle.
         transmission (Transmission): The transmission of the vehicle.
         tyres (Tyres): The tyres of the vehicle.
-
     """
 
     print_name: str

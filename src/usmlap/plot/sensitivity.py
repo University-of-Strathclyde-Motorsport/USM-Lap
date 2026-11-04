@@ -17,8 +17,7 @@ def _transform_dictionary(data: list[CompetitionPoints]) -> PointsData:
         data (list[CompetitionPoints]): Input points data.
 
     Returns:
-        transformed (PointsData): Transformed points data.
-
+        PointsData: Transformed points data.
     """
     events = sorted(set().union(*(d.keys() for d in data)))
     transformed: PointsData = {}
@@ -36,9 +35,8 @@ def plot_points_sensitivity(
 
     Args:
         parameter (type[Parameter[float]]): The parameter being swept.
-        data (dict[float, CompetitionPoints]):
-            Dictionary of parameter values and corresponding points data.
-
+        data (dict[float, CompetitionPoints]): Dictionary of parameter values
+            and corresponding points data.
     """
     parameter_values = list(data.keys())
     event_data = _transform_dictionary(list(data.values()))

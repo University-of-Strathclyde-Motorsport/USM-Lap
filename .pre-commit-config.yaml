@@ -21,3 +21,9 @@ repos:
     rev: v0.0.84
     hooks:
       - id: ty
+
+  - repo: https://github.com/jsh9/format-docstring
+    rev: 0.4.1
+    hooks:
+      - id: format-docstring
+        name: Format docstrings in .py files

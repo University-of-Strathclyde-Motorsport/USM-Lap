@@ -11,8 +11,8 @@ class ModelError(Exception):
 
 @dataclass
 class MaximumIterationsExceededError(ModelError):
-    """Error raised when the maximum number of iterations is exceeded
-    without converging on a solution.
+    """Error raised when the maximum number of iterations is exceeded without
+    converging on a solution.
     """
 
     iterations: int
@@ -65,8 +65,8 @@ class OutOfChargeError(ModelError):
 class WheelLiftError(ModelError):
     """Error raised when one or more wheels have negative normal forces.
 
-    This is usually caused by extreme load transfer,
-    typically in the first couple of solver iterations.
+    This is usually caused by extreme load transfer, typically in the first
+    couple of solver iterations.
     """
 
     loads: FourCorner[float]

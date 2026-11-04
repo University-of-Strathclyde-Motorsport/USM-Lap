@@ -24,11 +24,13 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "format-docstring>=0.4.2",
     "graphviz>=0.21",
     "mkdocs-autoapi>=0.4.1",
     "mkdocs-material>=9.8.0",
     "mkdocstrings[python]>=1.0.8",
     "pre-commit>=4.6.2",
+    "pydoclint>=0.12.0",
     "pylint>=4.0.4",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
@@ -70,3 +72,11 @@ extend-select = ["B", "I", "Q", "S", "C4", "E"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["D", "INP001", "S101", "PLR2004", "PT011"]
+
+[tool.format_docstring]
+docstring_style = "google"
+exclude = "\\.git|\\.venv|__pycache__"
+line_length = 80
+include_arg_types = true
+include_arg_defaults = false
+include_return_and_yield_types = true

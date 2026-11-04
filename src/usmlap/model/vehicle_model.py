@@ -1,5 +1,5 @@
-"""This module implements the vehicle model,
-which contains all the subsystem models.
+"""This module implements the vehicle model, which contains all the subsystem
+models.
 """
 
 from __future__ import annotations

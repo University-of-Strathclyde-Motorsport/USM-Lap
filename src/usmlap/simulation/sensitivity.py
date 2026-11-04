@@ -25,18 +25,17 @@ def points_sensitivity(
         vehicle (Vehicle): The baseline vehicle to simulate.
         settings (SimSettings): Settings for the simulation.
         competition (Competition): The competition to simulate.
-        parameter (Parameter): The parameter to analyse the sensitivity of.
-        delta (Optional[tuple[float, float]]):
-            The range of values to evaluate across.
-            If not provided, the parameter uncertainty is used.
-        normalise (bool): Whether to normalise the sensitivity.
-            If `True`, the sensitivity is divided by the parameter delta.
+        parameter (type[Parameter]): The parameter to analyse the sensitivity
+            of.
+        delta (tuple[float, float] | None): The range of values to evaluate
+            across. If not provided, the parameter uncertainty is used.
+        normalise (bool): Whether to normalise the sensitivity. If ``True``, the
+            sensitivity is divided by the parameter delta.
 
     Returns:
-        sensitivity (float): The points sensitivity of the parameter.
-        delta (tuple[float, float]):
-            The range over which the sensitivity was evaluated.
-
+        tuple[float, tuple[float, float]]: The points sensitivity of the
+            parameter. delta (tuple[float, float]): The range over which the
+            sensitivity was evaluated.
     """
     if not delta:
         if not parameter.uncertainty:

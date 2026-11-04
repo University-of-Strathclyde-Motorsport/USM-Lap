@@ -50,8 +50,7 @@ class Acceleration(EventInterface, label="acceleration"):
             resolution (float): The resolution of the mesh.
 
         Returns:
-            mesh (Mesh): A mesh of the track.
-
+            Mesh: A mesh of the track.
         """
         return generate_mesh(
             TrackSettings(track_file=ACCELERATION_TRACK, resolution=resolution)

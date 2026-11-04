@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.nested_dict` module."""
+"""Unit tests for the ``usmlap.core.nested_dict`` module."""
 
 import pytest
 

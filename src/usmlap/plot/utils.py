@@ -8,7 +8,6 @@ def combined_legend(*args: Axes) -> None:
 
     Args:
         *args (Axes): The axes to create a legend for.
-
     """
     combined_handles = []
     combined_labels: list[str] = []

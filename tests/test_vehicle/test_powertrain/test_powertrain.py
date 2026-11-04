@@ -1,5 +1,4 @@
-"""
-Unit tests for powertrain module."""
+"""Unit tests for powertrain module."""
 
 import pytest
 

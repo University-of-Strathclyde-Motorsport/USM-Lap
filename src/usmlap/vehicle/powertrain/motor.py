@@ -12,17 +12,16 @@ class Motor(Serialisable):
     Attributes:
         print_name (str): Printable name of the motor.
         electrical_resistance (float): Electrical resistance of the motor.
-        peak_torque (float):
-            Peak torque which the motor can deliver for a short period.
-        continuous_torque (float):
-            Maximum torque which the motor can deliver continuously.
+        peak_torque (float): Peak torque which the motor can deliver for a short
+            period.
+        continuous_torque (float): Maximum torque which the motor can deliver
+            continuously.
         peak_current (float): Current required to deliver the peak torque.
-        continuous_current (float):
-            Current required to deliver the continuous torque.
+        continuous_current (float): Current required to deliver the continuous
+            torque.
         maximum_rpm (float): Maximum rotational speed of the motor.
         rated_voltage (float): Rated voltage of the motor.
         datasheet_url (str): URL for the datasheet of the motor.
-
     """
 
     print_name: str
@@ -54,8 +53,7 @@ class Motor(Serialisable):
             voltage (float): Voltage applied to the motor.
 
         Returns:
-            speed (float): Rotational speed of the motor.
-
+            float: Rotational speed of the motor.
         """
         return voltage * self.speed_per_volt
 
@@ -66,8 +64,7 @@ class Motor(Serialisable):
             current (float): Current applied to the motor.
 
         Returns:
-            torque (float): Torque output of the motor.
-
+            float: Torque output of the motor.
         """
         return current * self.torque_per_amp
 
@@ -78,8 +75,7 @@ class Motor(Serialisable):
             torque (float): Torque applied to the motor.
 
         Returns:
-            current (float): Current output of the motor.
-
+            float: Current output of the motor.
         """
         return torque / self.torque_per_amp
 
@@ -91,8 +87,7 @@ def rpm_to_rads(rpm: float) -> float:
         rpm (float): Speed in revolutions per minute
 
     Returns:
-        speed (float): Speed in radians per second
-
+        float: Speed in radians per second
     """
     return rpm * (math.pi / 30)
 
@@ -104,7 +99,6 @@ def rads_to_rpm(speed: float) -> float:
         speed (float): Speed in radians per second
 
     Returns:
-        rpm (float): Speed in revolutions per minute
-
+        float: Speed in revolutions per minute
     """
     return speed * (30 / math.pi)

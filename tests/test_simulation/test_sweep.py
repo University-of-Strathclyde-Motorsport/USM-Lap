@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.simulation.sweep` module."""
+"""Unit tests for the ``usmlap.simulation.sweep`` module."""
 
 import pytest
 

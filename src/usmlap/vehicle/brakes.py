@@ -1,10 +1,15 @@
 """This module models the brake system of a vehicle."""
 
 from dataclasses import dataclass
-from typing import Annotated
+from typing import Annotated, Any
 
 from annotated_types import Unit
-from pydantic import BaseModel, BeforeValidator, PositiveFloat, PositiveInt
+from pydantic import (
+    BaseModel,
+    PositiveFloat,
+    PositiveInt,
+    field_validator,
+)
 
 from usmlap.core.datatypes import FrontRear, Percentage
 from usmlap.core.maths import area_of_circle
@@ -16,14 +21,13 @@ class MasterCylinder(Serialisable):
 
     Attributes:
         print_name (str): The printable name of the master cylinder.
-        piston_diameter (float): The diameter of the piston.
+        piston_diameter (PositiveFloat): The diameter of the piston.
         colour (str): The colour of the master cylinder.
         piston_area (float): The area of the piston.
-
     """
 
     print_name: str
-    piston_diameter: Annotated[PositiveFloat, Unit("m")]
+    piston_diameter: PositiveFloat
     colour: str
 
     @property
@@ -36,10 +40,10 @@ class BrakeCaliper(Serialisable):
 
     Attributes:
         print_name (str): The printable name of the caliper.
-        piston_count (int): The number of pistons in the caliper.
-        piston_diameter (float): The diameter of the piston.
+        piston_count (PositiveInt): The number of pistons in the caliper.
+        piston_diameter (Annotated[PositiveFloat, Unit("m")]): The diameter of
+            the piston.
         piston_area (float): The total area of the pistons.
-
     """
 
     print_name: str
@@ -56,8 +60,8 @@ class BrakeDisc(Serialisable):
 
     Attributes:
         print_name (str): The printable name of the brake disc.
-        outer_diameter (float): The outer diameter of the brake disc.
-
+        outer_diameter (Annotated[PositiveFloat, Unit("m")]): The outer diameter
+            of the brake disc.
     """
 
     print_name: str
@@ -69,10 +73,10 @@ class BrakePad(Serialisable):
 
     Attributes:
         print_name (str): The printable name of the brake pad.
-        height (float): The height of the brake pad.
-        coefficient_of_friction (float):
-            The coefficient of friction between the brake pad and brake disc.
-
+        height (Annotated[PositiveFloat, Unit("m")]): The height of the brake
+            pad.
+        coefficient_of_friction (PositiveFloat): The coefficient of friction
+            between the brake pad and brake disc.
     """
 
     print_name: str
@@ -88,15 +92,32 @@ class BrakeLine(BaseModel):
         caliper (BrakeCaliper): The brake caliper attached to the wheel.
         disc (BrakeDisc): The brake disc attached to the wheel.
         pad (BrakePad): The brake pad attached to the caliper.
-
     """
 
-    cylinder: Annotated[
-        MasterCylinder, BeforeValidator(MasterCylinder.initialise)
-    ]
-    caliper: Annotated[BrakeCaliper, BeforeValidator(BrakeCaliper.initialise)]
-    disc: Annotated[BrakeDisc, BeforeValidator(BrakeDisc.initialise)]
-    pad: Annotated[BrakePad, BeforeValidator(BrakePad.initialise)]
+    cylinder: MasterCylinder
+    caliper: BrakeCaliper
+    disc: BrakeDisc
+    pad: BrakePad
+
+    @field_validator("cylinder", mode="before")
+    @classmethod
+    def _initialise_cylinder(cls, cylinder: Any) -> MasterCylinder:
+        return MasterCylinder.initialise(cylinder)
+
+    @field_validator("caliper", mode="before")
+    @classmethod
+    def _initialise_caliper(cls, caliper: Any) -> BrakeCaliper:
+        return BrakeCaliper.initialise(caliper)
+
+    @field_validator("disc", mode="before")
+    @classmethod
+    def _initialise_disc(cls, disc: Any) -> BrakeDisc:
+        return BrakeDisc.initialise(disc)
+
+    @field_validator("pad", mode="before")
+    @classmethod
+    def _initialise_pad(cls, pad: Any) -> BrakePad:
+        return BrakePad.initialise(pad)
 
     @property
     def area_scaling_factor(self) -> float:
@@ -124,8 +145,7 @@ class BrakeLine(BaseModel):
             cylinder_force (float): Force applied to the master cylinder.
 
         Returns:
-            brake_pressure (float): Gauge pressure of the brake fluid.
-
+            float: Gauge pressure of the brake fluid.
         """
         return cylinder_force / self.cylinder.piston_area
 
@@ -136,8 +156,7 @@ class BrakeLine(BaseModel):
             cylinder_force (float): Force applied to the master cylinder.
 
         Returns:
-            braking_torque (float): Torque applied to the wheel.
-
+            float: Torque applied to the wheel.
         """
         return cylinder_force * self.force_to_torque_scaling_factor
 
@@ -148,8 +167,7 @@ class BrakeLine(BaseModel):
             braking_torque (float): Braking torque required on the wheel.
 
         Returns:
-            cylinder_force (float): Force required on the master cylinder.
-
+            float: Force required on the master cylinder.
         """
         return braking_torque / self.force_to_torque_scaling_factor
 
@@ -161,11 +179,10 @@ class Brakes:
     Attributes:
         front (BrakeLine): Brake line for the front wheels.
         rear (BrakeLine): Brake line for the rear wheels.
-        pedal_ratio (float): Ratio of master cylinder force to pedal force.
-        front_brake_bias (float):
-            Proportion of force applied to the front master cylinder
-            (value between 0 and 1).
-
+        pedal_ratio (PositiveFloat): Ratio of master cylinder force to pedal
+            force.
+        front_brake_bias (Percentage): Proportion of force applied to the front
+            master cylinder (value between 0 and 1).
     """
 
     front: BrakeLine
@@ -195,9 +212,7 @@ class Brakes:
             pedal_force (float): Force applied to the pedal.
 
         Returns:
-            cylinder_forces (FrontRear[float]):
-                Force applied to the master cylinders.
-
+            FrontRear[float]: Force applied to the master cylinders.
         """
         total_force = pedal_force * self.pedal_ratio
         return self.brake_bias * total_force

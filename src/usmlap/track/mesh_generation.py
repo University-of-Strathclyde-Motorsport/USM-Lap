@@ -26,16 +26,16 @@ def generate_mesh(settings: TrackSettings) -> Mesh:
     Args:
         track_data (TrackData): The track data object.
         resolution (float): The resolution of the mesh, in metres.
-        smooth (bool): Whether to smooth the curvature data (default = `True`).
-        correct_tangency (bool): Whether to apply tangency correction
-            to the track (default = `True`).
-        correct_displacement (bool): Whether to apply displacement correction
-            to the track (default = `True`).
+        smooth (bool): Whether to smooth the curvature data (default =
+            ``True``).
+        correct_tangency (bool): Whether to apply tangency correction to the
+            track (default = ``True``).
+        correct_displacement (bool): Whether to apply displacement correction to
+            the track (default = ``True``).
 
 
     Returns:
-        mesh (Mesh): A mesh of the track.
-
+        Mesh: A mesh of the track.
     """
     track_data = TrackData.from_file(settings.track_file)
     track_length = track_data.total_length
@@ -98,13 +98,11 @@ def _interpolate_curvature(
     Args:
         data (list[ShapeData]): Shape data for the track.
         sample_position (Array1D): The positions to interpolate at.
-        smooth (bool | None): Whether to smooth the curvature
-            (default = `True`).
-            If `True`, uses `np.interp` to interpolate the curvature.
-            If `False`, uses `interp_previous` to interpolate the curvature
+        smooth (bool): Whether to smooth the curvature (default = ``True``). If
+            ``True``, uses ``np.interp`` to interpolate the curvature. If
+            ``False``, uses ``interp_previous`` to interpolate the curvature
     Returns:
-        curvature (Array1D): The interpolated curvature.
-
+        Array1D: The interpolated curvature.
     """
     curvature = np.array([node.curvature for node in data])
     length = np.array([node.length for node in data])
@@ -127,8 +125,7 @@ def _interpolate_elevation(
         sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        elevation (Array1D): The interpolated elevation.
-
+        Array1D: The interpolated elevation.
     """
     if not data:
         return np.full(len(sample_position), ElevationData.default())
@@ -148,8 +145,7 @@ def _interpolate_banking(
         sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        banking (Array1D): The interpolated banking.
-
+        Array1D: The interpolated banking.
     """
     if not data:
         return np.full(len(sample_position), BankingData.default())
@@ -169,8 +165,7 @@ def _interpolate_grip_factor(
         sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        grip_factor (Array1D): The interpolated grip factor.
-
+        Array1D: The interpolated grip factor.
     """
     if not data:
         return np.full(len(sample_position), GripFactorData.default())
@@ -187,11 +182,10 @@ def _interpolate_sector(
 
     Args:
         data (list[SectorData]): Sector data for the track.
-        sample_position (list[float]): The positions to interpolate at.
+        sample_position (Array1D): The positions to interpolate at.
 
     Returns:
-        sector (list[str]): The interpolated sector.
-
+        npt.NDArray[np.str_]: The interpolated sector.
     """
     if not data:
         return np.full((1, len(sample_position)), SectorData.default())
@@ -208,8 +202,7 @@ def _calculate_inclination(position: Array1D, elevation: Array1D) -> Array1D:
         elevation (Array1D): The elevation at each position.
 
     Returns:
-        inclination (Array1D): The inclination at each position.
-
+        Array1D: The inclination at each position.
     """
     diff_position = np.diff(position)
     diff_elevation = np.diff(elevation)
@@ -234,8 +227,7 @@ def _calculate_heading_angle(
         initial_heading (float): The initial heading angle (default = 0).
 
     Returns:
-        heading (Array1D): The heading angle for each node.
-
+        Array1D: The heading angle for each node.
     """
     swept_angle = curvature * length
     heading = initial_heading + np.cumsum(swept_angle) - swept_angle[0]
@@ -253,8 +245,7 @@ def _set_heading_angle(
         initial_heading (float): The initial heading angle (default = 0).
 
     Returns:
-        nodes (list[TrackNode]): The updated nodes.
-
+        list[TrackNode]: The updated nodes.
     """
     curvature = np.array([node.curvature for node in nodes])
     length = np.array([node.length for node in nodes])
@@ -273,20 +264,19 @@ def _calculate_coordinates(
 ) -> tuple[Array1D, Array1D]:
     """Calculate the coordinates for each node of a track.
 
-    Note that the lengths of the returned arrays are one greater
-    than the length of the input arrays.
-    The first to penultimate elements are the start coordinates of each node.
-    The second to final elements are the end coordinates of each node.
+    Note that the lengths of the returned arrays are one greater than the length
+    of the input arrays. The first to penultimate elements are the start
+    coordinates of each node. The second to final elements are the end
+    coordinates of each node.
 
     Args:
         length (Array1D): The length of each node.
         curvature (Array1D): The curvature of each node.
-        initial_coordinates (tuple[float, float]):
-            The initial x and y coordinates (default = (0, 0)).
+        initial_coordinates (tuple[float, float]): The initial x and y
+            coordinates (default = (0, 0)).
 
     Returns:
-        coordinates (tuple[Array1D, Array1D]): Lists of x and y coordinates.
-
+        tuple[Array1D, Array1D]: Lists of x and y coordinates.
     """
     x_0, y_0 = initial_coordinates
 
@@ -313,12 +303,11 @@ def _set_coordinates(
 
     Args:
         nodes (list[TrackNode]): The nodes to update.
-        initial_coordinates (tuple[float, float]): The start coordinate
-            of the first node (default = (0, 0)).
+        initial_coordinates (tuple[float, float]): The start coordinate of the
+            first node (default = (0, 0)).
 
     Returns:
-        nodes (list[TrackNode]): The updated nodes.
-
+        list[TrackNode]: The updated nodes.
     """
     length = np.array([node.length for node in nodes])
     curvature = np.array([node.curvature for node in nodes])
@@ -344,8 +333,7 @@ def _correct_tangency(
         fractional_position (list[float]): The fractional position of each node.
 
     Returns:
-        corrected_curvature (list[float]): Corrected curvature of each node.
-
+        list[TrackNode]: Corrected curvature of each node.
     """
     curvature = np.array([node.curvature for node in nodes])
     length = np.array([node.length for node in nodes])
@@ -379,16 +367,15 @@ def _correct_tangency(
 def _correct_displacement(
     nodes: list[TrackNode], settings: TrackSettings
 ) -> list[TrackNode]:
-    """Adjust the length and curvature of each node
-    to correct a displacement error.
+    """Adjust the length and curvature of each node to correct a displacement
+    error.
 
     Args:
         nodes (list[TrackNode]): The nodes of the track.
         iterations (int): The number of iterations to run.
 
     Returns:
-        corrected_nodes (list[TrackNode]): The corrected nodes.
-
+        list[TrackNode]: The corrected nodes.
     """
     original_length = sum([node.length for node in nodes])
     length = np.array([node.length for node in nodes])

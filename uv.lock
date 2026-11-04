@@ -255,6 +255,15 @@ wheels = [
 ]
 
 [[package]]
+name = "docstring-parser-fork"
+version = "0.0.16"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/ce/48b17c6c24d0af112f73721a90fac245450e548b82b53169260720f60d07/docstring_parser_fork-0.0.16.tar.gz", hash = "sha256:9ecf861ceab8b87d1297a71001c15a1956ad02e87434ee6473643a5988094f7c", size = 36360, upload-time = "2026-07-03T07:27:46.668Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c1/69/427c34e61827818942b48ececd7c892b8f58ba4ce4cfc89ba9fd8dbe8a8d/docstring_parser_fork-0.0.16-py3-none-any.whl", hash = "sha256:c024c97af582d6acf85a14f0b332b3a2ab08626648d251c25e47191f33064386", size = 25253, upload-time = "2026-07-03T07:27:45.591Z" },
+]
+
+[[package]]
 name = "et-xmlfile"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -321,6 +330,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5e/38/7311ade45b67dc2c2a4f9d1af4c18285f92591235e8c6cab4f9cecd36516/fonttools-4.68.0-cp315-cp315t-win_amd64.whl", hash = "sha256:6aea5cdbc32f5fd202cf8dec053a784b08692f8b1992af80eba32bef82bf84c7", size = 2563334, upload-time = "2026-10-27T16:30:19.883Z" },
     { url = "https://files.pythonhosted.org/packages/8a/ee/fd08713d15bf0f6487a72e415e91ef4a6b52ca96fa8f879533107a41e18d/fonttools-4.68.0-cp315-cp315t-win_arm64.whl", hash = "sha256:b612613f0165f560571c4e372af0ebbb1c4b36067de409922dcea349beb8bb20", size = 2528487, upload-time = "2026-10-27T16:30:22.222Z" },
     { url = "https://files.pythonhosted.org/packages/35/74/4ea331ecc65ba05a58b1e4e8ccd604c8a15565f876dfbf93fc2a2ea2e22b/fonttools-4.68.0-py3-none-any.whl", hash = "sha256:d76f8fdcb6936f5e1045a0c9dd721a4bf11112e60d1e243bfa1d39f06a8b3104", size = 1248357, upload-time = "2026-10-27T16:30:24.389Z" },
+]
+
+[[package]]
+name = "format-docstring"
+version = "0.4.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "jupyter-notebook-parser" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3a/b3/77e401341eb6d28aa0b38d5f5eb068f449a68e67a71d7e1950240746802a/format_docstring-0.4.2.tar.gz", hash = "sha256:351fb5fe383d780f2d8d9809d1b75c538804fe75d5736c1798d8393c53706273", size = 168164, upload-time = "2026-10-04T05:26:45.855Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a6/d9/7e704bb257a1450cb82813aea1b53c6dfb46315635168059157a7c54476f/format_docstring-0.4.2-py3-none-any.whl", hash = "sha256:e4689ad129a19fd3424e61a43f3b2eb625f8b71ed5e4c747bdfbc468f84c6d47", size = 68453, upload-time = "2026-10-04T05:26:44.722Z" },
 ]
 
 [[package]]
@@ -435,6 +457,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d", size = 245115, upload-time = "2025-03-05T20:05:02.478Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67", size = 134899, upload-time = "2025-03-05T20:05:00.369Z" },
+]
+
+[[package]]
+name = "jupyter-notebook-parser"
+version = "0.1.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f0/cb/e30e3691a8640acc7d22fba70423d8f4b9e726616f9fbc3c4c09ddc98cd9/jupyter_notebook_parser-0.1.4.tar.gz", hash = "sha256:5cc12f6aa54ff73ad28dd29b5e537c8eb943dde4651417fc3697067eeb58faaa", size = 3947, upload-time = "2022-10-09T08:25:51.936Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f4/a4/61adb19f3c74b0dc0e411de4f06ebef564b1f179928f9dffcbd4b378f2ef/jupyter_notebook_parser-0.1.4-py2.py3-none-any.whl", hash = "sha256:27b3b67cf898684e646d569f017cb27046774ad23866cb0bdf51d5f76a46476b", size = 5251, upload-time = "2022-10-09T08:25:50.65Z" },
 ]
 
 [[package]]
@@ -1066,6 +1097,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pydoclint"
+version = "0.12.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "docstring-parser-fork" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9b/f7/ae03ad83f47dfee8a468544e4b77b254940299b15f9710e00450a5034729/pydoclint-0.12.0.tar.gz", hash = "sha256:ac061ae24381547e41d5a45044a1f88c87a54541b67ec959bd5160c69256482c", size = 255216, upload-time = "2026-10-28T06:48:34.428Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6e/45/9aea4898fcfbb3ed973eb23f6b83c677bb8bcecb59e9681fae6da82bb3be/pydoclint-0.12.0-py3-none-any.whl", hash = "sha256:28f5763a865cb19b54883dfe68b05b01d2c2fc2e8d59dcf424cc345bc976a689", size = 99545, upload-time = "2026-10-28T06:48:33.34Z" },
+]
+
+[[package]]
 name = "pygments"
 version = "2.21.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1422,11 +1466,13 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "format-docstring" },
     { name = "graphviz" },
     { name = "mkdocs-autoapi" },
     { name = "mkdocs-material" },
     { name = "mkdocstrings", extra = ["python"] },
     { name = "pre-commit" },
+    { name = "pydoclint" },
     { name = "pylint" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -1456,11 +1502,13 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "format-docstring", specifier = ">=0.4.2" },
     { name = "graphviz", specifier = ">=0.21" },
     { name = "mkdocs-autoapi", specifier = ">=0.4.1" },
     { name = "mkdocs-material", specifier = ">=9.8.0" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.8" },
     { name = "pre-commit", specifier = ">=4.6.2" },
+    { name = "pydoclint", specifier = ">=0.12.0" },
     { name = "pylint", specifier = ">=4.0.4" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest-cov", specifier = ">=7.0.0" },

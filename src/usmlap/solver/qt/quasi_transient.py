@@ -79,15 +79,14 @@ class QuasiTransientSolver(SolverInterface):
     def _solve_next_iteration(self, previous_solution: Solution) -> Solution:
         """Calculate the next iteration of the solution.
 
-        This is done by calling the `QuasiSteadyStateSolver`.
+        This is done by calling the ``QuasiSteadyStateSolver``.
 
         Args:
-            previous_solution (Solution):
-                The previous iteration of the solution.
+            previous_solution (Solution): The previous iteration of the
+                solution.
 
         Returns:
-            solution (Solution): The next iteration of the solution.
-
+            Solution: The next iteration of the solution.
         """
         solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
@@ -101,8 +100,7 @@ class QuasiTransientSolver(SolverInterface):
             solution (Solution): The solution object.
 
         Returns:
-            solution (Solution): The solution with updated state variables.
-
+            Solution: The solution with updated state variables.
         """
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
@@ -128,18 +126,15 @@ class QuasiTransientSolver(SolverInterface):
 def _convergence_achieved(times: list[float], threshold: float) -> bool:
     """Check if the solution has converged.
 
-    This is done by checking if the difference in solution times
-    between the previous two iterations
-    is below a certain threshold.
+    This is done by checking if the difference in solution times between the
+    previous two iterations is below a certain threshold.
 
     Args:
         times (list[float]): The total times for each iteration.
         threshold (float): The threshold for convergence.
 
     Returns:
-        converged (bool):
-            `True` if the solution has converged, otherwise `False`.
-
+        bool: ``True`` if the solution has converged, otherwise ``False``.
     """
     if len(times) < 2:
         return False

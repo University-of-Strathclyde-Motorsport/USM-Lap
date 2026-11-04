@@ -65,16 +65,15 @@ class QuasiSteadyStateSolver(SolverInterface):
     def _solve_maximum_velocities(self, solution: Solution) -> Solution:
         """Calculate the theoretical maximum velocity at each node.
 
-        Nodes are solved independently of each other.
-        Only the potential lateral acceleration of the vehicle is considered.
-        The potential longitudinal acceleration is assumed to be infinite.
+        Nodes are solved independently of each other. Only the potential lateral
+        acceleration of the vehicle is considered. The potential longitudinal
+        acceleration is assumed to be infinite.
 
         Args:
             solution (Solution): The solution with no maximum velocities.
 
         Returns:
-            solution (Solution): The solution with maximum velocities solved.
-
+            Solution: The solution with maximum velocities solved.
         """
         previous_velocity = None
         for node in progress.track(
@@ -104,8 +103,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             start_index (int): The index of the node to begin propagating from.
 
         Returns:
-            solution (Solution): The forward-propagated solution.
-
+            Solution: The forward-propagated solution.
         """
         logger.debug(f"Forward propagating from apex {start_index}")
 
@@ -148,8 +146,7 @@ class QuasiSteadyStateSolver(SolverInterface):
             start_index (int): The index of the node to begin propagating from.
 
         Returns:
-            solution (Solution): The backward-propagated solution.
-
+            Solution: The backward-propagated solution.
         """
         logger.debug(f"Backward propagating apex {start_index}")
 
@@ -192,8 +189,7 @@ def _find_apexes(solution: Solution) -> list[int]:
         solution (Solution): The solution to analyse.
 
     Returns:
-        apexes (list[int]): The indices of the apexes.
-
+        list[int]: The indices of the apexes.
     """
     maximum_velocities = [-node.apex_velocity for node in solution]
     apex_indices, _ = find_peaks(maximum_velocities)

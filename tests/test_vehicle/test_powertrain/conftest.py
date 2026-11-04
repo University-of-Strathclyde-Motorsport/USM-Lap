@@ -1,5 +1,4 @@
-"""
-Fixtures for powertrain module unit tests."""
+"""Fixtures for powertrain module unit tests."""
 
 import math
 

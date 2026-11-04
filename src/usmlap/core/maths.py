@@ -12,10 +12,9 @@ def clamp(
     minimum: float | None = None,
     maximum: float | None = None,
 ) -> float:
-    """Clamp a value to a range.
-    If `value` is below `minimum`, it is set to `minimum`.
-    If `value` is above `maximum`, it is set to `maximum`.
-    Otherwise, `value` is returned unchanged.
+    """Clamp a value to a range. If ``value`` is below ``minimum``, it is set to
+    ``minimum``. If ``value`` is above ``maximum``, it is set to ``maximum``.
+    Otherwise, ``value`` is returned unchanged.
     """
     if maximum is not None and minimum is not None and maximum < minimum:
         raise ValueError("'maximum' must be greater than or equal to 'minimum'")
@@ -32,14 +31,13 @@ def area_of_circle(diameter: float) -> float:
     Diameter must be non-negative.
 
     Args:
-        diameter (`float`): Diameter of the circle.
+        diameter (float): Diameter of the circle.
 
     Returns:
-        `float`: Area of the circle.
+        float: ``float``: Area of the circle.
 
     Raises:
-        `ValueError`: if diameter is negative
-
+        ``ValueError``: if diameter is negative
     """
     if diameter < 0:
         raise ValueError(f"Invalid diameter {diameter}; must be non-negative")
@@ -51,25 +49,24 @@ def interp_previous[T: np.generic](
     xp: npt.NDArray[np.float64],
     yp: npt.NDArray[T],
 ) -> npt.NDArray[T]:
-    """Interpolate a list by choosing the previous  value.
+    """Interpolate a list by choosing the previous value.
 
     Args:
-        x (`NDArray[float64]`):
-            The x-coordinates at which to evaluate the interpolated values.
-        xp (`NDArray[float64]`):
-            The x-coordinates of the data. Must be strictly increasing.
-        yp (`list[T]`):
-            The y-coordinates of the data. Must be the same length as `xp`.
+        x (npt.NDArray[np.float64]): The x-coordinates at which to evaluate the
+            interpolated values.
+        xp (npt.NDArray[np.float64]): The x-coordinates of the data. Must be
+            strictly increasing.
+        yp (npt.NDArray[T]): The y-coordinates of the data. Must be the same
+            length as ``xp``.
 
     Returns:
-        y (list[T]): The interpolated values. The same length as `x`.
+        npt.NDArray[T]: The interpolated values. The same length as ``x``.
 
     Raises:
         ValueError:
-            - If `xp` and `yp` are not the same length
-            - If `xp` (or  `yp`) is empty
-            - If `xp` is not strictly increasing
-
+            - If ``xp`` and ``yp`` are not the same length
+            - If ``xp`` (or  ``yp``) is empty
+            - If ``xp`` is not strictly increasing
     """
     if len(xp) != len(yp):
         raise ValueError("xp and yp must have the same length")

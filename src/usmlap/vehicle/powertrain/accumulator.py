@@ -45,10 +45,10 @@ class Accumulator(Serialisable):
 
     Attributes:
         print_name (str): Printable name of the accumulator.
-        cell (Cell): The cell used in the accumulator.
+        cell (Annotated[Cell, BeforeValidator(Cell.initialise)]): The cell used
+            in the accumulator.
         cells_in_parallel (int): Number of cells in parallel.
         cells_in_series (int): Number of cells in series.
-
     """
 
     print_name: str

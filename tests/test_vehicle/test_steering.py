@@ -1,5 +1,4 @@
-"""
-Unit tests for steering module."""
+"""Unit tests for steering module."""
 
 import pytest
 

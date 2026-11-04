@@ -16,9 +16,7 @@ type Grid = np.ndarray[tuple[int, int], np.dtype[np.float64]]
 
 
 class StateOfCharge(float):
-    """State of charge of a cell.
-    Must be a number between 0 and 1.
-    """
+    """State of charge of a cell. Must be a number between 0 and 1."""
 
     def __new__(cls, value: Any) -> Self:
         value = float(value)
@@ -34,7 +32,6 @@ class CellState:
     Attributes:
         soc (StateOfCharge): State of charge of the cell.
         temperature (float): Temperature of the cell.
-
     """
 
     soc: StateOfCharge
@@ -73,12 +70,11 @@ class Cell(Serialisable):
         capacity (float): Capacity of the cell.
         nominal_voltage (float): Nominal voltage of the cell.
         discharge_current (float): Maximum continuous discharge current.
-        resistance (float): Internal resistance of the cell.
-            Note that this is an approximation, and will be updated later.
+        resistance (float): Internal resistance of the cell. Note that this is
+            an approximation, and will be updated later.
         datasheet_url (str): URL to the datasheet of the cell.
-        voltage_offset (float): Add or subtract a constant voltage
-            to the cell voltage (default = 0).
-
+        voltage_offset (float): Add or subtract a constant voltage to the cell
+            voltage (default = 0).
     """
 
     print_name: str
@@ -120,15 +116,14 @@ class Cell(Serialisable):
     def get_voltage(self, state_of_charge: StateOfCharge) -> float:
         """Get approximate cell voltage from state of charge.
 
-        This function interpolates linearly
-        between the charge and discharge voltage.
+        This function interpolates linearly between the charge and discharge
+        voltage.
 
         Args:
-            state_of_charge (float): State of charge, between 0 and 1.
+            state_of_charge (StateOfCharge): State of charge, between 0 and 1.
 
         Returns:
-            voltage (float): Voltage of the cell.
-
+            float: Voltage of the cell.
         """
         if state_of_charge < 0 or state_of_charge > 1:
             raise ValueError("State of charge must be between 0 and 1.")
@@ -173,7 +168,7 @@ class Cell(Serialisable):
         return calculate_resistance(self, cell_state)
 
     def discharge_current(self, cell_state: CellState) -> float:
-        """Get the available  discharge current for a given cell state.."""
+        """Get the available discharge current for a given cell state.."""
         return self.max_discharge_current
 
 
@@ -186,8 +181,7 @@ def calculate_resistance(cell: Cell, cell_state: CellState) -> float:
         cell_state (CellState): The state of the cell.
 
     Returns:
-        resistance (float): The resistance of the cell.
-
+        float: The resistance of the cell.
     """
     temperature = clamp(
         cell_state.temperature,

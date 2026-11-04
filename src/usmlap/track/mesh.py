@@ -22,11 +22,10 @@ class TrackNode(BaseModel):
         Curvature (float): The curvature of the track section (left +ve).
         Elevation (float): The elevation of the track section.
         Inclination (float): The inclination angle of the track section.
-        Banking (float): The banking angle of the track section
-            (+ve slope right to left).
+        Banking (float): The banking angle of the track section (+ve slope right
+            to left).
         GripFactor (float): The grip factor of the track section.
         Sector (int): The sector of the track section.
-
     """
 
     position: float = Field(ge=0)
@@ -79,11 +78,10 @@ class Mesh:
     """A mesh of a track.
 
     Attributes:
-        nodes (list[Node]): A list of nodes making up the track.
-        configuration (Configuration): The configuration of the track
-            (OPEN or CLOSED).
+        nodes (list[TrackNode]): A list of nodes making up the track.
+        configuration (Configuration): The configuration of the track (OPEN or
+            CLOSED).
         track_name (str): The name of the track.
-
     """
 
     nodes: list[TrackNode]
@@ -124,8 +122,7 @@ class Mesh:
             number_of_laps (int): The number of times to repeat the track.
 
         Returns:
-            mesh (Mesh): A new mesh that repeats the track a number of times.
-
+            Mesh: A new mesh that repeats the track a number of times.
         """
         repeating_nodes: list[TrackNode] = []
         for lap in range(1, number_of_laps + 1):

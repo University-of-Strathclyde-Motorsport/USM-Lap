@@ -1,6 +1,5 @@
-"""This module implements the apex solver,
-which calculates the theoretical maximum velocity at each node,
-assuming zero longitudinal acceleration.
+"""This module implements the apex solver, which calculates the theoretical
+maximum velocity at each node, assuming zero longitudinal acceleration.
 """
 
 import math
@@ -25,32 +24,27 @@ def solve_apex_velocity(
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
 ) -> float:
-    """Calculate the apex velocity at a node.
-    This is the maximum velocity that the vehicle can travel at
-    while maintaining lateral traction,
-    with zero longitudinal acceleration.
+    """Calculate the apex velocity at a node. This is the maximum velocity that
+    the vehicle can travel at while maintaining lateral traction, with zero
+    longitudinal acceleration.
 
     Args:
-        vehicle_model (TractionModel):
-            The vehicle model to use.
+        vehicle_model (TractionModel): The vehicle model to use.
         ctx (NodeContext): The simulation context.
-        velocity_estimate (float | None):
-            The initial velocity estimate, used to speed up calculation.
-            If unspecified, defaults to the maximum velocity of the vehicle.
-        precision (float):
-            The maximum error allowed in the calculation.
-        maximum_iterations (int):
-            The maximum number of iterations to perform before raising an error.
-            If high precision is required, this value may need to be increased.
+        velocity_estimate (float | None): The initial velocity estimate, used to
+            speed up calculation. If unspecified, defaults to the maximum
+            velocity of the vehicle.
+        precision (float): The maximum error allowed in the calculation.
+        maximum_iterations (int): The maximum number of iterations to perform
+            before raising an error. If high precision is required, this value
+            may need to be increased.
 
     Returns:
-        apex_velocity (float): The apex velocity at the node.
+        float: The apex velocity at the node.
 
     Raises:
-        MaximumIterationsExceededError:
-            If the maximum number of iterations is exceeded
-            without converging on a solution.
-
+        MaximumIterationsExceededError: If the maximum number of iterations is
+            exceeded without converging on a solution.
     """
     maximum_velocity = ctx.vehicle.maximum_velocity
     if ctx.node.curvature == 0:

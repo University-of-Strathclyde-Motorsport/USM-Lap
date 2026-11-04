@@ -64,10 +64,9 @@ def generate_plots(
     Args:
         filemap (OutingFileMap): The filemap for the simulation.
         settings (PlotSettings): Settings for generating plots.
-        solution (SolutionDataFrame | None): Optionally provide the solution.
-            If not provided, it will be loaded from the filemap.
-            (default = `None`)
-
+        solution (SolutionDataFrame | None): Optionally provide the solution. If
+            not provided, it will be loaded from the filemap. (default =
+            ``None``)
     """
     if solution is None:
         solution = read_parquet(filemap.parquet_file)

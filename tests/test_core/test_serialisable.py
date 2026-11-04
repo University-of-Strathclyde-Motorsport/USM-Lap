@@ -1,4 +1,4 @@
-"""Unit tests for the `usmlap.core.serialisable` module."""
+"""Unit tests for the ``usmlap.core.serialisable`` module."""
 
 import json
 from pathlib import Path

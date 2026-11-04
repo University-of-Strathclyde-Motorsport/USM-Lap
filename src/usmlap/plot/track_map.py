@@ -18,12 +18,11 @@ def plot_map(
 
     Args:
         mesh (Mesh): The track mesh to plot.
-        ax (Axes | None): The axes to plot the map on.
-            If not provided, a new figure and axes will be created.
-        draw_start_arrow (bool): Whether to draw an arrow
-            at the start of the track (default = `True`).
-        colour (str): The colour of the track (default = `USM_BLUE`).
-
+        ax (plt.Axes | None): The axes to plot the map on. If not provided, a
+            new figure and axes will be created.
+        draw_start_arrow (bool): Whether to draw an arrow at the start of the
+            track (default = ``True``).
+        colour (str): The colour of the track (default = ``USM_BLUE``).
     """
     if not ax:
         _, ax = plt.subplots()
@@ -50,8 +49,7 @@ def _draw_start_arrow(ax: plt.Axes) -> None:
     """Plot a red arrow at the start line of the track.
 
     Args:
-        ax (Axes): The axes to draw the arrow on.
-
+        ax (plt.Axes): The axes to draw the arrow on.
     """
     ax.plot([0, 0], [-10, 10], color=USM_RED)
     ax.annotate(

@@ -51,8 +51,7 @@ class Autocross(EventInterface, label="autocross"):
             resolution (float): The resolution of the mesh.
 
         Returns:
-            mesh (Mesh): A mesh of the track.
-
+            Mesh: A mesh of the track.
         """
         return generate_mesh(
             TrackSettings(track_file=self.track_file, resolution=resolution)
