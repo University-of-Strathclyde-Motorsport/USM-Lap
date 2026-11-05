@@ -24,6 +24,7 @@ class MasterCylinder(Serialisable):
         piston_diameter (PositiveFloat): The diameter of the piston.
         colour (str): The colour of the master cylinder.
         piston_area (float): The area of the piston.
+
     """
 
     print_name: str
@@ -44,6 +45,7 @@ class BrakeCaliper(Serialisable):
         piston_diameter (Annotated[PositiveFloat, Unit("m")]): The diameter of
             the piston.
         piston_area (float): The total area of the pistons.
+
     """
 
     print_name: str
@@ -62,6 +64,7 @@ class BrakeDisc(Serialisable):
         print_name (str): The printable name of the brake disc.
         outer_diameter (Annotated[PositiveFloat, Unit("m")]): The outer diameter
             of the brake disc.
+
     """
 
     print_name: str
@@ -77,6 +80,7 @@ class BrakePad(Serialisable):
             pad.
         coefficient_of_friction (PositiveFloat): The coefficient of friction
             between the brake pad and brake disc.
+
     """
 
     print_name: str
@@ -92,6 +96,7 @@ class BrakeLine(BaseModel):
         caliper (BrakeCaliper): The brake caliper attached to the wheel.
         disc (BrakeDisc): The brake disc attached to the wheel.
         pad (BrakePad): The brake pad attached to the caliper.
+
     """
 
     cylinder: MasterCylinder
@@ -146,6 +151,7 @@ class BrakeLine(BaseModel):
 
         Returns:
             float: Gauge pressure of the brake fluid.
+
         """
         return cylinder_force / self.cylinder.piston_area
 
@@ -157,6 +163,7 @@ class BrakeLine(BaseModel):
 
         Returns:
             float: Torque applied to the wheel.
+
         """
         return cylinder_force * self.force_to_torque_scaling_factor
 
@@ -168,6 +175,7 @@ class BrakeLine(BaseModel):
 
         Returns:
             float: Force required on the master cylinder.
+
         """
         return braking_torque / self.force_to_torque_scaling_factor
 
@@ -183,6 +191,7 @@ class Brakes:
             force.
         front_brake_bias (Percentage): Proportion of force applied to the front
             master cylinder (value between 0 and 1).
+
     """
 
     front: BrakeLine
@@ -213,6 +222,7 @@ class Brakes:
 
         Returns:
             FrontRear[float]: Force applied to the master cylinders.
+
         """
         total_force = pedal_force * self.pedal_ratio
         return self.brake_bias * total_force

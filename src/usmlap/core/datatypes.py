@@ -20,6 +20,7 @@ class Coordinate(BaseModel):
         x (float): x component.
         y (float): y component.
         z (float): z component (default: 0).
+
     """
 
     x: float
@@ -38,6 +39,7 @@ class FrontRear[T](NamedTuple):
     Attributes:
         front (T): Value for the front axle.
         rear (T): Value for the rear axle.
+
     """
 
     front: T
@@ -72,6 +74,7 @@ class LeftRight[T](NamedTuple):
     Attributes:
         left (T): Value for the left hand side.
         rear (T): Value for the right hand side.
+
     """
 
     left: T
@@ -106,6 +109,7 @@ class FourCorner[T](NamedTuple):
         fr (T): Value for the front right corner.
         rl (T): Value for the rear left corner.
         rr (T): Value for the rear right corner.
+
     """
 
     fl: T

@@ -22,6 +22,7 @@ class Motor(Serialisable):
         maximum_rpm (float): Maximum rotational speed of the motor.
         rated_voltage (float): Rated voltage of the motor.
         datasheet_url (str): URL for the datasheet of the motor.
+
     """
 
     print_name: str
@@ -54,6 +55,7 @@ class Motor(Serialisable):
 
         Returns:
             float: Rotational speed of the motor.
+
         """
         return voltage * self.speed_per_volt
 
@@ -65,6 +67,7 @@ class Motor(Serialisable):
 
         Returns:
             float: Torque output of the motor.
+
         """
         return current * self.torque_per_amp
 
@@ -76,29 +79,32 @@ class Motor(Serialisable):
 
         Returns:
             float: Current output of the motor.
+
         """
         return torque / self.torque_per_amp
 
 
 def rpm_to_rads(rpm: float) -> float:
-    """Convert from RPM to radians per second
+    """Convert from RPM to radians per second.
 
     Args:
         rpm (float): Speed in revolutions per minute
 
     Returns:
         float: Speed in radians per second
+
     """
     return rpm * (math.pi / 30)
 
 
 def rads_to_rpm(speed: float) -> float:
-    """Convert from radians per second to RPM
+    """Convert from radians per second to RPM.
 
     Args:
         speed (float): Speed in radians per second
 
     Returns:
         float: Speed in revolutions per minute
+
     """
     return speed * (30 / math.pi)

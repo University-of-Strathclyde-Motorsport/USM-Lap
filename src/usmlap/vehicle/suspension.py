@@ -58,6 +58,7 @@ class Suspension:
             contact patches.
         centre_of_gravity_height (Annotated[PositiveFloat, Unit("m")]):
             The height of the centre of gravity above the ground plane.
+
     """
 
     front: SuspensionAxle

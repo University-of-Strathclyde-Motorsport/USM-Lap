@@ -120,11 +120,6 @@ def plot_mesh_refinement(results: list[MeshRefinementResult]) -> None:
     plt.show()
 
 
-def main() -> None:
-    """Main function."""
+if __name__ == "__main__":
     results = mesh_refinement()
     plot_mesh_refinement(results)
-
-
-if __name__ == "__main__":
-    main()

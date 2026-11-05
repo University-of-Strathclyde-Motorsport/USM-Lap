@@ -170,7 +170,7 @@ class SolutionDataFrame:
 
     _df: polars.DataFrame
 
-    def __init__(self, df: polars.DataFrame) -> None:
+    def __init__(self, df: polars.DataFrame) -> None:  # noqa: D107
         self._df = df
 
     @staticmethod
@@ -204,8 +204,9 @@ class SolutionDataFrame:
     def get_channel(
         self, channel_id: ChannelId, *, warn_missing: bool = True
     ) -> Array1D:
-        """Get a channel from the solution. Returns an array of NaN if the
-        channel is missing.
+        """Get a channel from the solution.
+
+        Returns an array of NaN if the channel is missing.
         """
         if channel_id not in self._df.columns:
             if warn_missing:

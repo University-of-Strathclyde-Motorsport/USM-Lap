@@ -35,7 +35,10 @@ def simulate(
 
     Args:
         vehicle (Vehicle): The vehicle to simulate.
+        track_mesh (Mesh): The track to simulate.
         settings (SimSettings): Settings for the simulation.
+        initial_state (TransientVariables): The initial state of the vehicle.
+
     """
     if initial_state is None:
         initial_state = TransientVariables.get_default()

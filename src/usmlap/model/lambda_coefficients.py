@@ -15,6 +15,7 @@ class LambdaCoefficients:
         lateral_grip (float): Lateral grip coefficient.
         motor_torque (float): Motor torque coefficient (does not affect energy
             consumption).
+
     """
 
     longitudinal_grip: float = 1

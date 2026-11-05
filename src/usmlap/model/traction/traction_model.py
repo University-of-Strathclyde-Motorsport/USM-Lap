@@ -45,8 +45,7 @@ class TractionModel(ABC):
         ctx: NodeContext,
         velocity: float,
     ) -> tuple[float, float]:
-        """Get the total resistive forces acting on the vehicle. Returns a tuple
-        of body and aerodynamic forces.
+        """Get the total resistive forces acting on the vehicle.
 
         Args:
             ctx (NodeContext): The simulation context.
@@ -56,6 +55,7 @@ class TractionModel(ABC):
             tuple[float, float]: The resistive force acting through the centre
                 of mass. aero_force (float): The resistive force acting through
                 the centre of pressure.
+
         """
         weight = self.weight(ctx)
         body_force = ctx.node.z_to_x(weight)
@@ -70,8 +70,7 @@ class TractionModel(ABC):
         ctx: NodeContext,
         velocity: float,
     ) -> tuple[float, float]:
-        """Get the total normal forces acting on the tyres. Returns a tuple of
-        body and aerodynamic forces.
+        """Get the total normal forces acting on the tyres.
 
         Args:
             ctx (NodeContext): The simulation context.
@@ -81,6 +80,7 @@ class TractionModel(ABC):
             tuple[float, float]: The normal force acting through the centre of
                 mass. aero_force (float): The normal force acting through the
                 centre of pressure.
+
         """
         weight = self.weight(ctx)
         centripetal_force = self.centripetal_force(ctx, velocity)

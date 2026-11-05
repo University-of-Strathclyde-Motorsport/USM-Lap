@@ -1,6 +1,4 @@
-"""This module implements the acceleration solver, which calculates the maximum
-possible acceleration at a node.
-"""
+"""The acceleration solver calculates the maximum acceleration at a node."""
 
 from usmlap.model.context import NodeContext
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
@@ -12,21 +10,20 @@ PRECISION = 1e-3
 
 
 def solve_acceleration(
-    model: TractionModel,
+    vehicle_model: TractionModel,
     ctx: NodeContext,
     initial_velocity: float,
 ) -> float:
-    """Calculate the velocity at the end of a node, given the initial velocity
-    at the start of the node.
+    """Calculate velocity at the end of a node, given the velocity at the start.
 
     Args:
         vehicle_model (TractionModel): The vehicle model to use.
-        state (TransientVariables): The vehicle's state variables.
-        node (TrackNode): The track node to solve.
+        ctx (NodeContext): The context of the node.
         initial_velocity (float): The velocity at the start of the node.
 
     Returns:
         float: The velocity at the end of the node.
+
     """
     initial_ax = 0
     trajectory = Trajectory(
@@ -35,15 +32,17 @@ def solve_acceleration(
         curvature=ctx.node.curvature,
     )
 
-    resistive_fx = sum(model.resistive_forces(ctx, initial_velocity))
-    drive_force = model.powertrain.drive_force(ctx, initial_velocity)
+    resistive_fx = sum(vehicle_model.resistive_forces(ctx, initial_velocity))
+    drive_force = vehicle_model.powertrain.drive_force(ctx, initial_velocity)
 
     axs: list[float] = []
 
     for _ in range(1, MAXIMUM_ITERATIONS + 1):
         axs.append(trajectory.ax)
         try:
-            traction_force = model.longitudinal_traction(ctx, trajectory)
+            traction_force = vehicle_model.longitudinal_traction(
+                ctx, trajectory
+            )
 
         except InsufficientTractionError as e:
             trajectory.ax /= e.ratio

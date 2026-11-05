@@ -13,6 +13,8 @@ from usmlap.vehicle.vehicle import Vehicle
 
 
 class EventTuple[T](NamedTuple):
+    """A tuple containing all five competition events."""
+
     acceleration: T | None = None
     skidpad: T | None = None
     autocross: T | None = None
@@ -25,10 +27,11 @@ class EventInterface(ABC):
 
     Attributes:
         label (str): Name of the event.
+
     """
 
     def __init_subclass__(cls: type[EventInterface], label: str) -> None:
-        super().__init_subclass__()
+        super(cls).__init_subclass__()
         cls._meshes: dict[float, Mesh] = {}
         cls.label = label
 

@@ -34,7 +34,7 @@ def _discharge_rate(
     ctx: NodeContext,
     vehicle_state: CalculatedVehicleState,
 ) -> float:
-    """Rate of change of state of charge"""
+    """Rate of change of state of charge."""
     return (
         -vehicle_state.accumulator_current
         / ctx.vehicle.powertrain.accumulator.charge_capacity

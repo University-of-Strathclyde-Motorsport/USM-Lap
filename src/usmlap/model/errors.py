@@ -11,9 +11,7 @@ class ModelError(Exception):
 
 @dataclass
 class MaximumIterationsExceededError(ModelError):
-    """Error raised when the maximum number of iterations is exceeded without
-    converging on a solution.
-    """
+    """Raised when the maximum iterations are exceeded without converging."""
 
     iterations: int
     precision: float

@@ -44,6 +44,7 @@ class SolutionNode:
         lateral_acceleration (float): The lateral acceleration for the node.
         time (float): The time taken to drive this node.
         energy_used (float): The energy used to drive this node.
+
     """
 
     track_node: TrackNode
@@ -126,6 +127,7 @@ class SolutionNode:
 
         Returns:
             bool: ``True`` is the node is an apex, otherwise ``False``.
+
         """
         return self._apex
 
@@ -139,31 +141,35 @@ class SolutionNode:
         self._apex = False
 
     def set_initial_velocity(self, velocity: float) -> None:
-        """Set the velocity at the start of the node. If the initial velocity
-        has been anchored, it will not be modified.
+        """Set the velocity at the start of the node.
+
+        If the initial velocity has been anchored, it will not be modified.
 
         Args:
             velocity (float): The initial velocity to be set.
+
         """
         if not self._initial_velocity_anchored:
             self._initial_velocity = velocity
 
     def set_final_velocity(self, velocity: float) -> None:
-        """Set the velocity at the end of the node. If the final velocity has
-        been anchored, it will not be modified.
+        """Set the velocity at the end of the node.
+
+        If the final velocity has been anchored, it will not be modified.
 
         Args:
             velocity (float): The final velocity to be set.
+
         """
         if not self._final_velocity_anchored:
             self._final_velocity = velocity
 
     def anchor_initial_velocity(self, velocity: float) -> None:
-        """Anchor the initial velocity of this node. It can no longer be
-        modified.
+        """Anchor the initial velocity of this node so it cannot be modified.
 
         Args:
             velocity (float): The initial velocity to be set.
+
         """
         self.set_initial_velocity(velocity)
         self._initial_velocity_anchored = True
@@ -173,6 +179,7 @@ class SolutionNode:
 
         Args:
             velocity (float): The final velocity to be set.
+
         """
         self.set_final_velocity(velocity)
         self._final_velocity_anchored = True
@@ -235,6 +242,7 @@ class Solution:
 
         Returns:
             float: The sum of times for the nodes in the sector.
+
         """
         return sum([node.time for node in self if node.sector == sector])
 
@@ -243,6 +251,7 @@ class Solution:
 
         Returns:
             list[float]: List of positions.
+
         """
         sector = self.nodes[0].track_node.sector
         positions: list[float] = []
@@ -258,6 +267,7 @@ class Solution:
 
         Returns:
             list[int]: Indices of apexes.
+
         """
         return [i for i, node in enumerate(self.nodes) if node.is_apex()]
 
@@ -266,6 +276,7 @@ class Solution:
 
         Returns:
             list[int]: Indices of apexes.
+
         """
         indices = self.get_apex_indices()
         velocities = [self.nodes[i].apex_velocity for i in indices]
@@ -280,6 +291,7 @@ class Solution:
 
         Returns:
             list[SolutionNode]: Solution nodes which are apexes.
+
         """
         return [node for node in self if node.is_apex()]
 
@@ -296,6 +308,7 @@ class Solution:
 
         Returns:
             Solution: The new solution.
+
         """
         new_solution = copy(self)
         new_solution.nodes = [self.nodes[i] for i in indices]
@@ -324,9 +337,11 @@ def create_new_solution(
     Args:
         track_mesh (Mesh): The track mesh.
         vehicle_model (TractionModel): The vehicle model.
+        initial_state (TransientVariables): The initial state of the vehicle.
 
     Returns:
         Solution: A blank solution.
+
     """
     transient_variables = initialise_transient_variables(
         track_mesh,

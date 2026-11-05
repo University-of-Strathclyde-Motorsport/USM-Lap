@@ -67,6 +67,7 @@ def generate_plots(
         solution (SolutionDataFrame | None): Optionally provide the solution. If
             not provided, it will be loaded from the filemap. (default =
             ``None``)
+
     """
     if solution is None:
         solution = read_parquet(filemap.parquet_file)

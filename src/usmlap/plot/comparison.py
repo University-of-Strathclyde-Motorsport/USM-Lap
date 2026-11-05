@@ -1,6 +1,7 @@
 """This module contains functions for plotting comparisons between vehicles."""
 
 from collections.abc import Generator
+from dataclasses import dataclass, field
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,15 +12,12 @@ from usmlap.plot.style import COLOURMAP
 from usmlap.vehicle.vehicle import Vehicle
 
 
+@dataclass
 class ComparisonResults:
     """Data structure containing the results of a comparison simulation."""
 
-    _vehicles: list[Vehicle]
-    _points: list[CompetitionPoints]
-
-    def __init__(self) -> None:
-        self._vehicles = []
-        self._points = []
+    _vehicles: list[Vehicle] = field(default_factory=list)
+    _points: list[CompetitionPoints] = field(default_factory=list)
 
     def add_result(self, vehicle: Vehicle, points: CompetitionPoints) -> None:
         """Add a result to the comparison.
@@ -27,6 +25,7 @@ class ComparisonResults:
         Args:
             vehicle (Vehicle): The vehicle that was simulated.
             points (CompetitionPoints): Competition points for the vehicle.
+
         """
         self._vehicles.append(vehicle)
         self._points.append(points)
@@ -39,6 +38,7 @@ class ComparisonResults:
 
         Returns:
             list[Vehicle]: The vehicles that were simulated.
+
         """
         return self._vehicles
 
@@ -47,6 +47,7 @@ class ComparisonResults:
 
         Returns:
             list[CompetitionPoints]: The results to the simulations.
+
         """
         return self._points
 
@@ -55,6 +56,7 @@ class ComparisonResults:
 
         Returns:
             list[str]: The labels for the vehicles.
+
         """
         return [vehicle.label for vehicle in self._vehicles]
 
@@ -70,6 +72,7 @@ def _transform_data(input_data: list[CompetitionPoints]) -> PointsData:
 
     Returns:
         PointsData: Transformed points data.
+
     """
     keys = sorted(set().union(*(d.keys() for d in input_data)))
     transformed_data: PointsData = {}
@@ -92,6 +95,7 @@ def plot_competition_bar_chart(
         bar_width (float): Width of each bar, between 0 and 1 (default = 0.8).
         padding (float | None): If specified, add padding to the left and right
             of the plot (default = None). Recommended value of 0.7.
+
     """
     points_data = comparison_results.get_points()
     plot_data = _transform_data(points_data)
@@ -142,6 +146,7 @@ def _transform_dictionary(data: dict[str, CompetitionPoints]) -> PointsData:
 
     Returns:
         PointsData: Transformed points data.
+
     """
     events = sorted(set().union(*(d.keys() for d in data.values())))
     transformed: PointsData = {}
@@ -164,6 +169,7 @@ def plot_points_bar_chart(
         title (str): Title for the plot (default = "").
         y_label (str): Label for the y-axis (default = "Points").
         width (float): Width of each bar, between 0 and 1 (default = 0.9).
+
     """
     simulation_labels = data.keys()
     simulation_count = len(simulation_labels)

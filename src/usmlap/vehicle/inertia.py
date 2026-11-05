@@ -17,6 +17,7 @@ class UnsprungMass:
         mass (Annotated[PositiveFloat, Unit("kg")]): Mass of the unsprung mass.
         centre_of_gravity_height (Annotated[PositiveFloat, Unit("m")]):
             Height of the centre of gravity above the ground plane.
+
     """
 
     mass: Annotated[PositiveFloat, Unit("kg")]
@@ -34,6 +35,7 @@ class Inertia:
             the vehicle.
         front_unsprung_mass (UnsprungMass): Unsprung mass for the front axle.
         rear_unsprung_mass (UnsprungMass): Unsprung mass for the rear axle.
+
     """
 
     curb_mass: Annotated[PositiveFloat, Unit("kg")]

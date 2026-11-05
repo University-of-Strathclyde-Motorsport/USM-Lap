@@ -12,8 +12,10 @@ def clamp(
     minimum: float | None = None,
     maximum: float | None = None,
 ) -> float:
-    """Clamp a value to a range. If ``value`` is below ``minimum``, it is set to
-    ``minimum``. If ``value`` is above ``maximum``, it is set to ``maximum``.
+    """Clamp a value to a range.
+
+    If ``value`` is below ``minimum``, it is set to ``minimum``.
+    If ``value`` is above ``maximum``, it is set to ``maximum``.
     Otherwise, ``value`` is returned unchanged.
     """
     if maximum is not None and minimum is not None and maximum < minimum:
@@ -38,6 +40,7 @@ def area_of_circle(diameter: float) -> float:
 
     Raises:
         ``ValueError``: if diameter is negative
+
     """
     if diameter < 0:
         raise ValueError(f"Invalid diameter {diameter}; must be non-negative")
@@ -67,6 +70,7 @@ def interp_previous[T: np.generic](
             - If ``xp`` and ``yp`` are not the same length
             - If ``xp`` (or  ``yp``) is empty
             - If ``xp`` is not strictly increasing
+
     """
     if len(xp) != len(yp):
         raise ValueError("xp and yp must have the same length")

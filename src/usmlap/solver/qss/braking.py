@@ -1,6 +1,4 @@
-"""This module implements the braking solver, which calculates the maximum
-possible braking at a node.
-"""
+"""The braking solver calculates the maximum possible braking at a node."""
 
 from usmlap.model.context import NodeContext
 from usmlap.model.errors import InsufficientTractionError, WheelLiftError
@@ -16,17 +14,16 @@ def solve_braking(
     ctx: NodeContext,
     final_velocity: float,
 ) -> float:
-    """Calculate the velocity at the start of a node, given the final velocity
-    at the end of the node.
+    """Calculate velocity at the start of a node, given the velocity at the end.
 
     Args:
         vehicle_model (TractionModel): The vehicle model to use.
-        state (TransientVariables): The vehicle's state variables.
-        node (TrackNode): The track node to solve.
+        ctx (NodeContext): The context of the node.
         final_velocity (float): The velocity at the end of the node.
 
     Returns:
         float: The velocity at the start of the node.
+
     """
     initial_ax = 0
 

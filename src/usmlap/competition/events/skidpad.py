@@ -65,6 +65,7 @@ class Skidpad(EventInterface, label="skidpad"):
 
         Returns:
             Mesh: A mesh of the skidpad track.
+
         """
         return generate_mesh(
             TrackSettings(

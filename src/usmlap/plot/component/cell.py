@@ -27,10 +27,12 @@ def plot_cell_parameters(accumulator: Accumulator) -> None:
     """Plot the parameters of a cell.
 
     Args:
+        accumulator (Accumulator): The accumulator to plot.
         cell (Cell): The cell to plot.
         derate_soc (float): The SOC at which to begin derating current.
         t_min (float): The minimum temperature to plot.
         t_max (float): The maximum temperature to plot.
+
     """
     fig, axs = plt.subplots(2, 2, layout="constrained")
     ((ax_voltage, ax_soc_derate), (ax_resistance, ax_thermal_derate)) = axs

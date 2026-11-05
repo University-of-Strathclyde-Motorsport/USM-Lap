@@ -34,6 +34,7 @@ class Vehicle(Serialisable):
         suspension (Suspension): The suspension of the vehicle.
         transmission (Transmission): The transmission of the vehicle.
         tyres (Tyres): The tyres of the vehicle.
+
     """
 
     print_name: str

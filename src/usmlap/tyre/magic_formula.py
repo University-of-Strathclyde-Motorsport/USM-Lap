@@ -16,6 +16,7 @@ The following repositories have been used as a starting point for this module:
     https://github.com/teasit/magic-formula-tyre-library/tree/main
 """
 
+from dataclasses import dataclass
 from math import atan, cos, exp, pi, pow, sin, sqrt, tan
 
 from numpy import sign
@@ -40,6 +41,7 @@ class TyreAttitude(BaseModel):
         alpha (float): Side slip angle.
         gamma (float): Camber angle.
         pressure (float): Inflation pressure.
+
     """
 
     Vx: float
@@ -53,6 +55,7 @@ class TyreAttitude(BaseModel):
     pressure: float
 
 
+@dataclass
 class MagicFormula:
     """Contains the Pacejka Magic Formula equations.
 
@@ -60,14 +63,14 @@ class MagicFormula:
         parameters (TIRParameters): Tyre parameters loaded from a .TIR file.
         AMU (float): Constant used in calculation of digressive friction factor.
         LMUV (float): Scaling factor with slip speed vs decaying friction.
+
     """
 
-    def __init__(self, parameters: TIRParameters, tyre: TyreAttitude) -> None:
-        self.parameters = parameters
-        self.tyre = tyre
-        self.AMU = 1  # Used in calculation of digressive friction factor.
-        self.LMUV = 0  # Scaling factor with slip speed vs decaying friction.
-        self.use_alpha_star = True
+    parameters: TIRParameters
+    tyre: TyreAttitude
+    AMU: float = 1
+    LMUV: float = 0
+    use_alpha_star: bool = True
 
     @property
     def Fz(self) -> float:
@@ -664,10 +667,7 @@ class MagicFormula:
         x: float,
         SV: float,
     ) -> float:
-        """Implements the Pacejka Magic Formula.
-
-        Calculates longitudinal force Fx, lateral force Fy, or aligning moment
-        Mz.
+        """Calculate Fx, Fy, or Mz using the Pacejka Magic Formula.
 
         Args:
             B (float): Stiffness factor.
@@ -680,6 +680,7 @@ class MagicFormula:
 
         Returns:
             float: Output variable (either Fx, Fy, or Mz).
+
         """
         Bx = B * x
         return D * sin(C * atan(Bx - E * (Bx - atan(Bx)))) + SV
@@ -692,7 +693,7 @@ class MagicFormula:
         E: float,
         x: float,
     ) -> float:
-        """Implements the cosine version of the Pacejka Magic Formula.
+        """Calculate Fx, Fy, or Mz using the cosine Pacejka Magic Formula.
 
         Args:
             B (float): Stiffness factor.
@@ -704,6 +705,7 @@ class MagicFormula:
 
         Returns:
             float: Output variable.
+
         """
         Bx = B * x
         return D * cos(C * atan(Bx - E * (Bx - atan(Bx))))

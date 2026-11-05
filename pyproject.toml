@@ -68,7 +68,13 @@ src = ["src"]
 line-length = 80
 
 [tool.ruff.lint]
-extend-select = ["B", "I", "Q", "S", "C4", "E"]
+extend-select = ["B", "I", "Q", "S", "C4", "E", "D", "D204", "D400", "D401"]
+extend-ignore = ["D102", "D105"]
+# TODO: enable D404 (requires rewriting most module docstrings)
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["D", "INP001", "S101", "PLR2004", "PT011"]

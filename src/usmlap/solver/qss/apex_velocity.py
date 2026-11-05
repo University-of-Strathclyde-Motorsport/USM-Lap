@@ -1,5 +1,6 @@
-"""This module implements the apex solver, which calculates the theoretical
-maximum velocity at each node, assuming zero longitudinal acceleration.
+"""The apex solver calculates the theoretical maximum velocity at each node.
+
+Longitudinal acceleration is assumed to be zero.
 """
 
 import math
@@ -24,9 +25,10 @@ def solve_apex_velocity(
     precision: float = PRECISION,
     maximum_iterations: int = MAXIMUM_ITERATIONS,
 ) -> float:
-    """Calculate the apex velocity at a node. This is the maximum velocity that
-    the vehicle can travel at while maintaining lateral traction, with zero
-    longitudinal acceleration.
+    """Calculate the apex velocity at a node.
+
+    This is the maximum velocity that the vehicle can travel at while
+    maintaining lateral traction, with zero longitudinal acceleration.
 
     Args:
         vehicle_model (TractionModel): The vehicle model to use.
@@ -45,6 +47,7 @@ def solve_apex_velocity(
     Raises:
         MaximumIterationsExceededError: If the maximum number of iterations is
             exceeded without converging on a solution.
+
     """
     maximum_velocity = ctx.vehicle.maximum_velocity
     if ctx.node.curvature == 0:

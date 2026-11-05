@@ -36,6 +36,7 @@ def points_sensitivity(
         tuple[float, tuple[float, float]]: The points sensitivity of the
             parameter. delta (tuple[float, float]): The range over which the
             sensitivity was evaluated.
+
     """
     if not delta:
         if not parameter.uncertainty:

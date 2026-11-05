@@ -31,6 +31,7 @@ class RWDPowertrain(PowertrainInterface):
         soc_current_derate_point (float): State of charge at which to begin
             derating current.
         discharge_current_limit (float): Scaling factor for the current limit.
+
     """
 
     accumulator: Accumulator
@@ -61,10 +62,12 @@ class RWDPowertrain(PowertrainInterface):
         Below the derate point, the current is scaled linearly to zero.
 
         Args:
+            cell_state (CellState): State of cells in the accumulator.
             state_of_charge (float): State of charge, between 0 and 1.
 
         Returns:
             float: Available discharge current.
+
         """
         maximum_discharge_current = self.accumulator.maximum_discharge_current(
             cell_state,
@@ -75,10 +78,12 @@ class RWDPowertrain(PowertrainInterface):
         """Get the voltage drop across the accumulator and motor controller.
 
         Args:
+            cell_state (CellState): State of cells in the accumulator.
             current (float): Current drawn from the accumulator.
 
         Returns:
             float: Voltage drop.
+
         """
         resistance = (
             self.accumulator.resistance(cell_state)
@@ -90,11 +95,12 @@ class RWDPowertrain(PowertrainInterface):
         """Calculate the voltage applied to the motor.
 
         Args:
-            state_of_charge (float): State of charge of the accumulator.
+            cell_state (CellState): State of cells in the accumulator.
             current (float): Current drawn from the accumulator.
 
         Returns:
             float: Voltage across the motor.
+
         """
         accumulator_voltage = self.accumulator.get_voltage(cell_state.soc)
         voltage_drop = self.get_voltage_drop(cell_state, current)
@@ -106,12 +112,13 @@ class RWDPowertrain(PowertrainInterface):
         """Calculate the knee speed of the motor.
 
         Args:
-            state_of_charge (float): State of charge of the accumulator.
+            cell_state (CellState): State of cells in the accumulator.
             current (float | None): Current drawn from the accumulator. If not
                 provided, the maximum discharge current is used.
 
         Returns:
             float: Knee speed of the motor.
+
         """
         if current is None:
             current = self.get_discharge_current(cell_state)
@@ -124,10 +131,11 @@ class RWDPowertrain(PowertrainInterface):
         """Calculate the maximum speed of the motor.
 
         Args:
-            state_of_charge (float): State of charge of the accumulator.
+            cell_state (CellState): State of cells in the accumulator.
 
         Returns:
             float: Maximum speed of the motor.
+
         """
         return self.get_knee_speed(cell_state, current=0)
 

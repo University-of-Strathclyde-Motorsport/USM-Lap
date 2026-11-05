@@ -23,6 +23,9 @@ def plot_map(
         draw_start_arrow (bool): Whether to draw an arrow at the start of the
             track (default = ``True``).
         colour (str): The colour of the track (default = ``USM_BLUE``).
+        label (str | None): An optional label for the legend (default = None).
+        show_legend (bool): Whether to include a legend (default = ``False``).
+
     """
     if not ax:
         _, ax = plt.subplots()
@@ -50,6 +53,7 @@ def _draw_start_arrow(ax: plt.Axes) -> None:
 
     Args:
         ax (plt.Axes): The axes to draw the arrow on.
+
     """
     ax.plot([0, 0], [-10, 10], color=USM_RED)
     ax.annotate(

@@ -62,6 +62,7 @@ def get_file_format(filepath: Path | str) -> FileFormat:
 
     Returns:
         FileFormat: ``FileFormat``: The file format of the filepath.
+
     """
     if isinstance(filepath, Path):
         format_ = filepath.suffix
@@ -105,9 +106,11 @@ class Serialisable(BaseModel):
 
     @classmethod
     def initialise(cls, input: str | Path | Self) -> Self:
-        """Method designed for use as a BeforeValidator. If input is a filepath,
-        an object will be loaded from file. Otherwise, the input will be
-        returned.
+        """Initialise a Serialisable object.
+
+        Method designed for use as a BeforeValidator.
+        If input is a filepath, an object will be loaded from file.
+        Otherwise, the input will be returned.
         """
         if isinstance(input, str):
             return cls.from_file(Path(input))

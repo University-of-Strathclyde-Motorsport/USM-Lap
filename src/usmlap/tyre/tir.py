@@ -28,6 +28,7 @@ class Units(_ParameterGroup):
         ANGLE (str): Angle units (default="radians").
         MASS (str): Mass units (default="kg").
         TIME (str): Time units (default="second").
+
     """
 
     LENGTH: str
@@ -49,6 +50,7 @@ class Model(_ParameterGroup):
         ROAD_INCREMENT (float | None): Increment in road sampling.
         ROAD_DIRECTION (float | None): Direction of travelled distance. 1 =
             default, -1 = reverse (default = 1)
+
     """
 
     FITTYP: int
@@ -68,6 +70,7 @@ class Dimension(_ParameterGroup):
         RIM_RADIUS (float | None): Nominal rim radius.
         RIM_WIDTH (float | None): Rim width.
         ASPECT_RATIO (float | None): Nominal aspect ratio.
+
     """
 
     UNLOADED_RADIUS: float
@@ -83,6 +86,7 @@ class OperatingConditions(_ParameterGroup):
     Attributes:
         INFLPRES (float): Tyre inflation pressure.
         NOMPRES (float): Nominal pressure used in Magic Formula equations.
+
     """
 
     INFLPRES: float
@@ -100,6 +104,7 @@ class Inertia(_ParameterGroup):
         BELT_IXX (float | None): Belt diametral moment of inertia.
         BELT_IYY (float | None): Belt polar moment of inertia.
         GRAVITY (float | None): Gravity acting on belt in Z direction.
+
     """
 
     MASS: float | None = None
@@ -150,6 +155,7 @@ class Vertical(_ParameterGroup):
         BOTTOM_OFFST (float | None): Distance to rim when bottoming starts to
             occur.
         BOTTOM_STIFF (float | None): Vertical stiffness of bottomed tyre.
+
     """
 
     FNOMIN: float
@@ -217,6 +223,7 @@ class Structural(_ParameterGroup):
         PCFY3 (float | None): Tyre overall lateral stiffness pressure
             dependency.
         PCMZ1 (float | None): Tyre overall yaw stiffness pressure dependency.
+
     """
 
     LONGITUDINAL_STIFFNESS: float | None = None
@@ -264,6 +271,7 @@ class ContactPatch(_ParameterGroup):
         ENV_C2 (float | None): Effective plane angle attenuation.
         Q_A2 (float | None): Linear load term in contact length.
         Q_A1 (float | None): Square root load term in contact length.
+
     """
 
     Q_RA1: float | None = None
@@ -289,6 +297,7 @@ class InflationPressureRange(_ParameterGroup):
     Attributes:
         PRESMIN (float | None): Minimum allowed inflation pressure.
         PRESMAX (float | None): Maximum allowed inflation pressure.
+
     """
 
     PRESMIN: float | None = None
@@ -301,6 +310,7 @@ class VerticalForceRange(_ParameterGroup):
     Attributes:
         FZMIN (float | None): Minimum allowed wheel load.
         FZMAX (float | None): Maximum allowed wheel load.
+
     """
 
     FZMIN: float | None = None
@@ -313,6 +323,7 @@ class LongSlipRange(_ParameterGroup):
     Attributes:
         KPUMIN (float | None): Minimum valid wheel slip.
         KPUMAX (float | None): Maximum valid wheel slip.
+
     """
 
     KPUMIN: float | None = None
@@ -325,6 +336,7 @@ class SlipAngleRange(_ParameterGroup):
     Attributes:
         ALPMIN (float | None): Minimum valid slip angle.
         ALPMAX (float | None): Maximum valid slip angle.
+
     """
 
     ALPMIN: float | None = None
@@ -337,6 +349,7 @@ class InclinationAngleRange(_ParameterGroup):
     Attributes:
         CAMMIN (float | None): Minimum valid camber angle.
         CAMMAX (float | None): Maximum valid camber angle.
+
     """
 
     CAMMIN: float | None = None
@@ -372,6 +385,7 @@ class ScalingCoefficients(_ParameterGroup):
         LVMX (float): Scale factor of Mx vertical shift.
         LMY (float): Scale factor of rolling resistance torque.
         LMP (float | None): Scale factor of parking moment.
+
     """
 
     LFZO: float = 1
@@ -431,6 +445,7 @@ class LongitudinalCoefficients(_ParameterGroup):
         PPX2 (float): Quadratic pressure effect on slip stiffness.
         PPX3 (float): Linear pressure effect on longitudinal friction.
         PPX4 (float): Quadratic pressure effect on longitudinal friction.
+
     """
 
     PCX1: float
@@ -481,6 +496,7 @@ class OverturningCoefficients(_ParameterGroup):
         QSX14 (float | None): Lateral force induced overturning moment with
             camber.
         PPMX1 (float): Influence of inflation pressure on overturning moment.
+
     """
 
     QSX1: float
@@ -546,6 +562,7 @@ class LateralCoefficients(_ParameterGroup):
         PPY3 (float): Linear pressure effect on lateral friction.
         PPY4 (float): Quadratic pressure effect on lateral friction.
         PPY5 (float): Influence of inflation pressure on camber stiffness.
+
     """
 
     PCY1: float
@@ -606,6 +623,7 @@ class RollingCoefficients(_ParameterGroup):
             squared.
         QSY7 (float): Rolling resistance torque coefficient load dependency.
         QSY8 (float): Rolling resistance torque coefficient pressure dependency.
+
     """
 
     QSY1: float
@@ -657,6 +675,7 @@ class AligningCoefficients(_ParameterGroup):
         PPZ1 (float): Linear pressure effect on pneumatic trail.
         PPZ2 (float): Influence of inflation pressure on residual aligning
             torque.
+
     """
 
     QBZ1: float
@@ -730,6 +749,7 @@ class TurnslipCoefficients(_ParameterGroup):
         QBRP1 (float | None): Residual (spin) torque reduction factor parameter
             due to side slip.
         QDRP1 (float | None): Turn slip moment peak magnitude parameter.
+
     """
 
     PDXP1: float | None = None
@@ -804,6 +824,7 @@ class TIRParameters(BaseModel):
 
         >>> tir_parameters = TIRParameters.from_file("Example Tyre.tir")
         >>> inflation_pressure = tir_parameters.OPERATING_CONDITIONS.INFLPRES
+
     """
 
     UNITS: Units
@@ -848,6 +869,7 @@ class TIRParameters(BaseModel):
             ValueError: If an error occurs while parsing the .TIR file.
             ValidationError: If the data cannot be converted into a valid
                 ``TIRParameters`` object.
+
         """
         tir_data = _TIRReader().read(filepath)
         return cls.model_validate(tir_data)
@@ -870,6 +892,7 @@ class _TIRReader:
         Raises:
             FileNotFoundError: If the file is not found.
             ValueError: If an error occurs while parsing the .TIR file.
+
         """
         self.active_parameter_group: str | None = None
         self.data: dict[str, dict[str, str]] = {}
@@ -889,6 +912,7 @@ class _TIRReader:
 
         Args:
             line (str): A line from the .TIR file.
+
         """
         line = line.strip()
         if line.startswith(("$", "!")):
@@ -909,6 +933,7 @@ class _TIRReader:
 
         Raises:
             ValueError: If the group name cannot be parsed.
+
         """
         match = re.search(r"\[([A-Z_]+)\]", line)
         if not match:
@@ -928,6 +953,7 @@ class _TIRReader:
         Raises:
             ValueError: If no parameter group is currently active, then the line
                 cannot be parsed.
+
         """
         match = re.search(r"([A-Z0-9_]+)\s*=\s*([^\n\r\$]+)", line)
         if not match:

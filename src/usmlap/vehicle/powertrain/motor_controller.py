@@ -10,6 +10,7 @@ class MotorController(Serialisable):
         print_name (str): The printable name of the motor controller.
         resistance (float): The resistance of the motor controller.
         efficiency (float): The approximate efficiency of the motor controller.
+
     """
 
     print_name: str

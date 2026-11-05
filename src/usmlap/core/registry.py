@@ -12,7 +12,7 @@ class Registry[KT, VT]:
     _name: str | None
     _store: dict[KT, VT]
 
-    def __init__(self, name: str | None = None) -> None:
+    def __init__(self, name: str | None = None) -> None:  # noqa: D107
         self._name = name
         self._store: dict[KT, VT] = {}
 
@@ -24,6 +24,7 @@ class Registry[KT, VT]:
 
         Returns:
             Iterable[KT]: A list containing all registered keys.
+
         """
         return self._store.keys()
 
@@ -36,6 +37,7 @@ class Registry[KT, VT]:
 
         Raises:
             ValueError: If the key is already registered.
+
         """
         if key in self:
             raise ValueError(f"Key '{key}' is already registered.")
@@ -50,12 +52,12 @@ class Registry[KT, VT]:
         Returns:
             VT | None: The stored value associated with ``key``. Returns
                 ``None`` if ``key`` is not registered.
+
         """
         return self._store.get(key)
 
     def get_or_raise(self, key: KT) -> VT:
-        """Retrieve a value by its key. Raise an error if the key is no
-        registered.
+        """Retrieve a value by its key, or raise an error if not registered.
 
         Args:
             key (KT): The unique identifier to look up.
@@ -65,6 +67,7 @@ class Registry[KT, VT]:
 
         Raises:
             KeyError: If the key is not found in the registry.
+
         """
         if key in self:
             return self._store[key]
@@ -85,6 +88,7 @@ class Registry[KT, VT]:
 
         Raises:
             KeyError: If the value is not registered in the registry.
+
         """
         for k, v in self._store.items():
             if v == value:

@@ -1,5 +1,4 @@
-"""This module implements a constant tyre model, which assumes that the
-effective grip coefficient is constant.
+"""A tyre model which assumes that the effective grip coefficient is constant.
 
 This tyre model is unsuitable for real simulation, and strictly for testing
 purposes.

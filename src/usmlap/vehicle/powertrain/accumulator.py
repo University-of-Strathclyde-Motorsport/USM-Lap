@@ -49,6 +49,7 @@ class Accumulator(Serialisable):
             in the accumulator.
         cells_in_parallel (int): Number of cells in parallel.
         cells_in_series (int): Number of cells in series.
+
     """
 
     print_name: str

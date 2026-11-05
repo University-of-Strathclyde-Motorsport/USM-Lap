@@ -74,6 +74,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             Solution: The solution with maximum velocities solved.
+
         """
         previous_velocity = None
         for node in progress.track(
@@ -104,6 +105,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             Solution: The forward-propagated solution.
+
         """
         logger.debug(f"Forward propagating from apex {start_index}")
 
@@ -113,7 +115,7 @@ class QuasiSteadyStateSolver(SolverInterface):
         for node in solution.nodes[start_index:]:
             ctx = self.local_context(node.track_node, node.transient_variables)
             potential_velocity = solve_acceleration(
-                model=solution.vehicle_model,
+                vehicle_model=solution.vehicle_model,
                 ctx=ctx,
                 initial_velocity=node.initial_velocity,
             )
@@ -147,6 +149,7 @@ class QuasiSteadyStateSolver(SolverInterface):
 
         Returns:
             Solution: The backward-propagated solution.
+
         """
         logger.debug(f"Backward propagating apex {start_index}")
 
@@ -190,6 +193,7 @@ def _find_apexes(solution: Solution) -> list[int]:
 
     Returns:
         list[int]: The indices of the apexes.
+
     """
     maximum_velocities = [-node.apex_velocity for node in solution]
     apex_indices, _ = find_peaks(maximum_velocities)

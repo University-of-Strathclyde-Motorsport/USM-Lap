@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from pathlib import Path
 
@@ -29,6 +30,7 @@ class ShapeData(BaseModel):
         length (float): The length of the track section.
         curvature (float): The curvature of the track section. Positive for
             left, negative for right.
+
     """
 
     length: float = Field(gt=0)
@@ -43,6 +45,7 @@ class SectorData(BaseModel):
         label (str): An optional label for the sector (default = ""). If left
             blank, labels will be automatically generated.
         timed (bool): Whether the sector should be timed (default = True).
+
     """
 
     start_position: float = Field(ge=0)
@@ -60,6 +63,7 @@ class ElevationData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         elevation (float): The elevation of the track at the position.
+
     """
 
     position: float = Field(ge=0)
@@ -77,6 +81,7 @@ class BankingData(BaseModel):
         position (float): The position that the data was recorded.
         angle (float): The banking angle of the track at the position.
         TODO: Sign convention?
+
     """
 
     position: float = Field(ge=0)
@@ -93,6 +98,7 @@ class GripFactorData(BaseModel):
     Attributes:
         position (float): The position that the data was recorded.
         grip_factor (float): The grip factor of the track at the position.
+
     """
 
     position: float = Field(ge=0)
@@ -157,6 +163,7 @@ class TrackData(Serialisable):
         configuration (Configuration): The configuration of the track.
         # direction (Direction): The direction of driving (default = FORWARD). #
         mirror (bool): Whether the track should be mirrored (default = False).
+
     """
 
     print_name: str
@@ -254,13 +261,14 @@ def load_track_from_spreadsheet(filepath: Path) -> TrackData:
     """Load a track from the library.
 
     Args:
-        filename (str): The name of the track file.
+        filepath (Path): The name of the track file.
 
     Returns:
         TrackData: The loaded track data.
 
     Raises:
         FileNotFoundError: If the file does not exist.
+
     """
     reader = TrackReader(filepath)
     return TrackData(
@@ -277,20 +285,20 @@ def load_track_from_spreadsheet(filepath: Path) -> TrackData:
     )
 
 
+@dataclass
 class TrackReader:
     """Reads track data from an OpenLAP Excel spreadsheet.
 
     Attributes:
         workbook (pandas.ExcelFile): The Excel file containing the track data.
+
     """
 
-    def __init__(self, filepath: Path) -> None:
-        """Initialises the TrackReader from a filepath.
+    filepath: Path
+    workbook: pandas.ExcelFile = field(init=False)
 
-        Args:
-            filepath (Path): Path to the Excel file to be read.
-        """
-        self.workbook = pandas.ExcelFile(filepath, engine="openpyxl")
+    def __post_init__(self) -> None:
+        self.workbook = pandas.ExcelFile(self.filepath, engine="openpyxl")
 
     def _get_info(self) -> pandas.DataFrame:
         return pandas.read_excel(
@@ -312,7 +320,7 @@ class TrackReader:
         return str(self._get_info().at["City", 1])
 
     def get_shape_data(self) -> list[ShapeData]:
-        """Returns the shape data for the track."""
+        """Get the shape data for the track."""
 
         def get_curvature(section_type: SectionType, radius: float) -> float:
             """Calculate curvature from section type and corner radius."""
@@ -338,7 +346,7 @@ class TrackReader:
         return shape_data
 
     def get_elevation_data(self) -> list[ElevationData]:
-        """Returns the elevation data for the track."""
+        """Get the elevation data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Elevation")
         elevation_data = [
             ElevationData(
@@ -350,7 +358,7 @@ class TrackReader:
         return elevation_data
 
     def get_banking_data(self) -> list[BankingData]:
-        """Returns the banking data for the track."""
+        """Get the banking data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Banking")
         banking_data = [
             BankingData(
@@ -362,7 +370,7 @@ class TrackReader:
         return banking_data
 
     def get_grip_factor_data(self) -> list[GripFactorData]:
-        """Returns the grip factor data for the track."""
+        """Get the grip factor data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Grip Factors")
         grip_factor_data = [
             GripFactorData(
@@ -374,7 +382,7 @@ class TrackReader:
         return grip_factor_data
 
     def get_sector_data(self) -> list[SectorData]:
-        """Returns the sector data for the track."""
+        """Get the sector data for the track."""
         dataframe = pandas.read_excel(self.workbook, sheet_name="Sectors")
         sector_data = [
             SectorData(
@@ -386,17 +394,17 @@ class TrackReader:
         return sector_data
 
     def get_configuration(self) -> Configuration:
-        """Returns the configuration of the track."""
+        """Get the configuration of the track."""
         return Configuration[
             str(self._get_info().at["Configuration", 1]).upper()
         ]
 
     def get_direction(self) -> Direction:
-        """Returns the direction of driving."""
+        """Get the direction of driving."""
         return Direction[str(self._get_info().at["Direction", 1]).upper()]
 
     def get_mirror(self) -> bool:
-        """Returns whether the track should be mirrored."""
+        """Whether the track should be mirrored."""
         mirror_str = str(self._get_info().at["Mirror", 1])
         return mirror_str.lower() in ["on", "yes", "true"]
 

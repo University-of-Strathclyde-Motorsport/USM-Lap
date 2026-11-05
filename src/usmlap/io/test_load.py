@@ -78,7 +78,7 @@ _TEST_LOAD_SUFFIXES: set[str] = {".json", ".yaml"}
 
 
 def test_load_all() -> None:
-
+    """Attempt to load all models from known directories."""
     with Progress(transient=True) as progress:
         task = progress.add_task("Loading models...", total=len(MODELS_BY_DIR))
 

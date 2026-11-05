@@ -52,6 +52,7 @@ class Autocross(EventInterface, label="autocross"):
 
         Returns:
             Mesh: A mesh of the track.
+
         """
         return generate_mesh(
             TrackSettings(track_file=self.track_file, resolution=resolution)

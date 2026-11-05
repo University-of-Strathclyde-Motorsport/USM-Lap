@@ -32,6 +32,7 @@ class CellState:
     Attributes:
         soc (StateOfCharge): State of charge of the cell.
         temperature (float): Temperature of the cell.
+
     """
 
     soc: StateOfCharge
@@ -75,6 +76,7 @@ class Cell(Serialisable):
         datasheet_url (str): URL to the datasheet of the cell.
         voltage_offset (float): Add or subtract a constant voltage to the cell
             voltage (default = 0).
+
     """
 
     print_name: str
@@ -124,6 +126,7 @@ class Cell(Serialisable):
 
         Returns:
             float: Voltage of the cell.
+
         """
         if state_of_charge < 0 or state_of_charge > 1:
             raise ValueError("State of charge must be between 0 and 1.")
@@ -182,6 +185,7 @@ def calculate_resistance(cell: Cell, cell_state: CellState) -> float:
 
     Returns:
         float: The resistance of the cell.
+
     """
     temperature = clamp(
         cell_state.temperature,

@@ -11,9 +11,10 @@ PLOT_EXTENSIONS = {".png", ".svg", ".jpg"}
 
 @dataclass(frozen=True, slots=True)
 class StudyFileMap:
-    """A mapping of the files associates with a study. A study is a collection
-    of simulations using different settings, such as a parameter sweep or a
-    model comparison.
+    """A mapping of the files associates with a study.
+
+    A study is a collection of simulations using different settings,
+    such as a parameter sweep or a model comparison.
     """
 
     root: Path
@@ -50,9 +51,10 @@ class StudyFileMap:
 
 @dataclass(frozen=True, slots=True)
 class SimFileMap:
-    """A mapping of the files associated with a sim group. A sim group is a
-    collection of sims using the same vehicle, such as for a competition
-    simulation.
+    """A mapping of the files associated with a sim group.
+
+    A sim group is a collection of sims using the same vehicle,
+    such as for a competition simulation.
     """
 
     root: Path

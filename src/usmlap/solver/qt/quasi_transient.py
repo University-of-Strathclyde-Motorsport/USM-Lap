@@ -87,6 +87,7 @@ class QuasiTransientSolver(SolverInterface):
 
         Returns:
             Solution: The next iteration of the solution.
+
         """
         solver = QuasiSteadyStateSolver(self.vehicle_model, self.global_context)
         solution = solver.solve(previous_solution)
@@ -101,6 +102,7 @@ class QuasiTransientSolver(SolverInterface):
 
         Returns:
             Solution: The solution with updated state variables.
+
         """
         for i in range(1, len(solution.nodes)):
             previous_node = solution.nodes[i - 1]
@@ -135,6 +137,7 @@ def _convergence_achieved(times: list[float], threshold: float) -> bool:
 
     Returns:
         bool: ``True`` if the solution has converged, otherwise ``False``.
+
     """
     if len(times) < 2:
         return False

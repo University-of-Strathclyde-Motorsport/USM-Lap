@@ -8,7 +8,18 @@ from usmlap.core.serialisable import Serialisable
 
 
 class TrackSettings(Serialisable):
-    """Settings for track mesh generation."""
+    """Settings for track mesh generation.
+
+    Properties:
+        track_file (Path): A track data file.
+        resolution (float): The resolution of the mesh, in metres.
+        smooth (bool): Whether to smooth the curvature data (default =
+            ``True``).
+        correct_tangency (bool): Whether to apply tangency correction to the
+            track (default = ``True``).
+        correct_displacement (bool): Whether to apply displacement correction to
+            the track (default = ``True``).
+    """
 
     track_file: Path
     resolution: float

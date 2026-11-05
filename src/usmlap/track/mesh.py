@@ -26,6 +26,7 @@ class TrackNode(BaseModel):
             to left).
         GripFactor (float): The grip factor of the track section.
         Sector (int): The sector of the track section.
+
     """
 
     position: float = Field(ge=0)
@@ -82,6 +83,7 @@ class Mesh:
         configuration (Configuration): The configuration of the track (OPEN or
             CLOSED).
         track_name (str): The name of the track.
+
     """
 
     nodes: list[TrackNode]
@@ -123,6 +125,7 @@ class Mesh:
 
         Returns:
             Mesh: A new mesh that repeats the track a number of times.
+
         """
         repeating_nodes: list[TrackNode] = []
         for lap in range(1, number_of_laps + 1):

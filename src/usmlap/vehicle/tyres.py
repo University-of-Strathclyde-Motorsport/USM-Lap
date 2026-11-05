@@ -1,4 +1,4 @@
-"""This module defines the parameters of a tyre."""
+"""Parameters of tyres."""
 
 from typing import Annotated
 
@@ -14,6 +14,7 @@ class Tyre(Serialisable):
         print_name (str): Printable name of the tyre.
         unloaded_radius (float): The unloaded radius of the tyre.
         tyre_model (TyreModel): The tyre model.
+
     """
 
     print_name: str

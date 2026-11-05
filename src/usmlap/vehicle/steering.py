@@ -17,6 +17,7 @@ class Steering:
             steering wheel is rotated, the wheels rotate 1 degree.
         steering_wheel_radius (Annotated[PositiveFloat, Unit("m")]): The radius
             of the steering wheel. Used for calculating steering torque.
+
     """
 
     steering_ratio: PositiveFloat
@@ -32,6 +33,7 @@ class Steering:
         Returns:
             float: Angular displacement of the steering wheel from neutral
                 (clockwise positive).
+
         """
         return wheel_angle * self.steering_ratio
 
@@ -45,5 +47,6 @@ class Steering:
         Returns:
             float: Angular displacement of the wheels from static (clockwise
                 positive).
+
         """
         return steering_wheel_angle / self.steering_ratio

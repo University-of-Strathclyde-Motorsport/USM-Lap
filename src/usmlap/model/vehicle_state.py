@@ -18,6 +18,7 @@ class Trajectory:
         velocity (float): Longitudinal velocity.
         ax (float): Longitudinal acceleration (forwards +ve).
         ay (float): Lateral acceleration (left +ve).
+
     """
 
     curvature: float = 0
@@ -50,6 +51,7 @@ class TransientVariables:
     Attributes:
         soc (StateOfCharge): The state of charge of the accumulator. 1 = fully
             charged, 0 = fully discharged (default = 1).
+
     """
 
     soc: StateOfCharge
@@ -109,6 +111,7 @@ class VehicleState:
         trajectory (Trajectory): Variables describing the vehicle's trajectory.
         transient (TransientVariables): The vehicle's transient variables.
         calculated (CalculatedVehicleState): Full state of the vehicle.
+
     """
 
     trajectory: Trajectory

@@ -45,6 +45,7 @@ class Competition(BaseModel):
         dataset (CompetitionData): Dataset to use for points calculation.
         competition_data (CompetitionData): Data loaded from ``dataset``.
         events (list[EventInterface]): List of events to simulate.
+
     """
 
     autocross_track: Path = DEFAULT_AUTOCROSS_TRACK
@@ -109,6 +110,7 @@ class Competition(BaseModel):
         Returns:
             CompetitionResults: Dictionary of points scored in all simulated
                 events.
+
         """
         competition_results: CompetitionSolutions = {}
         competition_points: CompetitionPoints = {}
