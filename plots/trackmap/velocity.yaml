@@ -1,0 +1,5 @@
+title: Autocross Velocity Profile
+caxis:
+  channel_id: vCar
+  label: "Velocity (ms⁻¹)"
+  cmin: 5

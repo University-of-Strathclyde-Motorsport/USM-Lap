@@ -17,17 +17,16 @@ def plot_scatter(data: SolutionDataFrame, config: ScatterConfig) -> Figure:
 
     x_data = data.get_channel(config.xaxis.channel_id)
     y_data = data.get_channel(config.yaxis.channel_id)
+
     if config.caxis is not None:
         c_data = data.get_channel(config.caxis.channel_id)
+        scatter = ax.scatter(x=x_data, y=y_data, c=c_data, alpha=config.alpha)
+        scatter.set_cmap(config.caxis.cmap)
+        vmin, vmax = config.caxis.get_new_clim(scatter.get_clim())
+        scatter.set_clim(vmin, vmax)
+        fig.colorbar(scatter, ax=ax, label=config.caxis.label)
     else:
-        c_data = None
-
-    ax.scatter(
-        x=x_data,
-        y=y_data,
-        c=c_data,  # type: ignore
-        alpha=config.alpha,
-    )
+        ax.scatter(x=x_data, y=y_data, alpha=config.alpha)
 
     ax.grid(config.show_grid)
     ax.set_xlabel(config.xaxis.label)

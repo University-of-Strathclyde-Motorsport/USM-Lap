@@ -7,6 +7,7 @@ from pydantic import Field
 
 from usmlap.core.colour import HexColour
 from usmlap.core.serialisable import Serialisable
+from usmlap.plot.config.axes import AxisConfig
 from usmlap.solver.solution_channels import ChannelId
 
 
@@ -14,19 +15,8 @@ class WaveformConfig(Serialisable):
     """Configuration options for a plot."""
 
     title: str
-    xaxis: XAxisConfig
+    xaxis: AxisConfig
     axes: list[WaveformAxisConfig]
-
-
-class XAxisConfig(Serialisable):
-    """Configuration options for the x-axis of the plot."""
-
-    channel_id: ChannelId
-    provided_label: str | None = Field(alias="label", default=None)
-
-    @property
-    def label(self) -> str:
-        return self.provided_label or self.channel_id
 
 
 class WaveformAxisConfig(Serialisable):

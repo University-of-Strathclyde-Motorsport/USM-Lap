@@ -6,7 +6,7 @@ from pathlib import Path
 import typer
 lazy import matplotlib.pyplot as plt
 
-lazy from usmlap.core.filepath import OUTPUT_ROOT
+from usmlap.core.filepath import OUTPUT_ROOT
 lazy from usmlap.io.filemap import OutingFileMap, SimFileMap, StudyFileMap
 lazy from usmlap.io.parquet import read_parquet
 lazy from usmlap.io.sim_folder import make_timestamped_folder
@@ -16,8 +16,10 @@ lazy from usmlap.io.test_load import (
     test_load_all,
 )
 lazy from usmlap.plot.config.scatter import ScatterConfig
+lazy from usmlap.plot.config.trackmap import TrackmapConfig
 lazy from usmlap.plot.config.waveform import WaveformConfig
 lazy from usmlap.plot.plots.scatter import plot_scatter
+lazy from usmlap.plot.plots.trackmap import plot_trackmap
 lazy from usmlap.plot.plots.waveform import plot_waveform
 lazy from usmlap.plot.study_plots import generate_study_plots
 lazy from usmlap.simulation.settings import SimSettings
@@ -85,6 +87,15 @@ def scatter(simulation: Path, config_file: Path) -> None:
     filemap = OutingFileMap(simulation)
     data = read_parquet(filemap.parquet_file)
     plot_scatter(data, ScatterConfig.from_file(config_file))
+    plt.show()
+
+
+@app.command()
+def trackmap(simulation: Path, config_file: Path) -> None:
+    """Generate a trackmap plot of a simulation."""
+    filemap = OutingFileMap(simulation)
+    data = read_parquet(filemap.parquet_file)
+    plot_trackmap(data, TrackmapConfig.from_file(config_file))
     plt.show()
 
 

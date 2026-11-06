@@ -35,7 +35,7 @@ dev = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "ruff>=0.16.10",
-    "ty>=0.0.84",
+    "ty>=0.0.98",
     "vulture>=2.16",
 ]
 
@@ -62,22 +62,27 @@ branch = true
 [tool.coverage.report]
 skip_empty = true
 
+[tool.lint]
+src = ["src/usmlap"]
+
 [tool.ruff]
 fix = true
-src = ["src"]
 line-length = 80
 
 [tool.ruff.lint]
-extend-select = ["B", "I", "Q", "S", "C4", "E", "D", "D204", "D400", "D401"]
+extend-select = ["B", "I", "Q", "S", "C4", "E", "D", "D204", "D400", "D401", "TID"]
 extend-ignore = ["D102", "D105"]
 # TODO: enable D404 (requires rewriting most module docstrings)
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D", "INP001", "S101", "PLR2004", "PT011"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["D", "INP001", "S101", "PLR2004", "PT011"]
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"src.usmlap" = { msg = "Import from `usmlap`, not `src.usmlap`." }
+
 
 [tool.format_docstring]
 docstring_style = "google"

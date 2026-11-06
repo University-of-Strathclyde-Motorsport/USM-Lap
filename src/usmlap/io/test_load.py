@@ -8,6 +8,7 @@ from rich.progress import Progress
 from usmlap.core.registry import Registry
 from usmlap.core.serialisable import Serialisable
 from usmlap.plot.config.scatter import ScatterConfig
+from usmlap.plot.config.trackmap import TrackmapConfig
 from usmlap.plot.config.waveform import WaveformConfig
 from usmlap.simulation.settings import OutingSettings
 from usmlap.simulation.study import Study
@@ -38,6 +39,7 @@ LoadableModelRegistry.register("study", Study)
 LoadableModelRegistry.register("outing", OutingSettings)
 LoadableModelRegistry.register("waveform", WaveformConfig)
 LoadableModelRegistry.register("scatter", ScatterConfig)
+LoadableModelRegistry.register("trackmap", TrackmapConfig)
 
 
 def test_load(
@@ -72,6 +74,7 @@ MODELS_BY_DIR: dict[Path, type[Serialisable]] = {
     Path(r"sims/outings"): OutingSettings,
     Path(r"plots/waveform"): WaveformConfig,
     Path(r"plots/scatter"): ScatterConfig,
+    Path(r"plots/trackmap"): TrackmapConfig,
 }
 
 _TEST_LOAD_SUFFIXES: set[str] = {".json", ".yaml"}
